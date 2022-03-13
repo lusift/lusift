@@ -60,7 +60,7 @@ export default class Guide {
   }
 
   private closeCurrentStep() {
-    //
+    this.activeStepInstance.remove();
   }
 
   public setStep(newStepNum: number) {
@@ -89,4 +89,3 @@ export default class Guide {
     this.setStep(newStep);
   }
 }
-

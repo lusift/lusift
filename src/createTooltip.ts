@@ -1,6 +1,6 @@
-import { document, window } from 'global';
+ import { document, window } from 'global';
 
-const createTooltip = ({ title }) => {
+const createTooltip = ({ title, nextStep, prevStep }) => {
 
   const tooltip = document.createElement('div');
   tooltip.id=`tooltip`;
@@ -27,11 +27,11 @@ const createTooltip = ({ title }) => {
         </div>
     `;
 
-  const arrow = document.createElement('div');
-  arrow.classList.add('arrow');
-  arrow.setAttributeNode(document.createAttribute('data-popper-arrow'));
+    const arrow = document.createElement('div');
+    arrow.classList.add('arrow');
+    arrow.setAttributeNode(document.createAttribute('data-popper-arrow'));
 
-  arrow.innerHTML=`
+    arrow.innerHTML=`
         <style>
      .arrow,
       .arrow::before {
@@ -75,6 +75,11 @@ const createTooltip = ({ title }) => {
 
   document.querySelector('html').appendChild(tooltip);
   const closeButton = document.querySelector(`#tooltip button.close`);
+  const nextButton = document.querySelector(`#tooltip button.next`);
+  const prevButton = document.querySelector(`#tooltip button.prev`);
+
+  nextButton.addEventListener('click', nextStep);
+  prevButton.addEventListener('click', prevStep);
   closeButton.addEventListener('click', () => {
     console.log('remove')
   });

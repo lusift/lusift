@@ -37,10 +37,14 @@ export default class Tooltip {
     private popperInstance: PopperInstanceType;
     readonly uid: string;
     readonly data: TooltipData;
+    private nextStep: Function;
+    private prevStep: Function;
 
     constructor(
         {
             target,
+            nextStep,
+            prevStep,
             data
         }:
         {
@@ -55,6 +59,8 @@ export default class Tooltip {
         this.target=target;
         this.targetElement = document.querySelector(this.target.elementSelector);
         this.data = data;
+        this.nextStep=nextStep;
+        this.prevStep=prevStep;
         this.create();
     }
 
@@ -64,6 +70,8 @@ export default class Tooltip {
         const { title, placement, arrow } = this.data;
 
         this.tooltipElement = createTooltip({
+            nextStep: this.nextStep,
+            prevStep: this.prevStep,
             title,
         });
 
@@ -84,6 +92,14 @@ export default class Tooltip {
         });
         // console.log(this.popperInstance);
     }
+
+    public remove(): void {
+        this.tooltipElement.remove();
+        this.popperInstance.forceUpdate();
+        this.popperInstance.destroy();
+        console.log(this.popperInstance.state);
+    }
+
     /* public getState() {
         return this.popperInstance.state;
     } */
