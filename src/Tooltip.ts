@@ -45,7 +45,9 @@ export default class Tooltip {
             target,
             nextStep,
             prevStep,
-            data
+            data,
+            guideID,
+            index
         }:
         {
             target: Target;
@@ -56,13 +58,14 @@ export default class Tooltip {
             index: number,
         }) {
 
-        this.target=target;
-        this.targetElement = document.querySelector(this.target.elementSelector);
-        this.data = data;
-        this.nextStep=nextStep;
-        this.prevStep=prevStep;
-        this.create();
-    }
+            this.target=target;
+            this.targetElement = document.querySelector(this.target.elementSelector);
+            this.data = data;
+            this.uid=`g-${guideID}--t-${index}`;
+            this.nextStep=nextStep;
+            this.prevStep=prevStep;
+            this.create();
+        }
 
     private create(): void {
         if (!this.targetElement) return console.log('Error: target element not found');
@@ -71,10 +74,13 @@ export default class Tooltip {
 
         this.tooltipElement = createTooltip({
             remove: this.remove.bind(this),
+            uid: this.uid,
             nextStep: this.nextStep,
             prevStep: this.prevStep,
+            toShowArrow: arrow,
             title,
         });
+
 
         this.popperInstance = createPopper(this.targetElement, this.tooltipElement, {
             ...popperOptions,

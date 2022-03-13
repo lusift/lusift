@@ -1,14 +1,14 @@
  import { document, window } from 'global';
 
-const createTooltip = ({ title, remove, nextStep, prevStep }) => {
+const createTooltip = ({ title, remove, toShowArrow, uid, nextStep, prevStep }) => {
 
   const tooltip = document.createElement('div');
-  tooltip.id=`tooltip`;
+  tooltip.id=`tooltip-${uid}`;
   tooltip.role='tooltip';
 
   tooltip.innerHTML=`
         <style>
-        #tooltip {
+        #tooltip-${uid} {
             background: #ccc;
             font-weight: bold;
             padding: 4px 8px;
@@ -27,6 +27,7 @@ const createTooltip = ({ title, remove, nextStep, prevStep }) => {
         </div>
     `;
 
+  if(toShowArrow) {
     const arrow = document.createElement('div');
     arrow.classList.add('arrow');
     arrow.setAttributeNode(document.createAttribute('data-popper-arrow'));
@@ -52,30 +53,32 @@ const createTooltip = ({ title, remove, nextStep, prevStep }) => {
         transform: rotate(45deg);
       }
 
-      #tooltip[data-popper-placement^='top'] > .arrow {
+      #tooltip-${uid}[data-popper-placement^='top'] > .arrow {
         bottom: -4px;
       }
 
-      #tooltip[data-popper-placement^='bottom'] > .arrow {
+      #tooltip-${uid}[data-popper-placement^='bottom'] > .arrow {
         top: -4px;
       }
 
-      #tooltip[data-popper-placement^='left'] > .arrow {
+      #tooltip-${uid}[data-popper-placement^='left'] > .arrow {
         right: -4px;
       }
 
-      #tooltip[data-popper-placement^='right'] > .arrow {
+      #tooltip-${uid}[data-popper-placement^='right'] > .arrow {
         left: -4px;
       }
         </style>
+
       `;
 
-  tooltip.appendChild(arrow);
+    tooltip.appendChild(arrow);
+  }
 
   document.querySelector('html').appendChild(tooltip);
-  const closeButton = document.querySelector(`#tooltip button.close`);
-  const nextButton = document.querySelector(`#tooltip button.next`);
-  const prevButton = document.querySelector(`#tooltip button.prev`);
+  const closeButton = document.querySelector(`#tooltip-${uid} button.close`);
+  const nextButton = document.querySelector(`#tooltip-${uid} button.next`);
+  const prevButton = document.querySelector(`#tooltip-${uid} button.prev`);
   closeButton.addEventListener('click', remove);
   nextButton.addEventListener('click', nextStep);
   prevButton.addEventListener('click', prevStep);
