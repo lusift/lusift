@@ -70,6 +70,7 @@ export default class Tooltip {
         const { title, placement, arrow } = this.data;
 
         this.tooltipElement = createTooltip({
+            remove: this.remove.bind(this),
             nextStep: this.nextStep,
             prevStep: this.prevStep,
             title,

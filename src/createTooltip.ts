@@ -1,6 +1,6 @@
  import { document, window } from 'global';
 
-const createTooltip = ({ title, nextStep, prevStep }) => {
+const createTooltip = ({ title, remove, nextStep, prevStep }) => {
 
   const tooltip = document.createElement('div');
   tooltip.id=`tooltip`;
@@ -68,7 +68,6 @@ const createTooltip = ({ title, nextStep, prevStep }) => {
         left: -4px;
       }
         </style>
-
       `;
 
   tooltip.appendChild(arrow);
@@ -77,12 +76,9 @@ const createTooltip = ({ title, nextStep, prevStep }) => {
   const closeButton = document.querySelector(`#tooltip button.close`);
   const nextButton = document.querySelector(`#tooltip button.next`);
   const prevButton = document.querySelector(`#tooltip button.prev`);
-
+  closeButton.addEventListener('click', remove);
   nextButton.addEventListener('click', nextStep);
   prevButton.addEventListener('click', prevStep);
-  closeButton.addEventListener('click', () => {
-    console.log('remove')
-  });
 
   return tooltip;
 }
