@@ -39,9 +39,6 @@ export default class Guide {
 
   constructor(guideData: GuideDataType) {
     this.guideData = guideData;
-    // retrieve activeStep from localstorage
-    console.log('saved guide');
-    console.log(loadState())
     this.setInitialState();
   }
 
@@ -64,6 +61,14 @@ export default class Guide {
     } else {
       console.log('guide data changed');
       this.activeStep=0;
+      const existingState = loadState() || {};
+      const newState = {
+        ...existingState,
+        [this.guideData.id]: {
+          ...this.guideData
+        }
+      }
+      saveState(newState);
     }
     console.log(`Starting with step: ${this.activeStep}`);
   }
@@ -89,7 +94,7 @@ export default class Guide {
 
   private showStep(stepIndex: number) {
     const { index, target, data, type } = this.guideData.steps[stepIndex];
-    console.log(`Step: ${index}`);
+    console.log(`Step index: ${index}`);
 
     // TODO make nextStep and prevStep be conditional and optional
     if (type==='tooltip') {
@@ -117,7 +122,7 @@ export default class Guide {
       case 'is':
         return pathname===value;
       case 'contains':
-        return pathname.contains(value);
+        return pathname.includes(value);
       case 'endsWith':
         return pathname.endsWith(value);
       case 'startWith':
