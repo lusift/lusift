@@ -8,12 +8,10 @@ export default class Lusift {
 
   constructor(content) {
     this.content=content;
-    // if loadState() matches this.content
-    //   sk
-    // else
-    //   saveState
-    // saveState(this.content)
-    // console.log(loadState());
+    const localState = loadState();
+    if(localState instanceof Object && localState.constructor === Object) {
+      saveState({});
+    }
   }
 
   refresh() {
