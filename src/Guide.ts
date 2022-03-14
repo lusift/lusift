@@ -5,7 +5,8 @@ import isEqual from 'lodash.isequal';
 
 // TODO do we close the entire guide if a step is closed?
 // TODO Check if the local data comparer is really working
-// TODO learn how to work better with lines folding. I keep having to manually unfold folds within folds
+// TODO add regex path type (for a path like /[companyName]/dashboard)
+// TODO fix close event handler for tooltips
 
 interface GuideDataType {
   id: string;
@@ -50,9 +51,7 @@ export default class Guide {
     if(!loadState()[this.guideData.id] || !isEqual(loadState()[this.guideData.id], this.guideData)) {
       console.log('guide data changed');
       this.activeStep=0;
-      const existingState = loadState() || {};
       const newState = {
-        ...existingState,
         [this.guideData.id]: {
           ...this.guideData
         }
@@ -108,6 +107,7 @@ export default class Guide {
         guideID: this.guideData.id,
         nextStep: this.nextStep.bind(this),
         prevStep: this.prevStep.bind(this),
+        closeGuide: this.close.bind(this)
       });
     } else if (type==='modal') {
 
@@ -137,10 +137,6 @@ export default class Guide {
     console.log(this.guideData);
     console.log('checking if element exists')
     return Boolean(document.querySelector(this.guideData.steps[stepIndex].target.elementSelector));
-  }
-
-  private closeCurrentStep() {
-    this.activeStepInstance.remove();
   }
 
   public setStep(newStepNum: number) {
@@ -198,10 +194,16 @@ export default class Guide {
       }
     }
     saveState(newState);
+    this.activeStepInstance.remove();
+    console.log('guide closed');
   }
 
   private jumpToStep(stepNum: number) {
     this.setStep(stepNum);
+  }
+
+  private closeCurrentStep() {
+    this.activeStepInstance.remove();
   }
 
   private nextStep() {

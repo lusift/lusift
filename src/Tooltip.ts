@@ -31,6 +31,8 @@ interface Target {
     elementSelector: string;
 }
 
+// TODO see if an unrelated dom change loses controls to the tooltip
+
 export default class Tooltip {
     private targetElement: document.HTMLElement;
     readonly target: Target;
@@ -40,6 +42,7 @@ export default class Tooltip {
     readonly data: TooltipData;
     private nextStep: Function;
     private prevStep: Function;
+    private closeGuide: Function;
 
     constructor(
         {
@@ -47,6 +50,7 @@ export default class Tooltip {
             guideID,
             nextStep,
             prevStep,
+            closeGuide,
             index,
             data
         }:
@@ -56,6 +60,7 @@ export default class Tooltip {
             data: TooltipData;
             nextStep: Function;
             prevStep: Function,
+            closeGuide: Function,
             index: number,
         }) {
 
@@ -65,6 +70,7 @@ export default class Tooltip {
         this.uid=`g-${guideID}--t-${index}`;
         this.nextStep=nextStep;
         this.prevStep=prevStep;
+        this.closeGuide=closeGuide;
         this.create();
     }
 
@@ -74,7 +80,7 @@ export default class Tooltip {
         const { title, placement, arrow } = this.data;
 
         this.tooltipElement = createTooltip({
-            remove: this.remove.bind(this),
+            remove: this.closeGuide,
             uid: this.uid,
             nextStep: this.nextStep,
             prevStep: this.prevStep,
