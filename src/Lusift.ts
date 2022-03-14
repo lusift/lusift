@@ -5,11 +5,13 @@ export default class Lusift {
   private content;
   // We'll just pretend for now that there's only going to be 1 instance
   private guideInstance;
+  private guideInstances;
 
   constructor(content) {
     this.content=content;
-    const localState = loadState();
-    if(localState instanceof Object && localState.constructor === Object) {
+    this.guideInstances = {};
+    // if loadState() type is not object,
+    if(!(this.content instanceof Object) || this.content.constructor !== Object ) {
       saveState({});
     }
   }
@@ -25,24 +27,14 @@ export default class Lusift {
     const { type, data } = this.content[contentID];
 
     if (type==='guide') {
-      this.guideInstance = new Guide(data);
-      this.guideInstance.start();
+      const guideInstance = new Guide(data);
+      this.guideInstances[contentID] = guideInstance;
+      guideInstance.start();
     }
+    console.log(this.guideInstances)
   }
 
-  close() {
+  close(contentID: string) {
     //
-  }
-}
-
-
-let printPrimeNumbers = (n) => {
-  let i=3;
-  while(n>0) {
-    if(i%2!==0) {
-      console.log(i);
-      n--;
-    }
-    i++;
   }
 }

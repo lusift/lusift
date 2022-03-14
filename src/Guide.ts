@@ -45,20 +45,9 @@ export default class Guide {
   private setInitialState() {
     // compare data with localstorage
     // set tracking state accordingly
-    const { data, activeStep, finished, prematurelyClosed } = loadState()[this.guideData.id];
-    /* console.log('locally saved data:');
-    console.log(data);
-    console.log('incoming:');
-    console.log(this.guideData) */
-    console.log(`saved active step: ${activeStep}`)
+    console.log(loadState());
 
-    if(isEqual(data, this.guideData)) {
-      console.log('guide data unchanged');
-      this.activeStep=activeStep || 0;
-      this.finished=finished;
-      this.prematurelyClosed=prematurelyClosed;
-
-    } else {
+    if(!loadState()[this.guideData.id] || !isEqual(loadState()[this.guideData.id], this.guideData)) {
       console.log('guide data changed');
       this.activeStep=0;
       const existingState = loadState() || {};
@@ -69,6 +58,20 @@ export default class Guide {
         }
       }
       saveState(newState);
+
+    } else {
+      const { data, activeStep, finished, prematurelyClosed } = loadState()[this.guideData.id];
+      /* console.log('locally saved data:');
+      console.log(data);
+      console.log('incoming:');
+      console.log(this.guideData) */
+      console.log(`saved active step: ${activeStep}`)
+
+      console.log('guide data unchanged');
+      this.activeStep=activeStep || 0;
+      this.finished=finished;
+      this.prematurelyClosed=prematurelyClosed;
+
     }
     console.log(`Starting with step: ${this.activeStep}`);
   }
