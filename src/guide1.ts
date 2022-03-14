@@ -8,7 +8,10 @@ const guide1 = {
             type: 'tooltip',
             targetElementSelector: 'svg',
             target: {
-                path: '',
+                path: {
+                    value: '/lusift/dashboard',
+                    comparator: 'is'
+                },
                 elementSelector: 'svg'
             },
             data: {
@@ -23,7 +26,10 @@ const guide1 = {
             type: 'tooltip',
             targetElementSelector: 'button',
             target: {
-                path: '',
+                path: {
+                    value: '/lusift/guides',
+                    comparator: 'contains'
+                },
                 elementSelector: 'input'
             },
             data: {

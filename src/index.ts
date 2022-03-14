@@ -1,28 +1,34 @@
-import Guide from './Guide';
+import Lusift from './Lusift';
 import guide1 from './guide1';
 
-class Lusift {
-    private content;
-    constructor(content){
-        console.log('Lusift imported');
-        this.content = content;
-    }
-    showContent(contentID: string) {
-        //Forces specific Lusift content to appear for the current user by passing in the ID.
-        // we can have a targeting class later that'll deal with user targetting
-        const guideData = this.content[contentID];
-        const gi = new Guide(guideData);
-        gi.start();
-    }
-}
+// Look through lusift architecture docs
+
+/* =============== TODOs =====================================================
+
+  - TODO see how steps for tooltip should progress
+  - HACK add all methods for Guide
+  - TODO add all lifecycle methods for Tooltip
+  - TODO inspect tooltip from demo.html
+  - TODO add configurability to tooltipElement- content, styling, javascript methods
+  - TODO add backdrop
+  - TODO add progress bar
+  - TODO lay out a series of interactions and events that will occur as part of
+         our first guide
+  - TODO add event emmitors and listeners and handlers
+
+  ============================================================================
+*/
+
 
 const content = {
-    "guide1": guide1
+    "guide1": {
+        type: 'guide',
+        data: guide1
+    }
 }
 
 export default () => {
-    // Lusift class receives all the guides as objects with id's
-    // showContent() method is passed the id of the specific artifact to be started
+    console.log('Lusift imported');
     const lusiftInstance = new Lusift(content);
     lusiftInstance.showContent("guide1");
 }

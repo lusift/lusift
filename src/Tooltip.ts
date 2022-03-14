@@ -3,6 +3,8 @@ import createTooltip from './createTooltip';
 import { createPopper } from '@popperjs/core';
 import popperOptions from './popperOptions';
 
+// import createPopper from './createPopper';
+
 interface PopperInstanceType {
     state: Object;
     destroy: () => void,
@@ -21,11 +23,10 @@ interface TooltipData {
 
 // reference to tooltip element is lost after any dom changes
 
-
 interface Target {
     path: {
         value: string;
-        comporator: string;
+        comparator: string;
     }
     elementSelector: string;
 }
@@ -43,11 +44,11 @@ export default class Tooltip {
     constructor(
         {
             target,
+            guideID,
             nextStep,
             prevStep,
-            data,
-            guideID,
-            index
+            index,
+            data
         }:
         {
             target: Target;
@@ -58,14 +59,14 @@ export default class Tooltip {
             index: number,
         }) {
 
-            this.target=target;
-            this.targetElement = document.querySelector(this.target.elementSelector);
-            this.data = data;
-            this.uid=`g-${guideID}--t-${index}`;
-            this.nextStep=nextStep;
-            this.prevStep=prevStep;
-            this.create();
-        }
+        this.target=target;
+        this.targetElement = document.querySelector(this.target.elementSelector);
+        this.data = data;
+        this.uid=`g-${guideID}--t-${index}`;
+        this.nextStep=nextStep;
+        this.prevStep=prevStep;
+        this.create();
+    }
 
     private create(): void {
         if (!this.targetElement) return console.log('Error: target element not found');
@@ -80,7 +81,6 @@ export default class Tooltip {
             toShowArrow: arrow,
             title,
         });
-
 
         this.popperInstance = createPopper(this.targetElement, this.tooltipElement, {
             ...popperOptions,
@@ -101,6 +101,7 @@ export default class Tooltip {
     }
 
     public remove(): void {
+        console.log(`removing tooltip ${this.uid}`)
         this.tooltipElement.remove();
         this.popperInstance.forceUpdate();
         this.popperInstance.destroy();
@@ -111,4 +112,3 @@ export default class Tooltip {
         return this.popperInstance.state;
     } */
 }
-
