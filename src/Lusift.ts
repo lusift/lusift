@@ -1,10 +1,12 @@
 import Guide from './Guide';
 import { saveState, loadState } from './localStorage';
 
+import { Content } from './types';
+
 export default class Lusift {
-  private content;
+  private content: Content;
   // We'll just pretend for now that there's only going to be 1 instance
-  private guideInstances;
+  private guideInstances: any;
 
   constructor() {
     this.guideInstances = {};

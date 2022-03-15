@@ -5,6 +5,7 @@ import Lusift from './Lusift';
 
 /* =============== TODOs =====================================================
 
+  - TODO Look into abstract syntax tree for html elements
   - TODO see how steps for tooltip should progress
   - TODO inspect tooltip from demo.html
   - TODO add configurability to tooltipElement- content, styling, javascript methods

@@ -3,41 +3,33 @@ import { window, document } from 'global';
 import { saveState, loadState } from './localStorage';
 import isEqual from 'lodash.isequal';
 
+import { GuideType } from './types';
+
 // TODO add regex path type (for a path like /[companyName]/dashboard)
-// TODO make it intallable
+// TODO make it installable
 // TODO make it usable with all the hooks and all that
 
-interface GuideDataType {
-  id: string;
-  name: string;
-  description: string;
-  steps: {
-    index: number;
-    type: string;
-    target: {
-      path: {
-        value: string;
-        comparator: string;
-      }
-      elementSelector: string;
-    };
-    data: {
-      placement: any;
-      title: string;
-      arrow: boolean;
-    };
-    placement: string;
-  }[];
+
+function isOfTypeGuide(object: any): boolean {
+  // TODO complete this
+  return 'data' in object;
+}
+
+
+function isOfTypeContent(object: any): boolean {
+  // TODO complete this
+  // object has atleast one key, each key's value is an object with
+  // -- type that is 'guide', and data that is of type GuideType
 }
 
 export default class Guide {
-  readonly guideData: GuideDataType;
+  readonly guideData: GuideType;
   private activeStep: number;
   private finished: boolean;
   private prematurelyClosed: boolean;
   private activeStepInstance: any;
 
-  constructor(guideData: GuideDataType) {
+  constructor(guideData: GuideType) {
     this.guideData = guideData;
     this.setInitialState();
   }
