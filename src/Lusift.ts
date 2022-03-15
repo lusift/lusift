@@ -33,7 +33,7 @@ export default class Lusift {
   refresh() {
     // run page elements through conditional again
     // TODO set gi type def
-    // Object.values(this.guideInstances).forEach((gi: Guide) => gi.attemptShow());
+    Object.values(this.guideInstances).forEach((gi: Guide) => gi.attemptShow());
     console.log('page refresh');
   }
 

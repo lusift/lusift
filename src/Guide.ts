@@ -87,20 +87,25 @@ export default class Guide {
 
   public attemptShow(): void {
     // call on Guide init, page load, and Lusift.refresh()
-    if(this.finished || this.prematurelyClosed) return;
-
-    const { activeStep } = this;
 
     window.setTimeout(() => {
+
+      if(this.finished || this.prematurelyClosed) return;
+
+      const { activeStep } = this;
       if (this.doesTargetPathMatch(activeStep) && this.isTargetElementFound(activeStep)) {
         console.log('target path and element matched');
         this.showStep(activeStep);
       } else {
         console.log('Either targetPath doesn\'t match or element not found');
-      /* if(!this.doesTargetPathMatch(activeStep)) return console.log('target path not matching');
-              if(!this.isTargetElementFound(activeStep)) return console.log('element not found') */
+        // remove steps that shouldn't apply to the current page
+
+        if(this.activeStepInstance) {
+          console.log('target selectors no longer matching, removing');
+          this.activeStepInstance.remove();
+        }
       }
-    }, 0)
+    }, 1000);
   }
 
   private showStep(stepIndex: number) {
