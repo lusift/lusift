@@ -2,40 +2,17 @@ import { document, window } from 'global';
 import createTooltip from './createTooltip';
 import { createPopper } from '@popperjs/core';
 import popperOptions from './popperOptions';
+import { PopperInstanceType, TooltipData, TooltipTarget } from './types';
 
 // import createPopper from './createPopper';
 
-interface PopperInstanceType {
-    state: Object;
-    destroy: () => void,
-    forceUpdate: () => void,
-    update: () => Promise<Object>,
-    setOptions: (
-    options: Object | ((Object) => Object)
-    ) => Promise<Object>,
-}
-
-interface TooltipData {
-    title: string;
-    placement: any; // Placement type from popper or manually
-    arrow: boolean;
-}
 
 // reference to tooltip element is lost after any dom changes
-
-interface Target {
-    path: {
-        value: string;
-        comparator: string;
-    }
-    elementSelector: string;
-}
-
 // TODO see if an unrelated dom change loses controls to the tooltip
 
 export default class Tooltip {
     private targetElement: document.HTMLElement;
-    readonly target: Target;
+    readonly target: TooltipTarget;
     private tooltipElement: document.HTMLElement;
     private popperInstance: PopperInstanceType;
     readonly uid: string;
@@ -55,7 +32,7 @@ export default class Tooltip {
             data
         }:
         {
-            target: Target;
+            target: TooltipTarget;
             guideID: string;
             data: TooltipData;
             nextStep: Function;

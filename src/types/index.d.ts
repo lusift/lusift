@@ -28,3 +28,29 @@ export interface Content {
     data: GuideType;
   }
 }
+
+
+export interface PopperInstanceType {
+    state: Object;
+    destroy: () => void,
+    forceUpdate: () => void,
+    update: () => Promise<Object>,
+    setOptions: (
+    options: Object | ((Object) => Object)
+    ) => Promise<Object>,
+}
+
+export interface TooltipData {
+    title: string;
+    placement: any; // Placement type from popper or manually
+    arrow: boolean;
+}
+
+
+export interface TooltipTarget {
+    path: {
+        value: string;
+        comparator: string;
+    }
+    elementSelector: string;
+}

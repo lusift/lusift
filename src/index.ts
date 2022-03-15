@@ -1,4 +1,4 @@
-import { window } from 'global';
+import { window, document } from 'global';
 import Lusift from './Lusift';
 
 // Look through lusift architecture docs
@@ -15,6 +15,17 @@ import Lusift from './Lusift';
   ============================================================================
 */
 
-/* window.Lusift = new Lusift();
-export default window.Lusift; */
-export default new Lusift();
+// TODO load on page load
+// TODO see why global variables are undefined here but not on other place
+
+/* if (typeof window !== "undefined") {
+  // Client-side-only code
+} */
+
+let lusiftInstance = new Lusift();
+
+/* setTimeout(() => {
+  window.Lusift = lusiftInstance;
+}, 0); */
+
+export default lusiftInstance;

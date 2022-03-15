@@ -1,4 +1,4 @@
- import { document, window } from 'global';
+import { document, window } from 'global';
 
 const createTooltip = ({ title, remove, toShowArrow, uid, nextStep, prevStep }) => {
 

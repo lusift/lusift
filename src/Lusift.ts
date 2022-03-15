@@ -1,5 +1,6 @@
 import Guide from './Guide';
 import { saveState, loadState } from './localStorage';
+import { window } from 'global';
 
 import { Content } from './types';
 
@@ -11,6 +12,9 @@ export default class Lusift {
   constructor() {
     this.guideInstances = {};
     console.log('Lusift imported');
+    /* setTimeout(() => {
+      window.Lusift = this;
+    }, 0); */
   }
 
   setContent(content) {
@@ -28,7 +32,8 @@ export default class Lusift {
 
   refresh() {
     // run page elements through conditional again
-    this.guideInstances.forEach(gi => gi.attemptShow());
+    // TODO set gi type def
+    // Object.values(this.guideInstances).forEach((gi: Guide) => gi.attemptShow());
     console.log('page refresh');
   }
 
@@ -46,7 +51,7 @@ export default class Lusift {
       }
       console.log(this.guideInstances)
 
-    }, 1000);
+    }, 0);
   }
 
   close(contentID: string) {

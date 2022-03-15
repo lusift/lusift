@@ -20,6 +20,7 @@ function isOfTypeContent(object: any): boolean {
   // TODO complete this
   // object has atleast one key, each key's value is an object with
   // -- type that is 'guide', and data that is of type GuideType
+  return false;
 }
 
 export default class Guide {
