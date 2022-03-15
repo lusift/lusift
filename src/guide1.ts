@@ -6,7 +6,6 @@ const guide1 = {
         {
             index: 0,
             type: 'tooltip',
-            targetElementSelector: 'svg',
             target: {
                 path: {
                     value: '/lusift/dashboard',
@@ -24,7 +23,6 @@ const guide1 = {
         {
             index: 1,
             type: 'tooltip',
-            targetElementSelector: 'button',
             target: {
                 path: {
                     value: '/lusift/guides',
@@ -36,6 +34,23 @@ const guide1 = {
                 placement: 'right',
                 title: 'Tooltip 2',
                 arrow: false,
+            },
+            placement: 'right'
+        },
+        {
+            index: 2,
+            type: 'tooltip',
+            target: {
+                path: {
+                    value: '/lusift/checklists/2/ed',
+                    comparator: 'contains'
+                },
+                elementSelector: '.chakra-modal__content header'
+            },
+            data: {
+                placement: 'right',
+                title: 'This is modal header',
+                arrow: true,
             },
             placement: 'right'
         },

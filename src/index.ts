@@ -31,4 +31,5 @@ export default () => {
     console.log('Lusift imported');
     const lusiftInstance = new Lusift(content);
     lusiftInstance.showContent("guide1");
+    return lusiftInstance;
 }

@@ -4,7 +4,6 @@ import { saveState, loadState } from './localStorage';
 export default class Lusift {
   private content;
   // We'll just pretend for now that there's only going to be 1 instance
-  private guideInstance;
   private guideInstances;
 
   constructor(content) {
@@ -17,8 +16,8 @@ export default class Lusift {
   }
 
   refresh() {
-    //equivalent of page()
     // run page elements through conditional again
+    this.guideInstances.forEach(gi => gi.attemptShow())
     console.log('page refresh');
   }
 

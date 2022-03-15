@@ -43,12 +43,21 @@ export default class Guide {
     this.setInitialState();
   }
 
+  private hasGuideDataChanged(): boolean {
+    const localData = loadState();
+    if(!localData[this.guideData.id]) return true;
+    const localGuideData = localData[this.guideData.id];
+    delete localGuideData.activeStep;
+    delete localGuideData.finished;
+    delete localGuideData.prematurelyClosed;
+    return !isEqual(localGuideData, this.guideData);
+  }
+
   private setInitialState() {
     // compare data with localstorage
     // set tracking state accordingly
-    console.log(loadState());
 
-    if(!loadState()[this.guideData.id] || !isEqual(loadState()[this.guideData.id], this.guideData)) {
+    if(this.hasGuideDataChanged()) {
       console.log('guide data changed');
       this.activeStep=0;
       const newState = {
@@ -86,12 +95,16 @@ export default class Guide {
 
     const { activeStep } = this;
 
-    if (this.doesTargetPathMatch(activeStep) && this.isTargetElementFound(activeStep)) {
-      console.log('target path and element matched');
-      this.showStep(activeStep);
-    } else {
-      console.log('Either targetPath doesn\'t match or element not found');
-    }
+    window.setTimeout(() => {
+      if (this.doesTargetPathMatch(activeStep) && this.isTargetElementFound(activeStep)) {
+        console.log('target path and element matched');
+        this.showStep(activeStep);
+      } else {
+        console.log('Either targetPath doesn\'t match or element not found');
+      /* if(!this.doesTargetPathMatch(activeStep)) return console.log('target path not matching');
+              if(!this.isTargetElementFound(activeStep)) return console.log('element not found') */
+      }
+    }, 0)
   }
 
   private showStep(stepIndex: number) {
@@ -190,10 +203,12 @@ export default class Guide {
       ...existingState,
       [this.guideData.id]: {
         ...existingState[this.guideData.id],
-        prematurelyClosed: true
+        prematurelyClosed: this.prematurelyClosed
       }
     }
     saveState(newState);
+    console.log(existingState)
+    console.log(newState);
     this.activeStepInstance.remove();
     console.log('guide closed');
   }
