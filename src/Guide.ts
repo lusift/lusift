@@ -3,10 +3,9 @@ import { window, document } from 'global';
 import { saveState, loadState } from './localStorage';
 import isEqual from 'lodash.isequal';
 
-// TODO do we close the entire guide if a step is closed?
-// TODO Check if the local data comparer is really working
 // TODO add regex path type (for a path like /[companyName]/dashboard)
-// TODO fix close event handler for tooltips
+// TODO make it intallable
+// TODO make it usable with all the hooks and all that
 
 interface GuideDataType {
   id: string;
@@ -44,7 +43,10 @@ export default class Guide {
   }
 
   private hasGuideDataChanged(): boolean {
+    console.log('checking if guide data has changed');
     const localData = loadState();
+    console.log(localData);
+    // WARN localData is undefined, how did Lusift class let this happen
     if(!localData[this.guideData.id]) return true;
     const localGuideData = localData[this.guideData.id];
     delete localGuideData.activeStep;
@@ -57,6 +59,7 @@ export default class Guide {
     // compare data with localstorage
     // set tracking state accordingly
 
+    console.log('setting initial stte')
     if(this.hasGuideDataChanged()) {
       console.log('guide data changed');
       this.activeStep=0;
