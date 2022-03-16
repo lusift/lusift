@@ -105,7 +105,7 @@ export default class Guide {
           this.activeStepInstance.remove();
         }
       }
-    }, 1000);
+    }, 0);
   }
 
   private showStep(stepIndex: number) {

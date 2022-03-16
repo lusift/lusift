@@ -32,7 +32,6 @@ export default class Lusift {
 
   refresh() {
     // run page elements through conditional again
-    // TODO set gi type def
     Object.values(this.guideInstances).forEach((gi: Guide) => gi.attemptShow());
     console.log('page refresh');
   }
@@ -40,6 +39,9 @@ export default class Lusift {
   showContent(contentID: string) {
     //Forces specific Lusift content to appear for the current user by passing in the ID.
     // TODO see if content exists for ID
+    if(!this.content[contentID]) {
+      return console.warn(`Content with id of ${contentID} doesn't exist`);
+    }
     setTimeout(() => {
       const { type, data } = this.content[contentID];
 
