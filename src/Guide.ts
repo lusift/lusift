@@ -77,7 +77,7 @@ export default class Guide {
 
     window.setTimeout(() => {
 
-      if(this.finished || this.prematurelyClosed) return;
+      if(!this.guideData.steps[this.activeStep] || this.finished || this.prematurelyClosed) return;
 
       const { activeStep } = this;
       if (this.doesTargetPathMatch(activeStep) && this.isTargetElementFound(activeStep)) {
