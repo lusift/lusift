@@ -33,11 +33,7 @@ export default class Guide {
     delete guideData.trackingState;
 
     this.guideData = guideData;
-    this.trackingState = localGuideState.trackingState || {
-      activeStep: 0,
-      finished: undefined,
-      prematurelyClosed: undefined
-    }
+    this.trackingState = localGuideState.trackingState || this.trackingState;
     console.log('guideData pulled from local storage:');
     console.log(this.guideData);
     console.log(this.trackingState);
@@ -121,14 +117,26 @@ export default class Guide {
   }
 
   private updateLocalTrackingState(): void {
-
+    // save to localstorage
+    const existingState = loadState();
+    const newState = {
+      ...existingState,
+      [this.guideData.id]: {
+        ...existingState[this.guideData.id],
+        trackingState: this.trackingState
+      }
+    }
+    saveState(newState);
+    console.log('new state:')
+    console.log(newState);
+    console.log(loadState())
   }
 
   public setStep(newStepNum: number): void {
     // change step and see which steps need to be unmounted or mounted
     // this.closeCurrentStep();
     if (newStepNum<0) {
-      return console.log('Step index can\'t be less than 0');
+      return console.warn('Step index can\'t be less than 0');
     } else if (newStepNum+1>this.guideData.steps.length) {
       this.trackingState.finished=true;
       console.log('guide finished');
@@ -138,38 +146,13 @@ export default class Guide {
       this.attemptShow();
     }
 
-    // save to localstorage
-    const existingState = loadState();
-    const newState = {
-      ...existingState,
-      [this.guideData.id]: {
-        ...existingState[this.guideData.id],
-        trackingState: this.trackingState
-      }
-    }
-
-    saveState(newState);
-    console.log('new state:')
-    console.log(newState);
-    console.log(loadState())
+    this.updateLocalTrackingState();
   }
 
   public close(): void {
     // close guide
-
     this.trackingState.prematurelyClosed=true;
-    // save to localstorage
-    const existingState = loadState();
-    const newState = {
-      ...existingState,
-      [this.guideData.id]: {
-        ...existingState[this.guideData.id],
-        trackingState: this.trackingState
-      }
-    }
-    saveState(newState);
-    console.log(existingState)
-    console.log(newState);
+    this.updateLocalTrackingState();
     this.activeStepInstance.remove();
     console.log('guide closed');
   }
