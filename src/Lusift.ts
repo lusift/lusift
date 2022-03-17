@@ -27,16 +27,11 @@ export default class Lusift {
     }
     this.content = content;
     console.log('filtering')
-    Object.values(this.content).forEach(item => {
-      console.log(item);
-    })
+    Object.keys(this.content).forEach((key) => {
+      const { id, name, description, steps } = this.content[key].data; //prolly a guide
+      this.content[key].data = { id, name, description, steps };
+    });
 
-    /* this.content = Object.values(content.data).forEach(data => {
-      delete data.finished;
-      delete data.prematurelyClosed;
-      delete data.activeStep;
-      return data;
-    }); */
     console.log('content set:');
     console.log(loadState());
     const localData = loadState();

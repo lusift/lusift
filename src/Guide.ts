@@ -9,7 +9,6 @@ import { GuideType } from './types';
 // TODO make it installable
 // TODO make it usable with all the hooks and all that
 
-
 export default class Guide {
   readonly guideData: GuideType;
   private activeStep: number;
@@ -121,6 +120,7 @@ export default class Guide {
     // is, endsWith, startsWith, contains
     const { value, comparator } = this.guideData.steps[stepIndex].target.path;
     const { pathname } = window.location;
+    console.log('value, pathname, comparator:')
     console.log(value, pathname, comparator)
     switch(comparator) {
       case 'is':
