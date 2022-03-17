@@ -1,7 +1,6 @@
 import Tooltip from './Tooltip';
 import { window, document } from 'global';
 import { saveState, loadState } from './localStorage';
-import isEqual from 'lodash.isequal';
 
 import { GuideType } from './types';
 
@@ -157,22 +156,17 @@ export default class Guide {
     console.log('guide closed');
   }
 
-  private jumpToStep(stepNum: number): void {
-    this.setStep(stepNum);
-  }
-
   private closeCurrentStep(): void {
     this.activeStepInstance.remove();
   }
 
-  private nextStep(removeListener: Function): void {
+  private nextStep(): void {
     const newStep = this.trackingState.activeStep+1;
     this.closeCurrentStep();
     this.setStep(newStep);
-    removeListener || removeListener();
   }
 
-  private prevStep(removeListener: Function): void {
+  private prevStep(): void {
     const newStep = this.trackingState.activeStep-1;
     this.closeCurrentStep();
     this.setStep(newStep);
