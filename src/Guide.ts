@@ -5,6 +5,7 @@ import isEqual from 'lodash.isequal';
 
 import { GuideType } from './types';
 
+// TODO when should the last step be registered as closed prematurely vs finished
 // TODO add regex path type (for a path like /[companyName]/dashboard)
 // TODO make it installable
 // TODO make it usable with all the hooks and all that
@@ -35,8 +36,8 @@ export default class Guide {
     console.log('checking if guide data has changed');
     const localData = loadState();
     console.log(localData);
-    if(!localData[this.guideData.id]) return true;
     const localGuideData = localData[this.guideData.id];
+    if(localGuideData) return true;
     delete localGuideData.trackingState;
     return !isEqual(localGuideData, this.guideData);
   }
@@ -50,8 +51,10 @@ export default class Guide {
       console.log('guide data changed');
       this.trackingState.activeStep=0;
       const newState = {
+        ...loadState(),
         [this.guideData.id]: {
-          ...this.guideData
+          ...this.guideData,
+          trackingState: this.trackingState
         }
       }
       saveState(newState);
@@ -61,7 +64,7 @@ export default class Guide {
       // We may need to change this entire function and instead of checking if data has changed alone,
       // see if it's empty and fill it with placeholder. Map those different conditions
       let trackingState = loadState()[this.guideData.id].trackingState || {};
-      const { activeStep, finished, prematurelyClosed } = trackingState;
+      const { activeStep = 0, finished, prematurelyClosed } = trackingState;
       /* console.log('locally saved data:');
       console.log(data);
       console.log('incoming:');
@@ -70,7 +73,7 @@ export default class Guide {
 
       console.log('guide data unchanged');
       this.trackingState = {
-        activeStep: activeStep || 0,
+        activeStep,
         finished,
         prematurelyClosed
       }
@@ -166,7 +169,7 @@ export default class Guide {
         ...existingState,
         [this.guideData.id]: {
           ...existingState[this.guideData.id],
-          finished: this.trackingState.finished
+          trackingState: this.trackingState
         }
       }
 
@@ -182,7 +185,7 @@ export default class Guide {
         ...existingState,
         [this.guideData.id]: {
           ...existingState[this.guideData.id],
-          activeStep: newStepNum
+          trackingState: this.trackingState
         }
       }
       this.attemptShow();
@@ -204,7 +207,7 @@ export default class Guide {
       ...existingState,
       [this.guideData.id]: {
         ...existingState[this.guideData.id],
-        prematurelyClosed: this.trackingState.prematurelyClosed
+        trackingState: this.trackingState
       }
     }
     saveState(newState);
