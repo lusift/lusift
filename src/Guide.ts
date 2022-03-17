@@ -27,15 +27,17 @@ export default class Guide {
   private activeStepInstance: any;
 
   constructor(guideID: string) {
-    // TODO bug: it's coming up undefined, so local storage is not set yet
-    // -- nevermind working now
-    this.guideData = loadState()[guideID];
-    this.trackingState = this.guideData.trackingState || {
+    // localGuideState consists of trackingState and guideData
+    const localGuideState = loadState()[guideID];
+    const guideData = Object.assign({}, localGuideState);
+    delete guideData.trackingState;
+
+    this.guideData = guideData;
+    this.trackingState = localGuideState.trackingState || {
       activeStep: 0,
       finished: undefined,
       prematurelyClosed: undefined
     }
-    delete this.guideData.trackingState;
     console.log('guideData pulled from local storage:');
     console.log(this.guideData);
     console.log(this.trackingState);
@@ -118,40 +120,32 @@ export default class Guide {
     return Boolean(document.querySelector(this.guideData.steps[stepIndex].target.elementSelector));
   }
 
+  private updateLocalTrackingState(): void {
+
+  }
+
   public setStep(newStepNum: number): void {
     // change step and see which steps need to be unmounted or mounted
     // this.closeCurrentStep();
-    let newState;
-
-    if (newStepNum+1>this.guideData.steps.length) {
+    if (newStepNum<0) {
+      return console.log('Step index can\'t be less than 0');
+    } else if (newStepNum+1>this.guideData.steps.length) {
       this.trackingState.finished=true;
-      // save to localstorage
-      // TODO refactor to add a method that updates tracking states
-      const existingState = loadState();
-      newState = {
-        ...existingState,
-        [this.guideData.id]: {
-          ...existingState[this.guideData.id],
-          trackingState: this.trackingState
-        }
-      }
-
       console.log('guide finished');
 
-    } else if (newStepNum<0) {
-      return console.log('Step index can\'t be less than 0');
     } else {
       this.trackingState.activeStep=newStepNum;
-      // save to localstorage
-      const existingState = loadState();
-      newState = {
-        ...existingState,
-        [this.guideData.id]: {
-          ...existingState[this.guideData.id],
-          trackingState: this.trackingState
-        }
-      }
       this.attemptShow();
+    }
+
+    // save to localstorage
+    const existingState = loadState();
+    const newState = {
+      ...existingState,
+      [this.guideData.id]: {
+        ...existingState[this.guideData.id],
+        trackingState: this.trackingState
+      }
     }
 
     saveState(newState);

@@ -17,7 +17,6 @@ export interface GuideType {
       title: string;
       arrow: boolean;
     };
-    placement: string;
   }[];
 }
 
@@ -31,26 +30,26 @@ export interface Content {
 
 
 export interface PopperInstanceType {
-    state: Object;
-    destroy: () => void,
-    forceUpdate: () => void,
-    update: () => Promise<Object>,
-    setOptions: (
+  state: Object;
+  destroy: () => void,
+  forceUpdate: () => void,
+  update: () => Promise<Object>,
+  setOptions: (
     options: Object | ((Object) => Object)
-    ) => Promise<Object>,
+  ) => Promise<Object>,
 }
 
 export interface TooltipData {
-    title: string;
-    placement: any; // Placement type from popper or manually
-    arrow: boolean;
+  title: string;
+  placement: any; // Placement type from popper or manually
+  arrow: boolean;
 }
 
 
 export interface TooltipTarget {
-    path: {
-        value: string;
-        comparator: string;
-    }
-    elementSelector: string;
+  path: {
+    value: string;
+    comparator: string;
+  }
+  elementSelector: string;
 }
