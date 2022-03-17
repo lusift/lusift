@@ -5,6 +5,7 @@ import Lusift from './Lusift';
 
 /* =============== TODOs =====================================================
 
+  - TODO wrap an error handler around the package to safely throw errors
   - TODO Look into abstract syntax tree for html elements
   - TODO see how steps for tooltip should progress
   - TODO inspect tooltip from demo.html
@@ -15,7 +16,6 @@ import Lusift from './Lusift';
   ============================================================================
 */
 
-// TODO load on page load
 // TODO see why global variables are undefined here but not on other place
 
 /* if (typeof window !== "undefined") {

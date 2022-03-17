@@ -3,6 +3,7 @@ import { saveState, loadState } from './localStorage';
 import { window } from 'global';
 
 import { Content } from './types';
+import { isOfTypeContent } from './utils/isOfType';
 
 export default class Lusift {
   private content: Content;
@@ -17,9 +18,25 @@ export default class Lusift {
     }, 0); */
   }
 
-  setContent(content) {
+  setContent(content: Content) {
     // TODO filter and validate this.content
-    this.content=content;
+    console.log('validating content: ');
+    console.log(content)
+    if(!isOfTypeContent(content)) {
+      return console.warn('Content data type is invalid');
+    }
+    this.content = content;
+    console.log('filtering')
+    Object.values(this.content).forEach(item => {
+      console.log(item);
+    })
+
+    /* this.content = Object.values(content.data).forEach(data => {
+      delete data.finished;
+      delete data.prematurelyClosed;
+      delete data.activeStep;
+      return data;
+    }); */
     console.log('content set:');
     console.log(loadState());
     const localData = loadState();
@@ -38,7 +55,11 @@ export default class Lusift {
 
   showContent(contentID: string) {
     //Forces specific Lusift content to appear for the current user by passing in the ID.
-    // TODO see if content exists for ID
+    if(!this.content) {
+      return console.warn(`Content not set, pass valid content object to setContent()`);
+    }
+
+    // see if content exists for ID
     if(!this.content[contentID]) {
       return console.warn(`Content with id of ${contentID} doesn't exist`);
     }
