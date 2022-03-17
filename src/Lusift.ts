@@ -1,25 +1,56 @@
 import Guide from './Guide';
 import { saveState, loadState } from './localStorage';
 import { window } from 'global';
+import isEqual from 'lodash.isequal';
 
 import { Content } from './types';
 import { isOfTypeContent } from './utils/isOfType';
 
 export default class Lusift {
   private content: Content;
-  // We'll just pretend for now that there's only going to be 1 instance
   private guideInstances: any;
 
   constructor() {
     this.guideInstances = {};
     console.log('Lusift imported');
-    /* setTimeout(() => {
-      window.Lusift = this;
-    }, 0); */
+    const localData = loadState();
+    // if loadState() type is not object,
+    if(!(localData instanceof Object) || localData.constructor !== Object) {
+      console.log('saving state as object');
+      saveState({});
+    }
   }
 
-  setContent(content: Content) {
-    // TODO filter and validate this.content
+  private hasGuideDataChanged(guideData): boolean {
+    console.log('checking if guide data has changed');
+    const localData = loadState();
+    console.log(localData);
+    if(!localData[guideData.id]) return true;
+    const localGuideData = localData[guideData.id];
+    delete localGuideData.trackingState;
+    return !isEqual(localGuideData, guideData);
+  }
+
+  private reconcileContentWithState(): void {
+    // Look through each content item,
+    // --clear tracking data if main data has changed
+    // --conserve otherwise
+    // TODO format tracking data in guide differently and then commit that change first
+    Object.keys(this.content).forEach((key) => {
+      if(this.content[key].type==='guide'){
+        const guideData = this.content[key].data; //prolly a guide
+        if(this.hasGuideDataChanged(guideData)) {
+          // clear tracking data
+        } else {
+
+        }
+      }
+    });
+  }
+
+  public setContent(content: Content): void {
+    // filter and validate this.content
+    // TODO where are we saving this.content to local state
     console.log('validating content: ');
     console.log(content)
     if(!isOfTypeContent(content)) {
@@ -33,22 +64,18 @@ export default class Lusift {
     });
 
     console.log('content set:');
-    console.log(loadState());
     const localData = loadState();
-    // if loadState() type is not object,
-    if(!(localData instanceof Object) || localData.constructor !== Object) {
-      console.log('saving state as object');
-      saveState({});
-    }
+    console.log(localData);
   }
 
-  refresh() {
+
+  public refresh(): void {
     // run page elements through conditional again
     Object.values(this.guideInstances).forEach((gi: Guide) => gi.attemptShow());
     console.log('page refresh');
   }
 
-  showContent(contentID: string) {
+  showContent(contentID: string): void {
     //Forces specific Lusift content to appear for the current user by passing in the ID.
     if(!this.content) {
       return console.warn(`Content not set, pass valid content object to setContent()`);
@@ -70,6 +97,7 @@ export default class Lusift {
       console.log(this.guideInstances)
 
     }, 0);
+    // TODO return all relevant hooks
   }
 
   close(contentID: string) {

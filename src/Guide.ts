@@ -8,12 +8,22 @@ import { GuideType } from './types';
 // TODO add regex path type (for a path like /[companyName]/dashboard)
 // TODO make it installable
 // TODO make it usable with all the hooks and all that
+// TODO add methods to target elements with click listeners to move to next step
+// TODO reformat guide object to add trackingState object property
+
+interface TrackingState {
+  activeStep: number;
+  finished: boolean;
+  prematurelyClosed: boolean;
+}
 
 export default class Guide {
   readonly guideData: GuideType;
-  private activeStep: number;
-  private finished: boolean;
-  private prematurelyClosed: boolean;
+  private trackingState: TrackingState = {
+    activeStep: 0,
+    finished: undefined,
+    prematurelyClosed: undefined
+  };
   private activeStepInstance: any;
 
   constructor(guideData: GuideType) {
@@ -25,12 +35,9 @@ export default class Guide {
     console.log('checking if guide data has changed');
     const localData = loadState();
     console.log(localData);
-    // WARN localData is undefined, how did Lusift class let this happen
     if(!localData[this.guideData.id]) return true;
     const localGuideData = localData[this.guideData.id];
-    delete localGuideData.activeStep;
-    delete localGuideData.finished;
-    delete localGuideData.prematurelyClosed;
+    delete localGuideData.trackingState;
     return !isEqual(localGuideData, this.guideData);
   }
 
@@ -41,7 +48,7 @@ export default class Guide {
     console.log('setting initial stte')
     if(this.hasGuideDataChanged()) {
       console.log('guide data changed');
-      this.activeStep=0;
+      this.trackingState.activeStep=0;
       const newState = {
         [this.guideData.id]: {
           ...this.guideData
@@ -50,7 +57,11 @@ export default class Guide {
       saveState(newState);
 
     } else {
-      const { data, activeStep, finished, prematurelyClosed } = loadState()[this.guideData.id];
+      // TODO The below is erroring out because loadState() could be an empty object
+      // We may need to change this entire function and instead of checking if data has changed alone,
+      // see if it's empty and fill it with placeholder. Map those different conditions
+      let trackingState = loadState()[this.guideData.id].trackingState || {};
+      const { activeStep, finished, prematurelyClosed } = trackingState;
       /* console.log('locally saved data:');
       console.log(data);
       console.log('incoming:');
@@ -58,12 +69,13 @@ export default class Guide {
       console.log(`saved active step: ${activeStep}`)
 
       console.log('guide data unchanged');
-      this.activeStep=activeStep || 0;
-      this.finished=finished;
-      this.prematurelyClosed=prematurelyClosed;
-
+      this.trackingState = {
+        activeStep: activeStep || 0,
+        finished,
+        prematurelyClosed
+      }
     }
-    console.log(`Starting with step: ${this.activeStep}`);
+    console.log(`Starting with step: ${this.trackingState.activeStep}`);
   }
 
   public start(): void {
@@ -76,9 +88,9 @@ export default class Guide {
 
     window.setTimeout(() => {
 
-      if(!this.guideData.steps[this.activeStep] || this.finished || this.prematurelyClosed) return;
+      const { activeStep, finished, prematurelyClosed } = this.trackingState;
+      if(!this.guideData.steps[activeStep] || finished || prematurelyClosed) return;
 
-      const { activeStep } = this;
       if (this.doesTargetPathMatch(activeStep) && this.isTargetElementFound(activeStep)) {
         console.log('target path and element matched');
         this.showStep(activeStep);
@@ -94,7 +106,7 @@ export default class Guide {
     }, 0);
   }
 
-  private showStep(stepIndex: number) {
+  private showStep(stepIndex: number): void {
     const { index, target, data, type } = this.guideData.steps[stepIndex];
     console.log(`Step index: ${index}`);
 
@@ -140,20 +152,21 @@ export default class Guide {
     return Boolean(document.querySelector(this.guideData.steps[stepIndex].target.elementSelector));
   }
 
-  public setStep(newStepNum: number) {
+  public setStep(newStepNum: number): void {
     // change step and see which steps need to be unmounted or mounted
     // this.closeCurrentStep();
     let newState;
+    const { activeStep, finished, prematurelyClosed } = this.trackingState;
 
     if (newStepNum+1>this.guideData.steps.length) {
-      this.finished=true;
+      this.trackingState.finished=true;
       // save to localstorage
       const existingState = loadState();
       newState = {
         ...existingState,
         [this.guideData.id]: {
           ...existingState[this.guideData.id],
-          finished: this.finished
+          finished: this.trackingState.finished
         }
       }
 
@@ -162,7 +175,7 @@ export default class Guide {
     } else if (newStepNum<0) {
       return console.log('Step index can\'t be less than 0');
     } else {
-      this.activeStep=newStepNum;
+      this.trackingState.activeStep=newStepNum;
       // save to localstorage
       const existingState = loadState();
       newState = {
@@ -184,14 +197,14 @@ export default class Guide {
   public close(): void {
     // close guide
 
-    this.prematurelyClosed=true;
+    this.trackingState.prematurelyClosed=true;
     // save to localstorage
     const existingState = loadState();
     const newState = {
       ...existingState,
       [this.guideData.id]: {
         ...existingState[this.guideData.id],
-        prematurelyClosed: this.prematurelyClosed
+        prematurelyClosed: this.trackingState.prematurelyClosed
       }
     }
     saveState(newState);
@@ -201,22 +214,22 @@ export default class Guide {
     console.log('guide closed');
   }
 
-  private jumpToStep(stepNum: number) {
+  private jumpToStep(stepNum: number): void {
     this.setStep(stepNum);
   }
 
-  private closeCurrentStep() {
+  private closeCurrentStep(): void {
     this.activeStepInstance.remove();
   }
 
-  private nextStep() {
-    const newStep = this.activeStep+1;
+  private nextStep(): void {
+    const newStep = this.trackingState.activeStep+1;
     this.closeCurrentStep();
     this.setStep(newStep);
   }
 
-  private prevStep() {
-    const newStep = this.activeStep-1;
+  private prevStep(): void {
+    const newStep = this.trackingState.activeStep-1;
     this.closeCurrentStep();
     this.setStep(newStep);
   }
