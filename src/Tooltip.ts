@@ -49,6 +49,7 @@ export default class Tooltip {
         this.prevStep=prevStep;
         this.closeGuide=closeGuide;
         this.create();
+        this.addTargetEvent('svg');
     }
 
     private create(): void {
@@ -83,7 +84,7 @@ export default class Tooltip {
         // console.log(this.popperInstance);
     }
 
-    public remove(): void {
+    public remove(removeListener): void {
         console.log(`removing tooltip ${this.uid}`)
         this.tooltipElement.remove();
         this.popperInstance.forceUpdate();
@@ -91,7 +92,30 @@ export default class Tooltip {
         console.log(this.popperInstance.state);
     }
 
-    /* public getState() {
-        return this.popperInstance.state;
-    } */
+    private addTargetEvent(elementSelector: string, method='next', eventType='click'): void {
+        // control - next, prev, close
+        // TODO add this event listener at the beginning of each tooltip step and
+        // remove it at then end of it
+        // TODO Look at how those saas do it - the options they give that is
+        const targetElement = document.querySelector(elementSelector);
+        const removeListener = () => this.removeTargetEvent({ eventType, method });
+
+        targetElement.addEventListener(eventType, () => {
+            switch(method) {
+                case 'next':
+                    this.nextStep(removeListener);
+                    break;
+                case 'prev':
+                    this.prevStep(removeListener);
+                    break;
+                case 'close':
+                    this.remove(removeListener);
+                    break;
+            }
+        });
+    }
+
+    private removeTargetEvent({ eventType, method }: { eventType: string, method: string }): void {
+        console.log(`remove event listener of type ${eventType} and method: ${method}`);
+    }
 }

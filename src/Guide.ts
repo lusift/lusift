@@ -10,7 +10,6 @@ import { GuideType } from './types';
 // TODO make it installable
 // TODO make it usable with all the hooks and all that
 // TODO add methods to target elements with click listeners to move to next step
-// TODO reformat guide object to add trackingState object property
 
 interface TrackingState {
   activeStep: number;
@@ -27,58 +26,19 @@ export default class Guide {
   };
   private activeStepInstance: any;
 
-  constructor(guideData: GuideType) {
-    this.guideData = guideData;
-    this.setInitialState();
-  }
-
-  private hasGuideDataChanged(): boolean {
-    console.log('checking if guide data has changed');
-    const localData = loadState();
-    console.log(localData);
-    const localGuideData = localData[this.guideData.id];
-    if(localGuideData) return true;
-    delete localGuideData.trackingState;
-    return !isEqual(localGuideData, this.guideData);
-  }
-
-  private setInitialState() {
-    // compare data with localstorage
-    // set tracking state accordingly
-
-    console.log('setting initial stte')
-    if(this.hasGuideDataChanged()) {
-      console.log('guide data changed');
-      this.trackingState.activeStep=0;
-      const newState = {
-        ...loadState(),
-        [this.guideData.id]: {
-          ...this.guideData,
-          trackingState: this.trackingState
-        }
-      }
-      saveState(newState);
-
-    } else {
-      // TODO The below is erroring out because loadState() could be an empty object
-      // We may need to change this entire function and instead of checking if data has changed alone,
-      // see if it's empty and fill it with placeholder. Map those different conditions
-      let trackingState = loadState()[this.guideData.id].trackingState || {};
-      const { activeStep = 0, finished, prematurelyClosed } = trackingState;
-      /* console.log('locally saved data:');
-      console.log(data);
-      console.log('incoming:');
-      console.log(this.guideData) */
-      console.log(`saved active step: ${activeStep}`)
-
-      console.log('guide data unchanged');
-      this.trackingState = {
-        activeStep,
-        finished,
-        prematurelyClosed
-      }
+  constructor(guideID: string) {
+    // TODO bug: it's coming up undefined, so local storage is not set yet
+    // -- nevermind working now
+    this.guideData = loadState()[guideID];
+    this.trackingState = this.guideData.trackingState || {
+      activeStep: 0,
+      finished: undefined,
+      prematurelyClosed: undefined
     }
-    console.log(`Starting with step: ${this.trackingState.activeStep}`);
+    delete this.guideData.trackingState;
+    console.log('guideData pulled from local storage:');
+    console.log(this.guideData);
+    console.log(this.trackingState);
   }
 
   public start(): void {
@@ -92,7 +52,11 @@ export default class Guide {
     window.setTimeout(() => {
 
       const { activeStep, finished, prematurelyClosed } = this.trackingState;
-      if(!this.guideData.steps[activeStep] || finished || prematurelyClosed) return;
+      if(!this.guideData.steps[activeStep] || finished || prematurelyClosed) {
+        return console.log('it\'s already finished or closed');
+      }
+      console.log('guide is not finished or closed yet');
+      console.log(activeStep, finished, prematurelyClosed);
 
       if (this.doesTargetPathMatch(activeStep) && this.isTargetElementFound(activeStep)) {
         console.log('target path and element matched');
@@ -113,7 +77,6 @@ export default class Guide {
     const { index, target, data, type } = this.guideData.steps[stepIndex];
     console.log(`Step index: ${index}`);
 
-    // TODO make nextStep and prevStep be conditional and optional
     if (type==='tooltip') {
       this.activeStepInstance = new Tooltip({
         target,
@@ -159,11 +122,11 @@ export default class Guide {
     // change step and see which steps need to be unmounted or mounted
     // this.closeCurrentStep();
     let newState;
-    const { activeStep, finished, prematurelyClosed } = this.trackingState;
 
     if (newStepNum+1>this.guideData.steps.length) {
       this.trackingState.finished=true;
       // save to localstorage
+      // TODO refactor to add a method that updates tracking states
       const existingState = loadState();
       newState = {
         ...existingState,
@@ -225,13 +188,14 @@ export default class Guide {
     this.activeStepInstance.remove();
   }
 
-  private nextStep(): void {
+  private nextStep(removeListener: Function): void {
     const newStep = this.trackingState.activeStep+1;
     this.closeCurrentStep();
     this.setStep(newStep);
+    removeListener || removeListener();
   }
 
-  private prevStep(): void {
+  private prevStep(removeListener: Function): void {
     const newStep = this.trackingState.activeStep-1;
     this.closeCurrentStep();
     this.setStep(newStep);

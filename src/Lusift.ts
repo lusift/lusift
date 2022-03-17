@@ -1,5 +1,6 @@
 import Guide from './Guide';
 import { saveState, loadState } from './localStorage';
+import { GuideType } from './types';
 import { window } from 'global';
 import isEqual from 'lodash.isequal';
 
@@ -9,6 +10,7 @@ import { isOfTypeContent } from './utils/isOfType';
 export default class Lusift {
   private content: Content;
   private guideInstances: any;
+  private contentSet: boolean;
 
   constructor() {
     this.guideInstances = {};
@@ -21,49 +23,58 @@ export default class Lusift {
     }
   }
 
-  private hasGuideDataChanged(guideData): boolean {
-    console.log('checking if guide data has changed');
+  private hasGuideDataChanged(guideData: GuideType): boolean {
     const localData = loadState();
-    console.log(localData);
     if(!localData[guideData.id]) return true;
     const localGuideData = localData[guideData.id];
     delete localGuideData.trackingState;
     return !isEqual(localGuideData, guideData);
   }
 
-  private reconcileContentWithState(): void {
+  private reconcileContentWithLocalState(): void {
     // Look through each content item,
-    // --clear tracking data if main data has changed
+    // --clear tracking data if item data has changed
     // --conserve otherwise
-    // TODO format tracking data in guide differently and then commit that change first
+    let stateToSave = {};
+
     Object.keys(this.content).forEach((key) => {
       if(this.content[key].type==='guide'){
         const guideData = this.content[key].data; //prolly a guide
         if(this.hasGuideDataChanged(guideData)) {
+          console.log(`${key} changed`);
           // clear tracking data
+          stateToSave[guideData.id] = guideData;
         } else {
-
+          console.log(`${key} is unchanged`);
+          const localGuideData = loadState()[guideData.id];
+          stateToSave[guideData.id] = localGuideData;
         }
       }
     });
+
+    saveState(stateToSave);
   }
 
   public setContent(content: Content): void {
     // filter and validate this.content
-    // TODO where are we saving this.content to local state
     console.log('validating content: ');
     console.log(content)
     if(!isOfTypeContent(content)) {
       return console.warn('Content data type is invalid');
     }
     this.content = content;
+    this.contentSet = true;
     console.log('filtering')
     Object.keys(this.content).forEach((key) => {
       const { id, name, description, steps } = this.content[key].data; //prolly a guide
       this.content[key].data = { id, name, description, steps };
     });
 
-    console.log('content set:');
+    // iterate through each content item to note changes and conditionally preserve trackingState
+    // and then save to localStorage
+    this.reconcileContentWithLocalState();
+
+    console.log('content set to local:');
     const localData = loadState();
     console.log(localData);
   }
@@ -75,9 +86,9 @@ export default class Lusift {
     console.log('page refresh');
   }
 
-  showContent(contentID: string): void {
+  public showContent(contentID: string): void {
     //Forces specific Lusift content to appear for the current user by passing in the ID.
-    if(!this.content) {
+    if(!this.content || !this.contentSet) {
       return console.warn(`Content not set, pass valid content object to setContent()`);
     }
 
@@ -86,11 +97,11 @@ export default class Lusift {
       return console.warn(`Content with id of ${contentID} doesn't exist`);
     }
     setTimeout(() => {
-      const { type, data } = this.content[contentID];
+      const { type } = this.content[contentID];
 
       if (type==='guide') {
         console.log('sending guide data:');
-        const guideInstance = new Guide(data);
+        const guideInstance = new Guide(contentID);
         this.guideInstances[contentID] = guideInstance;
         guideInstance.start();
       }
