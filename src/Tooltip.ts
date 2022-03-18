@@ -1,8 +1,6 @@
 import { document } from 'global';
 import createTooltip from './createTooltip';
-import { PopperInstanceType, TooltipData, TooltipTarget } from './types';
-
-// import createPopper from './createPopper';
+import { TooltipData, TooltipTarget } from './types';
 
 // reference to tooltip element is lost after any dom changes
 // TODO see if an unrelated dom change loses controls to the tooltip
@@ -24,9 +22,7 @@ import { PopperInstanceType, TooltipData, TooltipTarget } from './types';
 export default class Tooltip {
     private targetElement: document.HTMLElement;
     readonly target: TooltipTarget;
-    private tooltipElement: document.HTMLElement;
-    private tippyInstance;
-    private popperInstance: PopperInstanceType;
+    private tippyInstance: any;
     readonly uid: string;
     readonly data: TooltipData;
     private nextStep: Function;
@@ -79,7 +75,7 @@ export default class Tooltip {
         public show(): void {
             if (!this.targetElement) return console.warn('Error: target element not found');
 
-            const { placement, arrow, progressOn, bodyContent } = this.data;
+            const { placement, arrow, progressOn, bodyContent, offset } = this.data;
 
             this.tippyInstance = createTooltip({
                 remove: this.closeGuide,
@@ -90,6 +86,7 @@ export default class Tooltip {
                 arrow,
                 bodyContent,
                 placement,
+                offset
             });
 
             const { eventType, elementSelector, disabled } = progressOn;

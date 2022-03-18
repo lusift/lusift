@@ -6,6 +6,7 @@ export function isOfTypeTooltipData(object: any): boolean {
 
   return (object instanceof Object && object.constructor === Object) &&
     (typeof object.arrow === 'boolean') &&
+    (!object.offset || (object.offset instanceof Object && object.offset.length===2)) &&
     (placements.includes(object.placement)) &&
     // (typeof object.contentBody === 'string' && !!object.contentBody) &&
     (typeof object.progressOn === 'undefined' || object.progressOn instanceof Object)

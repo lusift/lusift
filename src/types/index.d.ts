@@ -43,12 +43,13 @@ export interface PopperInstanceType {
 export interface TooltipData {
   bodyContent: string;
   placement: any; // Placement type from popper or manually
+  offset: number[];
   arrow: boolean;
   progressOn?: {
     eventType: string;
     elementSelector: string;
     disabled?: boolean;
-  }
+  };
 }
 
 

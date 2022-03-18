@@ -36,12 +36,6 @@ export default createPopper; */
 export default {
   modifiers: [
     {
-      name: 'offset',
-      options: {
-        offset: [0, 10],
-      },
-    },
-    {
       name: 'preventOverflow',
       enabled: false
     },
