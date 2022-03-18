@@ -1,4 +1,4 @@
-import { document, window } from 'global';
+import { document } from 'global';
 import createTooltip from './createTooltip';
 import { createPopper } from '@popperjs/core';
 import popperOptions from './popperOptions';
@@ -8,6 +8,20 @@ import { PopperInstanceType, TooltipData, TooltipTarget } from './types';
 
 // reference to tooltip element is lost after any dom changes
 // TODO see if an unrelated dom change loses controls to the tooltip
+//
+// We need to give the ability to modify html and css content
+// - (btw, add a close button too - close x, dismiss link, none || skippable)
+// - progress on click of: next button or target element
+// Developer should be able to modify css on the global guide level, as well as on the step level
+// Where should this stuff be stored at? Look at tippy
+// How about a lusift.css file at the root?
+// Add option for beacon in Tooltip
+// Add developer helper method to quickly render an element on the screen
+// Add animations
+// Add asynchrous hotspots
+// closeOnOverlayClick
+// Add offset for Tooltip, with tippy
+// Add steps config, and steps styles to apply to all steps
 
 export default class Tooltip {
     private targetElement: document.HTMLElement;
@@ -60,13 +74,13 @@ export default class Tooltip {
             this.nextStep=nextStep;
             this.prevStep=prevStep;
             this.closeGuide=closeGuide;
-            // this.show();
+            this.show();
         }
 
         public show(): void {
             if (!this.targetElement) return console.warn('Error: target element not found');
 
-            const { title, placement, arrow, progressOn } = this.data;
+            const { placement, arrow, progressOn, bodyContent } = this.data;
 
             this.tooltipElement = createTooltip({
                 remove: this.closeGuide,
@@ -74,7 +88,7 @@ export default class Tooltip {
                 nextStep: this.nextStep,
                 prevStep: this.prevStep,
                 toShowArrow: arrow,
-                title,
+                bodyContent
             });
 
             this.popperInstance = createPopper(this.targetElement, this.tooltipElement, {

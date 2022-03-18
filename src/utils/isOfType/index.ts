@@ -7,7 +7,7 @@ export function isOfTypeTooltipData(object: any): boolean {
   return (object instanceof Object && object.constructor === Object) &&
     (typeof object.arrow === 'boolean') &&
     (placements.includes(object.placement)) &&
-    (typeof object.title === 'string' && !!object.title) &&
+    // (typeof object.contentBody === 'string' && !!object.contentBody) &&
     (typeof object.progressOn === 'undefined' || object.progressOn instanceof Object)
 }
 
@@ -15,9 +15,6 @@ export function isOfTypeStep(object: any): boolean {
 
   const stepTypes = ['tooltip'];
   const comparators = ['is', 'contains', 'endsWith', 'startsWith'];
-
-  // TODO
-  return true;
 
   return (object instanceof Object && object.constructor === Object) &&
     (typeof object.index === 'number') &&

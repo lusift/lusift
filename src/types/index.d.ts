@@ -1,3 +1,4 @@
+// TODO merge GuideType with TooltipTarget and TooltipData to avoid duplication
 export interface GuideType {
   id: string;
   name: string;
@@ -14,7 +15,7 @@ export interface GuideType {
     };
     data: {
       placement: any;
-      title: string;
+      bodyContent: string;
       arrow: boolean;
     };
   }[];
@@ -40,7 +41,7 @@ export interface PopperInstanceType {
 }
 
 export interface TooltipData {
-  title: string;
+  bodyContent: string;
   placement: any; // Placement type from popper or manually
   arrow: boolean;
   progressOn?: {

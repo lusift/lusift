@@ -78,9 +78,9 @@ export default class Guide {
 
     if (type==='tooltip') {
       this.activeStepInstance = this.guideData.steps[stepIndex];
-      console.log(this.activeStepInstance);
-      this.activeStepInstance.show();
-      /* this.activeStepInstance = new Tooltip({
+      /* console.log(this.activeStepInstance);
+      this.activeStepInstance.show(); */
+      this.activeStepInstance = new Tooltip({
         target,
         data,
         index,
@@ -88,7 +88,7 @@ export default class Guide {
         nextStep: this.nextStep.bind(this),
         prevStep: this.prevStep.bind(this),
         closeGuide: this.close.bind(this)
-      }); */
+      });
     } else if (type==='modal') {
 
     } else {

@@ -1,6 +1,5 @@
 import { window, document } from 'global';
 import Lusift from './Lusift';
-import useGuide from './useGuide';
 import useStep from './useStep';
 
 // Look through lusift architecture docs
@@ -30,4 +29,4 @@ import useStep from './useStep';
   window.Lusift = lusiftInstance;
 }, 0); */
 
-export { Lusift as default, useGuide, useStep };
+export { Lusift as default, useStep };
