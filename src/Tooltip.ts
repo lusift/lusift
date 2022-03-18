@@ -1,7 +1,5 @@
 import { document } from 'global';
 import createTooltip from './createTooltip';
-import { createPopper } from '@popperjs/core';
-import popperOptions from './popperOptions';
 import { PopperInstanceType, TooltipData, TooltipTarget } from './types';
 
 // import createPopper from './createPopper';
@@ -27,6 +25,7 @@ export default class Tooltip {
     private targetElement: document.HTMLElement;
     readonly target: TooltipTarget;
     private tooltipElement: document.HTMLElement;
+    private tippyInstance;
     private popperInstance: PopperInstanceType;
     readonly uid: string;
     readonly data: TooltipData;
@@ -82,31 +81,17 @@ export default class Tooltip {
 
             const { placement, arrow, progressOn, bodyContent } = this.data;
 
-            this.tooltipElement = createTooltip({
+            this.tippyInstance = createTooltip({
                 remove: this.closeGuide,
                 uid: this.uid,
                 nextStep: this.nextStep,
                 prevStep: this.prevStep,
-                toShowArrow: arrow,
-                bodyContent
+                target: this.targetElement,
+                arrow,
+                bodyContent,
+                placement,
             });
 
-            this.popperInstance = createPopper(this.targetElement, this.tooltipElement, {
-                ...popperOptions,
-                placement,
-                modifiers: [
-                    ...popperOptions.modifiers,
-                    {
-                        name: 'flip',
-                        enabled: placement === 'auto'
-                    },
-                    {
-                        name: 'arrow',
-                        enabled: arrow
-                    }
-                ]
-            });
-            // console.log(this.popperInstance);
             const { eventType, elementSelector, disabled } = progressOn;
             disabled || this.addEventListenerToTarget(elementSelector, 'next', eventType);
         }
@@ -114,10 +99,9 @@ export default class Tooltip {
         public remove(): void {
             console.log(`removing tooltip ${this.uid}`);
             this.removeAllEventListeners();
-            this.tooltipElement.remove();
-            this.popperInstance.forceUpdate();
-            this.popperInstance.destroy();
-            // console.log(this.popperInstance.state);
+            this.tippyInstance.destroy();
+            this.tippyInstance.unmount();
+            this.tippyInstance.disable();
         }
 
         private getListenerFromMethod(method: string): Function {
@@ -145,6 +129,7 @@ export default class Tooltip {
         private removeAllEventListeners(): void {
             this.targetsAndEventListeners.forEach(({ method, target, eventType }) => {
                 const targetElement = document.querySelector(target);
+                // TODO Write if for targetElement being null, btw why is it null (repeat this across other files too)
                 targetElement.removeEventListener(eventType, this.getListenerFromMethod(method));
                 console.log(`remove event listener of type ${eventType} and method ${method}`);
             });

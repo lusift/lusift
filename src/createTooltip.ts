@@ -1,99 +1,93 @@
 import { document, window } from 'global';
+import tippy, { inlinePositioning, Instance as TippyInstance } from 'tippy.js';
+import popperOptions from './popperOptions';
 
 const defaultBodyContent = `
-        <h3 style="font-weight: bold;">Default title</h3>
-        <p style="font-weight: normal;">Default tooltip content</p>
+      <h3 style="font-weight: bold;">Default title</h3>
+      <p style="font-weight: normal;">Default tooltip content</p>
 `;
 
-// TODO full-feature this
-const createTooltip = ({ remove, bodyContent = defaultBodyContent, toShowArrow, uid, nextStep, prevStep }) => {
 
-  const tooltip = document.createElement('div');
-  tooltip.id=`tooltip-${uid}`;
-  tooltip.role='tooltip';
+const renderTooltip = ({ remove, bodyContent = defaultBodyContent, arrow, placement, target, uid, nextStep, prevStep }) => {
 
-  // TODO css selectors in css declarations and html content should be prepended
-  // with tooltip uid here to isolate the style to this element alone
-
-  tooltip.innerHTML=`
+    const content = `
         <style>
-        #tooltip-${uid} {
-            background: #ccc;
+          #tooltip-${uid} {
+            // background: #ccc;
             font-weight: bold;
-            padding: 4px 8px;
-            font-size: 13px;
-            border-radius: 4px;
+            font-size: 1rem;
             display: block;
-            z-index: 9999;
+          }
+          #tooltip-${uid} > * {
+            margin: 4px 12px;
+          }
+          .tippy-box{
+            background: #ccc;
           }
         </style>
-        <div class="body-content">
-          ${bodyContent}
+        <div id="tooltip-${uid}">
+          <div class="body-content">
+            ${bodyContent}
+          </div>
+          <div class="nav-buttons section" style="display: flex">
+            <button class="close" style="border: 1px solid black; background: #888;">Close</button>
+            <button class="prev" style="border: 1px solid black; background: #888;">Prev</button>
+            <button class="next" style="border: 1px solid black; background: #888;">Next</button>
+          </div>
+        <div class="dismiss-link section">
+          <button class="close">dismiss link</button>
         </div>
-        <div style="display: flex">
-          <button class="close" style="border: 1px solid black; background: #888;">Close</button>
-          <button class="prev" style="border: 1px solid black; background: #888;">Prev</button>
-          <button class="next" style="border: 1px solid black; background: #888;">Next</button>
         </div>
     `;
 
-  if(toShowArrow) {
-    const arrow = document.createElement('div');
-    arrow.classList.add('arrow');
-    arrow.setAttributeNode(document.createAttribute('data-popper-arrow'));
+  const tippyInstance = tippy(target, {
+    allowHTML: true,
+    content,
+    interactive: true,
+    arrow,
+    hideOnClick: false,
+    inlinePositioning: true,
+    plugins: [inlinePositioning],
+    moveTransition: 'transform 0.2s ease-out',
+    offset: [0, 0],
+    placement,
+    onClickOutside(instance, event) {
+      // Probably give this option for hotspots
+    },
+    popperOptions: {
+      ...popperOptions,
+      placement,
+      modifiers: [
+        ...popperOptions.modifiers,
+        {
+          name: 'flip',
+          enabled: placement === 'auto'
+        },
+        {
+          name: 'arrow',
+          enabled: arrow
+        }
+      ]
 
-    arrow.innerHTML=`
-        <style>
-     .arrow,
-      .arrow::before {
-        position: absolute;
-        width: 8px;
-        height: 8px;
-        background: inherit;
-        z-index: 100;
-      }
+    },
+    showOnCreate: true,
+    trigger: 'manual',
+    theme: 'light'
+  });
 
-      .arrow {
-        visibility: hidden;
-      }
+  tippyInstance.show();
+  console.log(tippyInstance);
 
-      .arrow::before {
-        visibility: visible;
-        content: '';
-        transform: rotate(45deg);
-      }
+  const closeButtons = document.querySelectorAll(`#tooltip-${uid} button.close`);
+  const nextButtons = document.querySelectorAll(`#tooltip-${uid} button.next`);
+  const prevButtons = document.querySelectorAll(`#tooltip-${uid} button.prev`);
 
-      #tooltip-${uid}[data-popper-placement^='top'] > .arrow {
-        bottom: -4px;
-      }
+  closeButtons.forEach(btn => btn.addEventListener('click', remove));
+  nextButtons.forEach(btn => btn.addEventListener('click', nextStep));
+  prevButtons.forEach(btn => btn.addEventListener('click', prevStep));
 
-      #tooltip-${uid}[data-popper-placement^='bottom'] > .arrow {
-        top: -4px;
-      }
-
-      #tooltip-${uid}[data-popper-placement^='left'] > .arrow {
-        right: -4px;
-      }
-
-      #tooltip-${uid}[data-popper-placement^='right'] > .arrow {
-        left: -4px;
-      }
-        </style>
-
-      `;
-
-    tooltip.appendChild(arrow);
-  }
-
-  document.querySelector('html').appendChild(tooltip);
-  const closeButton = document.querySelector(`#tooltip-${uid} button.close`);
-  const nextButton = document.querySelector(`#tooltip-${uid} button.next`);
-  const prevButton = document.querySelector(`#tooltip-${uid} button.prev`);
-  closeButton.addEventListener('click', remove);
-  nextButton.addEventListener('click', nextStep);
-  prevButton.addEventListener('click', prevStep);
-
-  return tooltip;
+  return tippyInstance;
 }
 
-export default createTooltip;
+// TODO full-feature this
+export default renderTooltip;

@@ -167,12 +167,14 @@ export default class Guide {
 
   public nextStep(): void {
     const newStep = this.trackingState.activeStep+1;
+    // TODO first check if newStep is valid step num
     this.closeCurrentStep();
     this.setStep(newStep);
   }
 
   public prevStep(): void {
     const newStep = this.trackingState.activeStep-1;
+    // TODO first check if newStep is valid step num
     this.closeCurrentStep();
     this.setStep(newStep);
   }

@@ -1,11 +1,12 @@
 import Guide from './Guide';
 import { saveState, loadState } from './localStorage';
 import { GuideType } from './types';
-import { window } from 'global';
 import isEqual from 'lodash.isequal';
 
 import { Content } from './types';
 import { isOfTypeContent } from './utils/isOfType';
+import addTippyCSS from './addTippyCSS';
+
 
 export default new class Lusift {
   private content: Content;
@@ -21,6 +22,7 @@ export default new class Lusift {
       console.log('saving state as object');
       saveState({});
     }
+    addTippyCSS();
   }
 
   private hasGuideDataChanged(guideData: GuideType): boolean {
