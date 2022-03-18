@@ -4,6 +4,7 @@ import { saveState, loadState } from './localStorage';
 
 import { GuideType } from './types';
 
+// TODO catch the case when window is undefined in localStorage.ts file
 // TODO when should the last step be registered as closed prematurely vs finished
 // TODO add regex path type (for a path like /[companyName]/dashboard)
 // TODO make it installable
@@ -26,6 +27,8 @@ export default class Guide {
 
   constructor(guideID: string) {
     // localGuideState consists of trackingState and guideData
+    console.log(loadState());
+    console.log('kn')
     const localGuideState = loadState()[guideID];
     const guideData = Object.assign({}, localGuideState);
     delete guideData.trackingState;
@@ -74,7 +77,10 @@ export default class Guide {
     console.log(`Step index: ${index}`);
 
     if (type==='tooltip') {
-      this.activeStepInstance = new Tooltip({
+      this.activeStepInstance = this.guideData.steps[stepIndex];
+      console.log(this.activeStepInstance);
+      this.activeStepInstance.show();
+      /* this.activeStepInstance = new Tooltip({
         target,
         data,
         index,
@@ -82,7 +88,7 @@ export default class Guide {
         nextStep: this.nextStep.bind(this),
         prevStep: this.prevStep.bind(this),
         closeGuide: this.close.bind(this)
-      });
+      }); */
     } else if (type==='modal') {
 
     } else {
@@ -159,16 +165,15 @@ export default class Guide {
     this.activeStepInstance.remove();
   }
 
-  private nextStep(): void {
+  public nextStep(): void {
     const newStep = this.trackingState.activeStep+1;
     this.closeCurrentStep();
     this.setStep(newStep);
   }
 
-  private prevStep(): void {
+  public prevStep(): void {
     const newStep = this.trackingState.activeStep-1;
     this.closeCurrentStep();
     this.setStep(newStep);
   }
 }
-

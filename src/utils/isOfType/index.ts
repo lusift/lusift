@@ -16,6 +16,9 @@ export function isOfTypeStep(object: any): boolean {
   const stepTypes = ['tooltip'];
   const comparators = ['is', 'contains', 'endsWith', 'startsWith'];
 
+  // TODO
+  return true;
+
   return (object instanceof Object && object.constructor === Object) &&
     (typeof object.index === 'number') &&
     (stepTypes.includes(object.type)) &&

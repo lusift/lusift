@@ -7,7 +7,7 @@ import isEqual from 'lodash.isequal';
 import { Content } from './types';
 import { isOfTypeContent } from './utils/isOfType';
 
-export default class Lusift {
+export default new class Lusift {
   private content: Content;
   private guideInstances: any;
   private contentSet: boolean;
@@ -114,4 +114,8 @@ export default class Lusift {
   close(contentID: string) {
     //
   }
-}
+
+  static next(): void {
+    //
+  }
+}()

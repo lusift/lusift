@@ -3,6 +3,12 @@ import { window } from 'global';
  * This function accepts the app state, and saves it to localStorage
  * @param state
  */
+
+console.log('localStorage***********');
+if(!window) {
+    console.log('window is undefined')
+}
+
 export const saveState = (state) => {
     try {
         // Convert the state to a JSON string

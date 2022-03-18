@@ -6,7 +6,6 @@ import { PopperInstanceType, TooltipData, TooltipTarget } from './types';
 
 // import createPopper from './createPopper';
 
-
 // reference to tooltip element is lost after any dom changes
 // TODO see if an unrelated dom change loses controls to the tooltip
 
@@ -61,10 +60,10 @@ export default class Tooltip {
             this.nextStep=nextStep;
             this.prevStep=prevStep;
             this.closeGuide=closeGuide;
-            this.create();
+            // this.show();
         }
 
-        private create(): void {
+        public show(): void {
             if (!this.targetElement) return console.warn('Error: target element not found');
 
             const { title, placement, arrow, progressOn } = this.data;
@@ -99,7 +98,7 @@ export default class Tooltip {
         }
 
         public remove(): void {
-            console.log(`removing tooltip ${this.uid}`)
+            console.log(`removing tooltip ${this.uid}`);
             this.removeAllEventListeners();
             this.tooltipElement.remove();
             this.popperInstance.forceUpdate();
