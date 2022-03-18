@@ -8,7 +8,6 @@ import { GuideType } from './types';
 // TODO add regex path type (for a path like /[companyName]/dashboard)
 // TODO make it installable
 // TODO make it usable with all the hooks and all that
-// TODO add methods to target elements with click listeners to move to next step
 
 interface TrackingState {
   activeStep: number;

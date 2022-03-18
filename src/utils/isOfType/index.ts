@@ -7,7 +7,8 @@ export function isOfTypeTooltipData(object: any): boolean {
   return (object instanceof Object && object.constructor === Object) &&
     (typeof object.arrow === 'boolean') &&
     (placements.includes(object.placement)) &&
-    (typeof object.title === 'string' && !!object.title)
+    (typeof object.title === 'string' && !!object.title) &&
+    (typeof object.progressOn === 'undefined' || object.progressOn instanceof Object)
 }
 
 export function isOfTypeStep(object: any): boolean {

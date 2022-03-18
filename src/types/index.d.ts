@@ -43,6 +43,11 @@ export interface TooltipData {
   title: string;
   placement: any; // Placement type from popper or manually
   arrow: boolean;
+  progressOn?: {
+    eventType: string;
+    elementSelector: string;
+    disabled?: boolean;
+  }
 }
 
 
