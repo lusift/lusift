@@ -8,6 +8,7 @@ const defaultBodyContent = `
 `;
 
 // Add other positions like bottom-start and so on
+// TODO add shadow that is of background-color
 
 const closeXButton = () => {
   return `
@@ -47,10 +48,15 @@ const renderTooltip = ({ remove, bodyContent = defaultBodyContent, arrow, placem
     }
     #tooltip-${uid} > * {
       margin: 3px 6px;
+      /*
       border: 1px solid green;
+      */
     }
     .tippy-box{
       background: #ccc;
+    }
+    .section.body-content{
+      margin-top: 0 !important;
     }
 
     .dismiss-link{
@@ -61,7 +67,7 @@ const renderTooltip = ({ remove, bodyContent = defaultBodyContent, arrow, placem
 
     <div id="tooltip-${uid}">
     ${closeXButton()}
-    <div class="body-content">
+    <div class="section body-content">
       ${bodyContent}
     </div>
     <div class="nav-buttons section" style="display: flex">

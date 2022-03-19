@@ -17,6 +17,8 @@ import { TooltipData, TooltipTarget } from './types';
 // closeOnOverlayClick
 // Add steps config, and steps styles to apply to all steps
 
+// TODO bug: clicking on the link with active tooltip initiates a clone
+
 export default class Tooltip {
     private targetElement: document.HTMLElement;
     readonly target: TooltipTarget;
