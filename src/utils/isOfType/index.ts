@@ -1,8 +1,6 @@
 import { GuideType, Content } from '../../types';
 
-// TODO de-duplicate code by adding isObject function
-
-export function isObject(item: any) {
+export function isObject(item: any): boolean {
   return (item instanceof Object && item.constructor === Object);
 }
 
