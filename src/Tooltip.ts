@@ -13,10 +13,8 @@ import { TooltipData, TooltipTarget } from './types';
 // How about a lusift.css file at the root?
 // Add option for beacon in Tooltip
 // Add developer helper method to quickly render an element on the screen
-// Add animations
 // Add asynchrous hotspots
 // closeOnOverlayClick
-// Add offset for Tooltip, with tippy
 // Add steps config, and steps styles to apply to all steps
 
 export default class Tooltip {
