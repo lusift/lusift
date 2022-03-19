@@ -9,6 +9,63 @@ const defaultBodyContent = `
 
 // Add other positions like bottom-start and so on
 // TODO add shadow that is of background-color, and also color appropriate border
+// TODO add ability to style all nav buttons and their layout
+// TODO also put style property to root of each tooltip in lusiftContent
+// TODO isolate css to this element alone(including that of tippy's)!
+// Besides just wiping it on tooltip removal, consider the case when there's multiple element on the page
+// TODO add function to convert camel case to hyphen case for styleProps props
+
+const actions = {
+  styleProps: {},
+  closeButton: {
+    styleProps: {},
+    disable: false,
+  },
+  navSection: {
+    styleProps: {},
+    nextButton: {
+      text: 'next',
+      styleProps: {},
+      disable: false,
+    },
+    prevButton: {
+      text: 'prev',
+      styleProps: {},
+      disable: false,
+    },
+    dismissLink: {
+      text: 'skip this',
+      styleProps: {},
+      disable: false,
+    }
+  },
+}
+
+const defaultActions = {
+  styleProps: {},
+  closeButton: {
+    styleProps: {},
+    disable: false,
+  },
+  navSection: {
+    styleProps: {},
+    nextButton: {
+      text: 'next',
+      styleProps: {},
+      disable: false,
+    },
+    prevButton: {
+      text: 'prev',
+      styleProps: {},
+      disable: false,
+    },
+    dismissLink: {
+      text: 'skip this',
+      styleProps: {},
+      disable: false,
+    }
+  },
+}
 
 const closeXButton = () => {
   return `

@@ -4,9 +4,10 @@ import { GuideType } from './types';
 import isEqual from 'lodash.isequal';
 
 import { Content } from './types';
-import { isOfTypeContent } from './utils/isOfType';
+import { isOfTypeContent, isObject } from './utils/isOfType';
 import addTippyCSS from './addTippyCSS';
 
+// TODO add a dev class
 
 export default new class Lusift {
   private content: Content;
@@ -15,10 +16,10 @@ export default new class Lusift {
 
   constructor() {
     this.guideInstances = {};
-    console.log('Lusift imported');
+    console.log('Lusift instantiated');
     const localData = loadState();
     // if loadState() type is not object,
-    if(!(localData instanceof Object) || localData.constructor !== Object) {
+    if(!isObject(localData)) {
       console.log('saving state as object');
       saveState({});
     }

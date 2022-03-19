@@ -1,15 +1,23 @@
 import { GuideType, Content } from '../../types';
 
+// TODO de-duplicate code by adding isObject function
+
+export function isObject(item: any) {
+  return (item instanceof Object && item.constructor === Object);
+}
+
 export function isOfTypeTooltipData(object: any): boolean {
 
   const placements = ['bottom', 'top', 'right', 'left'];
 
-  return (object instanceof Object && object.constructor === Object) &&
+  return isObject(object) &&
     (typeof object.arrow === 'boolean') &&
     (!object.offset || (object.offset instanceof Object && object.offset.length===2)) &&
+    (!object.actions || isObject(object.actions)) &&
     (placements.includes(object.placement)) &&
+    (typeof object.contentBody === 'string' || (!object.contentBody && typeof object.contentBody !=='boolean')) &&
     // (typeof object.contentBody === 'string' && !!object.contentBody) &&
-    (typeof object.progressOn === 'undefined' || object.progressOn instanceof Object)
+    (typeof object.progressOn === 'undefined' || isObject(object.progressOn))
 }
 
 export function isOfTypeStep(object: any): boolean {
@@ -17,14 +25,14 @@ export function isOfTypeStep(object: any): boolean {
   const stepTypes = ['tooltip'];
   const comparators = ['is', 'contains', 'endsWith', 'startsWith'];
 
-  return (object instanceof Object && object.constructor === Object) &&
+  return isObject(object) &&
     (typeof object.index === 'number') &&
     (stepTypes.includes(object.type)) &&
     (isOfTypeTooltipData(object.data)) &&
     // target
-    (object.target instanceof Object && object.target.constructor === Object) &&
+    isObject(object.target) &&
     (typeof object.target.elementSelector === 'string' && !!object.target.elementSelector) && //validate element selector
-    (object.target.path instanceof Object && object.target.path.constructor === Object) &&
+    isObject(object.target.path) &&
     (typeof object.target.path.comparator === 'string' && comparators.includes(object.target.path.comparator)) &&
     (typeof object.target.path.value === 'string') && //validate path
     (isOfTypeTooltipData(object.data))
@@ -32,7 +40,7 @@ export function isOfTypeStep(object: any): boolean {
 
 export function isOfTypeGuide(object: any): boolean {
 
-  return (object instanceof Object && object.constructor === Object) &&
+  return isObject(object) &&
     (typeof object.id === 'string' && !!object.id) &&
     (typeof object.name === 'string') &&
     (typeof object.description === 'string') &&
@@ -44,7 +52,7 @@ type ContentItem = GuideType;
 
 export function isOfTypeContent(object: Content): boolean {
   const itemTypes = ['guide'];
-  return (object instanceof Object && object.constructor === Object) &&
+  return isObject(object) &&
     Object.values(object).every((item: any) => {
       return typeof itemTypes.includes(item.type) && isOfTypeGuide(item.data);
   });

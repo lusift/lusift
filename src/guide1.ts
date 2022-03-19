@@ -1,25 +1,51 @@
+const tooltip1 = {
+    index: 0,
+    type: 'tooltip',
+    target: {
+        path: {
+            value: '/lusift/dashboard',
+            comparator: 'is'
+        },
+        elementSelector: 'svg'
+    },
+    data: {
+        placement: 'bottom',
+        arrow: true,
+        bodyContent: '<p style="color:blue">Tooltip 1 body</p>',
+    },
+    actions: {
+        styleProps: {},
+        closeButton: {
+            styleProps: {},
+            disable: false,
+        },
+        navSection: {
+            styleProps: {},
+            nextButton: {
+                text: 'next',
+                styleProps: {},
+                disable: false,
+            },
+            prevButton: {
+                text: 'prev',
+                styleProps: {},
+                disable: false,
+            },
+            dismissLink: {
+                text: 'skip this',
+                styleProps: {},
+                disable: false,
+            }
+        },
+    }
+}
+
 const guide1 = {
     id: 'guide1',
     name: '',
     description: '',
     steps: [
-        {
-            index: 0,
-            type: 'tooltip',
-            target: {
-                path: {
-                    value: '/lusift/dashboard',
-                    comparator: 'is'
-                },
-                elementSelector: 'svg'
-            },
-            data: {
-                placement: 'bottom',
-                title: 'This is tooltip 1',
-                arrow: true,
-            },
-            placement: 'bottom'
-        },
+        tooltip1,
         {
             index: 1,
             type: 'tooltip',
@@ -32,10 +58,8 @@ const guide1 = {
             },
             data: {
                 placement: 'right',
-                title: 'Tooltip 2',
-                arrow: false,
+                arrow: true,
             },
-            placement: 'right'
         },
         {
             index: 2,
@@ -49,11 +73,9 @@ const guide1 = {
             },
             data: {
                 placement: 'right',
-                title: 'This is modal header',
                 arrow: true,
             },
-            placement: 'right'
-        },
+        }
     ]
 }
 

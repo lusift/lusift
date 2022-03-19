@@ -20,12 +20,44 @@ import { TooltipData, TooltipTarget } from './types';
 // TODO bug: clicking on the link with active tooltip initiates a clone
 // TODO take scroll view into account to make the tooltip appear and disappear
 
+
+const defaultToolipActions = {
+  styleProps: {},
+  closeButton: {
+    styleProps: {},
+    disable: false,
+  },
+  navSection: {
+    styleProps: {},
+    nextButton: {
+      text: 'next',
+      styleProps: {},
+      disable: false,
+    },
+    prevButton: {
+      text: 'prev',
+      styleProps: {},
+      disable: false,
+    },
+    dismissLink: {
+      text: 'skip this',
+      styleProps: {},
+      disable: false,
+    }
+  },
+}
+
+interface StepActions {
+
+}
+
 export default class Tooltip {
     private targetElement: document.HTMLElement;
     readonly target: TooltipTarget;
     private tippyInstance: any;
     readonly uid: string;
     readonly data: TooltipData;
+    private actions: StepActions = defaultToolipActions;
     private nextStep: Function;
     private prevStep: Function;
     private closeGuide: Function;
@@ -44,7 +76,8 @@ export default class Tooltip {
             prevStep,
             closeGuide,
             index,
-            data
+            data,
+            actions
         }:
             {
             target: TooltipTarget;
@@ -54,11 +87,13 @@ export default class Tooltip {
             prevStep: Function,
             closeGuide: Function,
             index: number,
+            actions: StepActions
         }) {
 
             this.target = target;
             this.targetElement = document.querySelector(this.target.elementSelector);
             this.data = data;
+            this.consolidateActions(actions);
 
             const progressOn = data.progressOn || {};
             this.data.progressOn = {
@@ -71,6 +106,10 @@ export default class Tooltip {
             this.prevStep=prevStep;
             this.closeGuide=closeGuide;
             this.show();
+        }
+
+        private consolidateActions(actions) {
+          // merge default actions with incoming actions provided by developer(user)
         }
 
         public show(): void {
