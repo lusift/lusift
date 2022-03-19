@@ -18,6 +18,7 @@ import { TooltipData, TooltipTarget } from './types';
 // Add steps config, and steps styles to apply to all steps
 
 // TODO bug: clicking on the link with active tooltip initiates a clone
+// TODO take scroll view into account to make the tooltip appear and disappear
 
 export default class Tooltip {
     private targetElement: document.HTMLElement;
@@ -96,9 +97,8 @@ export default class Tooltip {
         public remove(): void {
             console.log(`removing tooltip ${this.uid}`);
             this.removeAllEventListeners();
-            this.tippyInstance.destroy();
             this.tippyInstance.unmount();
-            this.tippyInstance.disable();
+            this.tippyInstance.destroy();
         }
 
         private getListenerFromMethod(method: string): Function {

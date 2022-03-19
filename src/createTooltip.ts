@@ -8,7 +8,7 @@ const defaultBodyContent = `
 `;
 
 // Add other positions like bottom-start and so on
-// TODO add shadow that is of background-color
+// TODO add shadow that is of background-color, and also color appropriate border
 
 const closeXButton = () => {
   return `
@@ -23,7 +23,7 @@ const closeXButton = () => {
     /*
     border: 1px solid blue;
     */
-    margin: -4px -6px !important;
+    margin: -4px -5px !important;
     margin-bottom: 0 !important;
     font-weight: normal;
     font-size: 1rem;
@@ -34,6 +34,45 @@ const closeXButton = () => {
   <div class="section close-btn">
     <button class="closeX close">&times;</button>
   </div>
+  `;
+}
+
+const navButtons = () => {
+  return `
+    <style>
+    .section.nav-buttons{
+      display: flex;
+      justify-content: space-between;
+      margin-top: 4px !important;
+    }
+    .nav-buttons .dismiss-link{
+      color: #777;
+      font-style: italic;
+      font-size: 0.8rem;
+      margin-right: 0.4rem;
+    }
+    .nav-buttons .next, .nav-buttons .prev{
+      color: #fff;
+      background-color: rgb(17, 153, 158);
+      padding: 0.2rem 0.35rem;
+      font-size: 0.75rem;
+      font-weight: bold;
+      border-radius: 8px;
+    }
+    .nav-buttons .prev{
+      margin-right: 0.3rem;
+    }
+    </style>
+
+    <div class="nav-buttons section">
+      <button class="close dismiss-link">
+        skip this
+      </button>
+    <!--
+    -->
+      <button class="prev">Prev</button>
+      <button class="next">Next</button>
+    </div>
   `;
 }
 
@@ -48,19 +87,10 @@ const renderTooltip = ({ remove, bodyContent = defaultBodyContent, arrow, placem
     }
     #tooltip-${uid} > * {
       margin: 3px 6px;
-      /*
-      border: 1px solid green;
-      */
-    }
-    .tippy-box{
-      background: #ccc;
     }
     .section.body-content{
       margin-top: 0 !important;
-    }
-
-    .dismiss-link{
-      padding: 0;
+      min-width: 80px;
     }
 
     </style>
@@ -70,15 +100,14 @@ const renderTooltip = ({ remove, bodyContent = defaultBodyContent, arrow, placem
     <div class="section body-content">
       ${bodyContent}
     </div>
-    <div class="nav-buttons section" style="display: flex">
-      <button class="prev" style="border: 1px solid black; background: #888;">Prev</button>
-      <button class="next" style="border: 1px solid black; background: #888;">Next</button>
-    </div>
+    ${navButtons()}
+    <!--
     <div class="dismiss-link section">
       <button class="close dismiss-link">
         skip this
       </button>
     </div>
+    -->
     </div>
   `;
 
