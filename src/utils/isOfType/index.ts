@@ -33,6 +33,7 @@ export function isOfTypeStep(object: any): boolean {
     isObject(object.target.path) &&
     (typeof object.target.path.comparator === 'string' && comparators.includes(object.target.path.comparator)) &&
     (typeof object.target.path.value === 'string') && //validate path
+    (object.styleProps === undefined || isObject(object.styleProps)) &&
     (isOfTypeTooltipData(object.data))
 }
 

@@ -73,7 +73,7 @@ export default class Guide {
   }
 
   private showStep(stepIndex: number): void {
-    const { index, target, data, actions, type } = this.guideData.steps[stepIndex];
+    const { index, target, data, actions, type, styleProps } = this.guideData.steps[stepIndex];
     console.log(`Step index: ${index}`);
 
     if (type==='tooltip') {
@@ -88,7 +88,8 @@ export default class Guide {
         nextStep: this.nextStep.bind(this),
         prevStep: this.prevStep.bind(this),
         closeGuide: this.close.bind(this),
-        actions
+        actions,
+        styleProps
       });
     } else if (type==='modal') {
 

@@ -1,5 +1,6 @@
 import { document, window } from 'global';
 import tippy, { inlinePositioning, Instance as TippyInstance } from 'tippy.js';
+import styleObjectToString from './utils/styleObjectToString';
 import popperOptions from './popperOptions';
 
 const defaultBodyContent = `
@@ -25,7 +26,6 @@ const closeXButton = (closeButton) => {
     margin: -4px !important;
   }
   .closeX{
-    color: #666;
     /*
     border: 1px solid blue;
     */
@@ -34,6 +34,8 @@ const closeXButton = (closeButton) => {
     font-weight: normal;
     font-size: 1rem;
     padding: 0 2px;
+    color: #666;
+    ${styleObjectToString(closeButton.styleProps)}
   }
   </style>
 
@@ -53,7 +55,7 @@ const navButtons = (navSection) => {
       flex-wrap: wrap;
       justify-content: space-between;
       margin-top: 4px !important;
-      border: 1px solid red;
+      ${styleObjectToString(navSection.styleProps)}
     }
     .nav-buttons .dismiss-link{
       color: #777;
@@ -71,10 +73,11 @@ const navButtons = (navSection) => {
     }
     .nav-buttons .next{
       align-self: flex-end;
-      border: 2px solid green;
+      ${styleObjectToString(nextButton.styleProps)}
     }
     .nav-buttons .prev{
       margin-right: 0.3rem;
+      ${styleObjectToString(prevButton.styleProps)}
     }
     </style>
 
@@ -90,13 +93,15 @@ const navButtons = (navSection) => {
   `;
 }
 
-const renderTooltip = ({ remove, bodyContent = defaultBodyContent, arrow, placement, target, actions, offset, uid, nextStep, prevStep }) => {
+const renderTooltip = ({ remove, bodyContent = defaultBodyContent, arrow, placement, target, styleProps, actions, offset, uid, nextStep, prevStep }) => {
 
   const { closeButton, navSection } = actions;
-  const { prevButton, nextButton } = navSection;
 
   const content = `
     <style>
+    .tippy-box{
+      ${styleObjectToString(styleProps)}
+    }
     #tooltip-${uid} {
       font-weight: bold;
       font-size: 1rem;

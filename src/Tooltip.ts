@@ -31,6 +31,7 @@ export default class Tooltip {
     readonly uid: string;
     readonly data: TooltipData;
     private actions: StepActions = defaultToolipActions;
+    readonly styleProps: Object = {};
     private nextStep: Function;
     private prevStep: Function;
     private closeGuide: Function;
@@ -50,7 +51,8 @@ export default class Tooltip {
             closeGuide,
             index,
             data,
-            actions
+            actions,
+            styleProps
         }:
             {
             target: TooltipTarget;
@@ -60,12 +62,12 @@ export default class Tooltip {
             prevStep: Function,
             closeGuide: Function,
             index: number,
-            actions: StepActions
+            actions: StepActions,
+            styleProps: Object
         }) {
 
             this.target = target;
-            this.targetElement = document.querySelector(this.target.elementSelector);
-            this.consolidateActions(actions);
+            this.styleProps = styleProps || {};
             this.data = data;
 
             const progressOn = data.progressOn || {};
@@ -74,7 +76,10 @@ export default class Tooltip {
                 elementSelector: target.elementSelector,
                 ...progressOn
             }
+
+            this.consolidateActions(actions);
             this.uid=`g-${guideID}--t-${index}`;
+            this.targetElement = document.querySelector(this.target.elementSelector);
             this.nextStep=nextStep;
             this.prevStep=prevStep;
             this.closeGuide=closeGuide;
@@ -100,10 +105,11 @@ export default class Tooltip {
                 prevStep: this.prevStep,
                 target: this.targetElement,
                 actions: this.actions,
+                styleProps: this.styleProps,
                 arrow,
                 bodyContent,
                 placement,
-                offset
+                offset,
             });
 
             const { eventType, elementSelector, disabled } = progressOn;

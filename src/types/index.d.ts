@@ -47,9 +47,12 @@ export interface TooltipTarget {
 }
 
 export interface Tooltip {
+  index: number;
+  type: string;
   data: TooltipData;
   target: TooltipTarget;
   actions: StepActions;
+  styleProps: Object;
 }
 
 
@@ -57,13 +60,7 @@ export interface GuideType {
   id: string;
   name: string;
   description: string;
-  steps: {
-    index: number;
-    type: string;
-    target: TooltipTarget;
-    data: TooltipData;
-    actions: StepActions;
-  }[];
+  steps: Tooltip[];
 }
 
 
