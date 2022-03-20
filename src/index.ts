@@ -7,15 +7,15 @@ import Lusift from './Lusift';
 
   - TODO wrap an error handler around the package to safely throw errors
   - TODO Look into abstract syntax tree for html elements
-  - TODO see how steps for tooltip should progress
-  - TODO add backdrop
   - TODO add progress bar
 
   ============================================================================
 */
 
-/* if (typeof window !== "undefined") {
-  // Client-side-only code
-} */
+if (typeof window !== "undefined") {
+  window.Lusift = Lusift;
+}
+
+console.log('%c index file runs ', 'background: #222; color: #bada55');
 
 export { Lusift as default };

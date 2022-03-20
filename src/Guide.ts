@@ -23,19 +23,21 @@ export default class Guide {
     prematurelyClosed: undefined
   };
   private activeStepInstance: any;
+  private stepDisplayed: null | number = null;
 
   constructor(guideID: string) {
     // localGuideState consists of trackingState and guideData
-    console.log(loadState());
+    console.log('%c Guide constructor! ', 'background: #222; color: #bada55');
+    // console.log(loadState());
     const localGuideState = loadState()[guideID];
     const guideData = Object.assign({}, localGuideState);
     delete guideData.trackingState;
 
     this.guideData = guideData;
     this.trackingState = localGuideState.trackingState || this.trackingState;
-    console.log('guideData pulled from local storage:');
+    /* console.log('guideData pulled from local storage:');
     console.log(this.guideData);
-    console.log(this.trackingState);
+    console.log(this.trackingState); */
   }
 
   public start(): void {
@@ -45,9 +47,11 @@ export default class Guide {
 
   public attemptShow(): void {
     // call on Guide init, page load, and Lusift.refresh()
+    // TODO case where the step is already on display
 
     window.setTimeout(() => {
 
+      console.log(`%c  ${this.stepDisplayed}`, 'background: #222; color: #bada55');
       const { activeStep, finished, prematurelyClosed } = this.trackingState;
       if(!this.guideData.steps[activeStep] || finished || prematurelyClosed) {
         return console.log('it\'s already finished or closed');
@@ -57,7 +61,9 @@ export default class Guide {
 
       if (this.doesTargetPathMatch(activeStep) && this.isTargetElementFound(activeStep)) {
         console.log('target path and element matched');
-        this.showStep(activeStep);
+        if(this.stepDisplayed === null) {
+          this.showStep(activeStep);
+        }
       } else {
         console.log('Either targetPath doesn\'t match or element not found');
         // remove steps that shouldn't apply to the current page
@@ -72,7 +78,8 @@ export default class Guide {
 
   private showStep(stepIndex: number): void {
     const { index, target, data, actions, type, styleProps } = this.guideData.steps[stepIndex];
-    console.log(`Step index: ${index}`);
+    // console.log(`Step index: ${index}`);
+      console.log(`%c  ${this.stepDisplayed}`, 'background: #222; color: #bada55');
 
     if (type==='tooltip') {
       this.activeStepInstance = this.guideData.steps[stepIndex];
@@ -94,14 +101,15 @@ export default class Guide {
     } else {
 
     }
+    this.stepDisplayed = stepIndex;
   }
 
   private doesTargetPathMatch(stepIndex: number): boolean {
     // is, endsWith, startsWith, contains
     const { value, comparator } = this.guideData.steps[stepIndex].target.path;
     const { pathname } = window.location;
-    console.log('value, pathname, comparator:')
-    console.log(value, pathname, comparator)
+    /* console.log('value, pathname, comparator:')
+    console.log(value, pathname, comparator) */
     switch(comparator) {
       case 'is':
         return pathname===value;
@@ -115,8 +123,8 @@ export default class Guide {
   }
 
   private isTargetElementFound(stepIndex: number): boolean {
-    console.log(this.guideData);
-    console.log('checking if element exists')
+    /* console.log(this.guideData);
+    console.log('checking if element exists') */
     return Boolean(document.querySelector(this.guideData.steps[stepIndex].target.elementSelector));
   }
 
@@ -131,9 +139,9 @@ export default class Guide {
       }
     }
     saveState(newState);
-    console.log('new state:')
+    /* console.log('new state:')
     console.log(newState);
-    console.log(loadState())
+    console.log(loadState()) */
   }
 
   public setStep(newStepNum: number): void {
@@ -157,12 +165,13 @@ export default class Guide {
     // close guide
     this.trackingState.prematurelyClosed=true;
     this.updateLocalTrackingState();
-    this.activeStepInstance.remove();
+    this.closeCurrentStep();
     console.log('guide closed');
   }
 
   private closeCurrentStep(): void {
     this.activeStepInstance.remove();
+    this.stepDisplayed = null;
   }
 
   public nextStep(): void {

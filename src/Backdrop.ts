@@ -9,11 +9,12 @@ interface ElementPosition {
   bottom: number;
 }
 
-// TODO should we change focus
+// TODO should we change focus on page
 // TODO factor in stage's padding in tooltip offset from target
 // TODO should we make stage into the target for event listeners -- nah
 // TODO some target inside stages are given padding in both dimensions and some not
 // TODO fix stuff with zIndices
+// 2147483647
 // TODO since we're taking element outside of dom like that, can we preserve reference to the target element
 // by linking reference of dummy element to target element?
 
@@ -76,11 +77,11 @@ class Backdrop {
     this.overlay.style.cssText = styleObjectToString(overlayStyle);
 
     document.body.appendChild(this.overlay);
-    console.log('overlay added');
+    // console.log('overlay added');
   }
 
   private addTargetDummy(): void {
-    console.log('adding dummy');
+    // console.log('adding dummy');
 
     // add a element of type target's element, and it's css to replace target element
     // change the target element's css to place it on the original cordinates but on top of overlay
@@ -88,8 +89,8 @@ class Backdrop {
 
     const targetElement = document.querySelector(this.targetSelector);
     const targetPosition = this.getElementPosition(targetElement);
-    console.log('target position:');
-    console.log(targetPosition);
+    /* console.log('target position:');
+    console.log(targetPosition); */
 
     // Save targetElement style that's being modified to get on stage
     const { position, zIndex, top, left, bottom, right } = targetElement.style;
@@ -108,13 +109,13 @@ class Backdrop {
 
     // insert to dom
     targetElement.outerHTML = targetDummy.outerHTML;
-    console.log('dummy added');
+    // console.log('dummy added');
   }
 
   private stageElement(targetElement: document.HTMLElement, targetPosition: ElementPosition): void {
 
-    console.log('saved target element:');
-    console.log(targetElement)
+    /* console.log('saved target element:');
+    console.log(targetElement) */
 
     this.stage = document.createElement('div');
     this.stage.id='lusift-stage';
@@ -153,7 +154,7 @@ class Backdrop {
 
     this.stage.appendChild(targetElement);
 
-    console.log('staged');
+    // console.log('staged');
   }
 
   private offStage() {
@@ -180,7 +181,7 @@ class Backdrop {
     this.offStage();
     this.overlay.remove();
     this.stage.remove();
-    console.log('overlay and stage removed')
+    // console.log('overlay and stage removed')
   }
 }
 

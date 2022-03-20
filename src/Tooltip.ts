@@ -66,6 +66,8 @@ export default class Tooltip {
             styleProps: Object
         }) {
 
+            console.log('%c Tooltip constructor! ', 'background: #222; color: #bada55');
+
             this.target = target;
             this.styleProps = styleProps || {};
             this.data = data;
@@ -90,8 +92,8 @@ export default class Tooltip {
         private consolidateActions(actions: StepActions) {
           // merge default actions with incoming actions provided by the developer(user)
           this.actions = mergeObjects(this.actions, actions);
-          console.log('consolidateActions')
-          console.log(this.actions);
+          /* console.log('consolidateActions')
+          console.log(this.actions); */
         }
 
         public show(): void {
@@ -145,7 +147,7 @@ export default class Tooltip {
 
             targetElement.addEventListener(eventType, this.getListenerFromMethod(method));
             this.targetsAndEventListeners.push({ method, target, eventType });
-            console.log(this.targetsAndEventListeners);
+            // console.log(this.targetsAndEventListeners);
         }
 
         private removeAllEventListeners(): void {
@@ -156,7 +158,7 @@ export default class Tooltip {
                 console.log(`remove event listener of type ${eventType} and method ${method}`);
             });
             this.targetsAndEventListeners = [];
-            console.log(this.targetsAndEventListeners);
+            // console.log(this.targetsAndEventListeners);
         }
 
 

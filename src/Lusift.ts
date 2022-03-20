@@ -3,6 +3,8 @@ import { saveState, loadState } from './localStorage';
 import { GuideType } from './types';
 import isEqual from 'lodash.isequal';
 
+import { window } from 'global';
+
 import { Content } from './types';
 import { isOfTypeContent, isObject } from './utils/isOfType';
 import addTippyCSS from './addTippyCSS';
@@ -17,11 +19,12 @@ export default new class Lusift {
 
   constructor() {
     this.guideInstances = {};
-    console.log('Lusift instantiated');
+    console.log('%c Lusift constructor! ', 'background: #222; color: #bada55');
+
     const localData = loadState();
     // if loadState() type is not object,
     if(!isObject(localData)) {
-      console.log('saving state as object');
+      // console.log('saving state as object');
       saveState({});
     }
     addTippyCSS();
@@ -60,14 +63,14 @@ export default new class Lusift {
 
   public setContent(content: Content): void {
     // filter and validate this.content
-    console.log('validating content: ');
-    console.log(content)
+    /* console.log('validating content: ');
+    console.log(content) */
     if(!isOfTypeContent(content)) {
       return console.warn('Content data type is invalid');
     }
     this.content = content;
     this.contentSet = true;
-    console.log('filtering')
+    // console.log('filtering')
     Object.keys(this.content).forEach((key) => {
       const { id, name, description, steps } = this.content[key].data; //prolly a guide
       this.content[key].data = { id, name, description, steps };
@@ -77,16 +80,16 @@ export default new class Lusift {
     // and then save to localStorage
     this.reconcileContentWithLocalState();
 
-    console.log('content set to local:');
+    // console.log('content set to local:');
     const localData = loadState();
-    console.log(localData);
+    // console.log(localData);
   }
 
 
   public refresh(): void {
     // run page elements through conditional again
     Object.values(this.guideInstances).forEach((gi: Guide) => gi.attemptShow());
-    console.log('page refresh');
+    console.log('%c page refresh ', 'background: #222; color: #bada55');
   }
 
   public showContent(contentID: string): void {
@@ -103,12 +106,12 @@ export default new class Lusift {
       const { type } = this.content[contentID];
 
       if (type==='guide') {
-        console.log('sending guide data:');
+        // console.log('sending guide data:');
         const guideInstance = new Guide(contentID);
         this.guideInstances[contentID] = guideInstance;
         guideInstance.start();
       }
-      console.log(this.guideInstances)
+      // console.log(this.guideInstances)
 
     }, 0);
     // TODO return all relevant hooks
