@@ -54,7 +54,6 @@ export default new class Lusift {
         }
       }
     });
-
     saveState(stateToSave);
   }
 

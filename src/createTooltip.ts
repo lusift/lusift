@@ -15,59 +15,8 @@ const defaultBodyContent = `
 // Besides just wiping it on tooltip removal, consider the case when there's multiple element on the page
 // TODO add function to convert camel case to hyphen case for styleProps props
 
-const actions = {
-  styleProps: {},
-  closeButton: {
-    styleProps: {},
-    disable: false,
-  },
-  navSection: {
-    styleProps: {},
-    nextButton: {
-      text: 'next',
-      styleProps: {},
-      disable: false,
-    },
-    prevButton: {
-      text: 'prev',
-      styleProps: {},
-      disable: false,
-    },
-    dismissLink: {
-      text: 'skip this',
-      styleProps: {},
-      disable: false,
-    }
-  },
-}
-
-const defaultActions = {
-  styleProps: {},
-  closeButton: {
-    styleProps: {},
-    disable: false,
-  },
-  navSection: {
-    styleProps: {},
-    nextButton: {
-      text: 'next',
-      styleProps: {},
-      disable: false,
-    },
-    prevButton: {
-      text: 'prev',
-      styleProps: {},
-      disable: false,
-    },
-    dismissLink: {
-      text: 'skip this',
-      styleProps: {},
-      disable: false,
-    }
-  },
-}
-
-const closeXButton = () => {
+const closeXButton = (closeButton) => {
+  if (closeButton.disable) return;
   return `
   <style>
   div.section.close-btn{
@@ -94,13 +43,17 @@ const closeXButton = () => {
   `;
 }
 
-const navButtons = () => {
+const navButtons = (navSection) => {
+  const { nextButton, prevButton, dismissLink } = navSection;
+
   return `
     <style>
     .section.nav-buttons{
       display: flex;
+      flex-wrap: wrap;
       justify-content: space-between;
       margin-top: 4px !important;
+      border: 1px solid red;
     }
     .nav-buttons .dismiss-link{
       color: #777;
@@ -116,24 +69,31 @@ const navButtons = () => {
       font-weight: bold;
       border-radius: 8px;
     }
+    .nav-buttons .next{
+      align-self: flex-end;
+      border: 2px solid green;
+    }
     .nav-buttons .prev{
       margin-right: 0.3rem;
     }
     </style>
 
     <div class="nav-buttons section">
-      <button class="close dismiss-link">
-        skip this
-      </button>
-    <!--
-    -->
-      <button class="prev">Prev</button>
-      <button class="next">Next</button>
+      ${dismissLink.disable ? '': `
+        <button class="close dismiss-link">
+          skip this
+        </button>
+        `}
+      ${prevButton.disable ? '': `<button class="prev">Prev</button>`}
+      ${nextButton.disable ? '': `<button class="next">Next</button>`}
     </div>
   `;
 }
 
-const renderTooltip = ({ remove, bodyContent = defaultBodyContent, arrow, placement, target, offset, uid, nextStep, prevStep }) => {
+const renderTooltip = ({ remove, bodyContent = defaultBodyContent, arrow, placement, target, actions, offset, uid, nextStep, prevStep }) => {
+
+  const { closeButton, navSection } = actions;
+  const { prevButton, nextButton } = navSection;
 
   const content = `
     <style>
@@ -153,11 +113,11 @@ const renderTooltip = ({ remove, bodyContent = defaultBodyContent, arrow, placem
     </style>
 
     <div id="tooltip-${uid}">
-    ${closeXButton()}
+    ${closeXButton(closeButton)}
     <div class="section body-content">
       ${bodyContent}
     </div>
-    ${navButtons()}
+    ${navButtons(navSection)}
     <!--
     <div class="dismiss-link section">
       <button class="close dismiss-link">

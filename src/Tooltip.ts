@@ -1,6 +1,8 @@
 import { document } from 'global';
 import createTooltip from './createTooltip';
-import { TooltipData, TooltipTarget } from './types';
+import { mergeObjects } from './utils/mergeObjects';
+import { TooltipData, TooltipTarget, StepActions } from './types';
+import defaultToolipActions from './defaultTooltipActions';
 
 // reference to tooltip element is lost after any dom changes
 // TODO see if an unrelated dom change loses controls to the tooltip
@@ -20,36 +22,7 @@ import { TooltipData, TooltipTarget } from './types';
 // TODO bug: clicking on the link with active tooltip initiates a clone
 // TODO take scroll view into account to make the tooltip appear and disappear
 
-
-const defaultToolipActions = {
-  styleProps: {},
-  closeButton: {
-    styleProps: {},
-    disable: false,
-  },
-  navSection: {
-    styleProps: {},
-    nextButton: {
-      text: 'next',
-      styleProps: {},
-      disable: false,
-    },
-    prevButton: {
-      text: 'prev',
-      styleProps: {},
-      disable: false,
-    },
-    dismissLink: {
-      text: 'skip this',
-      styleProps: {},
-      disable: false,
-    }
-  },
-}
-
-interface StepActions {
-
-}
+// TODO add type and type validator for step actions
 
 export default class Tooltip {
     private targetElement: document.HTMLElement;
@@ -92,8 +65,8 @@ export default class Tooltip {
 
             this.target = target;
             this.targetElement = document.querySelector(this.target.elementSelector);
-            this.data = data;
             this.consolidateActions(actions);
+            this.data = data;
 
             const progressOn = data.progressOn || {};
             this.data.progressOn = {
@@ -108,8 +81,11 @@ export default class Tooltip {
             this.show();
         }
 
-        private consolidateActions(actions) {
-          // merge default actions with incoming actions provided by developer(user)
+        private consolidateActions(actions: StepActions) {
+          // merge default actions with incoming actions provided by the developer(user)
+          this.actions = mergeObjects(this.actions, actions);
+          console.log('consolidateActions')
+          console.log(this.actions);
         }
 
         public show(): void {
@@ -123,6 +99,7 @@ export default class Tooltip {
                 nextStep: this.nextStep,
                 prevStep: this.prevStep,
                 target: this.targetElement,
+                actions: this.actions,
                 arrow,
                 bodyContent,
                 placement,

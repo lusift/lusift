@@ -2,8 +2,10 @@ import { isObject } from './isOfType';
 /*
 * Deep merge properties of two objects
 * replace with lodash.merge if insufficient
+* or check this thread:
+* https://stackoverflow.com/questions/27936772/how-to-deep-merge-instead-of-shallow-merge
 */
-export function mergeObjects(obj1: Object, obj2: Object) {
+export function mergeObjects(obj1: Object, obj2: Object): any {
   obj1 = Object.assign({}, obj1);
   obj2 = Object.assign({}, obj2);
 
