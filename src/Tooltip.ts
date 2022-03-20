@@ -1,8 +1,9 @@
-import { document } from 'global';
+import { document, window } from 'global';
 import createTooltip from './createTooltip';
-import { mergeObjects } from './utils/mergeObjects';
+import mergeObjects from './utils/mergeObjects';
 import { TooltipData, TooltipTarget, StepActions } from './types';
 import defaultToolipActions from './defaultTooltipActions';
+import Backdrop from './Backdrop';
 
 // reference to tooltip element is lost after any dom changes
 // TODO see if an unrelated dom change loses controls to the tooltip
@@ -21,8 +22,7 @@ import defaultToolipActions from './defaultTooltipActions';
 
 // TODO bug: clicking on the link with active tooltip initiates a clone
 // TODO take scroll view into account to make the tooltip appear and disappear
-
-// TODO add type and type validator for step actions
+// TODO add Actions validator
 
 export default class Tooltip {
     private targetElement: document.HTMLElement;
@@ -35,12 +35,12 @@ export default class Tooltip {
     private nextStep: Function;
     private prevStep: Function;
     private closeGuide: Function;
-    // private targetsAndEventListeners: TargetAndEventListeners;
     private targetsAndEventListeners: {
         method: string;
         target: string;
         eventType: string;
     }[] = [];
+    private backdrop: any;
 
     constructor(
         {
@@ -83,6 +83,7 @@ export default class Tooltip {
             this.nextStep=nextStep;
             this.prevStep=prevStep;
             this.closeGuide=closeGuide;
+            window.alert('tooltip initiated')
             this.show();
         }
 
@@ -114,11 +115,13 @@ export default class Tooltip {
 
             const { eventType, elementSelector, disabled } = progressOn;
             disabled || this.addEventListenerToTarget(elementSelector, 'next', eventType);
+            this.backdrop = new Backdrop(this.target.elementSelector);
         }
 
         public remove(): void {
             console.log(`removing tooltip ${this.uid}`);
             this.removeAllEventListeners();
+            this.backdrop.remove();
             this.tippyInstance.unmount();
             this.tippyInstance.destroy();
         }
@@ -154,5 +157,10 @@ export default class Tooltip {
             });
             this.targetsAndEventListeners = [];
             console.log(this.targetsAndEventListeners);
+        }
+
+
+        public removeOverlay() {
+          //
         }
 }

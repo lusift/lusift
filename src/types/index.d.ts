@@ -1,4 +1,3 @@
-// TODO merge GuideType with TooltipTarget and TooltipData to avoid duplication
 
 export interface StepActions {
   styleProps: Object;

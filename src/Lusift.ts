@@ -8,6 +8,7 @@ import { isOfTypeContent, isObject } from './utils/isOfType';
 import addTippyCSS from './addTippyCSS';
 
 // TODO add a dev class
+// TODO add constants file
 
 export default new class Lusift {
   private content: Content;

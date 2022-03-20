@@ -5,7 +5,7 @@ import { isObject } from './isOfType';
 * or check this thread:
 * https://stackoverflow.com/questions/27936772/how-to-deep-merge-instead-of-shallow-merge
 */
-export function mergeObjects(obj1: Object, obj2: Object): any {
+function mergeObjects(obj1: Object, obj2: Object): any {
   obj1 = Object.assign({}, obj1);
   obj2 = Object.assign({}, obj2);
 
@@ -24,3 +24,5 @@ export function mergeObjects(obj1: Object, obj2: Object): any {
   });
   return obj1;
 }
+
+export default mergeObjects;

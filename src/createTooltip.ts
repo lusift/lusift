@@ -8,44 +8,38 @@ const defaultBodyContent = `
   <p style="font-weight: normal;">Default tooltip content</p>
 `;
 
-// Add other positions like bottom-start and so on
-// TODO add shadow that is of background-color, and also color appropriate border
-// TODO add ability to style all nav buttons and their layout
-// TODO also put style property to root of each tooltip in lusiftContent
-// TODO isolate css to this element alone(including that of tippy's)!
-// Besides just wiping it on tooltip removal, consider the case when there's multiple element on the page
-// TODO add function to convert camel case to hyphen case for styleProps props
+// TODO Add other positions like bottom-start and so on
 
-const closeXButton = (closeButton) => {
+const closeXButton = (closeButton: any): string => {
   if (closeButton.disable) return;
   return `
-  <style>
-  div.section.close-btn{
-    display: flex;
-    justify-content: flex-end;
-    margin: -4px !important;
-  }
-  .closeX{
-    /*
-    border: 1px solid blue;
-    */
-    margin: -4px -5px !important;
-    margin-bottom: 0 !important;
-    font-weight: normal;
-    font-size: 1rem;
-    padding: 0 2px;
-    color: #666;
-    ${styleObjectToString(closeButton.styleProps)}
-  }
-  </style>
+    <style>
+    div.section.close-btn{
+      display: flex;
+      justify-content: flex-end;
+      margin: -4px !important;
+    }
+    .closeX{
+      /*
+      border: 1px solid blue;
+      */
+      margin: -4px -5px !important;
+      margin-bottom: 0 !important;
+      font-weight: normal;
+      font-size: 1rem;
+      padding: 0 2px;
+      color: #666;
+      ${styleObjectToString(closeButton.styleProps)}
+    }
+    </style>
 
-  <div class="section close-btn">
-    <button class="closeX close">&times;</button>
-  </div>
+    <div class="section close-btn">
+      <button class="closeX close">&times;</button>
+    </div>
   `;
 }
 
-const navButtons = (navSection) => {
+const navButtons = (navSection: any): string => {
   const { nextButton, prevButton, dismissLink } = navSection;
 
   return `
@@ -72,7 +66,6 @@ const navButtons = (navSection) => {
       border-radius: 8px;
     }
     .nav-buttons .next{
-      align-self: flex-end;
       ${styleObjectToString(nextButton.styleProps)}
     }
     .nav-buttons .prev{
@@ -100,6 +93,7 @@ const renderTooltip = ({ remove, bodyContent = defaultBodyContent, arrow, placem
   const content = `
     <style>
     .tippy-box{
+      z-index: 999999;
       ${styleObjectToString(styleProps)}
     }
     #tooltip-${uid} {
@@ -137,6 +131,7 @@ const renderTooltip = ({ remove, bodyContent = defaultBodyContent, arrow, placem
     allowHTML: true,
     content,
     interactive: true,
+    zIndex: 99999,
     arrow,
     hideOnClick: false,
     inlinePositioning: true,

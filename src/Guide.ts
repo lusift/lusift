@@ -8,7 +8,6 @@ import { GuideType } from './types';
 // TODO when should the last step be registered as closed prematurely vs finished
 // TODO add regex path type (for a path like /[companyName]/dashboard)
 // TODO make it installable
-// TODO make it usable with all the hooks and all that
 
 interface TrackingState {
   activeStep: number;
@@ -28,7 +27,6 @@ export default class Guide {
   constructor(guideID: string) {
     // localGuideState consists of trackingState and guideData
     console.log(loadState());
-    console.log('kn')
     const localGuideState = loadState()[guideID];
     const guideData = Object.assign({}, localGuideState);
     delete guideData.trackingState;

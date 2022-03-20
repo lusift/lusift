@@ -6,9 +6,8 @@ const styleObjectToString = (styleProps: Object) => {
   // convert and layout styleProps into string literal
   let stylesString = '';
   Object.keys(styleProps).forEach(key => {
-    stylesString += `${camelCaseToHyphenCase(key)}: ${styleProps[key]};\n`;
+    stylesString += `${camelCaseToHyphenCase(key)}: ${styleProps[key]} !important;\n`;
   });
-  console.log(stylesString)
   return stylesString;
 }
 
