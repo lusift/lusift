@@ -17,7 +17,9 @@ interface ElementPosition {
 // 2147483647
 // TODO since we're taking element outside of dom like that, can we preserve reference to the target element
 // by linking reference of dummy element to target element?
-// TODO attach a unique class to targetElement and use that when bringing it off the stage
+// TODO some element takes entirety of stage's width, leaving no padding on x-axis
+// -- add another element that actually contains the element and have stage be it's parent
+// TODO wait for all fonts to load and such before executing Lusift,
 
 if(window) {
   window.alert = console.log
@@ -49,6 +51,7 @@ class Backdrop {
   private targetElementContextStyle: any;
   readonly targetDummySelector: string = '#lusift-backdrop-target-dummy';
   readonly stagedTargetClass: string;
+  private targetContainer: any;
 
   constructor({
     targetSelector,
@@ -147,7 +150,7 @@ class Backdrop {
 
     this.stage = document.createElement('div');
     this.stage.id='lusift-stage';
-    // overlay.appendChild(stage);
+    this.targetContainer = document.createElement('div');
 
     const paddingValue = 10;
     const requiredPadding = paddingValue * 2;
@@ -156,22 +159,36 @@ class Backdrop {
     const stageHeight = (this.targetPosition.bottom - this.targetPosition.top) + (requiredPadding);
 
     const stageStyle = {
-      //TODO what's the logic to these props
       top: `${this.targetPosition.top - (requiredPadding / 2)}px`,
       left: `${this.targetPosition.left - (requiredPadding / 2)}px`,
+      /* top: `${this.targetPosition.top }px`,
+      left: `${this.targetPosition.left}px`,
+      opacity: 0.5,*/
       bottom: '',
       right: '',
       position: 'absolute',
       width: `${stageWidth}px`,
       height: `${stageHeight}px`,
-      backgroundColor: '#fff',
       display: 'flex',
+      background: '#fff',
       justifyContent: 'center',
       alignItems: 'center',
       zIndex: '99998'
     };
+
     this.stage.style.cssText = styleObjectToString(stageStyle);
+    this.targetContainer.style.cssText = styleObjectToString({
+      ...stageStyle,
+      top: `${this.targetPosition.top }px`,
+      left: `${this.targetPosition.left}px`,
+      width: `${(stageWidth - requiredPadding)}px`,
+      height: `${(stageHeight - requiredPadding)}px`,
+      zIndex: Number(stageStyle.zIndex)+1,
+    });
+
     document.body.appendChild(this.stage);
+    document.body.appendChild(this.targetContainer);
+    this.targetContainer.appendChild(targetElement);
 
     const targetElementStyle = {
       ...targetElement.style,
@@ -183,7 +200,7 @@ class Backdrop {
     targetElement.classList.add(this.stagedTargetClass);
     this.targetSelector = `${this.targetSelector}.${this.stagedTargetClass}`;
 
-    this.stage.appendChild(targetElement);
+    // this.stage.appendChild(targetElement);
 
     // console.log('staged');
   }
@@ -213,6 +230,7 @@ class Backdrop {
   private remove(): void {
     this.offStage();
     this.overlay.remove();
+    this.targetContainer.remove();
     this.stage.remove();
     // console.log('overlay and stage removed')
   }
