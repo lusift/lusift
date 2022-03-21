@@ -17,31 +17,60 @@ interface ElementPosition {
 // 2147483647
 // TODO since we're taking element outside of dom like that, can we preserve reference to the target element
 // by linking reference of dummy element to target element?
+// TODO attach a unique class to targetElement and use that when bringing it off the stage
 
 if(window) {
   window.alert = console.log
 }
 
+const getStepUID = ({ guideID, index, type }) => {
+    return `lusift--g-${guideID}--${type}-${index}`;
+}
+
+interface BackdropForTooltipParameters{
+  targetSelector: string;
+  uid: string;
+}
+
+interface BackdropAsStepParameters{
+  targetSelector: string;
+  index: number;
+  guideID: string;
+}
+
+type BackdropParameters = BackdropForTooltipParameters & BackdropAsStepParameters;
+
 class Backdrop {
 
-  readonly targetSelector: string;
+  private targetSelector: string;
+  private targetPosition: ElementPosition;
   private overlay: any;
   private stage: any;
   private targetElementContextStyle: any;
-  private targetDummySelector: string = '#lusift-backdrop-target-dummy';
+  readonly targetDummySelector: string = '#lusift-backdrop-target-dummy';
+  readonly stagedTargetClass: string;
 
-  constructor(targetSelector: string) {
+  constructor({
+    targetSelector,
+    uid,
+    guideID,
+    index
+  }: BackdropParameters) {
+    uid = uid || getStepUID({ guideID, index, type: 'backdrop' });
+    this.stagedTargetClass = `${uid}__target`;
     this.targetSelector = `${targetSelector}:not(${this.targetDummySelector})`;
+    const targetElement = document.querySelector(this.targetSelector);
+    this.targetPosition = this.getElementPosition(targetElement);
     this.show();
   }
 
   private show(): void {
     window.alert('triggering overlay');
     this.addOverlay();
-    const targetElement = document.querySelector(this.targetSelector);
-    const targetPosition = this.getElementPosition(targetElement);
+    const targetElement: document.HTMLElement  = document.querySelector(this.targetSelector);
+    this.targetPosition = this.getElementPosition(targetElement);
     this.addTargetDummy();
-    this.stageElement(targetElement, targetPosition);
+    this.stageElement(targetElement);
   }
 
   private getElementPosition(element: document.HTMLElement): ElementPosition {
@@ -88,13 +117,12 @@ class Backdrop {
     // put things back into place after overlay is triggered close
 
     const targetElement = document.querySelector(this.targetSelector);
-    const targetPosition = this.getElementPosition(targetElement);
     /* console.log('target position:');
     console.log(targetPosition); */
 
     // Save targetElement style that's being modified to get on stage
-    const { position, zIndex, top, left, bottom, right } = targetElement.style;
-    this.targetElementContextStyle = { position, zIndex, top, left, bottom, right };
+    const { position, zIndex, top, left, bottom, right, border } = targetElement.style;
+    this.targetElementContextStyle = { position, zIndex, top, left, bottom, right, border };
 
     // dummy element
     const targetDummy = htmlStringToElement(targetElement.outerHTML);
@@ -112,7 +140,7 @@ class Backdrop {
     // console.log('dummy added');
   }
 
-  private stageElement(targetElement: document.HTMLElement, targetPosition: ElementPosition): void {
+  private stageElement(targetElement): void {
 
     /* console.log('saved target element:');
     console.log(targetElement) */
@@ -124,16 +152,15 @@ class Backdrop {
     const paddingValue = 10;
     const requiredPadding = paddingValue * 2;
 
-    const stageWidth = (targetPosition.right - targetPosition.left) + (requiredPadding);
-    const stageHeight = (targetPosition.bottom - targetPosition.top) + (requiredPadding);
+    const stageWidth = (this.targetPosition.right - this.targetPosition.left) + (requiredPadding);
+    const stageHeight = (this.targetPosition.bottom - this.targetPosition.top) + (requiredPadding);
 
     const stageStyle = {
       //TODO what's the logic to these props
-      top: `${targetPosition.top - (requiredPadding / 2)}px`,
-      left: `${targetPosition.left - (requiredPadding / 2)}px`,
+      top: `${this.targetPosition.top - (requiredPadding / 2)}px`,
+      left: `${this.targetPosition.left - (requiredPadding / 2)}px`,
       bottom: '',
       right: '',
-      // TODO should this be absolute
       position: 'absolute',
       width: `${stageWidth}px`,
       height: `${stageHeight}px`,
@@ -152,6 +179,10 @@ class Backdrop {
     }
     targetElement.style.cssText = styleObjectToString(targetElementStyle);
 
+    // add lusift class to target
+    targetElement.classList.add(this.stagedTargetClass);
+    this.targetSelector = `${this.targetSelector}.${this.stagedTargetClass}`;
+
     this.stage.appendChild(targetElement);
 
     // console.log('staged');
@@ -168,6 +199,8 @@ class Backdrop {
       ...this.targetElementContextStyle
     }
     targetElement.style.cssText = styleObjectToString(targetElementStyle);
+    targetElement.classList.remove(this.stagedTargetClass);
+    this.targetSelector = this.targetSelector.replace(`.${this.stagedTargetClass}`, '');
 
     // insert this.targetElement back to it's original place
     const targetDummy = document.querySelector(this.targetDummySelector);

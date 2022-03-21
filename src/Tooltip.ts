@@ -5,30 +5,38 @@ import { TooltipData, TooltipTarget, StepActions } from './types';
 import defaultToolipActions from './defaultTooltipActions';
 import Backdrop from './Backdrop';
 
-// reference to tooltip element is lost after any dom changes
 // TODO see if an unrelated dom change loses controls to the tooltip
-//
-// We need to give the ability to modify html and css content
-// - (btw, add a close button too - close x, dismiss link, none || skippable)
-// - progress on click of: next button or target element
-// Developer should be able to modify css on the global guide level, as well as on the step level
-// Where should this stuff be stored at? Look at tippy
-// How about a lusift.css file at the root?
-// Add option for beacon in Tooltip
-// Add developer helper method to quickly render an element on the screen
-// Add asynchrous hotspots
-// closeOnOverlayClick
-// Add steps config, and steps styles to apply to all steps
+// TODO Developer should be able to modify css on the global guide level, as well as on the step level
+// TODO Add option for beacon in Tooltip
+// TODO Add developer helper method to quickly render an element on the screen during development
+// TODO Add asynchrous hotspots
+// TODO Add steps config, and steps styles to apply to all steps
 
-// TODO bug: clicking on the link with active tooltip initiates a clone
+// TODO add overlay{}
 // TODO take scroll view into account to make the tooltip appear and disappear
 // TODO add Actions validator
+
+// TODO in data type validators, when varifying that a property is an object,
+// make sure to take into account null
+
+const overlay = {
+    disabled: false,
+    color: '',
+    opacity: '0.5',
+    stagePadding: [0, 0],
+    closeOnOverlayClick: false
+}
+
+const getStepUID = ({ guideID, index, type }) => {
+    return `lusift--g-${guideID}--${type}-${index}`;
+}
 
 export default class Tooltip {
     private targetElement: document.HTMLElement;
     readonly target: TooltipTarget;
     private tippyInstance: any;
     readonly uid: string;
+    readonly backdropID: string;
     readonly data: TooltipData;
     private actions: StepActions = defaultToolipActions;
     readonly styleProps: Object = {};
@@ -80,7 +88,8 @@ export default class Tooltip {
             }
 
             this.consolidateActions(actions);
-            this.uid=`g-${guideID}--t-${index}`;
+            this.uid=getStepUID({ guideID, index, type: 'tooltip' });
+            this.backdropID=getStepUID({ guideID, index, type: 'backdrop' });
             this.targetElement = document.querySelector(this.target.elementSelector);
             this.nextStep=nextStep;
             this.prevStep=prevStep;
@@ -117,7 +126,7 @@ export default class Tooltip {
 
             const { eventType, elementSelector, disabled } = progressOn;
             disabled || this.addEventListenerToTarget(elementSelector, 'next', eventType);
-            this.backdrop = new Backdrop(this.target.elementSelector);
+            this.backdrop = new Backdrop({ targetSelector: this.target.elementSelector, uid: this.backdropID});
         }
 
         public remove(): void {
