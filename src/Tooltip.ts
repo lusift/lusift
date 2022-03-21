@@ -24,7 +24,7 @@ const overlay = {
     color: '#444',
     opacity: '0.5',
     stageGap: 5,
-    closeOnOverlayClick: false
+    nextOnOverlayClick: false
 }
 
 const getStepUID = ({ guideID, index, type }) => {
@@ -113,6 +113,7 @@ export default class Tooltip {
 
             if(!overlay.disabled) {
                 this.backdrop = new Backdrop({ targetSelector: this.target.elementSelector, uid: this.backdropID, data: overlay});
+                overlay.nextOnOverlayClick || this.addEventListenerToTarget(this.backdrop.overlay, 'close');
             }
 
             this.tippyInstance = createTooltip({
