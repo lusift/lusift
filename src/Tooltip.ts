@@ -19,8 +19,8 @@ import Backdrop from './Backdrop';
 // TODO in data type validators, when varifying that a property is an object,
 // make sure to take into account null
 
-const overlay = {
-    disabled: true,
+const defaulBackdropData = {
+    disabled: false,
     color: '#444',
     opacity: '0.5',
     stageGap: 5,
@@ -108,12 +108,18 @@ export default class Tooltip {
         public show(): void {
             if (!this.targetElement) return console.warn('Error: target element not found');
 
-            const { placement, arrow, progressOn, bodyContent, offset } = this.data;
+            const { placement, arrow, progressOn, bodyContent, offset, backdrop } = this.data;
 
 
-            if(!overlay.disabled) {
-                this.backdrop = new Backdrop({ targetSelector: this.target.elementSelector, uid: this.backdropID, data: overlay});
-                overlay.nextOnOverlayClick || this.addEventListenerToTarget(this.backdrop.overlay, 'close');
+            if(!backdrop.disabled) {
+                this.backdrop = new Backdrop({
+                    targetSelector: this.target.elementSelector,
+                    uid: this.backdropID,
+                    data: backdrop
+                });
+                // TODO only one overlay on the screen at a time
+                const overlaySelector = '#lusift-overlay'; // constant
+                this.backdrop.nextOnOverlayClick && this.addEventListenerToTarget(overlaySelector, 'next');
             }
 
             this.tippyInstance = createTooltip({
@@ -121,7 +127,7 @@ export default class Tooltip {
                 uid: this.uid,
                 nextStep: this.nextStep,
                 prevStep: this.prevStep,
-                target: overlay.disabled ? this.targetElement : this.backdrop.stage,
+                target: backdrop.disabled ? this.targetElement : this.backdrop.stage,
                 actions: this.actions,
                 styleProps: this.styleProps,
                 arrow,

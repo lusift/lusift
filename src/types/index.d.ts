@@ -25,11 +25,20 @@ export interface StepActions {
   };
 }
 
+interface BackdropData {
+  disabled: boolean;
+  color: string;
+  opacity: string;
+  stageGap: number;
+  nextOnOverlayClick: boolean;
+}
+
 export interface TooltipData {
   bodyContent: string;
   placement: any; // Placement type from popper or manually
   offset: number[];
   arrow: boolean;
+  backdrop: BackdropData;
   progressOn?: {
     eventType: string;
     elementSelector: string;

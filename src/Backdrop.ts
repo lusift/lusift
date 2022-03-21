@@ -58,7 +58,7 @@ class Backdrop {
 
   private targetSelector: string;
   private targetPosition: ElementPosition;
-  private overlay: any;
+  public overlay: any;
   public stage: any;
   private targetElementContextStyle: any;
   readonly targetDummySelector: string = '#lusift-backdrop-target-dummy';
@@ -87,6 +87,7 @@ class Backdrop {
     window.alert('triggering overlay');
     this.addOverlay();
     const targetElement: document.HTMLElement  = document.querySelector(this.targetSelector);
+    targetElement.id = 'lusift-overlay';
     this.targetPosition = this.getElementPosition(targetElement);
     this.addTargetDummy();
     this.stageElement(targetElement);
