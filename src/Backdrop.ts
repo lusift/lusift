@@ -17,8 +17,6 @@ interface ElementPosition {
 // 2147483647
 // TODO since we're taking element outside of dom like that, can we preserve reference to the target element
 // by linking reference of dummy element to target element?
-// TODO some element takes entirety of stage's width, leaving no padding on x-axis
-// -- add another element that actually contains the element and have stage be it's parent
 // TODO wait for all fonts to load and such before executing Lusift,
 
 if(window) {
@@ -29,15 +27,29 @@ const getStepUID = ({ guideID, index, type }) => {
     return `lusift--g-${guideID}--${type}-${index}`;
 }
 
+const backdropData = {
+  stageGap: 0,
+  opacity: '0.5',
+  color: '#555',
+}
+
+interface BackdropData{
+  stageGap: number;
+  opacity: string;
+  color: string;
+}
+
 interface BackdropForTooltipParameters{
   targetSelector: string;
   uid: string;
+  data: BackdropData;
 }
 
 interface BackdropAsStepParameters{
   targetSelector: string;
   index: number;
   guideID: string;
+  data: BackdropData;
 }
 
 type BackdropParameters = BackdropForTooltipParameters & BackdropAsStepParameters;
@@ -47,20 +59,24 @@ class Backdrop {
   private targetSelector: string;
   private targetPosition: ElementPosition;
   private overlay: any;
-  private stage: any;
+  public stage: any;
   private targetElementContextStyle: any;
   readonly targetDummySelector: string = '#lusift-backdrop-target-dummy';
   readonly stagedTargetClass: string;
   private targetContainer: any;
+  private stageGap: number[];
+  private data: BackdropData;
 
   constructor({
     targetSelector,
     uid,
     guideID,
-    index
+    index,
+    data
   }: BackdropParameters) {
     uid = uid || getStepUID({ guideID, index, type: 'backdrop' });
     this.stagedTargetClass = `${uid}__target`;
+    this.data = data;
     this.targetSelector = `${targetSelector}:not(${this.targetDummySelector})`;
     const targetElement = document.querySelector(this.targetSelector);
     this.targetPosition = this.getElementPosition(targetElement);
@@ -96,9 +112,12 @@ class Backdrop {
   private addOverlay(): void {
     this.overlay = document.createElement('div');
     this.overlay.id = 'lusift-overlay';
+
+    const { color, opacity } = this.data;
+
     const overlayStyle = {
-      background: '#444',
-      opacity: '0.5',
+      opacity,
+      background: color,
       position: 'fixed',
       top: '0',
       left: '0',
@@ -153,7 +172,7 @@ class Backdrop {
     this.targetContainer = document.createElement('div');
 
     const paddingValue = 10;
-    const requiredPadding = paddingValue * 2;
+    const requiredPadding = this.data.stageGap * 2;
 
     const stageWidth = (this.targetPosition.right - this.targetPosition.left) + (requiredPadding);
     const stageHeight = (this.targetPosition.bottom - this.targetPosition.top) + (requiredPadding);

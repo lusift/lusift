@@ -20,10 +20,10 @@ import Backdrop from './Backdrop';
 // make sure to take into account null
 
 const overlay = {
-    disabled: false,
-    color: '',
+    disabled: true,
+    color: '#444',
     opacity: '0.5',
-    stagePadding: [0, 0],
+    stageGap: 5,
     closeOnOverlayClick: false
 }
 
@@ -110,12 +110,17 @@ export default class Tooltip {
 
             const { placement, arrow, progressOn, bodyContent, offset } = this.data;
 
+
+            if(!overlay.disabled) {
+                this.backdrop = new Backdrop({ targetSelector: this.target.elementSelector, uid: this.backdropID, data: overlay});
+            }
+
             this.tippyInstance = createTooltip({
                 remove: this.closeGuide,
                 uid: this.uid,
                 nextStep: this.nextStep,
                 prevStep: this.prevStep,
-                target: this.targetElement,
+                target: overlay.disabled ? this.targetElement : this.backdrop.stage,
                 actions: this.actions,
                 styleProps: this.styleProps,
                 arrow,
@@ -126,7 +131,6 @@ export default class Tooltip {
 
             const { eventType, elementSelector, disabled } = progressOn;
             disabled || this.addEventListenerToTarget(elementSelector, 'next', eventType);
-            this.backdrop = new Backdrop({ targetSelector: this.target.elementSelector, uid: this.backdropID});
         }
 
         public remove(): void {
