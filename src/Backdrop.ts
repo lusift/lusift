@@ -1,6 +1,5 @@
 import { document, window } from 'global';
-import styleObjectToString from './utils/styleObjectToString';
-import htmlStringToElement from './utils/htmlStringToElement';
+import { styleObjectToString, htmlStringToElement, getStepUID } from './utils/';
 
 interface ElementPosition {
   top: number;
@@ -18,19 +17,16 @@ interface ElementPosition {
 // TODO since we're taking element outside of dom like that, can we preserve reference to the target element
 // by linking reference of dummy element to target element?
 // TODO wait for all fonts to load and such before executing Lusift,
+// TODO don't take targetElement out of it's original position on dom
 
 if(window) {
   window.alert = console.log
 }
 
-const getStepUID = ({ guideID, index, type }) => {
-    return `lusift--g-${guideID}--${type}-${index}`;
-}
-
-const backdropData = {
-  stageGap: 0,
+const defaultBackdropData = {
+  stageGap: 5,
   opacity: '0.5',
-  color: '#555',
+  color: '#444',
 }
 
 interface BackdropData{
@@ -76,7 +72,11 @@ class Backdrop {
   }: BackdropParameters) {
     uid = uid || getStepUID({ guideID, index, type: 'backdrop' });
     this.stagedTargetClass = `${uid}__target`;
-    this.data = data;
+
+    this.data = {
+      ...defaultBackdropData,
+      ...data
+    }
     this.targetSelector = `${targetSelector}:not(${this.targetDummySelector})`;
     const targetElement = document.querySelector(this.targetSelector);
     this.targetPosition = this.getElementPosition(targetElement);
@@ -87,11 +87,11 @@ class Backdrop {
     window.alert('triggering overlay');
     this.addOverlay();
     const targetElement: document.HTMLElement  = document.querySelector(this.targetSelector);
-    targetElement.id = 'lusift-overlay';
     this.targetPosition = this.getElementPosition(targetElement);
     this.addTargetDummy();
     this.stageElement(targetElement);
   }
+
 
   private getElementPosition(element: document.HTMLElement): ElementPosition {
     const documentElement = document;
@@ -172,7 +172,6 @@ class Backdrop {
     this.stage.id='lusift-stage';
     this.targetContainer = document.createElement('div');
 
-    const paddingValue = 10;
     const requiredPadding = this.data.stageGap * 2;
 
     const stageWidth = (this.targetPosition.right - this.targetPosition.left) + (requiredPadding);

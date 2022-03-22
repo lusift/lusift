@@ -26,7 +26,6 @@ export interface StepActions {
 }
 
 interface BackdropData {
-  disabled: boolean;
   color: string;
   opacity: string;
   stageGap: number;
@@ -38,7 +37,13 @@ export interface TooltipData {
   placement: any; // Placement type from popper or manually
   offset: number[];
   arrow: boolean;
-  backdrop: BackdropData;
+  backdrop?: {
+    disabled?: boolean;
+    color?: string;
+    opacity?: string;
+    stageGap?: number;
+    nextOnOverlayClick?: boolean;
+  }
   progressOn?: {
     eventType: string;
     elementSelector: string;

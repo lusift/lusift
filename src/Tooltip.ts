@@ -1,6 +1,6 @@
 import { document, window } from 'global';
 import createTooltip from './createTooltip';
-import mergeObjects from './utils/mergeObjects';
+import { mergeObjects, getStepUID } from './utils';
 import { TooltipData, TooltipTarget, StepActions } from './types';
 import defaultToolipActions from './defaultTooltipActions';
 import Backdrop from './Backdrop';
@@ -25,10 +25,6 @@ const defaulBackdropData = {
     opacity: '0.5',
     stageGap: 5,
     nextOnOverlayClick: false
-}
-
-const getStepUID = ({ guideID, index, type }) => {
-    return `lusift--g-${guideID}--${type}-${index}`;
 }
 
 export default class Tooltip {
@@ -116,6 +112,9 @@ export default class Tooltip {
 
             const { placement, arrow, progressOn, bodyContent, offset, backdrop } = this.data;
 
+            const { eventType, elementSelector, disabled } = progressOn;
+            // addEventListenerToTarget method targets dummy element from Backdrop if executed after dummy is created
+            disabled || this.addEventListenerToTarget(elementSelector, 'next', eventType);
 
             if(!backdrop.disabled) {
                 this.backdrop = new Backdrop({
@@ -141,15 +140,12 @@ export default class Tooltip {
                 placement,
                 offset,
             });
-
-            const { eventType, elementSelector, disabled } = progressOn;
-            disabled || this.addEventListenerToTarget(elementSelector, 'next', eventType);
         }
 
         public remove(): void {
             console.log(`removing tooltip ${this.uid}`);
             this.removeAllEventListeners();
-            this.backdrop.remove();
+            this.backdrop && this.backdrop.remove();
             this.tippyInstance.unmount();
             this.tippyInstance.destroy();
         }

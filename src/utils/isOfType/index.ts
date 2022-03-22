@@ -15,7 +15,8 @@ export function isOfTypeTooltipData(object: any): boolean {
     (placements.includes(object.placement)) &&
     (typeof object.contentBody === 'string' || (!object.contentBody && typeof object.contentBody !=='boolean')) &&
     // (typeof object.contentBody === 'string' && !!object.contentBody) &&
-    (typeof object.progressOn === 'undefined' || isObject(object.progressOn))
+    (typeof object.progressOn === 'undefined' || isObject(object.progressOn)) &&
+    (typeof object.backdrop === 'undefined' || isObject(object.backdrop))
 }
 
 export function isOfTypeStep(object: any): boolean {
