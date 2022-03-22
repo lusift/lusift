@@ -1,23 +1,20 @@
 import { document, window } from 'global';
-import { styleObjectToString, htmlStringToElement, getStepUID } from './utils/';
+import { styleObjectToString, getStepUID } from './utils/';
 
 interface ElementPosition {
   top: number;
   left: number;
   right: number;
   bottom: number;
+  height: number;
+  width: number;
 }
 
 // TODO should we change focus on page
-// TODO factor in stage's padding in tooltip offset from target
-// TODO should we make stage into the target for event listeners -- nah
-// TODO some target inside stages are given padding in both dimensions and some not
 // TODO fix stuff with zIndices
 // 2147483647
-// TODO since we're taking element outside of dom like that, can we preserve reference to the target element
-// by linking reference of dummy element to target element?
 // TODO wait for all fonts to load and such before executing Lusift,
-// TODO don't take targetElement out of it's original position on dom
+// TODO only one overlay on the screen at a time
 
 if(window) {
   window.alert = console.log
@@ -53,15 +50,10 @@ type BackdropParameters = BackdropForTooltipParameters & BackdropAsStepParameter
 class Backdrop {
 
   private targetSelector: string;
-  private targetPosition: ElementPosition;
-  public overlay: any;
-  public stage: any;
-  private targetElementContextStyle: any;
-  readonly targetDummySelector: string = '#lusift-backdrop-target-dummy';
   readonly stagedTargetClass: string;
-  private targetContainer: any;
-  private stageGap: number[];
-  private data: BackdropData;
+  public overlaySelectorClass: string = 'lusift-overlay';
+  // private data: BackdropData;
+  private data: any;
 
   constructor({
     targetSelector,
@@ -69,7 +61,7 @@ class Backdrop {
     guideID,
     index,
     data
-  }: BackdropParameters) {
+  }: any) { //BackdropParameters
     uid = uid || getStepUID({ guideID, index, type: 'backdrop' });
     this.stagedTargetClass = `${uid}__target`;
 
@@ -77,19 +69,8 @@ class Backdrop {
       ...defaultBackdropData,
       ...data
     }
-    this.targetSelector = `${targetSelector}:not(${this.targetDummySelector})`;
-    const targetElement = document.querySelector(this.targetSelector);
-    this.targetPosition = this.getElementPosition(targetElement);
-    this.show();
-  }
-
-  private show(): void {
-    window.alert('triggering overlay');
-    this.addOverlay();
-    const targetElement: document.HTMLElement  = document.querySelector(this.targetSelector);
-    this.targetPosition = this.getElementPosition(targetElement);
-    this.addTargetDummy();
-    this.stageElement(targetElement);
+    this.targetSelector = targetSelector;
+    this.addBackdop();
   }
 
 
@@ -106,151 +87,93 @@ class Backdrop {
       left: elementRect.left + scrollLeft,
       right: elementRect.left + scrollLeft + elementRect.width,
       bottom: elementRect.top + scrollTop + elementRect.height,
+      height: elementRect.height,
+      width: elementRect.width
     };
     return position;
   }
 
-  private addOverlay(): void {
-    this.overlay = document.createElement('div');
-    this.overlay.id = 'lusift-overlay';
+  private addBackdop(): void {
+    const targetElement = document.querySelector(this.targetSelector);
+    // TODO start watching target element and screen changes starting from here
+    const targetPosition = this.getElementPosition(targetElement);
+    console.log(targetPosition);
+    const padding = this.data.stageGap;
 
-    const { color, opacity } = this.data;
+    //TODO replace those height and widths with
+
+    const screenWidth = window.innerWidth
+    || document.documentElement.clientWidth
+    || document.body.clientWidth;
+
+    const screenHeight = window.innerHeight
+    || document.documentElement.clientHeight
+    || document.body.clientHeight;
+
+    const hTop = document.createElement('div');
+    hTop.id = 'hTop';
+    const hBottom = document.createElement('div');
+    hBottom.id = 'hBottom';
+
+    const vLeft = document.createElement('div');
+    vLeft.id = 'vLeft';
+    const vRight = document.createElement('div');
+    vRight.id = 'vRight';
 
     const overlayStyle = {
-      opacity,
-      background: color,
-      position: 'fixed',
-      top: '0',
-      left: '0',
-      bottom: '0',
-      right: '0',
-      zIndex: 99998
-    }
-    this.overlay.style.cssText = styleObjectToString(overlayStyle);
-
-    document.body.appendChild(this.overlay);
-    // console.log('overlay added');
-  }
-
-  private addTargetDummy(): void {
-    // console.log('adding dummy');
-
-    // add a element of type target's element, and it's css to replace target element
-    // change the target element's css to place it on the original cordinates but on top of overlay
-    // put things back into place after overlay is triggered close
-
-    const targetElement = document.querySelector(this.targetSelector);
-    /* console.log('target position:');
-    console.log(targetPosition); */
-
-    // Save targetElement style that's being modified to get on stage
-    const { position, zIndex, top, left, bottom, right, border } = targetElement.style;
-    this.targetElementContextStyle = { position, zIndex, top, left, bottom, right, border };
-
-    // dummy element
-    const targetDummy = htmlStringToElement(targetElement.outerHTML);
-    targetDummy.id = 'lusift-backdrop-target-dummy';
-    targetDummy.class='';
-    const targetDummyStyle = {
-      ...targetElement.style,
-      background: 'transparent',
-    }
-
-    targetDummy.style.cssText = styleObjectToString(targetDummyStyle);
-
-    // insert to dom
-    targetElement.outerHTML = targetDummy.outerHTML;
-    // console.log('dummy added');
-  }
-
-  private stageElement(targetElement): void {
-
-    /* console.log('saved target element:');
-    console.log(targetElement) */
-
-    this.stage = document.createElement('div');
-    this.stage.id='lusift-stage';
-    this.targetContainer = document.createElement('div');
-
-    const requiredPadding = this.data.stageGap * 2;
-
-    const stageWidth = (this.targetPosition.right - this.targetPosition.left) + (requiredPadding);
-    const stageHeight = (this.targetPosition.bottom - this.targetPosition.top) + (requiredPadding);
-
-    const stageStyle = {
-      top: `${this.targetPosition.top - (requiredPadding / 2)}px`,
-      left: `${this.targetPosition.left - (requiredPadding / 2)}px`,
-      /* top: `${this.targetPosition.top }px`,
-      left: `${this.targetPosition.left}px`,
-      opacity: 0.5,*/
-      bottom: '',
-      right: '',
+      opacity: '0.5',
+      background: '#444',
       position: 'absolute',
-      width: `${stageWidth}px`,
-      height: `${stageHeight}px`,
-      display: 'flex',
-      background: '#fff',
-      justifyContent: 'center',
-      alignItems: 'center',
-      zIndex: '99998'
-    };
+      top: '0',
+      bottom: '0',
+      left: '0',
+      right: '0',
+      zIndex: 99998,
+      border: '1px solid transparent',
+    }
 
-    this.stage.style.cssText = styleObjectToString(stageStyle);
-    this.targetContainer.style.cssText = styleObjectToString({
-      ...stageStyle,
-      top: `${this.targetPosition.top }px`,
-      left: `${this.targetPosition.left}px`,
-      width: `${(stageWidth - requiredPadding)}px`,
-      height: `${(stageHeight - requiredPadding)}px`,
-      zIndex: Number(stageStyle.zIndex)+1,
+    hTop.style.cssText = styleObjectToString({
+      ...overlayStyle,
+      height: `${targetPosition.bottom - targetPosition.height - padding}px`,
+      width: `${targetPosition.right - targetPosition.left + 2*padding}px`,
+      left: `${targetPosition.left - padding}px`,
+      bottom: ''
     });
 
-    document.body.appendChild(this.stage);
-    document.body.appendChild(this.targetContainer);
-    this.targetContainer.appendChild(targetElement);
 
-    const targetElementStyle = {
-      ...targetElement.style,
-      position: 'relative',
-    }
-    targetElement.style.cssText = styleObjectToString(targetElementStyle);
+    hBottom.style.cssText = styleObjectToString({
+      ...overlayStyle,
+      height: `${document.body.clientHeight - (targetPosition.top + targetPosition.height + padding)}px`,
+      width: `${targetPosition.right - targetPosition.left + 2*padding}px`,
+      left: `${targetPosition.left - padding}px`,
+      top: ''
+    });
 
-    // add lusift class to target
+    console.log(targetPosition.width)
+
+    vLeft.style.cssText = styleObjectToString({
+      ...overlayStyle,
+      width: `${targetPosition.right - targetPosition.width - padding}px`,
+    });
+    vRight.style.cssText = styleObjectToString({
+      ...overlayStyle,
+      width: `${document.body.clientWidth - (targetPosition.left+targetPosition.width) - padding}px`,
+      left: ''
+    });
+
+    [hTop, hBottom, vLeft, vRight].forEach(el => {
+      el.classList.add(this.overlaySelectorClass);
+      document.body.appendChild(el);
+    });
     targetElement.classList.add(this.stagedTargetClass);
-    this.targetSelector = `${this.targetSelector}.${this.stagedTargetClass}`;
-
-    // this.stage.appendChild(targetElement);
-
-    // console.log('staged');
-  }
-
-  private offStage() {
-    // reset target element's styles for positioning props
-    const targetElement = document.querySelector(this.targetSelector);
-    if(!targetElement){
-      return console.warn('Target not found in dom');
-    }
-    const targetElementStyle = {
-      ...targetElement.style,
-      ...this.targetElementContextStyle
-    }
-    targetElement.style.cssText = styleObjectToString(targetElementStyle);
-    targetElement.classList.remove(this.stagedTargetClass);
-    this.targetSelector = this.targetSelector.replace(`.${this.stagedTargetClass}`, '');
-
-    // insert this.targetElement back to it's original place
-    const targetDummy = document.querySelector(this.targetDummySelector);
-    if(!targetDummy){
-      return console.warn('Target dummy not found in dom');
-    }
-    targetDummy.outerHTML = targetElement.outerHTML;
   }
 
   private remove(): void {
-    this.offStage();
-    this.overlay.remove();
-    this.targetContainer.remove();
-    this.stage.remove();
+    document.querySelectorAll(`.${this.overlaySelectorClass}`)
+    .forEach((el: document.HTMLElement) => el.remove());
+
+    const targetElement = document.querySelector(this.targetSelector);
+    targetElement.classList.remove(this.stagedTargetClass);
     // console.log('overlay and stage removed')
   }
 }

@@ -12,12 +12,8 @@ import Backdrop from './Backdrop';
 // TODO Add asynchrous hotspots
 // TODO Add steps config, and steps styles to apply to all steps
 
-// TODO add overlay{}
 // TODO take scroll view into account to make the tooltip appear and disappear
 // TODO add Actions validator
-
-// TODO in data type validators, when varifying that a property is an object,
-// make sure to take into account null
 
 const defaulBackdropData = {
     disabled: false,
@@ -41,7 +37,7 @@ export default class Tooltip {
     private closeGuide: Function;
     private targetsAndEventListeners: {
         method: string;
-        target: string;
+        target: document.HTMLElement;
         eventType: string;
     }[] = [];
     private backdrop: any;
@@ -77,6 +73,7 @@ export default class Tooltip {
             this.data = data;
 
             const progressOn = data.progressOn || {};
+            // TODO factor stageGap to offset
             this.data.progressOn = {
                 eventType: 'click',
                 elementSelector: target.elementSelector,
@@ -112,9 +109,9 @@ export default class Tooltip {
 
             const { placement, arrow, progressOn, bodyContent, offset, backdrop } = this.data;
 
-            const { eventType, elementSelector, disabled } = progressOn;
+            const { eventType, disabled } = progressOn;
             // addEventListenerToTarget method targets dummy element from Backdrop if executed after dummy is created
-            disabled || this.addEventListenerToTarget(elementSelector, 'next', eventType);
+            disabled || this.addEventListenerToTarget(this.targetElement, 'next', eventType);
 
             if(!backdrop.disabled) {
                 this.backdrop = new Backdrop({
@@ -122,9 +119,11 @@ export default class Tooltip {
                     uid: this.backdropID,
                     data: backdrop
                 });
-                // TODO only one overlay on the screen at a time
-                const overlaySelector = '#lusift-overlay'; // constant
-                this.backdrop.nextOnOverlayClick && this.addEventListenerToTarget(overlaySelector, 'next');
+                if (this.data.backdrop.nextOnOverlayClick){
+                    Array.from(document.getElementsByClassName(this.backdrop.overlaySelectorClass)).forEach(target => {
+                        this.addEventListenerToTarget(target, 'next');
+                    });
+                }
             }
 
             this.tippyInstance = createTooltip({
@@ -132,7 +131,7 @@ export default class Tooltip {
                 uid: this.uid,
                 nextStep: this.nextStep,
                 prevStep: this.prevStep,
-                target: backdrop.disabled ? this.targetElement : this.backdrop.stage,
+                target: this.targetElement,
                 actions: this.actions,
                 styleProps: this.styleProps,
                 arrow,
@@ -161,30 +160,23 @@ export default class Tooltip {
             }
         }
 
-        private addEventListenerToTarget(target: string, method='next', eventType='click'): void {
+        private addEventListenerToTarget(target: document.HTMLElement, method='next', eventType='click'): void {
             // add this event listener at the  creation of each tooltip step and
             // remove it at removal of it
             // TODO Look at how those saas do it - the options they give that is
-            const targetElement = document.querySelector(target);
 
-            targetElement.addEventListener(eventType, this.getListenerFromMethod(method));
+            target.addEventListener(eventType, this.getListenerFromMethod(method));
             this.targetsAndEventListeners.push({ method, target, eventType });
             // console.log(this.targetsAndEventListeners);
         }
 
         private removeAllEventListeners(): void {
             this.targetsAndEventListeners.forEach(({ method, target, eventType }) => {
-                const targetElement = document.querySelector(target);
                 // TODO Write if for targetElement being null, btw why is it null (repeat this across other files too)
-                targetElement.removeEventListener(eventType, this.getListenerFromMethod(method));
+                target.removeEventListener(eventType, this.getListenerFromMethod(method));
                 console.log(`remove event listener of type ${eventType} and method ${method}`);
             });
             this.targetsAndEventListeners = [];
             // console.log(this.targetsAndEventListeners);
-        }
-
-
-        public removeOverlay() {
-          //
         }
 }

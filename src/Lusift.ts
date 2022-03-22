@@ -3,14 +3,17 @@ import { saveState, loadState } from './localStorage';
 import { GuideType } from './types';
 import isEqual from 'lodash.isequal';
 
-import { window } from 'global';
+import { window, document } from 'global';
 
 import { Content } from './types';
 import { isOfTypeContent, isObject } from './utils/isOfType';
+import { styleObjectToString } from './utils';
 import addTippyCSS from './addTippyCSS';
 
 // TODO add a dev class
 // TODO add constants file
+
+
 
 export default new class Lusift {
   private content: Content;
@@ -28,6 +31,11 @@ export default new class Lusift {
       saveState({});
     }
     addTippyCSS();
+
+    if (typeof window !== "undefined") {
+      window.setTimeout(() => {
+      }, 2000);
+    }
   }
 
   private hasGuideDataChanged(guideData: GuideType): boolean {
@@ -124,4 +132,4 @@ export default new class Lusift {
   static next(): void {
     //
   }
-}()
+}();
