@@ -83,15 +83,22 @@ class Backdrop {
     this.show();
   }
 
-  private show(): void {
+  /* private show(): void {
     window.alert('triggering overlay');
     this.addOverlay();
     const targetElement: document.HTMLElement  = document.querySelector(this.targetSelector);
     this.targetPosition = this.getElementPosition(targetElement);
     this.addTargetDummy();
     this.stageElement(targetElement);
-  }
+  } */
 
+  private show(): void {
+    window.alert('triggering overlay');
+    this.addOverlay();
+    const targetElement: document.HTMLElement  = document.querySelector(this.targetSelector);
+    this.targetPosition = this.getElementPosition(targetElement);
+    this.stageElement(targetElement);
+  }
 
   private getElementPosition(element: document.HTMLElement): ElementPosition {
     const documentElement = document;
@@ -170,6 +177,53 @@ class Backdrop {
 
     this.stage = document.createElement('div');
     this.stage.id='lusift-stage';
+
+    const requiredPadding = this.data.stageGap * 2;
+
+    const stageWidth = (this.targetPosition.right - this.targetPosition.left) + (requiredPadding);
+    const stageHeight = (this.targetPosition.bottom - this.targetPosition.top) + (requiredPadding);
+
+    const stageStyle = {
+      top: `${this.targetPosition.top - (requiredPadding / 2)}px`,
+      left: `${this.targetPosition.left - (requiredPadding / 2)}px`,
+      bottom: '',
+      right: '',
+      position: 'absolute',
+      width: `${stageWidth}px`,
+      height: `${stageHeight}px`,
+      display: 'flex',
+      background: '#fff',
+      justifyContent: 'center',
+      alignItems: 'center',
+      zIndex: '99998'
+    };
+
+    this.stage.style.cssText = styleObjectToString(stageStyle);
+
+    document.body.appendChild(this.stage);
+
+    const position = targetElement.style.position;
+    const targetElementStyle = {
+      ...targetElement.style,
+      position: (position==='' || position==='static') ? 'relative': position,
+      zIndex: '99999'
+    }
+    targetElement.style.cssText = styleObjectToString(targetElementStyle);
+
+    // add lusift class to target
+    targetElement.classList.add(this.stagedTargetClass);
+    this.targetSelector = `${this.targetSelector}.${this.stagedTargetClass}`;
+    // console.log('staged');
+  }
+
+
+  private stageElement0(targetElement): void {
+
+    /* console.log('saved target element:');
+    console.log(targetElement) */
+
+    this.stage = document.createElement('div');
+    this.stage.id='lusift-stage';
     this.targetContainer = document.createElement('div');
 
     const requiredPadding = this.data.stageGap * 2;
@@ -224,7 +278,7 @@ class Backdrop {
     // console.log('staged');
   }
 
-  private offStage() {
+  private offStage0() {
     // reset target element's styles for positioning props
     const targetElement = document.querySelector(this.targetSelector);
     if(!targetElement){
@@ -246,11 +300,27 @@ class Backdrop {
     targetDummy.outerHTML = targetElement.outerHTML;
   }
 
+
+  private offStage() {
+    // reset target element's styles for positioning props
+    const targetElement = document.querySelector(this.targetSelector);
+    if(!targetElement){
+      return console.warn('Target not found in dom');
+    }
+    const targetElementStyle = {
+      ...targetElement.style,
+      ...this.targetElementContextStyle
+    }
+    targetElement.style.cssText = styleObjectToString(targetElementStyle);
+    targetElement.classList.remove(this.stagedTargetClass);
+    this.targetSelector = this.targetSelector.replace(`.${this.stagedTargetClass}`, '');
+  }
+
   private remove(): void {
     this.offStage();
     this.overlay.remove();
-    this.targetContainer.remove();
-    this.stage.remove();
+    /* this.targetContainer.remove();
+    this.stage.remove(); */
     // console.log('overlay and stage removed')
   }
 }

@@ -85,7 +85,7 @@ export default class Tooltip {
 
             const backdrop = data.backdrop || {};
             this.data.backdrop = {
-                disabled: true,
+                disabled: false,
                 ...backdrop
             }
 
