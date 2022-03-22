@@ -87,6 +87,12 @@ export default class Tooltip {
                 ...progressOn
             }
 
+            const backdrop = data.backdrop || {};
+            this.data.backdrop = {
+                disabled: true,
+                ...backdrop
+            }
+
             this.consolidateActions(actions);
             this.uid=getStepUID({ guideID, index, type: 'tooltip' });
             this.backdropID=getStepUID({ guideID, index, type: 'backdrop' });
