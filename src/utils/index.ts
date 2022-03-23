@@ -2,5 +2,6 @@ import htmlStringToElement from './htmlStringToElement';
 import mergeObjects from './mergeObjects';
 import styleObjectToString from './styleObjectToString';
 import getStepUID from './getStepUID';
+import onElementResize from './onElementResize';
 
-export { htmlStringToElement, mergeObjects, styleObjectToString, getStepUID };
+export { htmlStringToElement, mergeObjects, styleObjectToString, getStepUID, onElementResize };

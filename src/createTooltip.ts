@@ -137,7 +137,7 @@ const renderTooltip = ({ remove, bodyContent = defaultBodyContent, arrow, placem
     inlinePositioning: true,
     plugins: [inlinePositioning],
     moveTransition: 'transform 0.2s ease-out',
-    offset: offset || [0, 10],
+    offset,
     placement,
     onClickOutside(instance, event) {
       // Probably give this option for hotspots

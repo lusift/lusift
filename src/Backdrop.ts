@@ -1,5 +1,5 @@
 import { document, window } from 'global';
-import { styleObjectToString, getStepUID } from './utils/';
+import { styleObjectToString, getStepUID, onElementResize } from './utils/';
 
 interface ElementPosition {
   top: number;
@@ -47,6 +47,7 @@ interface BackdropAsStepParameters{
 
 type BackdropParameters = BackdropForTooltipParameters & BackdropAsStepParameters;
 
+
 class Backdrop {
 
   private targetSelector: string;
@@ -61,7 +62,7 @@ class Backdrop {
     guideID,
     index,
     data
-  }: any) { //BackdropParameters
+  }: BackdropParameters) { //BackdropParameters
     uid = uid || getStepUID({ guideID, index, type: 'backdrop' });
     this.stagedTargetClass = `${uid}__target`;
 
@@ -71,6 +72,17 @@ class Backdrop {
     }
     this.targetSelector = targetSelector;
     this.addBackdop();
+    const targetElement = document.querySelector(this.targetSelector);
+
+    window.addEventListener('resize', this.resetBackdrop.bind(this));
+    onElementResize(targetElement, this.resetBackdrop.bind(this));
+  }
+
+  private resetBackdrop(): void {
+    window.setTimeout(() => {
+      this.remove();
+      this.addBackdop();
+    }, 500);
   }
 
 
@@ -93,22 +105,27 @@ class Backdrop {
     return position;
   }
 
+  private getScreenDimensions(): { screenWidth: number; screenHeight: number } {
+
+    return {
+      screenWidth: window.innerWidth
+      || document.documentElement.clientWidth
+      || document.body.clientWidth,
+
+      screenHeight: window.innerHeight
+      || document.documentElement.clientHeight
+      || document.body.clientHeight
+    }
+  }
+
   private addBackdop(): void {
+    // TODO block scrolling
     const targetElement = document.querySelector(this.targetSelector);
-    // TODO start watching target element and screen changes starting from here
-    const targetPosition = this.getElementPosition(targetElement);
-    console.log(targetPosition);
     const padding = this.data.stageGap;
 
-    //TODO replace those height and widths with
+    const { screenHeight, screenWidth } = this.getScreenDimensions();
 
-    const screenWidth = window.innerWidth
-    || document.documentElement.clientWidth
-    || document.body.clientWidth;
-
-    const screenHeight = window.innerHeight
-    || document.documentElement.clientHeight
-    || document.body.clientHeight;
+    const targetPosition = this.getElementPosition(targetElement);
 
     const hTop = document.createElement('div');
     hTop.id = 'hTop';
@@ -143,13 +160,11 @@ class Backdrop {
 
     hBottom.style.cssText = styleObjectToString({
       ...overlayStyle,
-      height: `${document.body.clientHeight - (targetPosition.top + targetPosition.height + padding)}px`,
+      height: `${screenHeight - (targetPosition.top + targetPosition.height + padding)}px`,
       width: `${targetPosition.right - targetPosition.left + 2*padding}px`,
       left: `${targetPosition.left - padding}px`,
       top: ''
     });
-
-    console.log(targetPosition.width)
 
     vLeft.style.cssText = styleObjectToString({
       ...overlayStyle,
@@ -157,7 +172,7 @@ class Backdrop {
     });
     vRight.style.cssText = styleObjectToString({
       ...overlayStyle,
-      width: `${document.body.clientWidth - (targetPosition.left+targetPosition.width) - padding}px`,
+      width: `${screenWidth - (targetPosition.left+targetPosition.width) - padding}px`,
       left: ''
     });
 
@@ -166,14 +181,43 @@ class Backdrop {
       document.body.appendChild(el);
     });
     targetElement.classList.add(this.stagedTargetClass);
+
+    // See that the overlay isn't glitchy, reset if it is
+    const { height: hTopHeight, width: hTopWidth } = this.getElementPosition(hTop);
+    const { height: hBottomHeight, width: hBottomWidth } = this.getElementPosition(hBottom);
+    const vLeftWidth = this.getElementPosition(vLeft).width;
+    const vRightWidth = this.getElementPosition(vRight).width;
+
+    const roundNum = (value: number, decimalPlaces: number) => {
+      return Number(Math.round(parseFloat(value + 'e' + decimalPlaces)) + 'e-' + decimalPlaces)
+    }
+
+    const overlaySumWidth = roundNum(hTopWidth+vLeftWidth+vRightWidth, 4);
+    const overlaySumHeight = roundNum((hTopHeight+hBottomHeight+targetPosition.height+2*padding), 4);
+
+    /* console.log(screenWidth, overlaySumWidth);
+    console.log(screenHeight, overlaySumHeight); */
+
+    if(screenWidth !== overlaySumWidth || screenHeight !== overlaySumHeight){
+      this.resetBackdrop();
+    }
   }
 
-  private remove(): void {
+  public removeOverlay(): void {
     document.querySelectorAll(`.${this.overlaySelectorClass}`)
     .forEach((el: document.HTMLElement) => el.remove());
 
     const targetElement = document.querySelector(this.targetSelector);
     targetElement.classList.remove(this.stagedTargetClass);
+  }
+
+  public remove(): void {
+    this.removeOverlay();
+
+    const targetElement = document.querySelector(this.targetSelector);
+    // remove event listeners
+    window.removeEventListener('resize', this.resetBackdrop);
+    // onElementResize(targetElement, this.resetBackdrop);
     // console.log('overlay and stage removed')
   }
 }

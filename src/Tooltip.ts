@@ -20,7 +20,7 @@ const defaulBackdropData = {
     color: '#444',
     opacity: '0.5',
     stageGap: 5,
-    nextOnOverlayClick: false
+    nextOnOverlayClick: false,
 }
 
 export default class Tooltip {
@@ -74,6 +74,7 @@ export default class Tooltip {
 
             const progressOn = data.progressOn || {};
             // TODO factor stageGap to offset
+            console.log(this.data);
             this.data.progressOn = {
                 eventType: 'click',
                 elementSelector: target.elementSelector,
@@ -82,8 +83,12 @@ export default class Tooltip {
 
             const backdrop = data.backdrop || {};
             this.data.backdrop = {
-                disabled: true,
+                ...defaulBackdropData,
                 ...backdrop
+            }
+            this.data.offset = this.data.offset || [0, 10];
+            if(!this.data.backdrop.disabled) {
+                this.data.offset[1] = this.data.offset[1] + this.data.backdrop.stageGap;
             }
 
             this.consolidateActions(actions);
@@ -104,27 +109,28 @@ export default class Tooltip {
           console.log(this.actions); */
         }
 
+        private addBackdrop(): void {
+            this.backdrop = new Backdrop({
+                targetSelector: this.target.elementSelector,
+                uid: this.backdropID,
+                data: this.data.backdrop
+            });
+            if (this.data.backdrop.nextOnOverlayClick){
+                Array.from(document.getElementsByClassName(this.backdrop.overlaySelectorClass)).forEach(target => {
+                    this.addEventListenerToTarget(target, 'next');
+                });
+            }
+        }
+
         public show(): void {
             if (!this.targetElement) return console.warn('Error: target element not found');
 
             const { placement, arrow, progressOn, bodyContent, offset, backdrop } = this.data;
 
             const { eventType, disabled } = progressOn;
-            // addEventListenerToTarget method targets dummy element from Backdrop if executed after dummy is created
             disabled || this.addEventListenerToTarget(this.targetElement, 'next', eventType);
 
-            if(!backdrop.disabled) {
-                this.backdrop = new Backdrop({
-                    targetSelector: this.target.elementSelector,
-                    uid: this.backdropID,
-                    data: backdrop
-                });
-                if (this.data.backdrop.nextOnOverlayClick){
-                    Array.from(document.getElementsByClassName(this.backdrop.overlaySelectorClass)).forEach(target => {
-                        this.addEventListenerToTarget(target, 'next');
-                    });
-                }
-            }
+            backdrop.disabled || this.addBackdrop();
 
             this.tippyInstance = createTooltip({
                 remove: this.closeGuide,
