@@ -125,12 +125,10 @@ class Backdrop {
   private getScreenDimensions(): { screenWidth: number; screenHeight: number } {
 
     return {
-      screenWidth: window.innerWidth
-      || document.documentElement.clientWidth
+      screenWidth: document.documentElement.clientWidth
       || document.body.clientWidth,
 
-      screenHeight: window.innerHeight
-      || document.documentElement.clientHeight
+      screenHeight: document.documentElement.clientHeight
       || document.body.clientHeight
     }
   }
