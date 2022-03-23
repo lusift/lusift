@@ -55,6 +55,8 @@ class Backdrop {
   public overlaySelectorClass: string = 'lusift-overlay';
   // private data: BackdropData;
   private data: any;
+  private dummyElement: document.HTMLElement;
+  private toStopOverlay: boolean;
 
   constructor({
     targetSelector,
@@ -72,19 +74,34 @@ class Backdrop {
     }
     this.targetSelector = targetSelector;
     this.addBackdop();
-    const targetElement = document.querySelector(this.targetSelector);
 
-    window.addEventListener('resize', this.resetBackdrop.bind(this));
-    onElementResize(targetElement, this.resetBackdrop.bind(this));
+    this.dummyElement = document.createElement('div');
+    this.dummyElement.id = 'lusift-backdrop-dummy';
+    document.body.appendChild(this.dummyElement);
+
+    this.resetBackdrop = this.resetBackdrop.bind(this);
+    window.addEventListener('resize', this.resetBackdrop, true);
+
+    // HACK
+    // TODO see what should be done when the page gets horizontal scroll bar
+    this.dummyElement.addEventListener('click', () => {
+      this.toStopOverlay = true;
+      window.removeEventListener('resize', this.resetBackdrop, true);
+    }, true);
+
+    onElementResize(
+      document.querySelector(`.${this.overlaySelectorClass}`),
+      this.resetBackdrop
+    );
   }
 
   private resetBackdrop(): void {
     window.setTimeout(() => {
-      this.remove();
+      // if(this.toStopOverlay) return console.log('no showing overlay anymore');
+      this.removeOverlay();
       this.addBackdop();
     }, 500);
   }
-
 
   private getElementPosition(element: document.HTMLElement): ElementPosition {
     const documentElement = document;
@@ -189,14 +206,14 @@ class Backdrop {
     const vRightWidth = this.getElementPosition(vRight).width;
 
     const roundNum = (value: number, decimalPlaces: number) => {
-      return Number(Math.round(parseFloat(value + 'e' + decimalPlaces)) + 'e-' + decimalPlaces)
+      return Number(Math.round(parseFloat(value + 'e' + decimalPlaces)) + 'e-' + decimalPlaces);
     }
 
     const overlaySumWidth = roundNum(hTopWidth+vLeftWidth+vRightWidth, 4);
     const overlaySumHeight = roundNum((hTopHeight+hBottomHeight+targetPosition.height+2*padding), 4);
 
     /* console.log(screenWidth, overlaySumWidth);
-    console.log(screenHeight, overlaySumHeight); */
+       console.log(screenHeight, overlaySumHeight); */
 
     if(screenWidth !== overlaySumWidth || screenHeight !== overlaySumHeight){
       this.resetBackdrop();
@@ -213,11 +230,9 @@ class Backdrop {
 
   public remove(): void {
     this.removeOverlay();
-
-    const targetElement = document.querySelector(this.targetSelector);
     // remove event listeners
-    window.removeEventListener('resize', this.resetBackdrop);
-    // onElementResize(targetElement, this.resetBackdrop);
+    this.dummyElement.click();
+    this.dummyElement.remove();
     // console.log('overlay and stage removed')
   }
 }
