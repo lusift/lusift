@@ -12,7 +12,6 @@ import Backdrop from './Backdrop';
 // TODO Add steps config, and steps styles to apply to all steps
 
 // TODO add Actions validator
-// TODO tooltip - the arrow should have more options than to just be at the center
 // TODO hide and show tooltip instead of creating and destroying it every time when scroll view changes
 
 const defaulBackdropData = {
@@ -74,7 +73,6 @@ export default class Tooltip {
             this.data = data;
 
             const progressOn = data.progressOn || {};
-            // TODO factor stageGap to offset
             console.log(this.data);
             this.data.progressOn = {
                 eventType: 'click',
@@ -178,12 +176,10 @@ export default class Tooltip {
         }
 
         public remove(): void {
-            // TODO tippyInstance was undefined once
-            // probably when constructor() ran but tippy was never initiated
             if (!this.isTooltipShown) return console.log('Attempted to remove but tooltip is not shown');
             console.log(`removing tooltip ${this.uid}`);
             this.removeAllEventListeners();
-            this.backdrop && this.backdrop.remove(); // is this right??
+            this.backdrop && this.backdrop.remove();
             this.tippyInstance.unmount();
             this.tippyInstance.destroy();
             this.isTooltipShown = false;
@@ -201,7 +197,7 @@ export default class Tooltip {
         }
 
         private addEventListenerToTarget(target: document.HTMLElement, method='next', eventType='click'): void {
-            // add this event listener at the  creation of each tooltip step and
+            // add this event listener at the creation of each tooltip step and
             // remove it at removal of it
             // TODO Look at how those saas do it - the options they give that is
 

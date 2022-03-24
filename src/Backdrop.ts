@@ -11,8 +11,28 @@ interface ElementPosition {
 }
 
 
-const roundNum = (value: number, decimalPlaces: number) => {
+const roundNum = (value: number, decimalPlaces: number=2) => {
   return Math.round((value + Number.EPSILON) * Math.pow(10, decimalPlaces)) / (Math.pow(10, decimalPlaces));
+}
+
+const areNumbersEqual = (num1: number, num2: number): boolean => {
+
+  let num1Precision = num1.toString().substring(num1.toString().indexOf(".")).length-1;
+  if(num1.toString().indexOf('.')==-1) num1Precision=0;
+
+  let num2Precision = num2.toString().substring(num2.toString().indexOf(".")).length-1;
+  if(num2.toString().indexOf('.')==-1) num2Precision=0;
+  let decimalPlaces = Math.min(num1Precision, num2Precision);
+  if(decimalPlaces>2) {
+    decimalPlaces = 1; //most reliable precision
+  }
+
+  console.log(num1, num2)
+  console.log(num1Precision, num2Precision, decimalPlaces);
+
+  console.log(roundNum(num1, decimalPlaces), roundNum(num2, decimalPlaces));
+
+  return roundNum(num1, decimalPlaces) === roundNum(num2, decimalPlaces);
 }
 
 // TODO should we change focus on page
@@ -126,8 +146,8 @@ class Backdrop {
     const { height, width } = this.getElementPosition(document.documentElement);
 
     return {
-      screenWidth: roundNum(width, 4),
-      screenHeight: roundNum(height, 4)
+      screenWidth: width,
+      screenHeight: height
     }
   }
 
@@ -204,13 +224,16 @@ class Backdrop {
     const vRightWidth = this.getElementPosition(vRight).width;
 
 
-    const overlaySumWidth = roundNum(hTopWidth+vLeftWidth+vRightWidth, 4);
-    const overlaySumHeight = roundNum((hTopHeight+hBottomHeight+targetPosition.height+2*padding), 4);
+    const overlaySumWidth = hTopWidth+vLeftWidth+vRightWidth;
+    const overlaySumHeight = hTopHeight+hBottomHeight+targetPosition.height+2*padding;
 
-    console.log(screenWidth, overlaySumWidth);
-    console.log(screenHeight, overlaySumHeight);
+    /* console.log(screenWidth, overlaySumWidth);
+    console.log(screenHeight, overlaySumHeight); */
 
-    if(screenWidth !== overlaySumWidth || screenHeight !== overlaySumHeight){
+
+    if(!areNumbersEqual(screenWidth, overlaySumWidth) || !areNumbersEqual(screenHeight, overlaySumHeight)){
+      // TODO sometimes the precision isn't the same and it comes out as true and then you have a loop
+      // -
       this.resetBackdrop();
     }
   }
