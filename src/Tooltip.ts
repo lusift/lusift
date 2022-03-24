@@ -25,31 +25,6 @@ const defaulBackdropData = {
     nextOnOverlayClick: false,
 }
 
-
-const isElementInViewport = (el: document.HTMLElement): any => {
-  const rect = el.getBoundingClientRect();
-
-  return (
-    rect.top >= 0 &&
-      rect.left >= 0 &&
-      rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-    rect.right <= (window.innerWidth || document.documentElement.clientWidth)
-  );
-}
-
-const onElementVisibilityChange = (el: document.HTMLElement, callback: Function): Function => {
-  let old_visible: boolean;
-  return function () {
-    let visible = isElementInViewport(el);
-    if (visible != old_visible) {
-      old_visible = visible;
-      if (typeof callback == 'function') {
-        callback();
-      }
-    }
-  }
-}
-
 export default class Tooltip {
     private targetElement: document.HTMLElement;
     readonly target: TooltipTarget;
@@ -128,40 +103,33 @@ export default class Tooltip {
             this.closeGuide=closeGuide;
             window.alert('tooltip initiated')
             document.body.style.height='1000px'
-            this.attachShowEventHandler();
-            // TODO remove this handler on tooltip removal
+            this.attachIntersectionObserver();
         }
 
-        private attachShowEventHandler() {
+        private attachIntersectionObserver(): void {
+            // show tooltip when it comes into view, remove it when it goes out of it
             this.show = this.show.bind(this);
             this.remove = this.remove.bind(this);
 
-            let handler = onElementVisibilityChange(this.targetElement, () => {
-                window.setTimeout(() => {
-                    if(isElementInViewport(this.targetElement)) {
-                        console.log('element has come into viewport. show');
+            const { IntersectionObserver } = window;
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    const { isIntersecting, target } = entry;
+                    if(!target.isSameNode(this.targetElement)){
+                        return console.log('Observer target doesn\'t match tooltip target');
+                    }
+                    if(isIntersecting){
                         this.show();
                     } else {
-                        console.log('element has went out of viewport. remove');
                         this.remove();
                     }
-                }, 300);
+                });
+            }, {
+                root: null,
+                threshold: 1.0
             });
-            handler = handler.bind(this);
-
-            console.log('event listener attached')
-            const { addEventListener, attachEvent } = window;
-            if (window.addEventListener) {
-                addEventListener('DOMContentLoaded', handler, false);
-                addEventListener('load', handler, false);
-                addEventListener('scroll', handler, false);
-                addEventListener('resize', handler, false);
-            } else if (window.attachEvent)  {
-                attachEvent('onDOMContentLoaded', handler);
-                attachEvent('onload', handler);
-                attachEvent('onscroll', handler);
-                attachEvent('onresize', handler);
-            }
+            observer.observe(this.targetElement);
         }
 
         private consolidateActions(actions: StepActions) {

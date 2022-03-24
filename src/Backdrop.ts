@@ -18,9 +18,7 @@ const roundNum = (value: number, decimalPlaces: number) => {
 // TODO should we change focus on page
 // TODO fix stuff with zIndices
 // 2147483647
-// TODO wait for all fonts to load and such before executing Lusift,
 // TODO only one overlay on the screen at a time
-// TODO bug limit run of resetBackdrop (or addBackdop?), they're running multiple times at once
 
 const defaultBackdropData = {
   stageGap: 5,
