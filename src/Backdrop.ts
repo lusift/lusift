@@ -10,7 +10,6 @@ interface ElementPosition {
   width: number;
 }
 
-
 const roundNum = (value: number, decimalPlaces: number=2) => {
   return Math.round((value + Number.EPSILON) * Math.pow(10, decimalPlaces)) / (Math.pow(10, decimalPlaces));
 }
@@ -232,8 +231,6 @@ class Backdrop {
 
 
     if(!areNumbersEqual(screenWidth, overlaySumWidth) || !areNumbersEqual(screenHeight, overlaySumHeight)){
-      // TODO sometimes the precision isn't the same and it comes out as true and then you have a loop
-      // -
       this.resetBackdrop();
     }
   }

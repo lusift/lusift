@@ -146,15 +146,14 @@ const renderTooltip = ({ remove, bodyContent = defaultBodyContent,
       // Probably give this option for hotspots
     },
     popperOptions: {
-      strategy: 'fixed',
       ...popperOptions,
       placement,
       modifiers: [
         ...popperOptions.modifiers,
-        /* {
+        {
           name: 'flip',
           enabled: placement === 'auto',
-        }, */
+        },
         {
           name: 'arrow',
           enabled: arrow

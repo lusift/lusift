@@ -208,7 +208,6 @@ export default class Tooltip {
 
         private removeAllEventListeners(): void {
             this.targetsAndEventListeners.forEach(({ method, target, eventType }) => {
-                // TODO Write if for targetElement being null, btw why is it null (repeat this across other files too)
                 target.removeEventListener(eventType, this.getListenerFromMethod(method));
                 console.log(`remove event listener of type ${eventType} and method ${method}`);
             });
