@@ -9,7 +9,6 @@ const defaultBodyContent = `
 `;
 
 // TODO full-feature this
-// TODO Add other positions like bottom-start and so on
 
 const closeXButton = (closeButton: any): string => {
   if (closeButton.disable) return;
@@ -167,7 +166,6 @@ const renderTooltip = ({ remove, bodyContent = defaultBodyContent,
   console.log(tippyInstance)
 
   tippyInstance.show();
-  window.ti = tippyInstance;
 
   const closeButtons = document.querySelectorAll(`#tooltip-${uid} .close`);
   const nextButtons = document.querySelectorAll(`#tooltip-${uid} button.next`);

@@ -1,4 +1,5 @@
 import Tooltip from './Tooltip';
+import Hotspot from './Hotspot';
 import { window, document } from 'global';
 import { saveState, loadState } from './localStorage';
 
@@ -39,17 +40,12 @@ export default class Guide {
     /* console.log('guideData pulled from local storage:');
     console.log(this.guideData);
     console.log(this.trackingState); */
+    new Hotspot();
   }
 
   public start(): void {
     console.info('Launching guide');
     this.attemptShow();
-    () => {
-      const stepIndex = this.trackingState.activeStep;
-      const targetElement = document.querySelector(this.guideData.steps[stepIndex].target.elementSelector);
-      onElementVisibilityChange(targetElement, () => {
-      });
-    }
   }
 
   public attemptShow(): void {

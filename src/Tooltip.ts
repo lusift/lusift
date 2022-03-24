@@ -151,7 +151,7 @@ export default class Tooltip {
             if (!this.targetElement) return console.warn('Error: target element not found');
             if (this.isTooltipShown) return console.log('Tooltip is already displayed');
 
-            const { placement, alignment, arrow, progressOn, bodyContent, offset, backdrop } = this.data;
+            const { placement, arrow, progressOn, bodyContent, offset, backdrop } = this.data;
 
             const { eventType, disabled } = progressOn;
             disabled || this.addEventListenerToTarget(this.targetElement, 'next', eventType);
@@ -169,7 +169,6 @@ export default class Tooltip {
                 arrow,
                 bodyContent,
                 placement,
-                alignment,
                 offset,
             });
             this.isTooltipShown = true;
