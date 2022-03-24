@@ -8,6 +8,7 @@ const defaultBodyContent = `
   <p style="font-weight: normal;">Default tooltip content</p>
 `;
 
+// TODO full-feature this
 // TODO Add other positions like bottom-start and so on
 
 const closeXButton = (closeButton: any): string => {
@@ -86,29 +87,31 @@ const navButtons = (navSection: any): string => {
   `;
 }
 
-const renderTooltip = ({ remove, bodyContent = defaultBodyContent, arrow, placement, target, styleProps, actions, offset, uid, nextStep, prevStep }) => {
+const renderTooltip = ({ remove, bodyContent = defaultBodyContent,
+                       arrow, placement,
+                       target, styleProps, actions,
+                       offset, uid, nextStep, prevStep }) => {
 
   const { closeButton, navSection } = actions;
 
   const content = `
     <style>
-    .tippy-box{
-      z-index: 999999;
-      ${styleObjectToString(styleProps)}
-    }
-    #tooltip-${uid} {
-      font-weight: bold;
-      font-size: 1rem;
-      display: block;
-    }
-    #tooltip-${uid} > * {
-      margin: 3px 6px;
-    }
-    .section.body-content{
-      margin-top: 0 !important;
-      min-width: 80px;
-    }
-
+      .tippy-box{
+        z-index: 999999;
+        ${styleObjectToString(styleProps)}
+      }
+      #tooltip-${uid} {
+        font-weight: bold;
+        font-size: 1rem;
+        display: block;
+      }
+      #tooltip-${uid} > * {
+        margin: 3px 6px;
+      }
+      .section.body-content{
+        margin-top: 0 !important;
+        min-width: 80px;
+      }
     </style>
 
     <div id="tooltip-${uid}">
@@ -143,14 +146,15 @@ const renderTooltip = ({ remove, bodyContent = defaultBodyContent, arrow, placem
       // Probably give this option for hotspots
     },
     popperOptions: {
+      strategy: 'fixed',
       ...popperOptions,
       placement,
       modifiers: [
         ...popperOptions.modifiers,
-        {
+        /* {
           name: 'flip',
-          enabled: placement === 'auto'
-        },
+          enabled: placement === 'auto',
+        }, */
         {
           name: 'arrow',
           enabled: arrow
@@ -161,8 +165,10 @@ const renderTooltip = ({ remove, bodyContent = defaultBodyContent, arrow, placem
     trigger: 'manual',
     theme: 'light'
   });
+  console.log(tippyInstance)
 
   tippyInstance.show();
+  window.ti = tippyInstance;
 
   const closeButtons = document.querySelectorAll(`#tooltip-${uid} .close`);
   const nextButtons = document.querySelectorAll(`#tooltip-${uid} button.next`);
@@ -175,5 +181,4 @@ const renderTooltip = ({ remove, bodyContent = defaultBodyContent, arrow, placem
   return tippyInstance;
 }
 
-// TODO full-feature this
 export default renderTooltip;

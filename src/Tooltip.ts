@@ -5,14 +5,12 @@ import { TooltipData, TooltipTarget, StepActions } from './types';
 import defaultToolipActions from './defaultTooltipActions';
 import Backdrop from './Backdrop';
 
-// TODO see if an unrelated dom change loses controls to the tooltip
 // TODO Developer should be able to modify css on the global guide level, as well as on the step level
 // TODO Add option for beacon in Tooltip
 // TODO Add developer helper method to quickly render an element on the screen during development
 // TODO Add asynchrous hotspots
 // TODO Add steps config, and steps styles to apply to all steps
 
-// TODO take scroll view into account to make the tooltip appear and disappear
 // TODO add Actions validator
 // TODO tooltip - the arrow should have more options than to just be at the center
 // TODO hide and show tooltip instead of creating and destroying it every time when scroll view changes
@@ -101,8 +99,7 @@ export default class Tooltip {
             this.nextStep=nextStep;
             this.prevStep=prevStep;
             this.closeGuide=closeGuide;
-            window.alert('tooltip initiated')
-            document.body.style.height='1000px'
+            // window.alert('tooltip initiated')
             this.attachIntersectionObserver();
         }
 
@@ -127,7 +124,7 @@ export default class Tooltip {
                 });
             }, {
                 root: null,
-                threshold: 1.0
+                threshold: 0.95
             });
             observer.observe(this.targetElement);
         }
@@ -156,7 +153,7 @@ export default class Tooltip {
             if (!this.targetElement) return console.warn('Error: target element not found');
             if (this.isTooltipShown) return console.log('Tooltip is already displayed');
 
-            const { placement, arrow, progressOn, bodyContent, offset, backdrop } = this.data;
+            const { placement, alignment, arrow, progressOn, bodyContent, offset, backdrop } = this.data;
 
             const { eventType, disabled } = progressOn;
             disabled || this.addEventListenerToTarget(this.targetElement, 'next', eventType);
@@ -174,6 +171,7 @@ export default class Tooltip {
                 arrow,
                 bodyContent,
                 placement,
+                alignment,
                 offset,
             });
             this.isTooltipShown = true;

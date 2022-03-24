@@ -6,7 +6,11 @@ export function isObject(item: any): boolean {
 
 export function isOfTypeTooltipData(object: any): boolean {
 
-  const placements = ['bottom', 'top', 'right', 'left'];
+  const placements = ['bottom', 'top', 'right', 'left', 'auto'];
+  placements.forEach(p => {
+    placements.push(`${p}-start`);
+    placements.push(`${p}-end`);
+  })
 
   return isObject(object) &&
     (typeof object.arrow === 'boolean') &&
