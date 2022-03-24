@@ -162,7 +162,6 @@ const renderTooltip = ({ remove, bodyContent = defaultBodyContent, arrow, placem
     theme: 'light'
   });
 
-  console.log(tippyInstance);
   tippyInstance.show();
 
   const closeButtons = document.querySelectorAll(`#tooltip-${uid} .close`);

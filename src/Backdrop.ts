@@ -10,15 +10,16 @@ interface ElementPosition {
   width: number;
 }
 
+
+const roundNum = (value: number, decimalPlaces: number) => {
+  return Math.round((value + Number.EPSILON) * Math.pow(10, decimalPlaces)) / (Math.pow(10, decimalPlaces));
+}
+
 // TODO should we change focus on page
 // TODO fix stuff with zIndices
 // 2147483647
 // TODO wait for all fonts to load and such before executing Lusift,
 // TODO only one overlay on the screen at a time
-
-if(window) {
-  window.alert = console.log
-}
 
 const defaultBackdropData = {
   stageGap: 5,
@@ -73,6 +74,8 @@ class Backdrop {
       ...data
     }
     this.targetSelector = targetSelector;
+    /* document.body.style.height='1000px'
+    document.body.style.width='1000px' */
     this.addBackdop();
 
     this.dummyElement = document.createElement('div');
@@ -100,7 +103,7 @@ class Backdrop {
       // if(this.toStopOverlay) return console.log('no showing overlay anymore');
       this.removeOverlay();
       this.addBackdop();
-    }, 500);
+    }, 700);
   }
 
   private getElementPosition(element: document.HTMLElement): ElementPosition {
@@ -123,18 +126,18 @@ class Backdrop {
   }
 
   private getScreenDimensions(): { screenWidth: number; screenHeight: number } {
+    const { height, width } = this.getElementPosition(document.documentElement);
 
     return {
-      screenWidth: document.documentElement.clientWidth
-      || document.body.clientWidth,
-
-      screenHeight: document.documentElement.clientHeight
-      || document.body.clientHeight
+      screenWidth: roundNum(width, 4),
+      screenHeight: roundNum(height, 4)
     }
   }
 
   private addBackdop(): void {
     // TODO block scrolling
+   /* document.documentElement.style.overflow = 'hidden';
+   document.body.scroll = "no"; */
     const targetElement = document.querySelector(this.targetSelector);
     const padding = this.data.stageGap;
 
@@ -203,15 +206,12 @@ class Backdrop {
     const vLeftWidth = this.getElementPosition(vLeft).width;
     const vRightWidth = this.getElementPosition(vRight).width;
 
-    const roundNum = (value: number, decimalPlaces: number) => {
-      return Number(Math.round(parseFloat(value + 'e' + decimalPlaces)) + 'e-' + decimalPlaces);
-    }
 
     const overlaySumWidth = roundNum(hTopWidth+vLeftWidth+vRightWidth, 4);
     const overlaySumHeight = roundNum((hTopHeight+hBottomHeight+targetPosition.height+2*padding), 4);
 
-    /* console.log(screenWidth, overlaySumWidth);
-       console.log(screenHeight, overlaySumHeight); */
+    console.log(screenWidth, overlaySumWidth);
+    console.log(screenHeight, overlaySumHeight);
 
     if(screenWidth !== overlaySumWidth || screenHeight !== overlaySumHeight){
       this.resetBackdrop();
@@ -224,6 +224,8 @@ class Backdrop {
 
     const targetElement = document.querySelector(this.targetSelector);
     targetElement.classList.remove(this.stagedTargetClass);
+    /* document.documentElement.style.overflow = 'scroll';
+    document.body.scroll = "yes"; */
   }
 
   public remove(): void {
