@@ -20,6 +20,7 @@ const roundNum = (value: number, decimalPlaces: number) => {
 // 2147483647
 // TODO wait for all fonts to load and such before executing Lusift,
 // TODO only one overlay on the screen at a time
+// TODO bug limit run of resetBackdrop (or addBackdop?), they're running multiple times at once
 
 const defaultBackdropData = {
   stageGap: 5,
@@ -86,9 +87,7 @@ class Backdrop {
     window.addEventListener('resize', this.resetBackdrop, true);
 
     // HACK
-    // TODO see what should be done when the page gets horizontal scroll bar
     this.dummyElement.addEventListener('click', () => {
-      this.toStopOverlay = true;
       window.removeEventListener('resize', this.resetBackdrop, true);
     }, true);
 
@@ -100,7 +99,7 @@ class Backdrop {
 
   private resetBackdrop(): void {
     window.setTimeout(() => {
-      // if(this.toStopOverlay) return console.log('no showing overlay anymore');
+      if(this.toStopOverlay) return console.log('no showing overlay anymore');
       this.removeOverlay();
       this.addBackdop();
     }, 700);
@@ -230,6 +229,7 @@ class Backdrop {
 
   public remove(): void {
     this.removeOverlay();
+    this.toStopOverlay=true;
     // remove event listeners
     this.dummyElement.click();
     this.dummyElement.remove();

@@ -15,6 +15,7 @@ interface TrackingState {
   prematurelyClosed: boolean;
 }
 
+
 export default class Guide {
   readonly guideData: GuideType;
   private trackingState: TrackingState = {
@@ -43,6 +44,12 @@ export default class Guide {
   public start(): void {
     console.info('Launching guide');
     this.attemptShow();
+    () => {
+      const stepIndex = this.trackingState.activeStep;
+      const targetElement = document.querySelector(this.guideData.steps[stepIndex].target.elementSelector);
+      onElementVisibilityChange(targetElement, () => {
+      });
+    }
   }
 
   public attemptShow(): void {
@@ -59,7 +66,7 @@ export default class Guide {
       console.log('guide is not finished or closed yet');
       console.log(activeStep, finished, prematurelyClosed);
 
-      if (this.doesTargetPathMatch(activeStep) && this.isTargetElementFound(activeStep)) {
+      if (this.doesStepPathMatch(activeStep) && this.isStepElementFound(activeStep)) {
         console.log('target path and element matched');
         if(this.stepDisplayed === null) {
           this.showStep(activeStep);
@@ -104,7 +111,7 @@ export default class Guide {
     this.stepDisplayed = stepIndex;
   }
 
-  private doesTargetPathMatch(stepIndex: number): boolean {
+  private doesStepPathMatch(stepIndex: number): boolean {
     // is, endsWith, startsWith, contains
     const { value, comparator } = this.guideData.steps[stepIndex].target.path;
     const { pathname } = window.location;
@@ -122,7 +129,12 @@ export default class Guide {
     }
   }
 
-  private isTargetElementFound(stepIndex: number): boolean {
+  private isStepElementInView(stepIndex: number): boolean {
+    //
+    return false
+  }
+
+  private isStepElementFound(stepIndex: number): boolean {
     /* console.log(this.guideData);
     console.log('checking if element exists') */
     return Boolean(document.querySelector(this.guideData.steps[stepIndex].target.elementSelector));

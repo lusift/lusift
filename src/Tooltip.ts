@@ -14,6 +14,8 @@ import Backdrop from './Backdrop';
 
 // TODO take scroll view into account to make the tooltip appear and disappear
 // TODO add Actions validator
+// TODO tooltip - the arrow should have more options than to just be at the center
+// TODO hide and show tooltip instead of creating and destroying it every time when scroll view changes
 
 const defaulBackdropData = {
     disabled: false,
@@ -21,6 +23,31 @@ const defaulBackdropData = {
     opacity: '0.5',
     stageGap: 5,
     nextOnOverlayClick: false,
+}
+
+
+const isElementInViewport = (el: document.HTMLElement): any => {
+  const rect = el.getBoundingClientRect();
+
+  return (
+    rect.top >= 0 &&
+      rect.left >= 0 &&
+      rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+    rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+  );
+}
+
+const onElementVisibilityChange = (el: document.HTMLElement, callback: Function): Function => {
+  let old_visible: boolean;
+  return function () {
+    let visible = isElementInViewport(el);
+    if (visible != old_visible) {
+      old_visible = visible;
+      if (typeof callback == 'function') {
+        callback();
+      }
+    }
+  }
 }
 
 export default class Tooltip {
@@ -41,6 +68,7 @@ export default class Tooltip {
         eventType: string;
     }[] = [];
     private backdrop: any;
+    private isTooltipShown: boolean;
 
     constructor(
         {
@@ -99,7 +127,41 @@ export default class Tooltip {
             this.prevStep=prevStep;
             this.closeGuide=closeGuide;
             window.alert('tooltip initiated')
-            this.show();
+            document.body.style.height='1000px'
+            this.attachShowEventHandler();
+            // TODO remove this handler on tooltip removal
+        }
+
+        private attachShowEventHandler() {
+            this.show = this.show.bind(this);
+            this.remove = this.remove.bind(this);
+
+            let handler = onElementVisibilityChange(this.targetElement, () => {
+                window.setTimeout(() => {
+                    if(isElementInViewport(this.targetElement)) {
+                        console.log('element has come into viewport. show');
+                        this.show();
+                    } else {
+                        console.log('element has went out of viewport. remove');
+                        this.remove();
+                    }
+                }, 300);
+            });
+            handler = handler.bind(this);
+
+            console.log('event listener attached')
+            const { addEventListener, attachEvent } = window;
+            if (window.addEventListener) {
+                addEventListener('DOMContentLoaded', handler, false);
+                addEventListener('load', handler, false);
+                addEventListener('scroll', handler, false);
+                addEventListener('resize', handler, false);
+            } else if (window.attachEvent)  {
+                attachEvent('onDOMContentLoaded', handler);
+                attachEvent('onload', handler);
+                attachEvent('onscroll', handler);
+                attachEvent('onresize', handler);
+            }
         }
 
         private consolidateActions(actions: StepActions) {
@@ -124,6 +186,7 @@ export default class Tooltip {
 
         public show(): void {
             if (!this.targetElement) return console.warn('Error: target element not found');
+            if (this.isTooltipShown) return console.log('Tooltip is already displayed');
 
             const { placement, arrow, progressOn, bodyContent, offset, backdrop } = this.data;
 
@@ -145,14 +208,19 @@ export default class Tooltip {
                 placement,
                 offset,
             });
+            this.isTooltipShown = true;
         }
 
         public remove(): void {
+            // TODO tippyInstance was undefined once
+            // probably when constructor() ran but tippy was never initiated
+            if (!this.isTooltipShown) return console.log('Attempted to remove but tooltip is not shown');
             console.log(`removing tooltip ${this.uid}`);
             this.removeAllEventListeners();
-            this.backdrop && this.backdrop.remove();
+            this.backdrop && this.backdrop.remove(); // is this right??
             this.tippyInstance.unmount();
             this.tippyInstance.destroy();
+            this.isTooltipShown = false;
         }
 
         private getListenerFromMethod(method: string): Function {
