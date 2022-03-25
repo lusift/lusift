@@ -144,8 +144,8 @@ class Hotspot {
   private toggleTooltip(): any {
     console.log('toggle tooltip')
 
-    const { arrow, bodyContent, offset, styleProps, placement } = tooltipData;
     const target = document.querySelector(this.beaconSelector);
+    const { data, styleProps } = hotspot1.tip;
 
     if(!this.tippyInstance){
       // if it was never initiated
@@ -154,10 +154,7 @@ class Hotspot {
         uid: this.uid,
         target,
         styleProps,
-        arrow,
-        bodyContent,
-        placement,
-        offset,
+        data
       });
     }  else if(this.tippyInstance.state.isDestroyed) {
       // if it's removed
