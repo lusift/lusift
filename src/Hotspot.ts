@@ -1,7 +1,7 @@
 import { document, window } from 'global';
 import createHotspotTooltip from './createHotspotTooltip';
 import createBeacon from './createBeacon';
-import { styleObjectToString } from './utils';
+import { styleObjectToString, getElementPosition } from './utils';
 
 // TODO bug - beacon is fixed in position and not stuck to the target
 // TODO check for target and screen resize here too like we do in Backdrop
@@ -67,7 +67,7 @@ class Hotspot {
       left: targetLeft,
       width: targetWidth,
       height: targetHeight
-    } = this.getElementPosition(this.targetElement);
+    } = getElementPosition(this.targetElement);
     const targetPosition = { targetTop, targetLeft, targetWidth, targetHeight };
 
     const beaconID = `lusift-beacon-${this.uid}`;
@@ -110,25 +110,6 @@ class Hotspot {
     this.tippyInstance.unmount();
     this.tippyInstance.destroy();
     document.querySelector(this.beaconSelector).remove();
-  }
-
-  private getElementPosition(element: document.HTMLElement): any {
-    const documentElement = document;
-    const body = document.body;
-
-    const scrollTop = window.pageYOffset || documentElement.scrollTop || body.scrollTop;
-    const scrollLeft = window.pageXOffset || documentElement.scrollLeft || body.scrollLeft;
-    const elementRect = element.getBoundingClientRect();
-
-    const position = {
-      top: elementRect.top + scrollTop,
-      left: elementRect.left + scrollLeft,
-      right: elementRect.left + scrollLeft + elementRect.width,
-      bottom: elementRect.top + scrollTop + elementRect.height,
-      height: elementRect.height,
-      width: elementRect.width
-    };
-    return position;
   }
 
   private show(): void {

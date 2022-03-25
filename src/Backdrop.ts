@@ -1,14 +1,5 @@
 import { document, window } from 'global';
-import { styleObjectToString, getStepUID, onElementResize } from './utils/';
-
-interface ElementPosition {
-  top: number;
-  left: number;
-  right: number;
-  bottom: number;
-  height: number;
-  width: number;
-}
+import { styleObjectToString, getStepUID, onElementResize, getElementPosition } from './utils/';
 
 const roundNum = (value: number, decimalPlaces: number=2) => {
   return Math.round((value + Number.EPSILON) * Math.pow(10, decimalPlaces)) / (Math.pow(10, decimalPlaces));
@@ -122,27 +113,8 @@ class Backdrop {
     }, 700);
   }
 
-  private getElementPosition(element: document.HTMLElement): ElementPosition {
-    const documentElement = document;
-    const body = document.body;
-
-    const scrollTop = window.pageYOffset || documentElement.scrollTop || body.scrollTop;
-    const scrollLeft = window.pageXOffset || documentElement.scrollLeft || body.scrollLeft;
-    const elementRect = element.getBoundingClientRect();
-
-    const position: ElementPosition = {
-      top: elementRect.top + scrollTop,
-      left: elementRect.left + scrollLeft,
-      right: elementRect.left + scrollLeft + elementRect.width,
-      bottom: elementRect.top + scrollTop + elementRect.height,
-      height: elementRect.height,
-      width: elementRect.width
-    };
-    return position;
-  }
-
   private getScreenDimensions(): { screenWidth: number; screenHeight: number } {
-    const { height, width } = this.getElementPosition(document.documentElement);
+    const { height, width } = getElementPosition(document.documentElement);
 
     return {
       screenWidth: width,
@@ -159,7 +131,7 @@ class Backdrop {
 
     const { screenHeight, screenWidth } = this.getScreenDimensions();
 
-    const targetPosition = this.getElementPosition(targetElement);
+    const targetPosition = getElementPosition(targetElement);
 
     const hTop = document.createElement('div');
     hTop.id = 'hTop';
@@ -217,10 +189,10 @@ class Backdrop {
     targetElement.classList.add(this.stagedTargetClass);
 
     // See that the overlay isn't glitchy, reset if it is
-    const { height: hTopHeight, width: hTopWidth } = this.getElementPosition(hTop);
-    const { height: hBottomHeight, width: hBottomWidth } = this.getElementPosition(hBottom);
-    const vLeftWidth = this.getElementPosition(vLeft).width;
-    const vRightWidth = this.getElementPosition(vRight).width;
+    const { height: hTopHeight, width: hTopWidth } = getElementPosition(hTop);
+    const { height: hBottomHeight, width: hBottomWidth } = getElementPosition(hBottom);
+    const vLeftWidth = getElementPosition(vLeft).width;
+    const vRightWidth = getElementPosition(vRight).width;
 
 
     const overlaySumWidth = hTopWidth+vLeftWidth+vRightWidth;
@@ -234,7 +206,7 @@ class Backdrop {
     }
   }
 
-  public removeOverlay(): void {
+  private removeOverlay(): void {
     document.querySelectorAll(`.${this.overlaySelectorClass}`)
     .forEach((el: document.HTMLElement) => el.remove());
 
