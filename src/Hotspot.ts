@@ -3,6 +3,40 @@ import createHotspotTooltip from './createHotspotTooltip';
 
 // TODO bug - beacon is fixed in position and not stuck to the target
 // TODO check for target and screen resize here too like we do in Backdrop
+// TODO There're two types of beacon - pulsing and question mark (fa-question-circle)
+// TODO hotspots can trigger either modal or tooltips
+// TODO make hotspot serially triggering, like tooltips, for now
+
+const hotspot1 = {
+  index: 8,
+  type: 'hotspot',
+  target: {
+    path: {
+      value: '/lusift/nps',
+      comparator: 'is'
+    },
+    elementSelector: 'h2',
+  },
+  beacon: {
+    placement: {
+      top: 90,
+      left: 90,
+    },
+    size: 1,
+    color: '',
+    type: 'pulsing'
+  },
+  tip: {
+    data: {
+      placement: 'bottom',
+      arrow: true,
+      bodyContent: '<p style="color:blue">Hotspot 1 body</p>',
+    },
+    styleProps: {
+      border: '2px solid green',
+    }
+  },
+}
 
 const placement = {
   top: 90,

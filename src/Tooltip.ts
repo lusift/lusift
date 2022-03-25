@@ -159,7 +159,7 @@ export default class Tooltip {
             if (!this.targetElement) return console.warn('Error: target element not found');
             if (this.isTooltipShown) return console.log('Tooltip is already displayed');
 
-            const { placement, arrow, progressOn, bodyContent, offset, backdrop } = this.data;
+            const { progressOn, backdrop } = this.data;
 
             const { eventType, disabled } = progressOn;
             disabled || this.addEventListenerToTarget(this.targetElement, 'next', eventType);
@@ -167,20 +167,19 @@ export default class Tooltip {
             backdrop.disabled || this.addBackdrop();
 
             if(!this.tippyInstance) {
+                // tippy was never initiated
                 this.tippyInstance = createTooltip({
-                    remove: this.closeGuide,
                     uid: this.uid,
+                    remove: this.closeGuide,
                     nextStep: this.nextStep,
                     prevStep: this.prevStep,
                     target: this.targetElement,
                     actions: this.actions,
                     styleProps: this.styleProps,
-                    arrow,
-                    bodyContent,
-                    placement,
-                    offset,
+                    data: this.data,
                 });
             } else {
+                // tippy was hidden
                 this.tippyInstance.show();
             }
             this.isTooltipShown = true;

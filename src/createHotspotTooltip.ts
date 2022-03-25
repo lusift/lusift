@@ -1,6 +1,5 @@
-import tippy, { inlinePositioning, Instance as TippyInstance } from 'tippy.js';
 import styleObjectToString from './utils/styleObjectToString';
-import popperOptions from './popperOptions';
+import createTippy from './createTippy';
 
 const defaultBodyContent = `
   <h3 style="font-weight: bold;">Default title</h3>
@@ -10,10 +9,15 @@ const defaultBodyContent = `
 // TODO full-feature this
 // TODO controlling width of tooltip
 
-const renderTooltip = ({ remove, bodyContent = defaultBodyContent,
-                       arrow, placement,
-                       target, styleProps,
-                       offset, uid}) => {
+const renderTooltip = ({ remove, data, target, styleProps, uid }) => {
+
+  const {
+    arrow,
+    placement,
+    offset,
+    bodyContent = defaultBodyContent,
+  } = data;
+
   const content = `
     <style>
       .tippy-box{
@@ -38,54 +42,19 @@ const renderTooltip = ({ remove, bodyContent = defaultBodyContent,
     <div class="section body-content">
       ${bodyContent}
     </div>
-    <!--
-    <div class="dismiss-link section">
-      <button class="close dismiss-link">
-        skip this
-      </button>
-    </div>
-    -->
     </div>
   `;
 
-  const tippyInstance = tippy(target, {
-    allowHTML: true,
+  const tippyInstance = createTippy({
+    target,
     content,
-    interactive: true,
-    zIndex: 99999,
     arrow,
-    hideOnClick: false,
-    inlinePositioning: true,
-    plugins: [inlinePositioning],
-    moveTransition: 'transform 0.2s ease-out',
     offset,
     placement,
-    onClickOutside(instance, event) {
-      remove();
-      // Probably give this option for hotspots
-    },
-    popperOptions: {
-      ...popperOptions,
-      placement,
-      modifiers: [
-        ...popperOptions.modifiers,
-        {
-          name: 'flip',
-          enabled: placement === 'auto',
-        },
-        {
-          name: 'arrow',
-          enabled: arrow
-        }
-      ]
-    },
-    showOnCreate: true,
-    trigger: 'manual',
-    theme: 'light'
+    remove
   });
-  console.log(tippyInstance);
 
-  // tippyInstance.show();
+  console.log(tippyInstance);
 
   return tippyInstance;
 }

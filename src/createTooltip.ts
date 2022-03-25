@@ -1,7 +1,6 @@
 import { document, window } from 'global';
-import tippy, { inlinePositioning, Instance as TippyInstance } from 'tippy.js';
 import styleObjectToString from './utils/styleObjectToString';
-import popperOptions from './popperOptions';
+import createTippy from './createTippy';
 
 const defaultBodyContent = `
   <h3 style="font-weight: bold;">Default title</h3>
@@ -10,7 +9,7 @@ const defaultBodyContent = `
 
 // TODO full-feature this
 
-const closeXButton = (closeButton: any): string => {
+const renderCloseXButton = (closeButton: any): string => {
   if (closeButton.disable) return;
   return `
     <style>
@@ -39,7 +38,7 @@ const closeXButton = (closeButton: any): string => {
   `;
 }
 
-const navButtons = (navSection: any): string => {
+const renderNavButtons = (navSection: any): string => {
   const { nextButton, prevButton, dismissLink } = navSection;
 
   return `
@@ -86,12 +85,19 @@ const navButtons = (navSection: any): string => {
   `;
 }
 
-const renderTooltip = ({ remove, bodyContent = defaultBodyContent,
-                       arrow, placement,
-                       target, styleProps, actions,
-                       offset, uid, nextStep, prevStep }) => {
+const renderTooltip = ({
+  remove, data, target,
+  styleProps, actions,
+  uid, nextStep, prevStep
+}) => {
 
   const { closeButton, navSection } = actions;
+  const {
+    arrow,
+    bodyContent = defaultBodyContent,
+    placement,
+    offset
+  } = data;
 
   const content = `
     <style>
@@ -114,59 +120,28 @@ const renderTooltip = ({ remove, bodyContent = defaultBodyContent,
     </style>
 
     <div id="tooltip-${uid}">
-    ${closeXButton(closeButton)}
+    ${renderCloseXButton(closeButton)}
     <div class="section body-content">
       ${bodyContent}
     </div>
-    ${navButtons(navSection)}
-    <!--
-    <div class="dismiss-link section">
-      <button class="close dismiss-link">
-        skip this
-      </button>
-    </div>
-    -->
+    ${renderNavButtons(navSection)}
     </div>
   `;
 
-  const tippyInstance = tippy(target, {
-    allowHTML: true,
+  const tippyInstance = createTippy({
+    target,
     content,
-    interactive: true,
-    zIndex: 99999,
     arrow,
-    hideOnClick: false,
-    inlinePositioning: true,
-    plugins: [inlinePositioning],
-    moveTransition: 'transform 0.2s ease-out',
     offset,
     placement,
-    onClickOutside(instance, event) {
-      // Probably give this option for hotspots
-    },
-    popperOptions: {
-      ...popperOptions,
-      placement,
-      modifiers: [
-        ...popperOptions.modifiers,
-        {
-          name: 'flip',
-          enabled: placement === 'auto',
-        },
-        {
-          name: 'arrow',
-          enabled: arrow
-        }
-      ]
-    },
-    showOnCreate: true,
-    trigger: 'manual',
-    theme: 'light'
+    remove: ()=>{}
   });
+
   console.log(tippyInstance)
 
   tippyInstance.show();
 
+  // add event listener to tooltip buttons
   const closeButtons = document.querySelectorAll(`#tooltip-${uid} .close`);
   const nextButtons = document.querySelectorAll(`#tooltip-${uid} button.next`);
   const prevButtons = document.querySelectorAll(`#tooltip-${uid} button.prev`);

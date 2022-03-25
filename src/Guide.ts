@@ -125,11 +125,6 @@ export default class Guide {
     }
   }
 
-  private isStepElementInView(stepIndex: number): boolean {
-    //
-    return false
-  }
-
   private isStepElementFound(stepIndex: number): boolean {
     /* console.log(this.guideData);
     console.log('checking if element exists') */
@@ -137,7 +132,7 @@ export default class Guide {
   }
 
   private updateLocalTrackingState(): void {
-    // save to localstorage
+    // save/sync class object to localstorage
     const existingState = loadState();
     const newState = {
       ...existingState,
@@ -165,7 +160,6 @@ export default class Guide {
       this.trackingState.activeStep=newStepNum;
       this.attemptShow();
     }
-
     this.updateLocalTrackingState();
   }
 
