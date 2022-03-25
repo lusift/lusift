@@ -1,9 +1,12 @@
 import { document, window } from 'global';
 import createHotspotTooltip from './createHotspotTooltip';
 
+// TODO bug - beacon is fixed in position and not stuck to the target
+// TODO check for target and screen resize here too like we do in Backdrop
+
 const placement = {
-  top: 85,
-  left: 95,
+  top: 90,
+  left: 90,
   size: 1,
   color: '',
   animation: false,
@@ -30,10 +33,11 @@ class Hotspot {
     this.elementSelector = 'h2';
     this.targetElement = document.querySelector(this.elementSelector);
     console.log(this.targetElement)
-    this.addBeacon();
+    window.setTimeout(this.addBeacon.bind(this), 1000);
+    // this.addBeacon();
   }
 
-  public attemptShow(): void {
+  private attemptShow(): void {
 
   }
 
@@ -49,6 +53,10 @@ class Hotspot {
     const { top, left, animation } = placement;
     const beaconID = `lusift-beacon-${this.uid}`;
     this.beaconSelector = `#${beaconID}`;
+    /* targetTop=10;
+    targetLeft=1;
+    targetHeight=1;
+    targetWidth=2; */
 
     beaconContainer.innerHTML = `
     <style>
@@ -61,12 +69,15 @@ class Hotspot {
       height: 13px;
       -webkit-animation: shine 2s ease-in-out infinite;
               animation: shine 2s ease-in-out infinite;
-      position: fixed;
       cursor: pointer;
       -webkit-animation-delay: 1s;
               animation-delay: 1s;
-      top: ${targetTop+(top*targetHeight/100)}px;
-      left: ${targetLeft+(left*targetWidth/100)}px;
+              /*
+      top: ${targetTop+(top*(targetHeight/100))}px;
+      left: ${targetLeft+(left*(targetWidth/100))}px;
+      */
+      top: ${(top/100)*targetHeight}px;
+      left: ${(left/100)*targetWidth}px;
     }
 
     ${animation? `
@@ -119,10 +130,9 @@ class Hotspot {
 
     } else if(this.tippyInstance.state.isShown) {
       this.tippyInstance.hide();
-      // if it's shown
     } else if(this.tippyInstance) {
-      this.tippyInstance.show();
       // if it's hidden
+      this.tippyInstance.show();
     }
   }
 

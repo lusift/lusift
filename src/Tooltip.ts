@@ -13,6 +13,7 @@ import Backdrop from './Backdrop';
 
 // TODO add Actions validator
 // TODO hide and show tooltip instead of creating and destroying it every time when scroll view changes
+// TODO bug - adding height with document.body.style.height does the bad thing to the highlight stage
 
 const defaulBackdropData = {
     disabled: false,
@@ -105,6 +106,7 @@ export default class Tooltip {
             // show tooltip when it comes into view, remove it when it goes out of it
             this.show = this.show.bind(this);
             this.remove = this.remove.bind(this);
+            this.hide = this.hide.bind(this);
 
             const { IntersectionObserver } = window;
 
@@ -117,7 +119,7 @@ export default class Tooltip {
                     if(isIntersecting){
                         this.show();
                     } else {
-                        this.remove();
+                        this.hide();
                     }
                 });
             }, {
@@ -132,6 +134,12 @@ export default class Tooltip {
           this.actions = mergeObjects(this.actions, actions);
           /* console.log('consolidateActions')
           console.log(this.actions); */
+        }
+
+        private hide(): void {
+            this.tippyInstance.hide();
+            this.backdrop && this.backdrop.remove();
+            this.isTooltipShown = false;
         }
 
         private addBackdrop(): void {
@@ -158,19 +166,23 @@ export default class Tooltip {
 
             backdrop.disabled || this.addBackdrop();
 
-            this.tippyInstance = createTooltip({
-                remove: this.closeGuide,
-                uid: this.uid,
-                nextStep: this.nextStep,
-                prevStep: this.prevStep,
-                target: this.targetElement,
-                actions: this.actions,
-                styleProps: this.styleProps,
-                arrow,
-                bodyContent,
-                placement,
-                offset,
-            });
+            if(!this.tippyInstance) {
+                this.tippyInstance = createTooltip({
+                    remove: this.closeGuide,
+                    uid: this.uid,
+                    nextStep: this.nextStep,
+                    prevStep: this.prevStep,
+                    target: this.targetElement,
+                    actions: this.actions,
+                    styleProps: this.styleProps,
+                    arrow,
+                    bodyContent,
+                    placement,
+                    offset,
+                });
+            } else {
+                this.tippyInstance.show();
+            }
             this.isTooltipShown = true;
         }
 

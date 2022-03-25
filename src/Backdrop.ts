@@ -229,7 +229,6 @@ class Backdrop {
     /* console.log(screenWidth, overlaySumWidth);
     console.log(screenHeight, overlaySumHeight); */
 
-
     if(!areNumbersEqual(screenWidth, overlaySumWidth) || !areNumbersEqual(screenHeight, overlaySumHeight)){
       this.resetBackdrop();
     }
