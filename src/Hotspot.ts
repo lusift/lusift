@@ -38,29 +38,12 @@ const hotspot1 = {
   },
 }
 
-const placement = {
-  top: 90,
-  left: 90,
-  size: 1,
-  color: '',
-  animation: false,
-}
-
-const tooltipData = {
-  arrow: true,
-  bodyContent: undefined,
-  offset: [0,10],
-  styleProps: {},
-  placement: 'bottom'
-}
-
 class Hotspot {
   private uid: string;
   private elementSelector: string;
   private tippyInstance: any;
-  private styleProps: any = {};
   private targetElement: document.HTMLElement;
-  private beaconSelector: document.HTMLElement;
+  private beaconSelector: string;
 
   constructor() {
     this.uid = 'some-id-here';
@@ -77,63 +60,64 @@ class Hotspot {
 
   private addBeacon(): void {
     console.log('adding beacon');
-    let { top: targetTop, left: targetLeft, width: targetWidth, height: targetHeight } = this.getElementPosition(this.targetElement);
+    let {
+      top: targetTop,
+      left: targetLeft,
+      width: targetWidth,
+      height: targetHeight
+    } = this.getElementPosition(this.targetElement);
+
     const beaconContainer = document.createElement('div');
     beaconContainer.style.position="absolute";
     beaconContainer.style.top=`${targetTop}px`;
     beaconContainer.style.left=`${targetLeft}px`;
     beaconContainer.classList.add('lusift-beacon-container');
 
-    const { top, left, animation } = placement;
+    const { placement, size, color, type } = hotspot1.beacon;
+    const { top, left } = placement;
+    const animation = true;
+
     const beaconID = `lusift-beacon-${this.uid}`;
     this.beaconSelector = `#${beaconID}`;
-    /* targetTop=10;
-    targetLeft=1;
-    targetHeight=1;
-    targetWidth=2; */
 
     beaconContainer.innerHTML = `
     <style>
     #${beaconID} {
-      background-color: #b9f;
+      background-color: ${color || '#b9f'};
       border-radius: 50%;
       position: absolute;
       z-index: 20;
-      width: 13px;
-      height: 13px;
+      width: ${size *13}px;
+      height: ${size *13}px;
       -webkit-animation: shine 2s ease-in-out infinite;
-              animation: shine 2s ease-in-out infinite;
+      animation: shine 2s ease-in-out infinite;
       cursor: pointer;
       -webkit-animation-delay: 1s;
-              animation-delay: 1s;
-              /*
-      top: ${targetTop+(top*(targetHeight/100))}px;
-      left: ${targetLeft+(left*(targetWidth/100))}px;
-      */
+      animation-delay: 1s;
       top: ${(top/100)*targetHeight}px;
       left: ${(left/100)*targetWidth}px;
     }
 
     ${animation? `
 
-    @-webkit-keyframes shine {
-      0%, 20% {
-        box-shadow: 0px 0px 0px 0px rgba(187, 153, 255, 0.49);
+      @-webkit-keyframes shine {
+        0%, 20% {
+          box-shadow: 0px 0px 0px 0px rgba(187, 153, 255, 0.49);
+        }
+        100% {
+          box-shadow: 0px 0px 0px ${25*size}px rgba(0, 0, 0, 0);
+        }
       }
-      100% {
-        box-shadow: 0px 0px 0px ${40*placement.size}px rgba(0, 0, 0, 0);
-      }
-    }
 
-    @keyframes shine {
-      0%, 20% {
-        box-shadow: 0px 0px 0px 0px rgba(187, 153, 255, 0.49);
-      }
-      100% {
-        box-shadow: 0px 0px 0px ${40*placement.size}px rgba(0, 0, 0, 0);
-      }
-    }`: ''
-  }
+      @keyframes shine {
+        0%, 20% {
+          box-shadow: 0px 0px 0px 0px rgba(187, 153, 255, 0.49);
+        }
+        100% {
+          box-shadow: 0px 0px 0px ${25*size}px rgba(0, 0, 0, 0);
+        }
+      }`: ''
+    }
     </style>
     <div id="${beaconID}"></div>
     `;
