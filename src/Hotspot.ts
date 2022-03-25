@@ -1,5 +1,7 @@
 import { document, window } from 'global';
 import createHotspotTooltip from './createHotspotTooltip';
+import createBeacon from './createBeacon';
+import { styleObjectToString } from './utils';
 
 // TODO bug - beacon is fixed in position and not stuck to the target
 // TODO check for target and screen resize here too like we do in Backdrop
@@ -66,62 +68,14 @@ class Hotspot {
       width: targetWidth,
       height: targetHeight
     } = this.getElementPosition(this.targetElement);
-
-    const beaconContainer = document.createElement('div');
-    beaconContainer.style.position="absolute";
-    beaconContainer.style.top=`${targetTop}px`;
-    beaconContainer.style.left=`${targetLeft}px`;
-    beaconContainer.classList.add('lusift-beacon-container');
-
-    const { placement, size, color, type } = hotspot1.beacon;
-    const { top, left } = placement;
-    const animation = true;
+    const targetPosition = { targetTop, targetLeft, targetWidth, targetHeight };
 
     const beaconID = `lusift-beacon-${this.uid}`;
     this.beaconSelector = `#${beaconID}`;
+    const beaconData = hotspot1.beacon;
 
-    beaconContainer.innerHTML = `
-    <style>
-    #${beaconID} {
-      background-color: ${color || '#b9f'};
-      border-radius: 50%;
-      position: absolute;
-      z-index: 20;
-      width: ${size *13}px;
-      height: ${size *13}px;
-      -webkit-animation: shine 2s ease-in-out infinite;
-      animation: shine 2s ease-in-out infinite;
-      cursor: pointer;
-      -webkit-animation-delay: 1s;
-      animation-delay: 1s;
-      top: ${(top/100)*targetHeight}px;
-      left: ${(left/100)*targetWidth}px;
-    }
+    createBeacon({ targetPosition, beaconData, beaconID });
 
-    ${animation? `
-
-      @-webkit-keyframes shine {
-        0%, 20% {
-          box-shadow: 0px 0px 0px 0px rgba(187, 153, 255, 0.49);
-        }
-        100% {
-          box-shadow: 0px 0px 0px ${25*size}px rgba(0, 0, 0, 0);
-        }
-      }
-
-      @keyframes shine {
-        0%, 20% {
-          box-shadow: 0px 0px 0px 0px rgba(187, 153, 255, 0.49);
-        }
-        100% {
-          box-shadow: 0px 0px 0px ${25*size}px rgba(0, 0, 0, 0);
-        }
-      }`: ''
-    }
-    </style>
-    <div id="${beaconID}"></div>
-    `;
-    document.body.appendChild(beaconContainer);
     document.getElementById(beaconID).addEventListener('click', () => this.toggleTooltip.bind(this)());
   }
 

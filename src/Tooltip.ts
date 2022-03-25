@@ -15,7 +15,7 @@ import Backdrop from './Backdrop';
 // TODO hide and show tooltip instead of creating and destroying it every time when scroll view changes
 // TODO bug - adding height with document.body.style.height does the bad thing to the highlight stage
 
-const defaulBackdropData = {
+const defaultBackdropData = {
     disabled: false,
     color: '#444',
     opacity: '0.5',
@@ -83,7 +83,7 @@ export default class Tooltip {
 
             const backdrop = data.backdrop || {};
             this.data.backdrop = {
-                ...defaulBackdropData,
+                ...defaultBackdropData,
                 ...backdrop
             }
             this.data.offset = this.data.offset || [0, 10];
