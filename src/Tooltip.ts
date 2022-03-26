@@ -12,7 +12,6 @@ import Backdrop from './Backdrop';
 // TODO Add steps config, and steps styles to apply to all steps
 
 // TODO add Actions validator
-// TODO hide and show tooltip instead of creating and destroying it every time when scroll view changes
 // TODO bug - adding height with document.body.style.height does the bad thing to the highlight stage
 
 const defaultBackdropData = {
@@ -44,6 +43,7 @@ export default class Tooltip {
     private isTooltipShown: boolean;
 
     constructor(
+        // TODO why can't we just reference nextStep, prevStep, and closeGuide from window.Lusift?
         {
             target,
             guideID,

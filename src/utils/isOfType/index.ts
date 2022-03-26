@@ -76,14 +76,12 @@ export function isOfTypeTooltip(object: any): boolean {
 }
 
 export function isOfTypeHotspot(object: any): boolean {
-  console.log(object.type)
   return object.type === 'hotspot';
 }
 
 export function isOfTypeStep(object: any): boolean {
 
   const stepTypes = ['tooltip', 'hotspot'];
-  console.log(isOfTypeTarget(object.target))
 
   return isObject(object) &&
     (typeof object.index === 'number') &&

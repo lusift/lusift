@@ -52,6 +52,7 @@ export default class Guide {
   public attemptShow(): void {
     // call on Guide init, page load, and Lusift.refresh()
     // TODO case where the step is already on display
+    // TODO case for Modal
 
     window.setTimeout(() => {
 

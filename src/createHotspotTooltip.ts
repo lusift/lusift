@@ -54,8 +54,6 @@ const renderTooltip = ({ remove, data, target, styleProps, uid }) => {
     remove
   });
 
-  console.log(tippyInstance);
-
   return tippyInstance;
 }
 

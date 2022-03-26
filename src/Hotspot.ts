@@ -1,7 +1,7 @@
 import { document, window } from 'global';
 import createHotspotTooltip from './createHotspotTooltip';
 import createBeacon from './createBeacon';
-import { getElementPosition } from './utils';
+import { getElementPosition, getStepUID } from './utils';
 import { HotspotData } from './types';
 
 // TODO check for target and screen resize here too like we do in Backdrop
@@ -45,24 +45,24 @@ const hotspot1: HotspotData = {
 }
 
 class Hotspot {
-  private uid: string;
-  private elementSelector: string;
+  private tipID: string;
   private tippyInstance: any;
   private targetElement: document.HTMLElement;
   private beaconSelector: string;
+  private data: object;
+  private beaconID: string;
 
-  constructor({ data, guideID, nextStep, prevStep, closeGuide }) {
+  private nextStep: Function;
+
+  constructor({ data, guideID, nextStep }) {
     console.log(data);
-    this.uid = 'some-id-here';
-    this.elementSelector = 'h2';
-    this.targetElement = document.querySelector(this.elementSelector);
-    console.log(this.targetElement)
-    window.setTimeout(this.addBeacon.bind(this), 1000);
-    // this.addBeacon();
-  }
-
-  private attemptShow(): void {
-
+    this.data = data;
+    const { index, type, target } = data;
+    this.tipID = getStepUID({guideID, type, index});
+    this.beaconID = getStepUID({guideID, type:'beacon', index});
+    this.nextStep = nextStep;
+    this.targetElement = document.querySelector(target.elementSelector);
+    this.addBeacon();
   }
 
   private addBeacon(): void {
@@ -75,13 +75,12 @@ class Hotspot {
     } = getElementPosition(this.targetElement);
     const targetPosition = { targetTop, targetLeft, targetWidth, targetHeight };
 
-    const beaconID = `lusift-beacon-${this.uid}`;
-    this.beaconSelector = `#${beaconID}`;
+    this.beaconSelector = `#${this.beaconID}`;
     const beaconData = hotspot1.beacon;
 
-    createBeacon({ targetPosition, beaconData, beaconID });
+    createBeacon({ targetPosition, beaconData, beaconID: this.beaconID });
 
-    document.getElementById(beaconID).addEventListener('click', () => this.toggleTooltip.bind(this)());
+    document.getElementById(this.beaconID).addEventListener('click', () => this.toggleTooltip.bind(this)());
   }
 
   private toggleTooltip(): any {
@@ -93,7 +92,7 @@ class Hotspot {
     if(!this.tippyInstance){
       // if it was never initiated
       this.tippyInstance = createHotspotTooltip({
-        remove: this.remove.bind(this),
+        remove: this.nextStep,
         uid: this.uid,
         target,
         styleProps,
@@ -113,11 +112,7 @@ class Hotspot {
   private remove(): void {
     this.tippyInstance.unmount();
     this.tippyInstance.destroy();
-    document.querySelector(this.beaconSelector).remove();
-  }
-
-  private show(): void {
-
+    document.querySelector(this.beaconSelector).parentElement.remove();
   }
 }
 
