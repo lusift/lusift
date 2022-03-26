@@ -109,8 +109,6 @@ export default class Guide {
         data: hotspot,
         guideID: this.guideData.id,
         nextStep: this.nextStep.bind(this),
-        prevStep: this.prevStep.bind(this),
-        closeGuide: this.close.bind(this),
       });
     }
     this.stepDisplayed = stepIndex;
@@ -181,8 +179,12 @@ export default class Guide {
   }
 
   private closeCurrentStep(): void {
-    this.activeStepInstance.remove();
-    this.stepDisplayed = null;
+    if(this.stepDisplayed) {
+      this.activeStepInstance.remove();
+      this.stepDisplayed = null;
+    } else {
+      console.warn('There\'s no active step to close');
+    }
   }
 
   private nextStep(): void {
