@@ -40,8 +40,8 @@ export default class Guide {
     /* console.log('guideData pulled from local storage:');
        console.log(this.guideData);
        console.log(this.trackingState); */
-    new Hotspot();
-    new Modal();
+    /* new Hotspot();
+    new Modal(); */
   }
 
   public start(): void {

@@ -13,12 +13,17 @@ import addTippyCSS from './addTippyCSS';
 // TODO add a dev class
 // TODO add constants file
 // TODO q- can you have multiple flows at once? No right?!
+// TODO give ability to run functions after each step and guide
 
 
 export default new class Lusift {
   private content: Content;
   private guideInstances: any;
   private contentSet: boolean;
+
+  public next;
+  public prev;
+  public close;
 
   constructor() {
     this.guideInstances = {};
@@ -111,23 +116,23 @@ export default new class Lusift {
       return console.warn(`Content with id of ${contentID} doesn't exist`);
     }
     setTimeout(() => {
-      const { type } = this.content[contentID];
-
       // console.log('sending guide data:');
       const guideInstance = new Guide(contentID);
       this.guideInstances[contentID] = guideInstance;
       guideInstance.start();
+
+      // attatch active content's navigation methods to Lusift class
+      this.next = guideInstance.nextStep;
+      this.next = guideInstance.nextStep.bind(guideInstance);
+      this.prev = guideInstance.prevStep.bind(guideInstance);
+      this.close = guideInstance.close.bind(guideInstance);
       // console.log(this.guideInstances)
 
     }, 0);
     // TODO return all relevant hooks
   }
 
-  private close(contentID: string): void {
-    //
-  }
-
-  static next(): void {
+  private closeContent(contentID: string): void {
     //
   }
 }();
