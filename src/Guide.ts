@@ -164,7 +164,7 @@ export default class Guide {
     this.updateLocalTrackingState();
   }
 
-  public close(): void {
+  private close(): void {
     // close guide
     this.trackingState.prematurelyClosed=true;
     this.updateLocalTrackingState();
@@ -177,14 +177,14 @@ export default class Guide {
     this.stepDisplayed = null;
   }
 
-  public nextStep(): void {
+  private nextStep(): void {
     const newStep = this.trackingState.activeStep+1;
     // TODO first check if newStep is valid step num
     this.closeCurrentStep();
     this.setStep(newStep);
   }
 
-  public prevStep(): void {
+  private prevStep(): void {
     const newStep = this.trackingState.activeStep-1;
     // TODO first check if newStep is valid step num
     this.closeCurrentStep();

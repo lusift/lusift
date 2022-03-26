@@ -18,15 +18,15 @@ import addTippyCSS from './addTippyCSS';
 
 export default new class Lusift {
   private content: Content;
-  private guideInstances: any;
+  private guideInstance: any;
   private contentSet: boolean;
 
-  public next;
-  public prev;
-  public close;
+  private next: Function;
+  private prev: Function;
+  private close: Function;
+  private goto: Function;
 
   constructor() {
-    this.guideInstances = {};
     console.log('%c Lusift constructor! ', 'background: #222; color: #bada55');
 
     const localData = loadState();
@@ -74,7 +74,7 @@ export default new class Lusift {
     saveState(stateToSave);
   }
 
-  public setContent(content: Content): void {
+  private setContent(content: Content): void {
     // filter and validate this.content
     /* console.log('validating content: ');
     console.log(content) */
@@ -99,13 +99,13 @@ export default new class Lusift {
   }
 
 
-  public refresh(): void {
+  private refresh(): void {
     // run page elements through conditional again
-    Object.values(this.guideInstances).forEach((gi: Guide) => gi.attemptShow());
+    this.guideInstance.attemptShow();
     console.log('%c page refresh ', 'background: #222; color: #bada55');
   }
 
-  public showContent(contentID: string): void {
+  private showContent(contentID: string): void {
     //Forces specific Lusift content to appear for the current user by passing in the ID.
     if(!this.content || !this.contentSet) {
       return console.warn(`Content not set, pass valid content object to setContent()`);
@@ -117,19 +117,18 @@ export default new class Lusift {
     }
     setTimeout(() => {
       // console.log('sending guide data:');
-      const guideInstance = new Guide(contentID);
-      this.guideInstances[contentID] = guideInstance;
-      guideInstance.start();
-
-      // attatch active content's navigation methods to Lusift class
-      this.next = guideInstance.nextStep;
-      this.next = guideInstance.nextStep.bind(guideInstance);
-      this.prev = guideInstance.prevStep.bind(guideInstance);
-      this.close = guideInstance.close.bind(guideInstance);
-      // console.log(this.guideInstances)
-
+      this.guideInstance = new Guide(contentID);
+      this.guideInstance.start();
+      this.prepareHooks();
     }, 0);
-    // TODO return all relevant hooks
+  }
+
+  private prepareHooks(): void {
+    // attatch active content's navigation methods to Lusift class
+    this.next = this.guideInstance.nextStep.bind(this.guideInstance);
+    this.prev = this.guideInstance.prevStep.bind(this.guideInstance);
+    this.close = this.guideInstance.close.bind(this.guideInstance);
+    this.goto = this.guideInstance.setStep.bind(this.guideInstance);
   }
 
   private closeContent(contentID: string): void {
