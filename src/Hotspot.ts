@@ -48,7 +48,6 @@ class Hotspot {
   private tipID: string;
   private tippyInstance: any;
   private targetElement: document.HTMLElement;
-  private beaconSelector: string;
   private data: object;
   private beaconID: string;
 
@@ -75,7 +74,6 @@ class Hotspot {
     } = getElementPosition(this.targetElement);
     const targetPosition = { targetTop, targetLeft, targetWidth, targetHeight };
 
-    this.beaconSelector = `#${this.beaconID}`;
     const beaconData = hotspot1.beacon;
 
     createBeacon({ targetPosition, beaconData, beaconID: this.beaconID });
@@ -86,14 +84,14 @@ class Hotspot {
   private toggleTooltip(): any {
     console.log('toggle tooltip')
 
-    const target = document.querySelector(this.beaconSelector);
+    const target = document.getElementById(this.beaconID);
     const { data, styleProps } = hotspot1.tip;
 
     if(!this.tippyInstance){
       // if it was never initiated
       this.tippyInstance = createHotspotTooltip({
         remove: this.nextStep,
-        uid: this.uid,
+        uid: this.tipID,
         target,
         styleProps,
         data
@@ -112,7 +110,7 @@ class Hotspot {
   private remove(): void {
     this.tippyInstance.unmount();
     this.tippyInstance.destroy();
-    document.querySelector(this.beaconSelector).parentElement.remove();
+    document.getElementById(this.beaconID).parentElement.remove();
   }
 }
 
