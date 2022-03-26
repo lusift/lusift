@@ -1,7 +1,7 @@
 import { document, window } from 'global';
 import createTooltip from './createTooltip';
 import { mergeObjects, getStepUID } from './utils';
-import { TooltipData, TooltipTarget, StepActions } from './types';
+import { TooltipData, Target, StepActions } from './types';
 import defaultToolipActions from './defaultTooltipActions';
 import Backdrop from './Backdrop';
 
@@ -25,7 +25,7 @@ const defaultBackdropData = {
 
 export default class Tooltip {
     private targetElement: document.HTMLElement;
-    readonly target: TooltipTarget;
+    readonly target: Target;
     private tippyInstance: any;
     readonly uid: string;
     readonly backdropID: string;
@@ -56,7 +56,7 @@ export default class Tooltip {
             styleProps
         }:
             {
-            target: TooltipTarget;
+            target: Target;
             guideID: string;
             data: TooltipData;
             nextStep: Function;

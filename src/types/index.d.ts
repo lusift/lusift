@@ -51,7 +51,7 @@ export interface TooltipData {
   };
 }
 
-export interface TooltipTarget {
+export interface Target {
   path: {
     value: string;
     comparator: string;
@@ -63,7 +63,7 @@ export interface Tooltip {
   index: number;
   type: string;
   data: TooltipData;
-  target: TooltipTarget;
+  target: Target;
   actions: StepActions;
   styleProps: Object;
 }
@@ -95,18 +95,10 @@ export interface PopperInstanceType {
   ) => Promise<Object>,
 }
 
-
-
 export interface HotspotData {
   index: number;
   type: string;
-  target: {
-    path: {
-      value: string;
-      comparator: string;
-    },
-    elementSelector: string;
-  },
+  target: Target,
   beacon: {
     placement: {
       top: number;
