@@ -48,7 +48,7 @@ class Hotspot {
   private tipID: string;
   private tippyInstance: any;
   private targetElement: document.HTMLElement;
-  private data: object;
+  private data: HotspotData;
   private beaconID: string;
 
   private nextStep: Function;
@@ -74,7 +74,7 @@ class Hotspot {
     } = getElementPosition(this.targetElement);
     const targetPosition = { targetTop, targetLeft, targetWidth, targetHeight };
 
-    const beaconData = hotspot1.beacon;
+    const beaconData = this.data.beacon;
 
     createBeacon({ targetPosition, beaconData, beaconID: this.beaconID });
 
@@ -85,7 +85,7 @@ class Hotspot {
     console.log('toggle tooltip')
 
     const target = document.getElementById(this.beaconID);
-    const { data, styleProps } = hotspot1.tip;
+    const { data, styleProps } = this.data.tip;
 
     if(!this.tippyInstance){
       // if it was never initiated
@@ -97,6 +97,7 @@ class Hotspot {
         data
       });
     }  else if(this.tippyInstance.state.isDestroyed) {
+      console.warn('Uh... but it doesn\'t exist');
       // if it's removed
 
     } else if(this.tippyInstance.state.isShown) {
@@ -108,8 +109,12 @@ class Hotspot {
   }
 
   private remove(): void {
-    this.tippyInstance.unmount();
-    this.tippyInstance.destroy();
+    if(this.tippyInstance) {
+      this.tippyInstance.unmount();
+      this.tippyInstance.destroy();
+    } else {
+      console.log('Hotspot closed without ever opening');
+    }
     document.getElementById(this.beaconID).parentElement.remove();
   }
 }
