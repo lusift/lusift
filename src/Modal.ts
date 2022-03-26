@@ -1,16 +1,12 @@
+import createModal from './createModal';
 
 class Modal {
-
   constructor() {
+    this.addModal();
 
   }
-
-  public attemptShow(): void {
-
-  }
-
-  private show(): void {
-
+  private addModal(): void {
+    createModal();
   }
 }
 

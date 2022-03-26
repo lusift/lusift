@@ -1,5 +1,6 @@
 import Tooltip from './Tooltip';
 import Hotspot from './Hotspot';
+import Modal from './Modal';
 import { window, document } from 'global';
 import { saveState, loadState } from './localStorage';
 
@@ -15,7 +16,6 @@ interface TrackingState {
   finished: boolean;
   prematurelyClosed: boolean;
 }
-
 
 export default class Guide {
   readonly guideData: GuideType;
@@ -38,9 +38,10 @@ export default class Guide {
     this.guideData = guideData;
     this.trackingState = localGuideState.trackingState || this.trackingState;
     /* console.log('guideData pulled from local storage:');
-    console.log(this.guideData);
-    console.log(this.trackingState); */
+       console.log(this.guideData);
+       console.log(this.trackingState); */
     new Hotspot();
+    new Modal();
   }
 
   public start(): void {
@@ -65,7 +66,7 @@ export default class Guide {
       if (this.doesStepPathMatch(activeStep) && this.isStepElementFound(activeStep)) {
         console.log('target path and element matched');
         if(this.stepDisplayed === null) {
-          this.showStep(activeStep);
+          this.startStep(activeStep);
         }
       } else {
         console.log('Either targetPath doesn\'t match or element not found');
@@ -79,7 +80,7 @@ export default class Guide {
     }, 0);
   }
 
-  private showStep(stepIndex: number): void {
+  private startStep(stepIndex: number): void {
     const { index, target, data, actions, type, styleProps } = this.guideData.steps[stepIndex];
     // console.log(`Step index: ${index}`);
       console.log(`%c  ${this.stepDisplayed}`, 'background: #222; color: #bada55');

@@ -1,4 +1,4 @@
-import { document, window } from 'global';
+import { document } from 'global';
 import styleObjectToString from './utils/styleObjectToString';
 import createTippy from './createTippy';
 
@@ -120,11 +120,11 @@ const renderTooltip = ({
     </style>
 
     <div id="tooltip-${uid}">
-    ${renderCloseXButton(closeButton)}
-    <div class="section body-content">
-      ${bodyContent}
-    </div>
-    ${renderNavButtons(navSection)}
+      ${renderCloseXButton(closeButton)}
+      <div class="section body-content">
+        ${bodyContent}
+      </div>
+      ${renderNavButtons(navSection)}
     </div>
   `;
 

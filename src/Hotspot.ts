@@ -1,9 +1,8 @@
 import { document, window } from 'global';
 import createHotspotTooltip from './createHotspotTooltip';
 import createBeacon from './createBeacon';
-import { styleObjectToString, getElementPosition } from './utils';
+import { getElementPosition } from './utils';
 
-// TODO bug - beacon is fixed in position and not stuck to the target
 // TODO check for target and screen resize here too like we do in Backdrop
 // TODO There're two types of beacon - pulsing and question mark (fa-question-circle)
 // TODO hotspots can trigger either modal or tooltips
@@ -106,7 +105,6 @@ class Hotspot {
   }
 
   private remove(): void {
-    //
     this.tippyInstance.unmount();
     this.tippyInstance.destroy();
     document.querySelector(this.beaconSelector).remove();

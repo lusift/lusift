@@ -15,7 +15,6 @@ import addTippyCSS from './addTippyCSS';
 // TODO q- can you have multiple flows at once? No right?!
 
 
-
 export default new class Lusift {
   private content: Content;
   private guideInstances: any;
@@ -114,19 +113,17 @@ export default new class Lusift {
     setTimeout(() => {
       const { type } = this.content[contentID];
 
-      if (type==='guide') {
-        // console.log('sending guide data:');
-        const guideInstance = new Guide(contentID);
-        this.guideInstances[contentID] = guideInstance;
-        guideInstance.start();
-      }
+      // console.log('sending guide data:');
+      const guideInstance = new Guide(contentID);
+      this.guideInstances[contentID] = guideInstance;
+      guideInstance.start();
       // console.log(this.guideInstances)
 
     }, 0);
     // TODO return all relevant hooks
   }
 
-  close(contentID: string) {
+  private close(contentID: string): void {
     //
   }
 
