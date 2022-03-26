@@ -83,12 +83,12 @@ export default class Guide {
   private startStep(stepIndex: number): void {
     const { index, target, data, actions, type, styleProps } = this.guideData.steps[stepIndex];
     // console.log(`Step index: ${index}`);
-      console.log(`%c  ${this.stepDisplayed}`, 'background: #222; color: #bada55');
+    console.log(`%c  ${this.stepDisplayed}`, 'background: #222; color: #bada55');
 
     if (type==='tooltip') {
       this.activeStepInstance = this.guideData.steps[stepIndex];
       /* console.log(this.activeStepInstance);
-      this.activeStepInstance.show(); */
+         this.activeStepInstance.show(); */
       this.activeStepInstance = new Tooltip({
         target,
         data,
@@ -102,8 +102,15 @@ export default class Guide {
       });
     } else if (type==='modal') {
 
-    } else {
-
+    } else if (type==='hotspot') {
+      const hotspot = this.guideData.steps[stepIndex];
+      this.activeStepInstance = new Hotspot({
+        data: hotspot,
+        guideID: this.guideData.id,
+        nextStep: this.nextStep.bind(this),
+        prevStep: this.prevStep.bind(this),
+        closeGuide: this.close.bind(this),
+      });
     }
     this.stepDisplayed = stepIndex;
   }

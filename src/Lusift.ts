@@ -7,14 +7,12 @@ import { window, document } from 'global';
 
 import { Content } from './types';
 import { isOfTypeContent, isObject } from './utils/isOfType';
-import { styleObjectToString } from './utils';
 import addTippyCSS from './addTippyCSS';
 
 // TODO add a dev class
 // TODO add constants file
 // TODO q- can you have multiple flows at once? No right?!
 // TODO give ability to run functions after each step and guide
-
 
 export default new class Lusift {
   private content: Content;
@@ -77,7 +75,7 @@ export default new class Lusift {
   private setContent(content: Content): void {
     // filter and validate this.content
     /* console.log('validating content: ');
-    console.log(content) */
+       console.log(content) */
     if(!isOfTypeContent(content)) {
       return console.warn('Content data type is invalid');
     }
@@ -101,8 +99,12 @@ export default new class Lusift {
 
   private refresh(): void {
     // run page elements through conditional again
-    this.guideInstance.attemptShow();
-    console.log('%c page refresh ', 'background: #222; color: #bada55');
+    if(this.guideInstance){
+      this.guideInstance.attemptShow();
+      console.log('%c page refresh ', 'background: #222; color: #bada55');
+    } else {
+      console.warn('No active guideInstance');
+    }
   }
 
   private showContent(contentID: string): void {
@@ -115,6 +117,9 @@ export default new class Lusift {
     if(!this.content[contentID]) {
       return console.warn(`Content with id of ${contentID} doesn't exist`);
     }
+    if(this.guideInstance){
+      this.guideInstance.close();
+    }
     setTimeout(() => {
       // console.log('sending guide data:');
       this.guideInstance = new Guide(contentID);
@@ -124,14 +129,10 @@ export default new class Lusift {
   }
 
   private prepareHooks(): void {
-    // attatch active content's navigation methods to Lusift class
+    // attatch active content's navigation methods to Lusift instance
     this.next = this.guideInstance.nextStep.bind(this.guideInstance);
     this.prev = this.guideInstance.prevStep.bind(this.guideInstance);
     this.close = this.guideInstance.close.bind(this.guideInstance);
     this.goto = this.guideInstance.setStep.bind(this.guideInstance);
-  }
-
-  private closeContent(contentID: string): void {
-    //
   }
 }();

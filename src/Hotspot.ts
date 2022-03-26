@@ -9,7 +9,7 @@ import { getElementPosition } from './utils';
 // TODO make hotspot serially triggering, like tooltips, for now
 
 const hotspot1 = {
-  index: 8,
+  index: 7,
   type: 'hotspot',
   target: {
     path: {
@@ -25,7 +25,7 @@ const hotspot1 = {
     },
     size: 1,
     color: '',
-    type: 'pulsing'
+    type: 'pulsing',
   },
   tip: {
     data: {
@@ -37,6 +37,10 @@ const hotspot1 = {
       border: '2px solid green',
     }
   },
+  async: {
+    leading: true,
+    following: true
+  }
 }
 
 class Hotspot {
@@ -46,7 +50,8 @@ class Hotspot {
   private targetElement: document.HTMLElement;
   private beaconSelector: string;
 
-  constructor() {
+  constructor({ data, guideID, nextStep, prevStep, closeGuide }) {
+    console.log(data);
     this.uid = 'some-id-here';
     this.elementSelector = 'h2';
     this.targetElement = document.querySelector(this.elementSelector);
