@@ -95,3 +95,37 @@ export interface PopperInstanceType {
   ) => Promise<Object>,
 }
 
+
+
+export interface HotspotData {
+  index: number;
+  type: string;
+  target: {
+    path: {
+      value: string;
+      comparator: string;
+    },
+    elementSelector: string;
+  },
+  beacon: {
+    placement: {
+      top: number;
+      left: number;
+    },
+    size: number;
+    color: string;
+    type: string;
+  },
+  tip: {
+    data: {
+      placement: string;
+      arrow: boolean;
+      bodyContent: string;
+    },
+    styleProps: object;
+  },
+  async: {
+    following: boolean;
+    leading: boolean;
+  }
+}
