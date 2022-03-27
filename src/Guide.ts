@@ -48,6 +48,14 @@ export default class Guide {
     this.attemptShow();
   }
 
+  private stepMatchesDisplayCriteria(stepIndex: number): boolean {
+    let criteriaMatch = this.doesStepPathMatch(stepIndex);
+    if(this.guideData.steps[stepIndex].type !=='modal') {
+      criteriaMatch = criteriaMatch && this.isStepElementFound(stepIndex);
+    }
+    return criteriaMatch;
+  }
+
   private attemptShow(): void {
     // call on Guide init, page load, and Lusift.refresh()
     // TODO case for Modal
@@ -62,7 +70,7 @@ export default class Guide {
       stepIndex++;
       console.log('Trying to display step '+stepIndex);
 
-      if (this.doesStepPathMatch(stepIndex) && this.isStepElementFound(stepIndex)) {
+      if (this.stepMatchesDisplayCriteria(stepIndex)) {
         console.log(`Step ${stepIndex}: target path and element matched`);
         if(this.activeStepInstance === null) {
           this.startStep(stepIndex);
