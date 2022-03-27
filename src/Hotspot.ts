@@ -38,10 +38,7 @@ const hotspot1: HotspotData = {
       border: '2px solid green',
     }
   },
-  async: {
-    leading: true,
-    following: true
-  }
+  async: true
 }
 
 class Hotspot {

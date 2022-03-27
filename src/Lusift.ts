@@ -96,12 +96,13 @@ export default new class Lusift {
     // console.log(localData);
   }
 
-
   private refresh(): void {
     // run page elements through conditional again
     if(this.guideInstance){
-      this.guideInstance.attemptShow();
-      console.log('%c page refresh ', 'background: #222; color: #bada55');
+      window.setTimeout(() => {
+        this.guideInstance.attemptShow();
+        console.log('%c page refresh ', 'background: #222; color: #bada55');
+      }, 0);
     } else {
       console.warn('No active guideInstance');
     }
@@ -112,7 +113,6 @@ export default new class Lusift {
     if(!this.content || !this.contentSet) {
       return console.warn(`Content not set, pass valid content object to setContent()`);
     }
-
     // see if content exists for ID
     if(!this.content[contentID]) {
       return console.warn(`Content with id of ${contentID} doesn't exist`);

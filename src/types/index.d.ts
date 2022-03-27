@@ -73,7 +73,7 @@ export interface GuideType {
   id: string;
   name: string;
   description: string;
-  steps: Tooltip[];
+  steps: Tooltip[] | HotspotData[];
 }
 
 
@@ -116,8 +116,5 @@ export interface HotspotData {
     },
     styleProps: object;
   },
-  async: {
-    following: boolean;
-    leading: boolean;
-  }
+  async: boolean;
 }

@@ -10,6 +10,7 @@ import { GuideType } from './types';
 // TODO when should the last step be registered as closed prematurely vs finished
 // TODO add regex path type (for a path like /[companyName]/dashboard)
 // TODO make it installable
+// TODO this.stepDisplayed is fairly redundant, get rid of it
 
 interface TrackingState {
   activeStep: number;
@@ -49,12 +50,10 @@ export default class Guide {
     this.attemptShow();
   }
 
-  public attemptShow(): void {
+  public attemptShowx(): void {
     // call on Guide init, page load, and Lusift.refresh()
     // TODO case where the step is already on display
     // TODO case for Modal
-
-    window.setTimeout(() => {
 
       console.log(`%c  ${this.stepDisplayed}`, 'background: #222; color: #bada55');
       const { activeStep, finished, prematurelyClosed } = this.trackingState;
@@ -63,6 +62,7 @@ export default class Guide {
       }
       console.log('guide is not finished or closed yet');
       console.log(activeStep, finished, prematurelyClosed);
+      console.log('Trying to display step '+activeStep);
 
       if (this.doesStepPathMatch(activeStep) && this.isStepElementFound(activeStep)) {
         console.log('target path and element matched');
@@ -71,14 +71,40 @@ export default class Guide {
         }
       } else {
         console.log('Either targetPath doesn\'t match or element not found');
-        // remove steps that shouldn't apply to the current page
-
         if(this.activeStepInstance) {
+          // remove steps that shouldn't apply to the current page
+          // TODO when is this possibly going to come to use??
           console.log('target selectors no longer matching, removing');
-          this.activeStepInstance.remove();
+          // this.activeStepInstance.remove();
         }
       }
-    }, 0);
+  }
+
+  private attemptShow(): void {
+    // call on Guide init, page load, and Lusift.refresh()
+    // TODO case where the step is already on display
+    // TODO case for Modal
+    const { activeStep, finished, prematurelyClosed } = this.trackingState;
+    if(finished || prematurelyClosed) {
+      return console.log('Guide is already finished or closed');
+    }
+    console.log('guide is not finished or closed yet');
+    let stepIndex=activeStep-1;
+    // if the current step has async true, then try starting the next one, and so on
+    do {
+      stepIndex++;
+      console.log('Trying to display step '+stepIndex);
+
+      if (this.doesStepPathMatch(stepIndex) && this.isStepElementFound(stepIndex)) {
+        console.log(`Step ${stepIndex}: target path and element matched`);
+        if(this.stepDisplayed === null) {
+          this.startStep(stepIndex);
+        }
+      } else {
+        console.log(`Step ${stepIndex}: Either targetPath doesn\'t match or element not found`);
+      }
+    }
+    while (this.guideData.steps[stepIndex].async && this.guideData.steps[stepIndex].type==='hotspot')
   }
 
   private startStep(stepIndex: number): void {
@@ -110,6 +136,11 @@ export default class Guide {
         guideID: this.guideData.id,
         nextStep: this.nextStep.bind(this),
       });
+      /* if(hotspot.async) {
+        this.activeStepInstance = null;
+        this.stepDisplayed = null;
+        this.nextStep();
+      } */
     }
     this.stepDisplayed = stepIndex;
   }
@@ -179,7 +210,7 @@ export default class Guide {
   }
 
   private closeCurrentStep(): void {
-    if(this.stepDisplayed) {
+    if(this.stepDisplayed && this.activeStepInstance) {
       this.activeStepInstance.remove();
       this.stepDisplayed = null;
     } else {
@@ -189,14 +220,22 @@ export default class Guide {
 
   private nextStep(): void {
     const newStep = this.trackingState.activeStep+1;
-    // TODO first check if newStep is valid step num
     this.closeCurrentStep();
+    if (newStep+1>this.guideData.steps.length) {
+      return console.warn('No new steps');
+    }
     this.setStep(newStep);
   }
 
   private prevStep(): void {
-    const newStep = this.trackingState.activeStep-1;
-    // TODO first check if newStep is valid step num
+    // make newStep the index of the closest previus step with !step.async
+    let newStep = this.trackingState.activeStep;
+    while(newStep>-2) {
+      newStep--;
+      if(this.guideData.steps[newStep].type !=='hotspot' || !this.guideData.steps[newStep].async){
+        break;
+      }
+    }
     this.closeCurrentStep();
     this.setStep(newStep);
   }
