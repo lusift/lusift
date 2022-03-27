@@ -10,7 +10,6 @@ import { GuideType } from './types';
 // TODO when should the last step be registered as closed prematurely vs finished
 // TODO add regex path type (for a path like /[companyName]/dashboard)
 // TODO make it installable
-// TODO this.stepDisplayed is fairly redundant, get rid of it
 
 interface TrackingState {
   activeStep: number;
@@ -26,7 +25,6 @@ export default class Guide {
     prematurelyClosed: undefined
   };
   private activeStepInstance: any;
-  private stepDisplayed: null | number = null;
 
   constructor(guideID: string) {
     // localGuideState consists of trackingState and guideData
@@ -50,39 +48,8 @@ export default class Guide {
     this.attemptShow();
   }
 
-  public attemptShowx(): void {
-    // call on Guide init, page load, and Lusift.refresh()
-    // TODO case where the step is already on display
-    // TODO case for Modal
-
-      console.log(`%c  ${this.stepDisplayed}`, 'background: #222; color: #bada55');
-      const { activeStep, finished, prematurelyClosed } = this.trackingState;
-      if(!this.guideData.steps[activeStep] || finished || prematurelyClosed) {
-        return console.log('it\'s already finished or closed');
-      }
-      console.log('guide is not finished or closed yet');
-      console.log(activeStep, finished, prematurelyClosed);
-      console.log('Trying to display step '+activeStep);
-
-      if (this.doesStepPathMatch(activeStep) && this.isStepElementFound(activeStep)) {
-        console.log('target path and element matched');
-        if(this.stepDisplayed === null) {
-          this.startStep(activeStep);
-        }
-      } else {
-        console.log('Either targetPath doesn\'t match or element not found');
-        if(this.activeStepInstance) {
-          // remove steps that shouldn't apply to the current page
-          // TODO when is this possibly going to come to use??
-          console.log('target selectors no longer matching, removing');
-          // this.activeStepInstance.remove();
-        }
-      }
-  }
-
   private attemptShow(): void {
     // call on Guide init, page load, and Lusift.refresh()
-    // TODO case where the step is already on display
     // TODO case for Modal
     const { activeStep, finished, prematurelyClosed } = this.trackingState;
     if(finished || prematurelyClosed) {
@@ -97,7 +64,7 @@ export default class Guide {
 
       if (this.doesStepPathMatch(stepIndex) && this.isStepElementFound(stepIndex)) {
         console.log(`Step ${stepIndex}: target path and element matched`);
-        if(this.stepDisplayed === null) {
+        if(this.activeStepInstance === null) {
           this.startStep(stepIndex);
         }
       } else {
@@ -110,7 +77,6 @@ export default class Guide {
   private startStep(stepIndex: number): void {
     const { index, target, data, actions, type, styleProps } = this.guideData.steps[stepIndex];
     // console.log(`Step index: ${index}`);
-    console.log(`%c  ${this.stepDisplayed}`, 'background: #222; color: #bada55');
 
     if (type==='tooltip') {
       this.activeStepInstance = this.guideData.steps[stepIndex];
@@ -136,13 +102,10 @@ export default class Guide {
         guideID: this.guideData.id,
         nextStep: this.nextStep.bind(this),
       });
-      /* if(hotspot.async) {
+      if(hotspot.async) {
         this.activeStepInstance = null;
-        this.stepDisplayed = null;
-        this.nextStep();
-      } */
+      }
     }
-    this.stepDisplayed = stepIndex;
   }
 
   private doesStepPathMatch(stepIndex: number): boolean {
@@ -210,9 +173,9 @@ export default class Guide {
   }
 
   private closeCurrentStep(): void {
-    if(this.stepDisplayed && this.activeStepInstance) {
+    if(this.activeStepInstance) {
       this.activeStepInstance.remove();
-      this.stepDisplayed = null;
+      this.activeStepInstance = null;
     } else {
       console.warn('There\'s no active step to close');
     }
