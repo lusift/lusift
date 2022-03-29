@@ -58,11 +58,14 @@ export function isOfTypeTooltipData(object: any): boolean {
     (typeof object.backdrop === 'undefined' || isObject(object.backdrop))
 }
 
-export function isOfTypeTarget(object: any): boolean {
+export function isOfTypeTarget(object: any, type: string): boolean {
   // TODO make change for Modal not having an elementSelector
   const comparators = ['is', 'contains', 'endsWith', 'startsWith'];
+  const elementSelectorExists = typeof object.elementSelector === 'string' && !!object.elementSelector;
+  console.log(type);
+
   return isObject(object) &&
-    (typeof object.elementSelector === 'string' && !!object.elementSelector) && //validate element selector
+    (elementSelectorExists || type==='modal') && //validate element selector
     isObject(object.path) &&
     (typeof object.path.comparator === 'string' && comparators.includes(object.path.comparator)) &&
     (typeof object.path.value === 'string') //validate path
@@ -72,6 +75,7 @@ export function isOfTypeTooltip(object: any): boolean {
   // TODO add validators for actions and backdrop
   return (isOfTypeTooltipData(object.data)) &&
     (object.styleProps === undefined || isObject(object.styleProps)) &&
+    object.type==='tooltip' &&
     (isOfTypeTooltipData(object.data))
 }
 
@@ -91,7 +95,8 @@ const modal = {
 
 export function isOfTypeModal(object: any): boolean {
   return (object.type === 'modal') &&
-    isObject(object.data) && typeof object.data.bodyContent === 'string';
+    isObject(object.data) &&
+    typeof object.data.bodyContent === 'string';
 }
 
 export function isOfTypeHotspot(object: any): boolean {
@@ -100,14 +105,14 @@ export function isOfTypeHotspot(object: any): boolean {
 
 export function isOfTypeStep(object: any): boolean {
 
-  const stepTypes = ['tooltip', 'hotspot'];
+  const stepTypes = ['tooltip', 'hotspot', 'modal'];
 
   return isObject(object) &&
     (typeof object.index === 'number') &&
     (stepTypes.includes(object.type)) &&
     // target
-    isOfTypeTarget(object.target) &&
-    (isOfTypeTooltip(object) || isOfTypeHotspot(object))
+    isOfTypeTarget(object.target, object.type) &&
+    (isOfTypeTooltip(object) || isOfTypeHotspot(object) || isOfTypeModal(object))
 }
 
 export function isOfTypeGuide(object: any): boolean {
