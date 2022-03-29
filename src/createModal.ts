@@ -68,23 +68,30 @@ const createModal = (): void => {
     left: '0',
     bottom: '0',
     right: '0',
-    zIndex: '99999',
+    zIndex: '99998',
     ...modalOverlayStyleProps
   });
 
   modal.style.cssText = styleObjectToString({
     borderRadius: '4px',
     background: '#fff',
-    width: '500px',
-    height: '400px',
+    height: '500px',
+    width: '600px',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    position: 'absolute',
+    zIndex: '99999',
+    opacity: '1',
     ...modalStyleProps
   });
 
   modal.innerHTML = `
   <style>
   .section.body-content{
-    margin: 3px 15px;
+    padding: 3px 15px;
     color: #111;
+    background: #fff;
   }
   </style>
   ${renderCloseXButton(closeButton)}
@@ -93,8 +100,9 @@ const createModal = (): void => {
     </div>
   `;
 
-  modalOverlay.appendChild(modal);
+  // modalOverlay.appendChild(modal);
   document.body.appendChild(modalOverlay);
+  document.body.appendChild(modal);
 }
 
 export default createModal;
