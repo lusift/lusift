@@ -65,6 +65,8 @@ export default class Guide {
     }
     console.log('guide is not finished or closed yet');
     let stepIndex=activeStep-1;
+    const steps = this.guideData.steps;
+
     // if the current step has async true, then try starting the next one, and so on
     do {
       stepIndex++;
@@ -72,14 +74,15 @@ export default class Guide {
 
       if (this.stepMatchesDisplayCriteria(stepIndex)) {
         console.log(`Step ${stepIndex}: target path and element matched`);
-        if(this.activeStepInstance === null) {
+        console.log(this.activeStepInstance)
+        if(!this.activeStepInstance) {
           this.startStep(stepIndex);
         }
       } else {
         console.log(`Step ${stepIndex}: Either targetPath doesn\'t match or element not found`);
       }
     }
-    while (this.guideData.steps[stepIndex].async && this.guideData.steps[stepIndex].type==='hotspot')
+    while (steps[stepIndex].async && steps[stepIndex].type==='hotspot')
   }
 
   private startStep(stepIndex: number): void {
@@ -118,7 +121,7 @@ export default class Guide {
         guideID,
         nextStep: this.nextStep.bind(this),
       });
-      if(hotspot.async) {
+      if(stepData.async) {
         this.activeStepInstance = null;
       }
     }

@@ -59,10 +59,8 @@ export function isOfTypeTooltipData(object: any): boolean {
 }
 
 export function isOfTypeTarget(object: any, type: string): boolean {
-  // TODO make change for Modal not having an elementSelector
   const comparators = ['is', 'contains', 'endsWith', 'startsWith'];
   const elementSelectorExists = typeof object.elementSelector === 'string' && !!object.elementSelector;
-  console.log(type);
 
   return isObject(object) &&
     (elementSelectorExists || type==='modal') && //validate element selector
@@ -77,20 +75,6 @@ export function isOfTypeTooltip(object: any): boolean {
     (object.styleProps === undefined || isObject(object.styleProps)) &&
     object.type==='tooltip' &&
     (isOfTypeTooltipData(object.data))
-}
-
-const modal = {
-  index: 7,
-  type: 'modal',
-  target: {
-    path: {
-      value: '/lusift/segments',
-      comparator: 'contains'
-    }
-  },
-  data: {
-    bodyContent: `<h2>Hiii!</h2>`
-  }
 }
 
 export function isOfTypeModal(object: any): boolean {
