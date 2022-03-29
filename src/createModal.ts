@@ -3,15 +3,9 @@ import { styleObjectToString } from './utils';
 
 // TODO custom functions - developer can pass functions in something like Lusift.method('method-id', method)
 // TODO set option for automatic redirect in actions{} (with wildcard feature in the link)
-// TODO only one content at a time
 // TODO - Lusift.next() Lusift.prev() Lusift.close() Lusift.goto(2) Lusift.showContent('contentID')
 // TODO see what buttons and how they should work and display for modals and tooltips
 // TODO make it easier to write html and css. Maybe see how a developer can choose to use ui frameworks.
-
-const async = {
-  leading: true,
-  following: true
-}
 
 const closeButton = {
   styleProps: {},

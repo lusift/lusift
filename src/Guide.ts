@@ -167,6 +167,11 @@ export default class Guide {
     console.log(loadState()) */
   }
 
+  private clearTrackingState(): void {
+    this.trackingState = undefined;
+    this.updateLocalTrackingState();
+  }
+
   public setStep(newStepNum: number): void {
     // change step and see which steps need to be unmounted or mounted
     // this.closeCurrentStep();

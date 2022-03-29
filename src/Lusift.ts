@@ -119,7 +119,10 @@ export default new class Lusift {
     }
     if(this.guideInstance){
       this.guideInstance.close();
+      // make sure the trackingState of the contentID is empty
+      this.guideInstance.clearTrackingState();
     }
+
     setTimeout(() => {
       // console.log('sending guide data:');
       this.guideInstance = new Guide(contentID);
