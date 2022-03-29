@@ -33,7 +33,7 @@ const renderCloseXButton = (closeButton: any): string => {
     </style>
 
     <div class="section close-btn">
-      <button class="closeX close">&times;</button>
+      <button onclick="Lusift.close()" class="closeX close">&times;</button>
     </div>
   `;
 }
@@ -75,21 +75,17 @@ const renderNavButtons = (navSection: any): string => {
 
     <div class="nav-buttons section">
       ${dismissLink.disable ? '': `
-        <button class="close dismiss-link">
+        <button onclick="Lusift.close()" class="close dismiss-link">
           skip this
         </button>
         `}
-      ${prevButton.disable ? '': `<button class="prev">Prev</button>`}
-      ${nextButton.disable ? '': `<button class="next">Next</button>`}
+      ${prevButton.disable ? '': `<button onclick="Lusift.prev()" class="prev">Prev</button>`}
+      ${nextButton.disable ? '': `<button onclick="Lusift.next()" class="next">Next</button>`}
     </div>
   `;
 }
 
-const renderTooltip = ({
-  remove, data, target,
-  styleProps, actions,
-  uid, nextStep, prevStep
-}) => {
+const renderTooltip = ({ data, target, styleProps, actions, uid }) => {
 
   const { closeButton, navSection } = actions;
   const {
@@ -136,19 +132,9 @@ const renderTooltip = ({
     placement,
     remove: ()=>{}
   });
-
   console.log(tippyInstance)
 
   tippyInstance.show();
-
-  // add event listener to tooltip buttons
-  const closeButtons = document.querySelectorAll(`#tooltip-${uid} .close`);
-  const nextButtons = document.querySelectorAll(`#tooltip-${uid} button.next`);
-  const prevButtons = document.querySelectorAll(`#tooltip-${uid} button.prev`);
-
-  closeButtons.forEach(btn => btn.addEventListener('click', remove));
-  nextButtons.forEach(btn => btn.addEventListener('click', nextStep));
-  prevButtons.forEach(btn => btn.addEventListener('click', prevStep));
 
   return tippyInstance;
 }

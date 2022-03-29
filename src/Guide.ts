@@ -100,9 +100,6 @@ export default class Guide {
         data,
         index,
         guideID,
-        nextStep: this.nextStep.bind(this),
-        prevStep: this.prevStep.bind(this),
-        closeGuide: this.close.bind(this),
         actions,
         styleProps
       });
@@ -117,7 +114,6 @@ export default class Guide {
       this.activeStepInstance = new Hotspot({
         data: stepData,
         guideID,
-        nextStep: this.nextStep.bind(this),
       });
       if(stepData.async) {
         this.activeStepInstance = null;

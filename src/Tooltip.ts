@@ -31,9 +31,6 @@ export default class Tooltip {
     readonly data: TooltipData;
     private actions: StepActions = defaultToolipActions;
     readonly styleProps: Object = {};
-    private nextStep: Function;
-    private prevStep: Function;
-    private closeGuide: Function;
     private targetsAndEventListeners: {
         method: string;
         target: document.HTMLElement;
@@ -43,13 +40,9 @@ export default class Tooltip {
     private isTooltipShown: boolean;
 
     constructor(
-        // TODO why can't we just reference nextStep, prevStep, and closeGuide from window.Lusift?
         {
             target,
             guideID,
-            nextStep,
-            prevStep,
-            closeGuide,
             index,
             data,
             actions,
@@ -59,9 +52,6 @@ export default class Tooltip {
             target: Target;
             guideID: string;
             data: TooltipData;
-            nextStep: Function;
-            prevStep: Function,
-            closeGuide: Function,
             index: number,
             actions: StepActions,
             styleProps: Object
@@ -95,9 +85,6 @@ export default class Tooltip {
             this.uid=getStepUID({ guideID, index, type: 'tooltip' });
             this.backdropID=getStepUID({ guideID, index, type: 'backdrop' });
             this.targetElement = document.querySelector(this.target.elementSelector);
-            this.nextStep=nextStep;
-            this.prevStep=prevStep;
-            this.closeGuide=closeGuide;
             // window.alert('tooltip initiated')
             this.attachIntersectionObserver();
         }
@@ -170,9 +157,6 @@ export default class Tooltip {
                 // tippy was never initiated
                 this.tippyInstance = createTooltip({
                     uid: this.uid,
-                    remove: this.closeGuide,
-                    nextStep: this.nextStep,
-                    prevStep: this.prevStep,
                     target: this.targetElement,
                     actions: this.actions,
                     styleProps: this.styleProps,
@@ -198,9 +182,9 @@ export default class Tooltip {
         private getListenerFromMethod(method: string): Function {
             switch(method) {
                 case 'next':
-                    return this.nextStep;
+                    return window.Lusift.next;
                 case 'prev':
-                    return this.prevStep;
+                    return window.Lusift.prev;
                 case 'close':
                     return this.remove;
             }
@@ -209,8 +193,6 @@ export default class Tooltip {
         private addEventListenerToTarget(target: document.HTMLElement, method='next', eventType='click'): void {
             // add this event listener at the creation of each tooltip step and
             // remove it at removal of it
-            // TODO Look at how those saas do it - the options they give that is
-
             target.addEventListener(eventType, this.getListenerFromMethod(method));
             this.targetsAndEventListeners.push({ method, target, eventType });
             // console.log(this.targetsAndEventListeners);

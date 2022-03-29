@@ -46,15 +46,12 @@ class Hotspot {
   private data: HotspotData;
   private beaconID: string;
 
-  private nextStep: Function;
-
-  constructor({ data, guideID, nextStep }) {
+  constructor({ data, guideID }) {
     console.log(data);
     this.data = data;
     const { index, type, target } = data;
     this.tipID = getStepUID({guideID, type, index});
     this.beaconID = getStepUID({guideID, type:'beacon', index});
-    this.nextStep = nextStep;
     this.targetElement = document.querySelector(target.elementSelector);
     this.addBeacon();
   }
@@ -85,7 +82,7 @@ class Hotspot {
     if(!this.tippyInstance){
       // if it was never initiated
       this.tippyInstance = createHotspotTooltip({
-        remove: this.nextStep,
+        remove: window.Lusift.next,
         uid: this.tipID,
         target,
         styleProps,
