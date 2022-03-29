@@ -35,21 +35,20 @@ const renderCloseXButton = (closeButton: any): string => {
     </style>
 
     <div class="section close-btn">
-      <button class="closeX close">&times;</button>
+      <button onclick="window.Lusift.close()" class="closeX close">&times;</button>
     </div>
   `;
 }
 
-const createModal = (): void => {
+const createModal = ({ uid, bodyContent }): void => {
   const modalOverlay = document.createElement('div');
   const modal = document.createElement('div');
-  const modalID = 'some-modal-id';
-  modal.id = modalID;
-  modalOverlay.classList.add('lusift-modal-container');
+  modal.id = uid;
+  modalOverlay.classList.add('lusift-modal-overlay');
 
   const modalStyleProps = {};
   const modalOverlayStyleProps = {};
-  const bodyContent = "<h2>Modal Content</h2>";
+  bodyContent = bodyContent || "<h2>Modal Content</h2>";
 
   modalOverlay.style.cssText = styleObjectToString({
     position: 'absolute',

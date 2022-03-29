@@ -1,28 +1,31 @@
 import createModal from './createModal';
+import { document } from 'global';
+import { getStepUID } from './utils';
 import { Modal as ModalData } from './types';
 
-const modal = {
-  index: 7,
-  type: 'modal',
-  target: {
-    path: {
-      value: '/lusift/segments',
-      comparator: 'contains'
-    }
-  },
-  data: {
-    bodyContent: `<h2>Hiii!</h2>`
-  }
-}
-
-
 class Modal {
+  private uid: string;
+  private data: any;
+
   constructor({ index, guideID, data }) {
-    // TODO generate uid
+    this.uid = getStepUID({guideID, type:'modal', index});
+    this.data = data;
     this.addModal();
+    console.log(data)
   }
+
   private addModal(): void {
-    createModal();
+    const { bodyContent } = this.data;
+
+    createModal({
+      uid: this.uid,
+      bodyContent
+    });
+  }
+
+  private remove(): void {
+    document.querySelector('.lusift-modal-overlay').remove();
+    document.getElementById(this.uid).remove();
   }
 }
 

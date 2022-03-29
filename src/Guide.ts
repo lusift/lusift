@@ -74,7 +74,6 @@ export default class Guide {
 
       if (this.stepMatchesDisplayCriteria(stepIndex)) {
         console.log(`Step ${stepIndex}: target path and element matched`);
-        console.log(this.activeStepInstance)
         if(!this.activeStepInstance) {
           this.startStep(stepIndex);
         }
@@ -90,7 +89,6 @@ export default class Guide {
     const { index, target, type, data } = stepData;
     const guideID = this.guideData.id;
     // console.log(`Step index: ${index}`);
-
 
     if (type==='tooltip') {
       /* console.log(this.activeStepInstance);
@@ -117,7 +115,7 @@ export default class Guide {
 
     } else if (type==='hotspot') {
       this.activeStepInstance = new Hotspot({
-        data,
+        data: stepData,
         guideID,
         nextStep: this.nextStep.bind(this),
       });
@@ -198,6 +196,7 @@ export default class Guide {
 
   private closeCurrentStep(): void {
     if(this.activeStepInstance) {
+      console.log(this.activeStepInstance)
       this.activeStepInstance.remove();
       this.activeStepInstance = null;
     } else {

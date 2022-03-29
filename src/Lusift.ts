@@ -11,7 +11,6 @@ import addTippyCSS from './addTippyCSS';
 
 // TODO add a dev class
 // TODO add constants file
-// TODO q- can you have multiple flows at once? No right?!
 // TODO give ability to run functions after each step and guide
 
 export default new class Lusift {
@@ -124,7 +123,6 @@ export default new class Lusift {
     }
 
     setTimeout(() => {
-      // console.log('sending guide data:');
       this.guideInstance = new Guide(contentID);
       this.guideInstance.start();
       this.prepareHooks();
