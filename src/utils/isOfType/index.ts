@@ -75,6 +75,25 @@ export function isOfTypeTooltip(object: any): boolean {
     (isOfTypeTooltipData(object.data))
 }
 
+const modal = {
+  index: 7,
+  type: 'modal',
+  target: {
+    path: {
+      value: '/lusift/segments',
+      comparator: 'contains'
+    }
+  },
+  data: {
+    bodyContent: `<h2>Hiii!</h2>`
+  }
+}
+
+export function isOfTypeModal(object: any): boolean {
+  return (object.type === 'modal') &&
+    isObject(object.data) && typeof object.data.bodyContent === 'string';
+}
+
 export function isOfTypeHotspot(object: any): boolean {
   return object.type === 'hotspot';
 }
