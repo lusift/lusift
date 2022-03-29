@@ -2,12 +2,10 @@ import { document, window } from 'global';
 import createHotspotTooltip from './createHotspotTooltip';
 import createBeacon from './createBeacon';
 import { getElementPosition, getStepUID } from './utils';
-import { HotspotData } from './types';
+import { Hotspot as HotspotData } from './types';
 
 // TODO check for target and screen resize here too like we do in Backdrop
 // TODO There're two types of beacon - pulsing and question mark (fa-question-circle)
-// TODO hotspots can trigger either modal or tooltips
-// TODO make hotspot serially triggering, like tooltips, for now
 
 const hotspot1: HotspotData = {
   index: 7,

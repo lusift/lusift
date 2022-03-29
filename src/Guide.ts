@@ -83,18 +83,22 @@ export default class Guide {
   }
 
   private startStep(stepIndex: number): void {
-    const { index, target, data, actions, type, styleProps } = this.guideData.steps[stepIndex];
+    const stepData = this.guideData.steps[stepIndex];
+    const { index, target, type, data } = stepData;
+    const guideID = this.guideData.id;
     // console.log(`Step index: ${index}`);
 
+
     if (type==='tooltip') {
-      this.activeStepInstance = this.guideData.steps[stepIndex];
       /* console.log(this.activeStepInstance);
          this.activeStepInstance.show(); */
+      const { actions, styleProps } = stepData;
+
       this.activeStepInstance = new Tooltip({
         target,
         data,
         index,
-        guideID: this.guideData.id,
+        guideID,
         nextStep: this.nextStep.bind(this),
         prevStep: this.prevStep.bind(this),
         closeGuide: this.close.bind(this),
@@ -102,12 +106,16 @@ export default class Guide {
         styleProps
       });
     } else if (type==='modal') {
+      this.activeStepInstance = new Modal({
+        index,
+        guideID,
+        data
+      });
 
     } else if (type==='hotspot') {
-      const hotspot = this.guideData.steps[stepIndex];
       this.activeStepInstance = new Hotspot({
-        data: hotspot,
-        guideID: this.guideData.id,
+        data,
+        guideID,
         nextStep: this.nextStep.bind(this),
       });
       if(hotspot.async) {
