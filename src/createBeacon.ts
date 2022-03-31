@@ -1,7 +1,9 @@
-import { document } from 'global';
-import { styleObjectToString } from './utils';
+import { document, window } from 'global';
+import { styleObjectToString, getElementPosition } from './utils';
 
-const createBeacon = ({ targetPosition, beaconData, beaconID }) => {
+// TODO create a relative positioned transparent element over the beacon element
+
+const createBeacon = ({ targetPosition, beaconData, beaconID, toggleTooltip }) => {
   const { targetTop, targetLeft, targetHeight, targetWidth } = targetPosition;
 
   const beaconContainer = document.createElement('div');
@@ -12,7 +14,7 @@ const createBeacon = ({ targetPosition, beaconData, beaconID }) => {
   });
   beaconContainer.classList.add('lusift-beacon-container');
 
-  const { placement, size, color, type } = beaconData;
+  let { placement, size, color, type } = beaconData;
   const { top, left } = placement;
   const animation = true;
 
@@ -22,7 +24,7 @@ const createBeacon = ({ targetPosition, beaconData, beaconID }) => {
     background-color: ${color || '#b9f'};
     border-radius: 50%;
     position: absolute;
-    z-index: 20;
+    pointer-events: auto;
     width: ${size *13}px;
     height: ${size *13}px;
     -webkit-animation: shine 2s ease-in-out infinite;
@@ -41,7 +43,7 @@ const createBeacon = ({ targetPosition, beaconData, beaconID }) => {
         box-shadow: 0px 0px 0px 0px rgba(187, 153, 255, 0.49);
       }
       100% {
-        box-shadow: 0px 0px 0px ${25*size}px rgba(0, 0, 0, 0);
+        box-shadow: 0px 0px 0px ${20*size}px rgba(0, 0, 0, 0);
       }
     }
 
@@ -50,7 +52,7 @@ const createBeacon = ({ targetPosition, beaconData, beaconID }) => {
         box-shadow: 0px 0px 0px 0px rgba(187, 153, 255, 0.49);
       }
       100% {
-        box-shadow: 0px 0px 0px ${25*size}px rgba(0, 0, 0, 0);
+        box-shadow: 0px 0px 0px ${20*size}px rgba(0, 0, 0, 0);
       }
     }`: ''
   }
@@ -58,27 +60,30 @@ const createBeacon = ({ targetPosition, beaconData, beaconID }) => {
   <div id="${beaconID}"></div>
   `;
 
-  if(type!=='pulsing') {
-    // TODO fa-question-circle
-    beaconContainer.innerHTML = `
-    <style>
-    #${beaconID} {
-      background-color: ${color || '#b9f'};
-      border-radius: 50%;
-      position: absolute;
-      z-index: 20;
-      width: ${size *13}px;
-      height: ${size *13}px;
-      cursor: pointer;
-      top: ${(top/100)*targetHeight}px;
-      left: ${(left/100)*targetWidth}px;
-    }
-    </style>
-
-    <div id="${beaconID}"></div>
-    `;
-  }
   document.body.appendChild(beaconContainer);
+  const beaconElement = document.getElementById(beaconID);
+
+  const beaconEventReceiver = document.createElement('div');
+  beaconEventReceiver.id=`${beaconID}-er`;
+  const { width, height } = getElementPosition(beaconElement);
+  console.log(width, height)
+
+  beaconEventReceiver.style.cssText = styleObjectToString({
+    ...beaconElement.style,
+    width: `${width}px`,
+    height: `${height}px`,
+    background: 'transparent',
+    // position: 'absolute',
+    // backgroundColor: 'red',
+    zIndex: '394490',
+    // pointerEvents: 'none'
+  });
+  beaconElement.appendChild(beaconEventReceiver);
+  console.log(beaconEventReceiver);
+  console.log(beaconElement);
+
+  // beaconElement.addEventListener('click', () => window.alert('byyyeee'))
+  beaconEventReceiver.addEventListener('click', toggleTooltip);
 }
 
 export default createBeacon;

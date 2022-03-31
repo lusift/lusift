@@ -1,14 +1,13 @@
 import { document, window } from 'global';
 import createTooltip from './createTooltip';
 import { mergeObjects, getStepUID } from './utils';
-import { TooltipData, Target, StepActions } from './types';
+import { TooltipData, HotspotAndTooltipTarget as Target, StepActions } from './types';
 import defaultToolipActions from './defaultTooltipActions';
 import Backdrop from './Backdrop';
 
 // TODO Developer should be able to modify css on the global guide level, as well as on the step level
 // TODO Add option for beacon in Tooltip
 // TODO Add developer helper method to quickly render an element on the screen during development
-// TODO Add asynchrous hotspots
 // TODO Add steps config, and steps styles to apply to all steps
 
 // TODO add Actions validator
@@ -113,6 +112,7 @@ export default class Tooltip {
                 root: null,
                 threshold: 0.95
             });
+            window.alert(this.target.elementSelector)
             observer.observe(this.targetElement);
         }
 

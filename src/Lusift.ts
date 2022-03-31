@@ -33,12 +33,8 @@ export default new class Lusift {
       saveState({});
     }
     addTippyCSS();
-
-    if (typeof window !== "undefined") {
-      window.setTimeout(() => {
-      }, 2000);
-    }
   }
+
 
   private hasGuideDataChanged(guideData: GuideType): boolean {
     const localData = loadState();
@@ -92,6 +88,7 @@ export default new class Lusift {
 
     // console.log('content set to local:');
     const localData = loadState();
+    console.log(localData)
     // console.log(localData);
   }
 
@@ -122,6 +119,7 @@ export default new class Lusift {
       this.guideInstance.clearTrackingState();
     }
 
+    window.activeGuideID = contentID;
     setTimeout(() => {
       this.guideInstance = new Guide(contentID);
       this.guideInstance.start();

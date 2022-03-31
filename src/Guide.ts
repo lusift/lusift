@@ -11,19 +11,21 @@ import { GuideType } from './types';
 // TODO add regex path type (for a path like /[companyName]/dashboard)
 // TODO make it installable
 
+// TODO define the asyncSteps type below
 interface TrackingState {
   activeStep: number;
   finished: boolean;
   prematurelyClosed: boolean;
+  asyncSteps: {
+    number: {
+      toOpen: boolean;
+    }
+  }
 }
 
 export default class Guide {
   readonly guideData: GuideType;
-  private trackingState: TrackingState = {
-    activeStep: 0,
-    finished: undefined,
-    prematurelyClosed: undefined
-  };
+  private trackingState: TrackingState;
   private activeStepInstance: any;
 
   constructor(guideID: string) {
@@ -35,12 +37,30 @@ export default class Guide {
     delete guideData.trackingState;
 
     this.guideData = guideData;
-    this.trackingState = localGuideState.trackingState || this.trackingState;
+    this.trackingState = localGuideState.trackingState || this.generateTrackingState();
     /* console.log('guideData pulled from local storage:');
        console.log(this.guideData);
        console.log(this.trackingState); */
     /* new Hotspot();
     new Modal(); */
+  }
+
+  private generateTrackingState(): any {
+    let newTrackingState = {
+      activeStep: 0,
+      finished: undefined,
+      prematurelyClosed: undefined,
+      asyncSteps: {}
+    };
+
+    this.guideData.steps.forEach(step => {
+      if(step.async && step.type==='hotspot') {
+        newTrackingState.asyncSteps[step.index] = {
+          toOpen: false
+        }
+      }
+    });
+    return newTrackingState;
   }
 
   public start(): void {
@@ -53,6 +73,7 @@ export default class Guide {
     if(this.guideData.steps[stepIndex].type !=='modal') {
       criteriaMatch = criteriaMatch && this.isStepElementFound(stepIndex);
     }
+    window.alert(criteriaMatch)
     return criteriaMatch;
   }
 
@@ -82,6 +103,14 @@ export default class Guide {
       }
     }
     while (steps[stepIndex].async && steps[stepIndex].type==='hotspot')
+    // TODO start all the async hotpots with toOpen true
+    steps.forEach(({ async, type, index }) => {
+      if(async && (type==='hotspot')) {
+        if(this.trackingState.asyncSteps[index].toOpen) {
+          this.startStep(index);
+        }
+      }
+    });
   }
 
   private startStep(stepIndex: number): void {
@@ -148,14 +177,13 @@ export default class Guide {
   private updateLocalTrackingState(): void {
     // save/sync class object to localstorage
     const existingState = loadState();
-    const newState = {
+    saveState({
       ...existingState,
       [this.guideData.id]: {
         ...existingState[this.guideData.id],
         trackingState: this.trackingState
       }
-    }
-    saveState(newState);
+    });
     /* console.log('new state:')
     console.log(newState);
     console.log(loadState()) */

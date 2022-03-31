@@ -3,9 +3,13 @@ import createHotspotTooltip from './createHotspotTooltip';
 import createBeacon from './createBeacon';
 import { getElementPosition, getStepUID } from './utils';
 import { Hotspot as HotspotData } from './types';
+import { loadState, saveState } from './localStorage';
 
 // TODO check for target and screen resize here too like we do in Backdrop
 // TODO There're two types of beacon - pulsing and question mark (fa-question-circle)
+// TODO async steps' close status need to be tracked. if AS leads to SS and then index progresses from there ---
+// TODO fix absolute positioned element not taking events
+//
 
 const hotspot1: HotspotData = {
   index: 7,
@@ -68,9 +72,12 @@ class Hotspot {
 
     const beaconData = this.data.beacon;
 
-    createBeacon({ targetPosition, beaconData, beaconID: this.beaconID });
-
-    document.getElementById(this.beaconID).addEventListener('click', () => this.toggleTooltip.bind(this)());
+    createBeacon({ targetPosition, beaconData, beaconID: this.beaconID, toggleTooltip: this.toggleTooltip.bind(this) });
+    this.changeAsyncStepStatus(true);
+    /* document.getElementById(this.beaconID).parentElement.addEventListener('click', () => {
+      console.log('tooltip!!')
+      this.toggleTooltip.bind(this)()
+    }, false); */
   }
 
   private toggleTooltip(): any {
@@ -100,6 +107,27 @@ class Hotspot {
     }
   }
 
+  private changeAsyncStepStatus(toOpen: boolean): void {
+    if(!this.data.async) return;
+
+    const exisitingState = loadState();
+    saveState({
+      ...exisitingState,
+      [window.activeGuideID]: {
+        ...exisitingState[window.activeGuideID],
+        trackingState: {
+          ...exisitingState[window.activeGuideID].trackingState,
+          asyncSteps: {
+            ...exisitingState[window.activeGuideID].asyncSteps,
+            [this.data.index]: {
+              toOpen
+            }
+          }
+        }
+      }
+    });
+  }
+
   private remove(): void {
     if(this.tippyInstance) {
       this.tippyInstance.unmount();
@@ -108,6 +136,7 @@ class Hotspot {
       console.log('Hotspot closed without ever opening');
     }
     document.getElementById(this.beaconID).parentElement.remove();
+    this.changeAsyncStepStatus(false);
   }
 }
 
