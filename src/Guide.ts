@@ -3,12 +3,12 @@ import Hotspot from './Hotspot';
 import Modal from './Modal';
 import { window, document } from 'global';
 import { saveState, loadState } from './localStorage';
+import { doesStringMatchRegex } from './utils';
 
 import { GuideType } from './types';
 
 // TODO catch the case when window is undefined in localStorage.ts file
 // TODO when should the last step be registered as closed prematurely vs finished
-// TODO add regex path type (for a path like /[companyName]/dashboard)
 // TODO make it installable
 // TODO navigating to different page still shows element,
 // is it the case for other elements as well, like tooltip?
@@ -153,7 +153,7 @@ export default class Guide {
   }
 
   private doesStepPathMatch(stepIndex: number): boolean {
-    // is, endsWith, startsWith, contains
+    // is, endsWith, startsWith, contains, regex
     const { value, comparator } = this.guideData.steps[stepIndex].target.path;
     const { pathname } = window.location;
     /* console.log('value, pathname, comparator:')
@@ -167,6 +167,8 @@ export default class Guide {
         return pathname.endsWith(value);
       case 'startWith':
         return pathname.startsWith(value);
+      case 'regex':
+        return doesStringMatchRegex(pathname, value);
     }
   }
 
