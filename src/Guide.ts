@@ -13,13 +13,12 @@ import { GuideType } from './types';
 // TODO navigating to different page still shows element,
 // is it the case for other elements as well, like tooltip?
 
-// TODO define the asyncSteps type below
 interface TrackingState {
   activeStep: number;
   finished: boolean;
   prematurelyClosed: boolean;
   asyncSteps: {
-    number: {
+    [key: number]: {
       toOpen: boolean;
     }
   }
