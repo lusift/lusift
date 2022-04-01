@@ -3,15 +3,19 @@ import { saveState, loadState } from './localStorage';
 import { GuideType } from './types';
 import isEqual from 'lodash.isequal';
 
+import Tooltip from './Tooltip';
+import Hotspot from './Hotspot';
+import Modal from './Modal';
+
 import { window, document } from 'global';
 
 import { Content } from './types';
 import { isOfTypeContent, isObject } from './utils/isOfType';
 import addTippyCSS from './addTippyCSS';
 
-// TODO add a dev class
 // TODO add constants file
 // TODO give ability to run functions after each step and guide
+
 
 export default new class Lusift {
   private content: Content;
@@ -42,6 +46,55 @@ export default new class Lusift {
     const localGuideData = localData[guideData.id];
     delete localGuideData.trackingState;
     return !isEqual(localGuideData, guideData);
+  }
+
+  private devShowStep(guideID: string, stepNumber: number): void {
+    // dev mode: to be used to develop/style step elements
+    if (typeof window.activeGuideID ==='string') {
+      return console.warn('Can\'t enable dev mode because a guide is active using showContent()');
+    }
+    if(!this.content || !this.contentSet) {
+      return console.warn(`Content not set, pass valid content object to setContent()`);
+    }
+    if (this.content[guideID]) {
+      const { steps } = this.content[guideID].data;
+      if (steps[stepNumber]) {
+        const { type, data } = steps[stepNumber];
+        if (type === 'tooltip') {
+          const { index, target, data, actions, styleProps } = steps[stepNumber];
+          new Tooltip({
+            target,
+            data,
+            index,
+            guideID,
+            actions,
+            styleProps
+          });
+        } else if (type === 'hotspot') {
+          new Hotspot({
+            data: steps[stepNumber],
+            guideID,
+          });
+        } else if (type === 'modal') {
+          new Modal({
+            index: stepNumber,
+            guideID,
+            data
+          });
+        } else {
+          console.warn(`${type} is not a valid type`);
+        }
+      } else {
+        console.warn(`${guideID} doesn't have a step ${stepNumber}`);
+      }
+    } else {
+      console.warn(`${guideID} doesn't exist`);
+    }
+    console.log(`%c Showing step ${stepNumber} of ${guideID} in dev mode`, 'background: #222; color: #bada55');
+    // if there is some other content active already, refuse to show dev mode
+    this.next = this.prev = this.close = this.showContent = function() {
+      window.alert(`Can't run this method in dev mode`);
+    }
   }
 
   private reconcileContentWithLocalState(): void {
@@ -93,7 +146,7 @@ export default new class Lusift {
   }
 
   private refresh(): void {
-    // run page elements through conditional again
+    // run page elements through step display conditionals again
     if(this.guideInstance){
       window.setTimeout(() => {
         this.guideInstance.attemptShow();

@@ -8,7 +8,6 @@ import { doesStringMatchRegex } from './utils';
 import { GuideType } from './types';
 
 // TODO catch the case when window is undefined in localStorage.ts file
-// TODO when should the last step be registered as closed prematurely vs finished
 // TODO make it installable
 // TODO navigating to different page still shows element,
 // is it the case for other elements as well, like tooltip?
@@ -216,7 +215,7 @@ export default class Guide {
 
   private close(): void {
     // close guide
-    // if current step is last of guide steps then finished, else prematurelyClosed
+    // if current step is last step then finished=true, else prematurelyClosed=true
     if(this.trackingState.activeStep+1 === this.guideData.steps.length) {
       this.trackingState.finished = true;
     } else {
