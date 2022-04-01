@@ -10,6 +10,8 @@ import { GuideType } from './types';
 // TODO when should the last step be registered as closed prematurely vs finished
 // TODO add regex path type (for a path like /[companyName]/dashboard)
 // TODO make it installable
+// TODO navigating to different page still shows element,
+// is it the case for other elements as well, like tooltip?
 
 // TODO define the asyncSteps type below
 interface TrackingState {
@@ -73,6 +75,7 @@ export default class Guide {
     if(this.guideData.steps[stepIndex].type !=='modal') {
       criteriaMatch = criteriaMatch && this.isStepElementFound(stepIndex);
     }
+    // TODO bug - this is running twice, why?
     window.alert(criteriaMatch)
     return criteriaMatch;
   }
@@ -103,10 +106,10 @@ export default class Guide {
       }
     }
     while (steps[stepIndex].async && steps[stepIndex].type==='hotspot')
-    // TODO start all the async hotpots with toOpen true
+    // start all the async hotpots with toOpen true
     steps.forEach(({ async, type, index }) => {
       if(async && (type==='hotspot')) {
-        if(this.trackingState.asyncSteps[index].toOpen) {
+        if(this.stepMatchesDisplayCriteria(index) && this.trackingState.asyncSteps[index].toOpen) {
           this.startStep(index);
         }
       }
