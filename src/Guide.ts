@@ -201,7 +201,7 @@ export default class Guide {
   public setStep(newStepNum: number): void {
     // change step and see which steps need to be unmounted or mounted
     // this.closeCurrentStep();
-    if (newStepNum<0) {
+    if (newStepNum < 0) {
       return console.warn('Step index can\'t be less than 0');
     } else if (newStepNum+1>this.guideData.steps.length) {
       this.trackingState.finished=true;
@@ -216,7 +216,12 @@ export default class Guide {
 
   private close(): void {
     // close guide
-    this.trackingState.prematurelyClosed=true;
+    // if current step is last of guide steps then finished, else prematurelyClosed
+    if(this.trackingState.activeStep+1 === this.guideData.steps.length) {
+      this.trackingState.finished = true;
+    } else {
+      this.trackingState.prematurelyClosed=true;
+    }
     this.updateLocalTrackingState();
     this.closeCurrentStep();
     console.log('guide closed');
