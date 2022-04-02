@@ -2,24 +2,12 @@ import { saveState, loadState } from './localStorage';
 import doesStepMatchDisplayCriteria from './doesStepMatchDisplayCriteria';
 import startStepInstance from './startStepInstance';
 
-import { GuideType } from './types';
+import { GuideType, TrackingState } from './types';
 
-// TODO catch the case when window is undefined in localStorage.ts file
 // TODO make it installable
+// TODO add progress bar
 // TODO navigating to different page still shows element,
 // is it the case for other elements as well, like tooltip?
-
-interface TrackingState {
-  activeStep: number;
-  finished: boolean;
-  prematurelyClosed: boolean;
-  asyncSteps: {
-    [key: number]: {
-      toOpen: boolean;
-    }
-  }
-}
-
 
 export default class Guide {
   readonly guideData: GuideType;

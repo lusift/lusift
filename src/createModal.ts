@@ -1,5 +1,6 @@
 import { document } from 'global';
 import { styleObjectToString } from './utils';
+import { MODAL_OVERLAY_CLASS } from './constants';
 
 // TODO set option for automatic redirect in actions{} (with wildcard feature in the link)
 // TODO make it easier to write html and css. Maybe see how a developer can choose to use ui frameworks.
@@ -41,7 +42,7 @@ const createModal = ({ uid, bodyContent }): void => {
   const modalOverlay = document.createElement('div');
   const modal = document.createElement('div');
   modal.id = uid;
-  modalOverlay.classList.add('lusift-modal-overlay');
+  modalOverlay.classList.add(MODAL_OVERLAY_CLASS);
 
   const modalStyleProps = {};
   const modalOverlayStyleProps = {};

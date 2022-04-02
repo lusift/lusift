@@ -84,6 +84,16 @@ export interface GuideType {
   steps: Tooltip[] | HotspotData[];
 }
 
+export interface TrackingState {
+  activeStep: number;
+  finished: boolean;
+  prematurelyClosed: boolean;
+  asyncSteps: {
+    [key: number]: {
+      toOpen: boolean;
+    }
+  }
+}
 
 export interface Content {
   [guideID: string]: {

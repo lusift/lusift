@@ -2,6 +2,7 @@ import createModal from './createModal';
 import { document } from 'global';
 import { getStepUID } from './utils';
 import { Modal as ModalData } from './types';
+import { MODAL_OVERLAY_CLASS } from './constants';
 
 class Modal {
   private uid: string;
@@ -24,7 +25,7 @@ class Modal {
   }
 
   private remove(): void {
-    document.querySelector('.lusift-modal-overlay').remove();
+    document.getElementsByClassName(MODAL_OVERLAY_CLASS)[0].remove();
     document.getElementById(this.uid).remove();
   }
 }
