@@ -80,7 +80,7 @@ export interface Tooltip {
 export interface GuideType {
   id: string;
   name: string;
-  description: string;
+  description?: string;
   steps: Tooltip[] | HotspotData[];
 }
 
@@ -99,6 +99,9 @@ export interface Content {
   [guideID: string]: {
     type: string;
     data: GuideType;
+    onNext?: Function;
+    onPrev?: Function;
+    onClose?: Function;
   }
 }
 

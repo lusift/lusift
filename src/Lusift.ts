@@ -57,6 +57,8 @@ export default new class Lusift {
 
   private devShowStep(guideID: string, stepNumber: number): void {
     // dev mode: to be used to develop/style step elements
+
+    // if there is some other content active already, refuse to show dev mode
     if (typeof this.activeGuideID ==='string') {
       return console.warn('Can\'t enable dev mode because a guide is active using showContent()');
     }
@@ -81,7 +83,6 @@ export default new class Lusift {
       console.warn(`${guideID} doesn't exist`);
     }
     console.log(`%c Showing step ${stepNumber} of ${guideID} in dev mode`, 'background: #222; color: #bada55');
-    // if there is some other content active already, refuse to show dev mode
     this.next = this.prev = this.close = this.showContent = function() {
       window.alert(`Can't run this method in dev mode`);
     }
@@ -118,6 +119,7 @@ export default new class Lusift {
       return console.warn('Content data type is invalid');
     }
     this.content = content;
+
     this.contentSet = true;
     // console.log('filtering')
     Object.keys(this.content).forEach((key) => {

@@ -1,40 +1,5 @@
 import { GuideType, Content } from '../../types';
 
-const hotspot1 = {
-  index: 7,
-  type: 'hotspot',
-  target: {
-    path: {
-      value: '/lusift/nps',
-      comparator: 'is'
-    },
-    elementSelector: 'h2',
-  },
-  beacon: {
-    placement: {
-      top: 90,
-      left: 90,
-    },
-    size: 1,
-    color: '',
-    type: 'pulsing',
-  },
-  tip: {
-    data: {
-      placement: 'bottom',
-      arrow: true,
-      bodyContent: '<p style="color:blue">Hotspot 1 body</p>',
-    },
-    styleProps: {
-      border: '2px solid green',
-    }
-  },
-  async: {
-    leading: true,
-    following: true
-  }
-}
-
 export function isObject(item: any): boolean {
   return (item instanceof Object && item.constructor === Object);
 }
@@ -96,8 +61,7 @@ export function isOfTypeTooltip(object: any): boolean {
 
 export function isOfTypeModal(object: any): boolean {
   return (object.type === 'modal') &&
-    isObject(object.data) &&
-    typeof object.data.bodyContent === 'string';
+    isObject(object.data);
 }
 
 export function isOfTypeHotspot(object: any): boolean {
@@ -133,4 +97,14 @@ export function isOfTypeContent(object: Content): boolean {
     Object.values(object).every((item: any) => {
       return typeof itemTypes.includes(item.type) && isOfTypeGuide(item.data);
   });
+}
+
+
+export function isOfTypeHtmlElement(element): boolean {
+  console.log('bodyContent')
+  if(typeof element !=='object') return false;
+  return (
+    element.constructor.name.startsWith('HTML') &&
+    element.constructor.name.endsWith('Element')
+  );
 }
