@@ -17,6 +17,7 @@ export default new class Lusift {
   private content: Content;
   private guideInstance: any;
   private contentSet: boolean;
+  public activeGuideID: string;
 
   private next: Function;
   private prev: Function;
@@ -38,8 +39,8 @@ export default new class Lusift {
   }
 
   private getTrackingState(): object {
-    if(this.contentSet && window.activeGuideID) {
-      return loadState()[window.activeGuideID].trackingState;
+    if(this.contentSet && this.activeGuideID) {
+      return loadState()[this.activeGuideID].trackingState;
     } else {
       console.warn('No active guide');
       return null;
@@ -56,7 +57,7 @@ export default new class Lusift {
 
   private devShowStep(guideID: string, stepNumber: number): void {
     // dev mode: to be used to develop/style step elements
-    if (typeof window.activeGuideID ==='string') {
+    if (typeof this.activeGuideID ==='string') {
       return console.warn('Can\'t enable dev mode because a guide is active using showContent()');
     }
     if(!this.content || !this.contentSet) {
@@ -161,7 +162,7 @@ export default new class Lusift {
       this.guideInstance.clearTrackingState();
     }
 
-    window.activeGuideID = contentID;
+    this.activeGuideID = contentID;
     setTimeout(() => {
       this.guideInstance = new Guide(contentID);
       this.guideInstance.start();
@@ -176,7 +177,7 @@ export default new class Lusift {
     this.close = this.guideInstance.close.bind(this.guideInstance);
     this.goto = this.guideInstance.setStep.bind(this.guideInstance);
 
-    const { onNext, onPrev, onClose } = this.content[window.activeGuideID];
+    const { onNext, onPrev, onClose } = this.content[this.activeGuideID];
     this.onNext = onNext;
     this.onPrev = onPrev;
     this.onClose = onClose;

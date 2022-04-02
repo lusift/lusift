@@ -36,7 +36,12 @@ class Hotspot {
 
     const beaconData = this.data.beacon;
 
-    createBeacon({ targetPosition, beaconData, beaconID: this.beaconID, toggleTooltip: this.toggleTooltip.bind(this) });
+    createBeacon({
+      targetPosition,
+      beaconData,
+      beaconID: this.beaconID,
+      toggleTooltip: this.toggleTooltip.bind(this)
+    });
     this.changeAsyncStepStatus(true);
     /* document.getElementById(this.beaconID).parentElement.addEventListener('click', () => {
       console.log('tooltip!!')
@@ -77,12 +82,12 @@ class Hotspot {
     const exisitingState = loadState();
     saveState({
       ...exisitingState,
-      [window.activeGuideID]: {
-        ...exisitingState[window.activeGuideID],
+      [window.Lusift.activeGuideID]: {
+        ...exisitingState[window.Lusift.activeGuideID],
         trackingState: {
-          ...exisitingState[window.activeGuideID].trackingState,
+          ...exisitingState[window.Lusift.activeGuideID].trackingState,
           asyncSteps: {
-            ...exisitingState[window.activeGuideID].asyncSteps,
+            ...exisitingState[window.Lusift.activeGuideID].asyncSteps,
             [this.data.index]: {
               toOpen
             }
