@@ -10,8 +10,6 @@ import Backdrop from './Backdrop';
 
 // TODO add Actions validator
 // TODO bug - adding height with document.body.style.height does the bad thing to the highlight stage
-// TODO add a showStep() method that takes the whole step data from steps[], checks if display critera is
-// satisfied, and then shows the step
 
 const defaultBackdropData = {
     disabled: false,

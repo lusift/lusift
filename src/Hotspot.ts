@@ -5,9 +5,6 @@ import { getElementPosition, getStepUID } from './utils';
 import { Hotspot as HotspotData } from './types';
 import { loadState, saveState } from './localStorage';
 
-// TODO check for target and screen resize here too like we do in Backdrop
-// TODO There're two types of beacon - pulsing and question mark (fa-question-circle)
-// TODO async steps' close status need to be tracked. if AS leads to SS and then index progresses from there ---
 // TODO fix absolute positioned element not taking events
 
 class Hotspot {

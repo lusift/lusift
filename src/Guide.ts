@@ -66,7 +66,6 @@ export default class Guide {
 
   private attemptShow(): void {
     // call on Guide init, page load, and Lusift.refresh()
-    // TODO case for Modal
     const { activeStep, finished, prematurelyClosed } = this.trackingState;
     if(finished || prematurelyClosed) {
       return console.log('Guide is already finished or closed');

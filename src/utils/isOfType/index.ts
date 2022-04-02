@@ -39,13 +39,17 @@ export function isObject(item: any): boolean {
   return (item instanceof Object && item.constructor === Object);
 }
 
+export function isObjectOrUndefined(object: any): boolean {
+  return isObject(object) || typeof object === 'undefined';
+}
+
 export function isOfTypeTooltipData(object: any): boolean {
 
   const placements = ['bottom', 'top', 'right', 'left', 'auto'];
   placements.forEach(p => {
     placements.push(`${p}-start`);
     placements.push(`${p}-end`);
-  })
+  });
 
   return isObject(object) &&
     (typeof object.arrow === 'boolean') &&
@@ -54,8 +58,8 @@ export function isOfTypeTooltipData(object: any): boolean {
     (placements.includes(object.placement)) &&
     (typeof object.contentBody === 'string' || (!object.contentBody && typeof object.contentBody !=='boolean')) &&
     // (typeof object.contentBody === 'string' && !!object.contentBody) &&
-    (typeof object.progressOn === 'undefined' || isObject(object.progressOn)) &&
-    (typeof object.backdrop === 'undefined' || isObject(object.backdrop))
+    isObjectOrUndefined(object.progressOn) &&
+    isObjectOrUndefined(object.backdrop)
 }
 
 export function isOfTypeTarget(object: any, type: string): boolean {
@@ -69,10 +73,23 @@ export function isOfTypeTarget(object: any, type: string): boolean {
     (typeof object.path.value === 'string') //validate path
 }
 
+export function isOfTypeTooltipActions(object: any): boolean {
+
+
+  return (isObject(object)) &&
+  Object.entries(object).every(prop => isObject(prop)) &&
+  isObjectOrUndefined(object.closeButton.styleProps) &&
+  isObjectOrUndefined(object.navSection.styleProps) &&
+  isObjectOrUndefined(object.navSection.nextButton) &&
+  isObjectOrUndefined(object.navSection.nextButton.styleProps) &&
+  isObjectOrUndefined(object.navSection.prevButton) &&
+  isObjectOrUndefined(object.navSection.dissmissLink) &&
+  isObjectOrUndefined(object.navSection.dissmissLink.styleProps)
+}
+
 export function isOfTypeTooltip(object: any): boolean {
-  // TODO add validators for actions and backdrop
   return (isOfTypeTooltipData(object.data)) &&
-    (object.styleProps === undefined || isObject(object.styleProps)) &&
+    isObjectOrUndefined(object.styleProps) &&
     object.type==='tooltip' &&
     (isOfTypeTooltipData(object.data))
 }
@@ -111,7 +128,6 @@ export function isOfTypeGuide(object: any): boolean {
 type ContentItem = GuideType;
 
 export function isOfTypeContent(object: Content): boolean {
-  return true;
   const itemTypes = ['guide'];
   return isObject(object) &&
     Object.values(object).every((item: any) => {
