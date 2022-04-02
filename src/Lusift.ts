@@ -12,6 +12,7 @@ import addTippyCSS from './addTippyCSS';
 import startStepInstance from './startStepInstance';
 
 // TODO give ability to run functions after each step and guide
+// TODO add getTrackingState()
 
 export default new class Lusift {
   private content: Content;
@@ -29,10 +30,18 @@ export default new class Lusift {
     const localData = loadState();
     // if loadState() type is not object,
     if(!isObject(localData)) {
-      // console.log('saving state as object');
       saveState({});
     }
     addTippyCSS();
+  }
+
+  private getTrackingState(): object {
+    if(this.contentSet && window.activeGuideID) {
+      return loadState()[window.activeGuideID].trackingState;
+    } else {
+      console.warn('No active guide');
+      return null;
+    }
   }
 
   private hasGuideDataChanged(guideData: GuideType): boolean {
