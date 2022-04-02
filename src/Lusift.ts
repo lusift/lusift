@@ -11,8 +11,7 @@ import { isOfTypeContent, isObject } from './utils/isOfType';
 import addTippyCSS from './addTippyCSS';
 import startStepInstance from './startStepInstance';
 
-// TODO give ability to run functions after each step and guide
-// TODO add getTrackingState()
+// TODO add onNext, onPrev, onClose to guide type def
 
 export default new class Lusift {
   private content: Content;
@@ -23,6 +22,9 @@ export default new class Lusift {
   private prev: Function;
   private close: Function;
   private goto: Function;
+  private onNext: Function;
+  private onPrev: Function;
+  private onClose: Function;
 
   constructor() {
     console.log('%c Lusift constructor! ', 'background: #222; color: #bada55');
@@ -173,5 +175,10 @@ export default new class Lusift {
     this.prev = this.guideInstance.prevStep.bind(this.guideInstance);
     this.close = this.guideInstance.close.bind(this.guideInstance);
     this.goto = this.guideInstance.setStep.bind(this.guideInstance);
+
+    const { onNext, onPrev, onClose } = this.content[window.activeGuideID];
+    this.onNext = onNext;
+    this.onPrev = onPrev;
+    this.onClose = onClose;
   }
 }();

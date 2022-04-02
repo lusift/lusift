@@ -1,3 +1,4 @@
+import { window } from 'global';
 import { saveState, loadState } from './localStorage';
 import doesStepMatchDisplayCriteria from './doesStepMatchDisplayCriteria';
 import startStepInstance from './startStepInstance';
@@ -143,6 +144,7 @@ export default class Guide {
     this.updateLocalTrackingState();
     this.closeCurrentStep();
     console.log('guide closed');
+    typeof window.Lusift.onClose === 'function' && window.Lusift.onClose();
   }
 
   private closeCurrentStep(): void {
@@ -162,6 +164,7 @@ export default class Guide {
       return console.warn('No new steps');
     }
     this.setStep(newStep);
+    typeof window.Lusift.onNext === 'function' && window.Lusift.onNext();
   }
 
   private prevStep(): void {
@@ -175,5 +178,6 @@ export default class Guide {
     }
     this.closeCurrentStep();
     this.setStep(newStep);
+    typeof window.Lusift.onPrev === 'function' && window.Lusift.onPrev();
   }
 }
