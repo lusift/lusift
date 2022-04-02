@@ -9,39 +9,6 @@ import { loadState, saveState } from './localStorage';
 // TODO There're two types of beacon - pulsing and question mark (fa-question-circle)
 // TODO async steps' close status need to be tracked. if AS leads to SS and then index progresses from there ---
 // TODO fix absolute positioned element not taking events
-//
-
-const hotspot1: HotspotData = {
-  index: 7,
-  type: 'hotspot',
-  target: {
-    path: {
-      value: '/lusift/nps',
-      comparator: 'is'
-    },
-    elementSelector: 'h2',
-  },
-  beacon: {
-    placement: {
-      top: 90,
-      left: 90,
-    },
-    size: 1,
-    color: '',
-    type: 'pulsing',
-  },
-  tip: {
-    data: {
-      placement: 'bottom',
-      arrow: true,
-      bodyContent: '<p style="color:blue">Hotspot 1 body</p>',
-    },
-    styleProps: {
-      border: '2px solid green',
-    }
-  },
-  async: true
-}
 
 class Hotspot {
   private tipID: string;

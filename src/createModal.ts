@@ -25,7 +25,7 @@ const renderCloseXButton = (closeButton: any): string => {
       font-weight: normal;
       font-size: 1.25rem;
       padding: 0 2px;
-      margin-right: 0.15rem;
+      margin-right: 0.2rem;
       color: #666;
       ${styleObjectToString(closeButton.styleProps)}
     }
@@ -68,6 +68,8 @@ const createModal = ({ uid, bodyContent }): void => {
     height: '500px',
     width: '600px',
     top: '50%',
+    display: 'flex',
+    flexDirection: 'column',
     left: '50%',
     transform: 'translate(-50%, -50%)',
     position: 'absolute',
@@ -82,11 +84,25 @@ const createModal = ({ uid, bodyContent }): void => {
     padding: 3px 15px;
     color: #111;
     background: #fff;
+    border: 1px solid red;
+    flex-grow: 1;
   }
+
+    .button{
+      color: #fff;
+      background-color: rgb(17, 153, 158);
+      padding: 0.2rem 0.35rem;
+      font-size: 0.75rem;
+      font-weight: bold;
+      border-radius: 8px;
+    }
   </style>
   ${renderCloseXButton(closeButton)}
     <div class="section body-content">
       ${bodyContent}
+      <div>
+        <button class="button" onclick="Lusift.next()">OK</button>
+      </div>
     </div>
   `;
 

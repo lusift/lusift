@@ -6,12 +6,12 @@ import defaultToolipActions from './defaultTooltipActions';
 import Backdrop from './Backdrop';
 
 // TODO Developer should be able to modify css on the global guide level, as well as on the step level
-// TODO Add option for beacon in Tooltip
-// TODO Add developer helper method to quickly render an element on the screen during development
 // TODO Add steps config, and steps styles to apply to all steps
 
 // TODO add Actions validator
 // TODO bug - adding height with document.body.style.height does the bad thing to the highlight stage
+// TODO add a showStep() method that takes the whole step data from steps[], checks if display critera is
+// satisfied, and then shows the step
 
 const defaultBackdropData = {
     disabled: false,

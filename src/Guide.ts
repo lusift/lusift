@@ -1,9 +1,6 @@
-import Tooltip from './Tooltip';
-import Hotspot from './Hotspot';
-import Modal from './Modal';
-import { window, document } from 'global';
 import { saveState, loadState } from './localStorage';
-import { doesStringMatchRegex } from './utils';
+import doesStepMatchDisplayCriteria from './doesStepMatchDisplayCriteria';
+import startStepInstance from './startStepInstance';
 
 import { GuideType } from './types';
 
@@ -23,6 +20,7 @@ interface TrackingState {
   }
 }
 
+
 export default class Guide {
   readonly guideData: GuideType;
   private trackingState: TrackingState;
@@ -41,8 +39,6 @@ export default class Guide {
     /* console.log('guideData pulled from local storage:');
        console.log(this.guideData);
        console.log(this.trackingState); */
-    /* new Hotspot();
-    new Modal(); */
   }
 
   private generateTrackingState(): any {
@@ -68,16 +64,6 @@ export default class Guide {
     this.attemptShow();
   }
 
-  private stepMatchesDisplayCriteria(stepIndex: number): boolean {
-    let criteriaMatch = this.doesStepPathMatch(stepIndex);
-    if(this.guideData.steps[stepIndex].type !=='modal') {
-      criteriaMatch = criteriaMatch && this.isStepElementFound(stepIndex);
-    }
-    // TODO bug - this is running twice, why?
-    window.alert(criteriaMatch)
-    return criteriaMatch;
-  }
-
   private attemptShow(): void {
     // call on Guide init, page load, and Lusift.refresh()
     // TODO case for Modal
@@ -94,10 +80,15 @@ export default class Guide {
       stepIndex++;
       console.log('Trying to display step '+stepIndex);
 
-      if (this.stepMatchesDisplayCriteria(stepIndex)) {
+      let { target, type } = steps[stepIndex];
+
+      if (doesStepMatchDisplayCriteria({ target, type })) {
         console.log(`Step ${stepIndex}: target path and element matched`);
         if(!this.activeStepInstance) {
-          this.startStep(stepIndex);
+          this.activeStepInstance = startStepInstance(
+            steps[stepIndex],
+            this.guideData.id
+          );
         }
       } else {
         console.log(`Step ${stepIndex}: Either targetPath doesn\'t match or element not found`);
@@ -105,77 +96,18 @@ export default class Guide {
     }
     while (steps[stepIndex].async && steps[stepIndex].type==='hotspot')
     // start all the async hotpots with toOpen true
-    steps.forEach(({ async, type, index }) => {
+    steps.forEach(({ async, type, index, target }) => {
       if(async && (type==='hotspot')) {
-        if(this.stepMatchesDisplayCriteria(index) && this.trackingState.asyncSteps[index].toOpen) {
-          this.startStep(index);
+        if(doesStepMatchDisplayCriteria({ target, type }) && this.trackingState.asyncSteps[index].toOpen) {
+          this.activeStepInstance = startStepInstance(
+            steps[stepIndex],
+            this.guideData.id
+          );
         }
       }
     });
   }
 
-  private startStep(stepIndex: number): void {
-    const stepData = this.guideData.steps[stepIndex];
-    const { index, target, type, data } = stepData;
-    const guideID = this.guideData.id;
-    // console.log(`Step index: ${index}`);
-
-    if (type==='tooltip') {
-      /* console.log(this.activeStepInstance);
-         this.activeStepInstance.show(); */
-      const { actions, styleProps } = stepData;
-
-      this.activeStepInstance = new Tooltip({
-        target,
-        data,
-        index,
-        guideID,
-        actions,
-        styleProps
-      });
-    } else if (type==='modal') {
-      this.activeStepInstance = new Modal({
-        index,
-        guideID,
-        data
-      });
-
-    } else if (type==='hotspot') {
-      this.activeStepInstance = new Hotspot({
-        data: stepData,
-        guideID,
-      });
-      if(stepData.async) {
-        this.activeStepInstance = null;
-      }
-    }
-  }
-
-  private doesStepPathMatch(stepIndex: number): boolean {
-    // is, endsWith, startsWith, contains, regex
-    const { value, comparator } = this.guideData.steps[stepIndex].target.path;
-    const { pathname } = window.location;
-    /* console.log('value, pathname, comparator:')
-    console.log(value, pathname, comparator) */
-    switch(comparator) {
-      case 'is':
-        return pathname===value;
-      case 'contains':
-        return pathname.includes(value);
-      case 'endsWith':
-        return pathname.endsWith(value);
-      case 'startWith':
-        return pathname.startsWith(value);
-      case 'regex':
-        return doesStringMatchRegex(pathname, value);
-    }
-  }
-
-  private isStepElementFound(stepIndex: number): boolean {
-    /* console.log(this.guideData);
-    console.log('checking if element exists') */
-    return Boolean(document.querySelector(this.guideData.steps[stepIndex].target.elementSelector));
-  }
 
   private updateLocalTrackingState(): void {
     // save/sync class object to localstorage

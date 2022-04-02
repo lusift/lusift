@@ -2,20 +2,16 @@ import Guide from './Guide';
 import { saveState, loadState } from './localStorage';
 import { GuideType } from './types';
 import isEqual from 'lodash.isequal';
-
-import Tooltip from './Tooltip';
-import Hotspot from './Hotspot';
-import Modal from './Modal';
+import doesStepMatchDisplayCriteria from './doesStepMatchDisplayCriteria';
 
 import { window, document } from 'global';
 
 import { Content } from './types';
 import { isOfTypeContent, isObject } from './utils/isOfType';
 import addTippyCSS from './addTippyCSS';
+import startStepInstance from './startStepInstance';
 
-// TODO add constants file
 // TODO give ability to run functions after each step and guide
-
 
 export default new class Lusift {
   private content: Content;
@@ -39,7 +35,6 @@ export default new class Lusift {
     addTippyCSS();
   }
 
-
   private hasGuideDataChanged(guideData: GuideType): boolean {
     const localData = loadState();
     if(!localData[guideData.id]) return true;
@@ -56,34 +51,17 @@ export default new class Lusift {
     if(!this.content || !this.contentSet) {
       return console.warn(`Content not set, pass valid content object to setContent()`);
     }
+
     if (this.content[guideID]) {
       const { steps } = this.content[guideID].data;
+      const { target, type } = steps[stepNumber];
+
+      if(!doesStepMatchDisplayCriteria({ target, type })) {
+        return console.warn('Display criteria for step do not match');
+      }
+
       if (steps[stepNumber]) {
-        const { type, data } = steps[stepNumber];
-        if (type === 'tooltip') {
-          const { index, target, data, actions, styleProps } = steps[stepNumber];
-          new Tooltip({
-            target,
-            data,
-            index,
-            guideID,
-            actions,
-            styleProps
-          });
-        } else if (type === 'hotspot') {
-          new Hotspot({
-            data: steps[stepNumber],
-            guideID,
-          });
-        } else if (type === 'modal') {
-          new Modal({
-            index: stepNumber,
-            guideID,
-            data
-          });
-        } else {
-          console.warn(`${type} is not a valid type`);
-        }
+        startStepInstance(steps[stepNumber], guideID);
       } else {
         console.warn(`${guideID} doesn't have a step ${stepNumber}`);
       }
