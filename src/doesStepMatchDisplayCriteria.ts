@@ -33,7 +33,7 @@ const doesStepMatchesDisplayCriteria = ({ target, type }): boolean => {
     criteriaMatch = criteriaMatch && isStepElementFound(target.elementSelector);
   }
   // TODO bug - this is running twice, why?
-  window.alert(criteriaMatch)
+  // window.alert(criteriaMatch)
   return criteriaMatch;
 }
 

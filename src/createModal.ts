@@ -1,6 +1,7 @@
 import { document } from 'global';
 import { styleObjectToString } from './utils';
-import { MODAL_OVERLAY_CLASS } from './constants';
+import { MODAL_OVERLAY_CLASS, DEFAULT_MODAL_BORDER_RADIUS } from './constants';
+import renderProgressBar from './renderProgressBar';
 
 // TODO set option for automatic redirect in actions{} (with wildcard feature in the link)
 // TODO make it easier to write html and css. Maybe see how a developer can choose to use ui frameworks.
@@ -64,7 +65,7 @@ const createModal = ({ uid, bodyContent }): void => {
   });
 
   modal.style.cssText = styleObjectToString({
-    borderRadius: '4px',
+    borderRadius: DEFAULT_MODAL_BORDER_RADIUS,
     background: '#fff',
     height: '500px',
     width: '600px',
@@ -81,13 +82,13 @@ const createModal = ({ uid, bodyContent }): void => {
 
   modal.innerHTML = `
   <style>
-  .section.body-content{
-    padding: 3px 15px;
-    color: #111;
-    background: #fff;
-    border: 1px solid red;
-    flex-grow: 1;
-  }
+    .section.body-content{
+      padding: 3px 15px;
+      color: #111;
+      background: #fff;
+      border: 1px solid red;
+      flex-grow: 1;
+    }
 
     .button{
       color: #fff;
@@ -98,6 +99,7 @@ const createModal = ({ uid, bodyContent }): void => {
       border-radius: 8px;
     }
   </style>
+  ${renderProgressBar()}
   ${renderCloseXButton(closeButton)}
     <div class="section body-content">
       ${bodyContent}

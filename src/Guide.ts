@@ -6,7 +6,7 @@ import startStepInstance from './startStepInstance';
 import { GuideType, TrackingState } from './types';
 
 // TODO make it installable
-// TODO add progress bar
+// TODO add base global css
 // TODO navigating to different page still shows element,
 // is it the case for other elements as well, like tooltip?
 
@@ -25,6 +25,7 @@ export default class Guide {
 
     this.guideData = guideData;
     this.trackingState = localGuideState.trackingState || this.generateTrackingState();
+    this.updateLocalTrackingState();
     /* console.log('guideData pulled from local storage:');
        console.log(this.guideData);
        console.log(this.trackingState); */

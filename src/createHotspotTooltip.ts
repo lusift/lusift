@@ -1,5 +1,6 @@
 import styleObjectToString from './utils/styleObjectToString';
 import createTippy from './createTippy';
+import renderProgressBar from './renderProgressBar';
 
 const defaultBodyContent = `
   <h3 style="font-weight: bold;">Default title</h3>
@@ -28,6 +29,7 @@ const renderTooltip = ({ remove, data, target, styleProps, uid }) => {
         font-weight: bold;
         font-size: 1rem;
         display: block;
+        padding: 5px 9px;
       }
       #tooltip-${uid} > * {
         margin: 3px 6px;
@@ -38,10 +40,11 @@ const renderTooltip = ({ remove, data, target, styleProps, uid }) => {
       }
     </style>
 
+    ${renderProgressBar()}
     <div id="tooltip-${uid}">
-    <div class="section body-content">
-      ${bodyContent}
-    </div>
+      <div class="section body-content">
+        ${bodyContent}
+      </div>
     </div>
   `;
 

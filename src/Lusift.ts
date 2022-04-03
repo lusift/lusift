@@ -11,13 +11,12 @@ import { isOfTypeContent, isObject } from './utils/isOfType';
 import addTippyCSS from './addTippyCSS';
 import startStepInstance from './startStepInstance';
 
-// TODO add onNext, onPrev, onClose to guide type def
-
 export default new class Lusift {
   private content: Content;
   private guideInstance: any;
   private contentSet: boolean;
   public activeGuideID: string;
+  public progress: number = 0;
 
   private next: Function;
   private prev: Function;

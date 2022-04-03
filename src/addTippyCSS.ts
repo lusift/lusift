@@ -1,4 +1,5 @@
 import { document, window } from 'global';
+import { DEFAULT_TOOLTIP_BORDER_RADIUS } from './constants';
 
 export default () => {
   if (typeof window !== "undefined") {
@@ -22,7 +23,7 @@ export default () => {
           position: relative;
           background-color: #333;
           color: #fff;
-          border-radius: 4px;
+          border-radius: ${DEFAULT_TOOLTIP_BORDER_RADIUS};
           font-size: 14px;
           line-height: 1.4;
           outline: 0;
@@ -94,7 +95,9 @@ export default () => {
 
       .tippy-content {
           position: relative;
+          /*changed this*/
           padding: 5px 9px;
+          padding: 0px;
           z-index: 1;
       }
 

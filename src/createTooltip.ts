@@ -1,5 +1,5 @@
-import { document } from 'global';
 import styleObjectToString from './utils/styleObjectToString';
+import renderProgressBar from './renderProgressBar';
 import createTippy from './createTippy';
 
 const defaultBodyContent = `
@@ -85,6 +85,7 @@ const renderNavButtons = (navSection: any): string => {
   `;
 }
 
+
 const renderTooltip = ({ data, target, styleProps, actions, uid }) => {
 
   const { closeButton, navSection } = actions;
@@ -105,9 +106,18 @@ const renderTooltip = ({ data, target, styleProps, actions, uid }) => {
         font-weight: bold;
         font-size: 1rem;
         display: block;
+        padding: 5px 9px;
       }
       #tooltip-${uid} > * {
         margin: 3px 6px;
+      }
+      .lusift-progress {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 3px;
+        /*make color that blue*/
+        color: #17a3a8;
       }
       .section.body-content{
         margin-top: 0 !important;
@@ -115,6 +125,7 @@ const renderTooltip = ({ data, target, styleProps, actions, uid }) => {
       }
     </style>
 
+    ${renderProgressBar()}
     <div id="tooltip-${uid}">
       ${renderCloseXButton(closeButton)}
       <div class="section body-content">

@@ -110,7 +110,6 @@ export default class Tooltip {
                 root: null,
                 threshold: 0.95
             });
-            window.alert(this.target.elementSelector)
             observer.observe(this.targetElement);
         }
 
