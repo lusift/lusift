@@ -14,6 +14,7 @@ export default class Guide {
   readonly guideData: GuideType;
   private trackingState: TrackingState;
   private activeStepInstance: any;
+  private activeStepInstances: any[] = [];
 
   constructor(guideID: string) {
     // localGuideState consists of trackingState and guideData
@@ -56,6 +57,8 @@ export default class Guide {
 
   private attemptShow(): void {
     // call on Guide init, page load, and Lusift.refresh()
+    //
+    this.attemptRemove();
     const { activeStep, finished, prematurelyClosed } = this.trackingState;
     if(finished || prematurelyClosed) {
       return console.log('Guide is already finished or closed');
@@ -73,11 +76,20 @@ export default class Guide {
 
       if (doesStepMatchDisplayCriteria({ target, type })) {
         console.log(`Step ${stepIndex}: target path and element matched`);
+        window.alert(`Step ${stepIndex}: target path and element matched`);
         if(!this.activeStepInstance) {
           this.activeStepInstance = startStepInstance(
             steps[stepIndex],
             this.guideData.id
           );
+          this.activeStepInstances.push({
+            instance: this.activeStepInstance,
+            target,
+            type
+          });
+          if(steps[stepIndex].async && steps[stepIndex].type==='hotspot') {
+            this.activeStepInstance = null;
+          }
         }
       } else {
         console.log(`Step ${stepIndex}: Either targetPath doesn\'t match or element not found`);
@@ -85,18 +97,36 @@ export default class Guide {
     }
     while (steps[stepIndex].async && steps[stepIndex].type==='hotspot')
     // start all the async hotpots with toOpen true
+      // TODO before checking if guide is finished, check if there are any async steps left
     steps.forEach(({ async, type, index, target }) => {
+      window.alert(async, type);
       if(async && (type==='hotspot')) {
         if(doesStepMatchDisplayCriteria({ target, type }) && this.trackingState.asyncSteps[index].toOpen) {
+          window.alert(`Step ${index}: target path and element matched`);
           this.activeStepInstance = startStepInstance(
-            steps[stepIndex],
+           steps[stepIndex],
             this.guideData.id
           );
+          this.activeStepInstances.push({
+            instance: this.activeStepInstance,
+            target,
+            type
+          });
+          this.activeStepInstance = null;
         }
       }
     });
   }
 
+  private attemptRemove(): void {
+    this.activeStepInstances.forEach(stepInstance => {
+      // if step display criteria doesn't match, then run remove() and remove from this.activeStepInstances
+      if(!doesStepMatchDisplayCriteria({ target: stepInstance.target, type: stepInstance.type })) {
+        stepInstance.instance.remove();
+        this.activeStepInstances.splice(this.activeStepInstances.indexOf(stepInstance), 1);
+      }
+    });
+  }
 
   private updateLocalTrackingState(): void {
     // save/sync class object to localstorage

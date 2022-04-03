@@ -8,7 +8,6 @@ import Backdrop from './Backdrop';
 // TODO Developer should be able to modify css on the global guide level, as well as on the step level
 // TODO Add steps config, and steps styles to apply to all steps
 
-// TODO add Actions validator
 // TODO bug - adding height with document.body.style.height does the bad thing to the highlight stage
 
 const defaultBackdropData = {

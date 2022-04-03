@@ -208,10 +208,12 @@ class Backdrop {
 
   private removeOverlay(): void {
     document.querySelectorAll(`.${this.overlaySelectorClass}`)
-    .forEach((el: document.HTMLElement) => el.remove());
+    .forEach((el: document.HTMLElement) => {
+      if(el) el.remove();
+    });
 
     const targetElement = document.querySelector(this.targetSelector);
-    targetElement.classList.remove(this.stagedTargetClass);
+    if(targetElement) targetElement.classList.remove(this.stagedTargetClass);
     /* document.documentElement.style.overflow = 'scroll';
     document.body.scroll = "yes"; */
   }

@@ -2,8 +2,6 @@ import { document, window } from 'global';
 import { styleObjectToString, getElementPosition } from './utils';
 import { BEACON_CONTAINER_CLASS } from './constants';
 
-// TODO create a relative positioned transparent element over the beacon element
-
 const createBeacon = ({ targetPosition, beaconData, beaconID, toggleTooltip }) => {
   const { targetTop, targetLeft, targetHeight, targetWidth } = targetPosition;
 

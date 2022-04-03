@@ -1,4 +1,3 @@
-
 export interface StepActions {
   styleProps: Object;
   closeButton: {

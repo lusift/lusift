@@ -29,9 +29,9 @@ const startStepInstance = (stepData: any, guideID: string): void => {
       data: stepData,
       guideID,
     });
-    if(stepData.async) {
+    /* if(stepData.async) {
       activeStepInstance = null;
-    }
+    } */
   }
   return activeStepInstance;
 }

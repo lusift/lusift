@@ -3,7 +3,7 @@ import Lusift from './Lusift';
 
 /* =============== TODOs =====================================================
 
-  - TODO wrap an error handler around the package to safely throw errors
+  - TODO wrap an error handler around the package to safely throw errors without crashing entire website
 
   ============================================================================
 */
