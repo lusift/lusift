@@ -3,9 +3,6 @@ import { styleObjectToString } from './utils';
 import { MODAL_OVERLAY_CLASS, DEFAULT_MODAL_BORDER_RADIUS } from './constants';
 import renderProgressBar from './renderProgressBar';
 
-// TODO set option for automatic redirect in actions{} (with wildcard feature in the link)
-// TODO make it easier to write html and css. Maybe see how a developer can choose to use ui frameworks.
-
 const closeButton = {
   styleProps: {},
   disable: false,

@@ -1,4 +1,3 @@
-// TODO finish this
 export default {
   modifiers: [
     {

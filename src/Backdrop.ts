@@ -25,11 +25,6 @@ const areNumbersEqual = (num1: number, num2: number): boolean => {
   return roundNum(num1, decimalPlaces) === roundNum(num2, decimalPlaces);
 }
 
-// TODO should we change focus on page
-// TODO fix stuff with zIndices
-// 2147483647
-// TODO only one overlay on the screen at a time
-
 const defaultBackdropData = {
   stageGap: 5,
   opacity: '0.5',
@@ -105,6 +100,10 @@ class Backdrop {
       document.querySelector(`.${this.overlaySelectorClass}`),
       this.resetBackdrop
     );
+    onElementResize(
+      document.body,
+      this.resetBackdrop
+    );
   }
 
   private resetBackdrop(): void {
@@ -125,7 +124,6 @@ class Backdrop {
   }
 
   private addBackdop(): void {
-    // TODO block scrolling
    /* document.documentElement.style.overflow = 'hidden';
    document.body.scroll = "no"; */
     const targetElement = document.querySelector(this.targetSelector);

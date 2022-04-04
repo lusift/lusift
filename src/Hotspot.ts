@@ -5,8 +5,6 @@ import { getElementPosition, getStepUID } from './utils';
 import { Hotspot as HotspotData } from './types';
 import { loadState, saveState } from './localStorage';
 
-// TODO fix absolute positioned element not taking events
-
 class Hotspot {
   private tipID: string;
   private tippyInstance: any;

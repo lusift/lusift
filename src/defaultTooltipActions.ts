@@ -1,4 +1,3 @@
-// TODO remove disable props here after documenting them, we /do/ make use of them
 export default {
   styleProps: {},
   closeButton: {
