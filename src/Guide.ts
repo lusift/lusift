@@ -7,8 +7,6 @@ import { GuideType, TrackingState } from './types';
 
 // TODO make it installable
 // TODO add base global css
-// TODO navigating to different page still shows element,
-// is it the case for other elements as well, like tooltip?
 
 export default class Guide {
   readonly guideData: GuideType;
@@ -60,6 +58,7 @@ export default class Guide {
     this.attemptRemove();
     this.attemptToOpenAsyncSteps();
     const { activeStep, finished, prematurelyClosed } = this.trackingState;
+    console.log(this.activeStepInstances)
     if(finished || prematurelyClosed) {
       return console.log('Guide is already finished or closed');
     }
@@ -77,18 +76,23 @@ export default class Guide {
       if (doesStepMatchDisplayCriteria({ target, type })) {
         console.log(`Step ${stepIndex}: target path and element matched`);
         window.alert(`Step ${stepIndex}: target path and element matched`);
-        if(!this.activeStepInstance) {
-          this.activeStepInstance = startStepInstance(
-            steps[stepIndex],
-            this.guideData.id
-          );
-          this.activeStepInstances.push({
-            instance: this.activeStepInstance,
-            target,
-            type
-          });
-          if(steps[stepIndex].async && steps[stepIndex].type==='hotspot') {
-            this.activeStepInstance = null;
+        if(this.stepAlreadyActive(stepIndex)){
+          console.warn(`Step ${stepIndex} is already active`);
+        } else {
+          if(!this.activeStepInstance) {
+            this.activeStepInstance = startStepInstance(
+              steps[stepIndex],
+              this.guideData.id
+            );
+            this.activeStepInstances.push({
+              instance: this.activeStepInstance,
+              target,
+              type,
+              index: stepIndex
+            });
+            if(steps[stepIndex].async && steps[stepIndex].type==='hotspot') {
+              this.activeStepInstance = null;
+            }
           }
         }
       } else {
@@ -96,6 +100,12 @@ export default class Guide {
       }
     }
     while (steps[stepIndex].async && steps[stepIndex].type==='hotspot')
+      console.log('Finished trying to display steps');
+      console.log(this.activeStepInstances)
+  }
+
+  private stepAlreadyActive(stepIndex: number): boolean {
+    return this.activeStepInstances.some(stepInstance => stepInstance.index === stepIndex);
   }
 
   private attemptToOpenAsyncSteps(): void {
@@ -104,12 +114,17 @@ export default class Guide {
     steps.forEach(({ async, type, index, target }) => {
       if(async && (type==='hotspot')) {
         if(doesStepMatchDisplayCriteria({ target, type }) && this.trackingState.asyncSteps[index].toOpen) {
-          window.alert(`Step ${index}: target path and element matched`);
+          console.log(`Step ${index}: target path and element matched`);
+          // if step is already active console.warn that the step is already active
+          if(this.stepAlreadyActive(index)) {
+            return console.warn(`Step ${index} is already active`);
+          }
           this.activeStepInstance = startStepInstance(
-           steps[index],
+            steps[index],
             this.guideData.id
           );
           this.activeStepInstances.push({
+            index,
             instance: this.activeStepInstance,
             target,
             type

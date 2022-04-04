@@ -105,7 +105,6 @@ class Hotspot {
       console.log('Hotspot closed without ever opening');
     }
     document.getElementById(this.beaconID).parentElement.remove();
-    this.changeAsyncStepStatus(false);
   }
 
   private removeAndCloseAsync(): void {
