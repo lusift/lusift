@@ -8,7 +8,6 @@ const defaultBodyContent = `
 `;
 
 // TODO full-feature this
-// TODO controlling width of tooltip
 
 const renderTooltip = ({ remove, data, target, styleProps, uid }) => {
 

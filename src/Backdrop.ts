@@ -93,6 +93,8 @@ class Backdrop {
 
     this.resetBackdrop = this.resetBackdrop.bind(this);
     window.addEventListener('resize', this.resetBackdrop, true);
+    // remove focus from focused element
+    document.activeElement.blur();
 
     // HACK
     this.dummyElement.addEventListener('click', () => {

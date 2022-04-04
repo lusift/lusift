@@ -140,7 +140,7 @@ export default new class Lusift {
     // run page elements through step display conditionals again
     if(this.guideInstance){
       window.setTimeout(() => {
-        this.guideInstance.attemptShow();
+        this.guideInstance.start();
         console.log('%c page refresh ', 'background: #222; color: #bada55');
       }, 0);
     } else {

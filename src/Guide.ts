@@ -16,18 +16,14 @@ export default class Guide {
 
   constructor(guideID: string) {
     // localGuideState consists of trackingState and guideData
-    console.log('%c Guide constructor! ', 'background: #222; color: #bada55');
-    // console.log(loadState());
     const localGuideState = loadState()[guideID];
     const guideData = Object.assign({}, localGuideState);
     delete guideData.trackingState;
 
     this.guideData = guideData;
+    console.log(`%c Welcome to guide: ${this.guideData.name || this.guideData.id}`, 'background: #222; color: #bada55');
     this.trackingState = localGuideState.trackingState || this.generateTrackingState();
     this.updateLocalTrackingState();
-    /* console.log('guideData pulled from local storage:');
-       console.log(this.guideData);
-       console.log(this.trackingState); */
   }
 
   private generateTrackingState(): any {
@@ -50,12 +46,12 @@ export default class Guide {
 
   public start(): void {
     console.info('Launching guide');
+    this.attemptRemove();
     this.attemptShow();
   }
 
   private attemptShow(): void {
     // call on Guide init, page load, and Lusift.refresh()
-    this.attemptRemove();
     this.attemptToOpenAsyncSteps();
     const { activeStep, finished, prematurelyClosed } = this.trackingState;
     console.log(this.activeStepInstances)
@@ -100,8 +96,8 @@ export default class Guide {
       }
     }
     while (steps[stepIndex].async && steps[stepIndex].type==='hotspot')
-      console.log('Finished trying to display steps');
-      console.log(this.activeStepInstances)
+    console.log('Finished trying to display steps');
+    console.log(this.activeStepInstances)
   }
 
   private stepAlreadyActive(stepIndex: number): boolean {
@@ -156,9 +152,6 @@ export default class Guide {
         trackingState: this.trackingState
       }
     });
-    /* console.log('new state:')
-    console.log(newState);
-    console.log(loadState()) */
   }
 
   private clearTrackingState(): void {
@@ -177,7 +170,7 @@ export default class Guide {
 
     } else {
       this.trackingState.activeStep=newStepNum;
-      this.attemptShow();
+      this.start();
     }
     this.updateLocalTrackingState();
   }
