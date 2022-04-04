@@ -58,7 +58,7 @@ class Hotspot {
     if(!this.tippyInstance){
       // if it was never initiated
       this.tippyInstance = createHotspotTooltip({
-        remove: window.Lusift.next,
+        remove: this.removeAndCloseAsync,
         uid: this.tipID,
         target,
         styleProps,
@@ -105,6 +105,11 @@ class Hotspot {
       console.log('Hotspot closed without ever opening');
     }
     document.getElementById(this.beaconID).parentElement.remove();
+    this.changeAsyncStepStatus(false);
+  }
+
+  private removeAndCloseAsync(): void {
+    this.remove();
     this.changeAsyncStepStatus(false);
   }
 }

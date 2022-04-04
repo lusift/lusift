@@ -57,8 +57,8 @@ export default class Guide {
 
   private attemptShow(): void {
     // call on Guide init, page load, and Lusift.refresh()
-    //
     this.attemptRemove();
+    this.attemptToOpenAsyncSteps();
     const { activeStep, finished, prematurelyClosed } = this.trackingState;
     if(finished || prematurelyClosed) {
       return console.log('Guide is already finished or closed');
@@ -96,15 +96,17 @@ export default class Guide {
       }
     }
     while (steps[stepIndex].async && steps[stepIndex].type==='hotspot')
+  }
+
+  private attemptToOpenAsyncSteps(): void {
     // start all the async hotpots with toOpen true
-      // TODO before checking if guide is finished, check if there are any async steps left
+    const steps = this.guideData.steps;
     steps.forEach(({ async, type, index, target }) => {
-      window.alert(async, type);
       if(async && (type==='hotspot')) {
         if(doesStepMatchDisplayCriteria({ target, type }) && this.trackingState.asyncSteps[index].toOpen) {
           window.alert(`Step ${index}: target path and element matched`);
           this.activeStepInstance = startStepInstance(
-           steps[stepIndex],
+           steps[index],
             this.guideData.id
           );
           this.activeStepInstances.push({
@@ -119,6 +121,7 @@ export default class Guide {
   }
 
   private attemptRemove(): void {
+    window.alert('attempting to remove steps')
     this.activeStepInstances.forEach(stepInstance => {
       // if step display criteria doesn't match, then run remove() and remove from this.activeStepInstances
       if(!doesStepMatchDisplayCriteria({ target: stepInstance.target, type: stepInstance.type })) {
