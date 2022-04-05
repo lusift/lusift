@@ -9,6 +9,7 @@ import { GuideType, TrackingState } from './types';
 // TODO make it installable
 // TODO add base global css
 // TODO refactor this class
+// TODO fix type definitions
 
 export default class Guide {
   readonly guideData: GuideType;
@@ -198,10 +199,10 @@ export default class Guide {
 
   private nextStep(): void {
     const newStep = this.trackingState.activeStep+1;
-    this.closeCurrentStep();
     if (newStep+1>this.guideData.steps.length) {
       return console.warn('No new steps');
     }
+    this.closeCurrentStep();
     this.setStep(newStep);
     typeof window.Lusift.onNext === 'function' && window.Lusift.onNext();
   }

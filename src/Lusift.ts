@@ -11,7 +11,6 @@ import { isOfTypeContent, isObject } from './utils/isOfType';
 import addTippyCSS from './addTippyCSS';
 import startStepInstance from './startStepInstance';
 
-// TODO remove backdrop after tooltip is closed
 
 class Lusift {
   private content: Content;

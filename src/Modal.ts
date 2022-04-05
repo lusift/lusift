@@ -12,7 +12,6 @@ class Modal {
     this.uid = getStepUID({guideID, type:'modal', index});
     this.data = data;
     this.addModal();
-    console.log(data)
   }
 
   private addModal(): void {

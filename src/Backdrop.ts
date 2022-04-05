@@ -16,7 +16,6 @@ const areNumbersEqual = (num1: number, num2: number): boolean => {
   if(decimalPlaces>2) {
     decimalPlaces = 1; //most reliable precision
   }
-
   /* console.log(num1, num2)
   console.log(num1Precision, num2Precision, decimalPlaces);
 
