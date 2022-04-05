@@ -83,7 +83,6 @@ const createModal = ({ uid, bodyContent }): void => {
       padding: 3px 15px;
       color: #111;
       background: #fff;
-      border: 1px solid red;
       flex-grow: 1;
     }
 

@@ -1,12 +1,14 @@
 import { window } from 'global';
 import { saveState, loadState } from './localStorage';
 import doesStepMatchDisplayCriteria from './doesStepMatchDisplayCriteria';
+import { changeAsyncStepStatus } from './utils';
 import startStepInstance from './startStepInstance';
 
 import { GuideType, TrackingState } from './types';
 
 // TODO make it installable
 // TODO add base global css
+// TODO refactor this class
 
 export default class Guide {
   readonly guideData: GuideType;
@@ -45,72 +47,68 @@ export default class Guide {
   }
 
   public start(): void {
-    console.info('Launching guide');
-    this.attemptRemove();
-    this.attemptShow();
+    console.log('start begin-----------');
+    const { finished, prematurelyClosed } = this.trackingState;
+    this.removeIllegalSteps();
+    this.attemptToStartAsyncSteps();
+    // if finished or completed
+    if(finished || prematurelyClosed) {
+      console.log('Guide is already finished or closed');
+    } else {
+      this.attemptToShowActiveStep();
+    }
+    console.log('start end-------------');
   }
 
-  private attemptShow(): void {
-    // call on Guide init, page load, and Lusift.refresh()
-    this.attemptToOpenAsyncSteps();
-    const { activeStep, finished, prematurelyClosed } = this.trackingState;
-    console.log(this.activeStepInstances)
-    if(finished || prematurelyClosed) {
-      return console.log('Guide is already finished or closed');
-    }
-    console.log('guide is not finished or closed yet');
+  private attemptToShowActiveStep(): void {
+    // we start with some activeStep from this.trackingState
+    // if the step is async, set toOpen to true
+    // if display criteria matches and step isn't already displayed, then startStep
+    // if the step is async, loop back with stepIndex++
+    const { activeStep } = this.trackingState;
     let stepIndex=activeStep-1;
     const steps = this.guideData.steps;
+    let isAsyncStep: boolean;
 
-    // if the current step has async true, then try starting the next one, and so on
     do {
       stepIndex++;
-      console.log('Trying to display step '+stepIndex);
+      const { target, type, async } = steps[stepIndex];
+      const displayCriteriaMatches = doesStepMatchDisplayCriteria({ target, type });
+      isAsyncStep = async && type === 'hotspot';
 
-      let { target, type } = steps[stepIndex];
-
-      if (doesStepMatchDisplayCriteria({ target, type })) {
-        console.log(`Step ${stepIndex}: target path and element matched`);
-        window.alert(`Step ${stepIndex}: target path and element matched`);
-        if(this.stepAlreadyActive(stepIndex)){
-          console.warn(`Step ${stepIndex} is already active`);
-        } else {
-          if(!this.activeStepInstance) {
-            this.activeStepInstance = startStepInstance(
-              steps[stepIndex],
-              this.guideData.id
-            );
-            this.activeStepInstances.push({
-              instance: this.activeStepInstance,
-              target,
-              type,
-              index: stepIndex
-            });
-            if(steps[stepIndex].async && steps[stepIndex].type==='hotspot') {
-              this.activeStepInstance = null;
-            }
-          }
-        }
-      } else {
-        console.log(`Step ${stepIndex}: Either targetPath doesn\'t match or element not found`);
+      if (isAsyncStep){
+        changeAsyncStepStatus(stepIndex, true);
+        this.trackingState = loadState()[this.guideData.id].trackingState;
+      }
+      if(displayCriteriaMatches && !this.stepAlreadyActive(stepIndex)) {
+        this.activeStepInstance = startStepInstance(
+          steps[stepIndex],
+          this.guideData.id
+        );
+        this.activeStepInstances.push({
+          instance: this.activeStepInstance,
+          index: stepIndex,
+          target,
+          type
+        });
       }
     }
-    while (steps[stepIndex].async && steps[stepIndex].type==='hotspot')
-    console.log('Finished trying to display steps');
-    console.log(this.activeStepInstances)
+    while (isAsyncStep)
+    this.trackingState.activeStep=stepIndex;
+    this.updateLocalTrackingState();
   }
 
   private stepAlreadyActive(stepIndex: number): boolean {
     return this.activeStepInstances.some(stepInstance => stepInstance.index === stepIndex);
   }
 
-  private attemptToOpenAsyncSteps(): void {
+  private attemptToStartAsyncSteps(): void {
     // start all the async hotpots with toOpen true
     const steps = this.guideData.steps;
     steps.forEach(({ async, type, index, target }) => {
       if(async && (type==='hotspot')) {
         if(doesStepMatchDisplayCriteria({ target, type }) && this.trackingState.asyncSteps[index].toOpen) {
-          console.log(`Step ${index}: target path and element matched`);
+          console.log(`Step ${index}: target path and element matched. toOpen is true`);
           // if step is already active console.warn that the step is already active
           if(this.stepAlreadyActive(index)) {
             return console.warn(`Step ${index} is already active`);
@@ -131,8 +129,7 @@ export default class Guide {
     });
   }
 
-  private attemptRemove(): void {
-    window.alert('attempting to remove steps')
+  private removeIllegalSteps(): void {
     this.activeStepInstances.forEach(stepInstance => {
       // if step display criteria doesn't match, then run remove() and remove from this.activeStepInstances
       if(!doesStepMatchDisplayCriteria({ target: stepInstance.target, type: stepInstance.type })) {
@@ -191,8 +188,8 @@ export default class Guide {
 
   private closeCurrentStep(): void {
     if(this.activeStepInstance) {
-      console.log(this.activeStepInstance)
       this.activeStepInstance.remove();
+      this.activeStepInstances = this.activeStepInstances.filter(instance => instance.index !==this.trackingState.activeStep);
       this.activeStepInstance = null;
     } else {
       console.warn('There\'s no active step to close');
@@ -214,7 +211,8 @@ export default class Guide {
     let newStep = this.trackingState.activeStep;
     while(newStep>-2) {
       newStep--;
-      if(this.guideData.steps[newStep].type !=='hotspot' || !this.guideData.steps[newStep].async){
+      let stepIsAsync = this.guideData.steps[newStep].type ==='hotspot' && this.guideData.steps[newStep].async;
+      if(stepIsAsync){
         break;
       }
     }

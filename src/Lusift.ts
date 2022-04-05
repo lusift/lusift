@@ -11,7 +11,9 @@ import { isOfTypeContent, isObject } from './utils/isOfType';
 import addTippyCSS from './addTippyCSS';
 import startStepInstance from './startStepInstance';
 
-export default new class Lusift {
+// TODO remove backdrop after tooltip is closed
+
+class Lusift {
   private content: Content;
   private guideInstance: any;
   private contentSet: boolean;
@@ -101,7 +103,7 @@ export default new class Lusift {
           // clear tracking data
           stateToSave[guideData.id] = guideData;
         } else {
-          console.log(`${key} is unchanged`);
+          // console.log(`${key} is unchanged`);
           const localGuideData = loadState()[guideData.id];
           stateToSave[guideData.id] = localGuideData;
         }
@@ -112,8 +114,8 @@ export default new class Lusift {
 
   private setContent(content: Content): void {
     // filter and validate this.content
-    /* console.log('validating content: ');
-       console.log(content) */
+    console.log('validating content: ');
+    console.log(content)
     if(!isOfTypeContent(content)) {
       return console.warn('Content data type is invalid');
     }
@@ -122,18 +124,14 @@ export default new class Lusift {
     this.contentSet = true;
     // console.log('filtering')
     Object.keys(this.content).forEach((key) => {
-      const { id, name, description, steps } = this.content[key].data; //prolly a guide
+      const { id, name, description, steps } = this.content[key].data;
       this.content[key].data = { id, name, description, steps };
     });
 
     // iterate through each content item to note changes and conditionally preserve trackingState
     // and then save to localStorage
     this.reconcileContentWithLocalState();
-
-    // console.log('content set to local:');
-    const localData = loadState();
-    console.log(localData)
-    // console.log(localData);
+    //content has been set to local
   }
 
   private refresh(): void {
@@ -179,8 +177,11 @@ export default new class Lusift {
     this.goto = this.guideInstance.setStep.bind(this.guideInstance);
 
     const { onNext, onPrev, onClose } = this.content[this.activeGuideID];
+    console.log(onNext)
     this.onNext = onNext;
     this.onPrev = onPrev;
     this.onClose = onClose;
   }
-}();
+}
+
+export default new Lusift();

@@ -58,7 +58,6 @@ export default class Tooltip {
             this.data = data;
 
             const progressOn = data.progressOn || {};
-            console.log(this.data);
             this.data.progressOn = {
                 eventType: 'click',
                 elementSelector: target.elementSelector,

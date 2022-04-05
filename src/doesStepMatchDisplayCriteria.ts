@@ -32,8 +32,6 @@ const doesStepMatchesDisplayCriteria = ({ target, type }): boolean => {
   if(type !=='modal') {
     criteriaMatch = criteriaMatch && isStepElementFound(target.elementSelector);
   }
-  // TODO bug - this is running twice, why?
-  // window.alert(criteriaMatch)
   return criteriaMatch;
 }
 

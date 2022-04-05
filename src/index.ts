@@ -1,14 +1,11 @@
 import { window, document } from 'global';
 import Lusift from './Lusift';
 
-/* =============== TODOs =====================================================
-
-  - TODO wrap an error handler around the package to safely throw errors without crashing entire website
-
-  ============================================================================
-*/
-
 if (typeof window !== "undefined") {
+  window.addEventListener('error', function(event) {
+    console.log(event);
+    return false;
+  }, true);
   window.Lusift = Lusift;
 }
 

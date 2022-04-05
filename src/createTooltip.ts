@@ -143,7 +143,6 @@ const renderTooltip = ({ data, target, styleProps, actions, uid }) => {
     placement,
     remove: ()=>{}
   });
-  console.log(tippyInstance)
 
   tippyInstance.show();
 

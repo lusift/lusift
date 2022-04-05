@@ -17,10 +17,10 @@ const areNumbersEqual = (num1: number, num2: number): boolean => {
     decimalPlaces = 1; //most reliable precision
   }
 
-  console.log(num1, num2)
+  /* console.log(num1, num2)
   console.log(num1Precision, num2Precision, decimalPlaces);
 
-  console.log(roundNum(num1, decimalPlaces), roundNum(num2, decimalPlaces));
+  console.log(roundNum(num1, decimalPlaces), roundNum(num2, decimalPlaces)); */
 
   return roundNum(num1, decimalPlaces) === roundNum(num2, decimalPlaces);
 }
