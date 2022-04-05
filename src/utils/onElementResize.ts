@@ -5,6 +5,7 @@ const onElementResize = (element: document.HTMLElement, callback: Function) => {
     const { ResizeObserver } = window;
     const resizeObserver = new ResizeObserver(() => callback());
     resizeObserver.observe(element);
+    return resizeObserver;
   }
 };
 

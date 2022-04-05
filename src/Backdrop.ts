@@ -62,6 +62,7 @@ class Backdrop {
   private data: any;
   private dummyElement: document.HTMLElement;
   private toStopOverlay: boolean;
+  private resizeObservers: any[] = [];
 
   constructor({
     targetSelector,
@@ -96,14 +97,14 @@ class Backdrop {
       window.removeEventListener('resize', this.resetBackdrop, true);
     }, true);
 
-    onElementResize(
+    this.resizeObservers.push(onElementResize(
       document.querySelector(`.${this.overlaySelectorClass}`),
       this.resetBackdrop
-    );
-    onElementResize(
+    ));
+    this.resizeObservers.push(onElementResize(
       document.body,
       this.resetBackdrop
-    );
+    ));
   }
 
   private resetBackdrop(): void {
@@ -224,6 +225,7 @@ class Backdrop {
     // remove event listeners
     this.dummyElement.click();
     this.dummyElement.remove();
+    this.resizeObservers.forEach(ro => ro.disconnect());
     // console.log('overlay and stage removed')
   }
 }
