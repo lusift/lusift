@@ -47,8 +47,8 @@ const renderNavButtons = (navSection: any): string => {
           skip this
         </button>
         `}
-      ${prevButton.disable ? '': `<button onclick="Lusift.prev()" class="prev">Prev</button>`}
-      ${nextButton.disable ? '': `<button onclick="Lusift.next()" class="next">Next</button>`}
+      ${prevButton.disable ? '': `<button onclick="Lusift.prev()" class="prev lusift-button">Prev</button>`}
+      ${nextButton.disable ? '': `<button onclick="Lusift.next()" class="next lusift-button">Next</button>`}
     </section>
   `;
 }

@@ -27,7 +27,7 @@ export default () => {
 
 
       /*tooltip nav-buttons*/
-        .lusift .tooltip section.nav-buttons{
+      .lusift .tooltip section.nav-buttons{
         display: flex;
         flex-wrap: wrap;
         justify-content: space-between;
@@ -100,7 +100,7 @@ export default () => {
         flex-grow: 1;
       }
 
-      .lusift .button{
+      .lusift-button{
         color: #fff;
         background-color: rgb(17, 153, 158);
         padding: 0.2rem 0.35rem;
