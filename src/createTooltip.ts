@@ -74,8 +74,8 @@ const renderTooltip = ({ data, target, styleProps, actions, uid }) => {
       }
     </style>
 
-    ${renderProgressBar()}
     <div class="lusift">
+      ${renderProgressBar()}
       <div class="tooltip" id="tooltip-${uid}">
         ${renderCloseXButton(closeButton)}
         <section class="body-content">

@@ -4,6 +4,8 @@ import createBeacon from './createBeacon';
 import { getElementPosition, getStepUID, changeAsyncStepStatus } from './utils';
 import { Hotspot as HotspotData } from './types';
 
+// TODO only one hotspot's tooltip enabled at a time
+
 class Hotspot {
   private tipID: string;
   private tippyInstance: any;

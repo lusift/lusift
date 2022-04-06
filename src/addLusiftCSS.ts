@@ -118,6 +118,12 @@ export default () => {
         display: block;
         width: 100%;
       }
+      .lusift-progress {
+        margin-top: -1px;
+      }
+      .modal .lusift-progress {
+        margin-top: 0;
+      }
       .lusift-progress::-webkit-progress-bar {
         initial: none;
         background-color: transparent; /*background-color of tooltip*/
