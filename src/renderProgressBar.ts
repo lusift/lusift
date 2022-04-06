@@ -39,24 +39,21 @@ const renderProgressBar = () => {
 
   return `
   <style>
-  .lusift-progress {
-    margin: 0;
-    padding: 0;
-    display: block;
-    width: 100%;
-    height: ${height};
-  }
-  .lusift-progress::-webkit-progress-bar {
-    background-color: transparent; /*background-color of tooltip*/
+    .lusift-progress {
+      height: ${height};
+    }
+    .lusift-progress::-webkit-progress-bar {
       border-radius: ${borderRadius}; /*border-radius of tooltip*/
-  }
+    }
     .lusift-progress::-webkit-progress-value {
       background-color: ${color}; /*color of progress bar*/
     }
-      </style>
+  </style>
 
-      <progress class="lusift-progress" aria-label="progressbar" max="${max}" value="${progress}"> ${progress}% </progress>
-      `;
+  <progress class="lusift-progress" aria-label="progressbar" max="${max}" value="${progress}">
+    ${progress}%
+  </progress>
+    `;
 }
 
 export default renderProgressBar;

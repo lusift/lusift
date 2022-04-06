@@ -12,27 +12,14 @@ const renderCloseXButton = (closeButton: any): string => {
   if (closeButton.disable) return;
   return `
     <style>
-    div.section.close-btn{
-      display: flex;
-      justify-content: flex-end;
-    }
-    .closeX{
-      /*
-      border: 1px solid blue;
-      */
-      margin-bottom: 0 !important;
-      font-weight: normal;
-      font-size: 1.25rem;
-      padding: 0 2px;
-      margin-right: 0.2rem;
-      color: #666;
+    .lusift .modal .closeX{
       ${styleObjectToString(closeButton.styleProps)}
     }
     </style>
 
-    <div class="section close-btn">
+    <section class="close-btn">
       <button onclick="window.Lusift.close()" class="closeX close">&times;</button>
-    </div>
+    </section>
   `;
 }
 
@@ -76,38 +63,25 @@ const createModal = ({ uid, bodyContent }): void => {
     opacity: '1',
     ...modalStyleProps
   });
+  modal.classList.add('modal');
 
   modal.innerHTML = `
-  <style>
-    .section.body-content{
-      padding: 3px 15px;
-      color: #111;
-      background: #fff;
-      flex-grow: 1;
-    }
-
-    .button{
-      color: #fff;
-      background-color: rgb(17, 153, 158);
-      padding: 0.2rem 0.35rem;
-      font-size: 0.75rem;
-      font-weight: bold;
-      border-radius: 8px;
-    }
-  </style>
   ${renderProgressBar()}
   ${renderCloseXButton(closeButton)}
-    <div class="section body-content">
+    <section class="body-content">
       ${bodyContent}
       <div>
         <button class="button" onclick="Lusift.next()">OK</button>
       </div>
-    </div>
+    </section>
   `;
+  const lusiftWrapper = document.createElement('div');
+  lusiftWrapper.classList.add('lusift');
+  lusiftWrapper.appendChild(modal);
 
   // modalOverlay.appendChild(modal);
   document.body.appendChild(modalOverlay);
-  document.body.appendChild(modal);
+  document.body.appendChild(lusiftWrapper);
 }
 
 export default createModal;

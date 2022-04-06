@@ -3,7 +3,6 @@ import createHotspotTooltip from './createHotspotTooltip';
 import createBeacon from './createBeacon';
 import { getElementPosition, getStepUID, changeAsyncStepStatus } from './utils';
 import { Hotspot as HotspotData } from './types';
-import { loadState, saveState } from './localStorage';
 
 class Hotspot {
   private tipID: string;

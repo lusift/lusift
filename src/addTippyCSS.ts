@@ -24,6 +24,7 @@ export default () => {
           background-color: #333;
           color: #fff;
           border-radius: ${DEFAULT_TOOLTIP_BORDER_RADIUS};
+          z-index: 99999;
           font-size: 14px;
           line-height: 1.4;
           outline: 0;
@@ -207,12 +208,14 @@ export default () => {
           */
           background-color: #fff;
       }
-      `;
+      `.replace(/(\r\n|\n|\r)/gm, "");
       const styleSheet = document.createElement("style");
-      styleSheet.type = "text/css";
-      styleSheet.innerText = tippyCSS;
+      // TODO bundling - maybe put the string in a file and load it minimized with webpack?
+      // styleSheet.type = "text/css";
+      styleSheet.setAttribute("lusift-tippy", "");
+      // styleSheet.innerText = tippyCSS;
+      styleSheet.textContent = tippyCSS;
       document.head.appendChild(styleSheet);
-
     }, 0);
   }
 }

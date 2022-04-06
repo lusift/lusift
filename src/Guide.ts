@@ -11,6 +11,7 @@ import { GuideType, TrackingState } from './types';
 // TODO refactor this class
 // TODO fix type definitions
 
+
 export default class Guide {
   readonly guideData: GuideType;
   private trackingState: TrackingState;

@@ -9,8 +9,10 @@ import { window, document } from 'global';
 import { Content } from './types';
 import { isOfTypeContent, isObject } from './utils/isOfType';
 import addTippyCSS from './addTippyCSS';
+import addLusiftCSS from './addLusiftCSS';
 import startStepInstance from './startStepInstance';
 
+// TODO create a shadowDom at the root of each step element where we'll insert the style
 
 class Lusift {
   private content: Content;
@@ -36,6 +38,7 @@ class Lusift {
       saveState({});
     }
     addTippyCSS();
+    addLusiftCSS();
   }
 
   private getTrackingState(): object {
