@@ -38,8 +38,27 @@ class Lusift {
     if(!isObject(localData)) {
       saveState({});
     }
+
+    // TODO put below functions in a seperate function that imports, prepares, and injects css
     addTippyCSS();
     addLusiftCSS();
+    if(typeof document !=='undefined') {
+      const customStyle = document.createElement("style");
+      customStyle.type = "text/css";
+      customStyle.setAttribute("lusift-custom-css", "");
+      document.head.appendChild(customStyle);
+    }
+  }
+
+  private setGlobalStyle(styleText: string): void {
+    if(typeof styleText !== 'string') {
+      return console.error('Invalid style passed to setGlobalStyle()');
+    }
+    let customStyle = document.querySelector('style[lusift-custom-css]');
+    if(!customStyle) {
+      return console.error('Style tag for custom-css not found. Report to project\'s github.');
+    }
+    customStyle.textContent = styleText;
   }
 
   private getTrackingState(): object {

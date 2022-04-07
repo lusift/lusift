@@ -4,14 +4,14 @@ import createBeacon from './createBeacon';
 import { getElementPosition, getStepUID, changeAsyncStepStatus } from './utils';
 import { Hotspot as HotspotData } from './types';
 
-// TODO only one hotspot's tooltip enabled at a time
-// add activeHotspot property to trackingState
+// TODO bug - sometimes the elements persist on page navigation and can't be referenced and removed from the dom either
+// is there an event like beforepagenav
 
 class Hotspot {
   private tipID: string;
-  private tippyInstance: any;
+  readonly tippyInstance: any;
   private targetElement: document.HTMLElement;
-  private data: HotspotData;
+  readonly data: HotspotData;
   private beaconID: string;
 
   constructor({ data, guideID }) {
@@ -95,9 +95,11 @@ class Hotspot {
     } else {
       console.log('Hotspot closed without ever opening');
     }
-    document.getElementById(this.beaconID).parentElement.remove();
-    window.Lusift.activeHotspot = null;
-    // TODO what happens if last line fails to run, in let say just navigating to next page?
+    const beaconElement = document.getElementById(this.beaconID);
+    if (beaconElement) {
+      beaconElement.parentElement.remove();
+      window.Lusift.activeHotspot = null;
+    }
   }
 
   private removeAndCloseAsync(): void {
