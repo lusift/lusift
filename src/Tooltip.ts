@@ -5,8 +5,7 @@ import { TooltipData, HotspotAndTooltipTarget as Target, StepActions } from './t
 import defaultToolipActions from './defaultTooltipActions';
 import Backdrop from './Backdrop';
 
-// TODO Developer should be able to modify css on the global guide level, as well as on the step level
-// TODO Add steps config, and steps styles to apply to all steps
+// TODO refactor entire codebase into modular files and directory structure
 
 const defaultBackdropData = {
     disabled: false,

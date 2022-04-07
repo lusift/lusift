@@ -7,8 +7,6 @@ const defaultBodyContent = `
   <p style="font-weight: normal;">Default tooltip content</p>
 `;
 
-// TODO full-feature this
-
 const renderTooltip = ({ remove, data, target, styleProps, uid }) => {
 
   const {

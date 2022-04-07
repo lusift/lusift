@@ -12,7 +12,8 @@ import addTippyCSS from './addTippyCSS';
 import addLusiftCSS from './addLusiftCSS';
 import startStepInstance from './startStepInstance';
 
-// TODO create a shadowDom at the root of each step element where we'll insert the style
+// TODO add setGlobalStyle
+// TODO --- do all of the feature work first and then refactoring of stuff here and there, and then loaders and stuff ----
 
 class Lusift {
   private content: Content;

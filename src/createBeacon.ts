@@ -65,7 +65,6 @@ const createBeacon = ({ targetPosition, beaconData, beaconID, toggleTooltip }) =
   const beaconEventReceiver = document.createElement('div');
   beaconEventReceiver.id=`${beaconID}-er`;
   const { width, height } = getElementPosition(beaconElement);
-  console.log(width, height)
 
   beaconEventReceiver.style.cssText = styleObjectToString({
     ...beaconElement.style,
@@ -78,8 +77,6 @@ const createBeacon = ({ targetPosition, beaconData, beaconID, toggleTooltip }) =
     // pointerEvents: 'none'
   });
   beaconElement.appendChild(beaconEventReceiver);
-  console.log(beaconEventReceiver);
-  console.log(beaconElement);
 
   // beaconElement.addEventListener('click', () => window.alert('byyyeee'))
   beaconEventReceiver.addEventListener('click', toggleTooltip);

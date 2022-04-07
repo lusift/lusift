@@ -7,7 +7,6 @@ import startStepInstance from './startStepInstance';
 import { GuideType, TrackingState } from './types';
 
 // TODO make it installable
-// TODO add base global css
 // TODO refactor this class
 // TODO fix type definitions
 

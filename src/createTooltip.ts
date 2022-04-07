@@ -7,8 +7,8 @@ const defaultBodyContent = `
   <p style="font-weight: normal;">Default tooltip content</p>
 `;
 
-// TODO full-feature this
 // TODO I am tired of writing html and css like this in a script file
+// I'm sure you could find project where they use a lot of html, css and js to modify webpages
 
 const renderCloseXButton = (closeButton: any): string => {
   if (closeButton.disable) return;
@@ -63,9 +63,6 @@ const renderTooltip = ({ data, target, styleProps, actions, uid }) => {
     placement,
     offset
   } = data;
-
-  // TODO the parent styleProps shouldn't really go into .tippy-box
-  // TODO set top margin on progress element negative?
 
   const content = `
     <style>
