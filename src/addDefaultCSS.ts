@@ -1,4 +1,5 @@
 import { window, document } from 'global';
+// const lusiftDefaultCSS = require('./style/lusift.css');
 
 export default () => {
   if (typeof document ==='undefined') return;
@@ -21,6 +22,6 @@ export default () => {
   const link = document.createElement('link');
   link.rel = 'stylesheet';
   link.type = 'text/css';
-  link.href = '../src/lusift.css';
+  link.href = './style/lusift.css';
   document.head.appendChild(link);
 }

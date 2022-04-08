@@ -14,7 +14,6 @@ import addDefaultCSS from './addDefaultCSS';
 import startStepInstance from './startStepInstance';
 
 // TODO --- do all of the feature work first and then refactoring of stuff here and there, and then loaders and stuff ----
-// TODO add beacon's css to global default styles file
 // TODO see how to bundle ts and css where we reference css files inside ts
 // TODO publish scrapped version to npm
 
@@ -45,8 +44,8 @@ class Lusift {
 
     // TODO put below functions in a seperate function that imports, prepares, and injects css
     addTippyCSS();
-    // addLusiftCSS();
-    addDefaultCSS();
+    addLusiftCSS();
+    // addDefaultCSS();
     if(typeof document !=='undefined') {
       const customStyle = document.createElement("style");
       customStyle.type = "text/css";

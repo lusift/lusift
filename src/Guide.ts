@@ -206,14 +206,21 @@ export default class Guide {
     this.setStep(newStep);
     typeof window.Lusift.onNext === 'function' && window.Lusift.onNext();
   }
+  // TODO even when setStep console warns closeCurrentStep still runs, fix this
 
   private prevStep(): void {
     // make newStep the index of the closest previus step with !step.async
     let newStep = this.trackingState.activeStep;
+
     while(newStep>-2) {
       newStep--;
-      let stepIsAsync = this.guideData.steps[newStep].type ==='hotspot' && this.guideData.steps[newStep].async;
-      if(stepIsAsync){
+      const step = this.guideData.steps[newStep];
+      if(!step) {
+        break;
+      }
+      const { type, async } = step;
+      let stepIsAsync = type ==='hotspot' && async;
+      if(!stepIsAsync){
         break;
       }
     }
