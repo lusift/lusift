@@ -10,10 +10,14 @@ import { Content } from './types';
 import { isOfTypeContent, isObject } from './utils/isOfType';
 import addTippyCSS from './addTippyCSS';
 import addLusiftCSS from './addLusiftCSS';
+import addDefaultCSS from './addDefaultCSS';
 import startStepInstance from './startStepInstance';
 
-// TODO add setGlobalStyle
 // TODO --- do all of the feature work first and then refactoring of stuff here and there, and then loaders and stuff ----
+// TODO add beacon's css to global default styles file
+// TODO see how to bundle ts and css where we reference css files inside ts
+// TODO publish scrapped version to npm
+
 
 class Lusift {
   private content: Content;
@@ -41,7 +45,8 @@ class Lusift {
 
     // TODO put below functions in a seperate function that imports, prepares, and injects css
     addTippyCSS();
-    addLusiftCSS();
+    // addLusiftCSS();
+    addDefaultCSS();
     if(typeof document !=='undefined') {
       const customStyle = document.createElement("style");
       customStyle.type = "text/css";
@@ -50,7 +55,7 @@ class Lusift {
     }
   }
 
-  private setGlobalStyle(styleText: string): void {
+  public setGlobalStyle(styleText: string): void {
     if(typeof styleText !== 'string') {
       return console.error('Invalid style passed to setGlobalStyle()');
     }
@@ -61,7 +66,7 @@ class Lusift {
     customStyle.textContent = styleText;
   }
 
-  private getTrackingState(): object {
+  public getTrackingState(): object {
     if(this.contentSet && this.activeGuideID) {
       return loadState()[this.activeGuideID].trackingState;
     } else {
@@ -78,7 +83,7 @@ class Lusift {
     return !isEqual(localGuideData, guideData);
   }
 
-  private devShowStep(guideID: string, stepNumber: number): void {
+  public devShowStep(guideID: string, stepNumber: number): void {
     // dev mode: to be used to develop/style step elements
 
     // if there is some other content active already, refuse to show dev mode
@@ -134,7 +139,7 @@ class Lusift {
     saveState(stateToSave);
   }
 
-  private setContent(content: Content): void {
+  public setContent(content: Content): void {
     // filter and validate this.content
     console.log('validating content: ');
     console.log(content)
@@ -156,7 +161,7 @@ class Lusift {
     //content has been set to local
   }
 
-  private refresh(): void {
+  public refresh(): void {
     // run page elements through step display conditionals again
     if(this.guideInstance){
       window.setTimeout(() => {
@@ -168,7 +173,7 @@ class Lusift {
     }
   }
 
-  private showContent(contentID: string): void {
+  public showContent(contentID: string): void {
     //Forces specific Lusift content to appear for the current user by passing in the ID.
     if(!this.content || !this.contentSet) {
       return console.warn(`Content not set, pass valid content object to setContent()`);

@@ -19,23 +19,25 @@ const createBeacon = ({ targetPosition, beaconData, beaconID, toggleTooltip }) =
 
   beaconContainer.innerHTML = `
   <style>
-  #${beaconID} {
-    background-color: ${color || '#b9f'};
-    border-radius: 50%;
-    position: absolute;
-    pointer-events: auto;
-    width: ${size *13}px;
-    height: ${size *13}px;
-    -webkit-animation: shine 2s ease-in-out infinite;
-    animation: shine 2s ease-in-out infinite;
-    cursor: pointer;
-    -webkit-animation-delay: 1s;
-    animation-delay: 1s;
-    top: ${(top/100)*targetHeight}px;
-    left: ${(left/100)*targetWidth}px;
-  }
+    #${beaconID} {
+      background-color: ${color || '#b9f'};
+      border-radius: 50%;
+      position: absolute;
+      pointer-events: auto;
+      width: ${size *13}px;
+      height: ${size *13}px;
 
-  ${animation? `
+      ${animation? `
+      -webkit-animation: shine 2s ease-in-out infinite;
+      animation: shine 2s ease-in-out infinite;
+        `: ''}
+      cursor: pointer;
+      -webkit-animation-delay: 1s;
+      animation-delay: 1s;
+      top: ${(top/100)*targetHeight}px;
+      left: ${(left/100)*targetWidth}px;
+    }
+
 
     @-webkit-keyframes shine {
       0%, 20% {
@@ -53,11 +55,11 @@ const createBeacon = ({ targetPosition, beaconData, beaconID, toggleTooltip }) =
       100% {
         box-shadow: 0px 0px 0px ${20*size}px rgba(0, 0, 0, 0);
       }
-    }`: ''
+    }
   }
   </style>
-  <div id="${beaconID}"></div>
-  `;
+  <div class="lusift-beacon" id="${beaconID}"></div>
+`;
 
   document.body.appendChild(beaconContainer);
   const beaconElement = document.getElementById(beaconID);

@@ -131,7 +131,6 @@ export default () => {
       .lusift-progress::-webkit-progress-value {
         initial: none;
       }
-
       `.replace(/(\r\n|\n|\r)/gm, "");
 
       const styleSheet = document.createElement("style");
