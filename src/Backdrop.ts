@@ -1,10 +1,13 @@
 import { document, window } from 'global';
-import { styleObjectToString, getStepUID, onElementResize, getElementPosition } from './utils/';
+import {
+  styleObjectToString,
+  getStepUID,
+  onElementResize,
+  getElementPosition,
+  roundNum
+} from './utils/';
 import { BackdropData, BackdropParameters } from './types';
 
-const roundNum = (value: number, decimalPlaces: number=2) => {
-  return Math.round((value + Number.EPSILON) * Math.pow(10, decimalPlaces)) / (Math.pow(10, decimalPlaces));
-}
 
 const areNumbersEqual = (num1: number, num2: number): boolean => {
 
@@ -31,13 +34,11 @@ const defaultBackdropData = {
   color: '#444',
 }
 
-
 class Backdrop {
 
   private targetSelector: string;
   readonly stagedTargetClass: string;
   public overlaySelectorClass: string = 'lusift-overlay';
-  // private data: BackdropData;
   private data: any;
   private dummyElement: document.HTMLElement;
   private toStopOverlay: boolean;
@@ -91,7 +92,7 @@ class Backdrop {
       if(this.toStopOverlay) return console.log('no showing overlay anymore');
       this.removeOverlay();
       this.addBackdop();
-    }, 700);
+    }, 500);
   }
 
   private getScreenDimensions(): { screenWidth: number; screenHeight: number } {

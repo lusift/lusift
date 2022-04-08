@@ -6,6 +6,7 @@ import onElementResize from './onElementResize';
 import getElementPosition from './getElementPosition';
 import doesStringMatchRegex from './doesStringMatchRegex';
 import changeAsyncStepStatus from './changeAsyncStepStatus';
+import roundNum from './roundNum';
 
 export {
   htmlStringToElement,
@@ -15,5 +16,6 @@ export {
   onElementResize,
   getElementPosition,
   doesStringMatchRegex,
-  changeAsyncStepStatus
+  changeAsyncStepStatus,
+  roundNum
 };
