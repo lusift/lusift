@@ -2,26 +2,13 @@ import { document } from 'global';
 import { styleObjectToString } from './utils';
 import { MODAL_OVERLAY_CLASS, DEFAULT_MODAL_BORDER_RADIUS } from './constants';
 import renderProgressBar from './renderProgressBar';
+import renderCloseXButton from './renderCloseXButton';
 
 const closeButton = {
   styleProps: {},
   disable: false,
 }
 
-const renderCloseXButton = (closeButton: any): string => {
-  if (closeButton.disable) return;
-  return `
-    <style>
-    .lusift .modal .closeX{
-      ${styleObjectToString(closeButton.styleProps)}
-    }
-    </style>
-
-    <section class="close-btn">
-      <button onclick="window.Lusift.close()" class="closeX close">&times;</button>
-    </section>
-  `;
-}
 
 const createModal = ({ uid, bodyContent }): void => {
   const modalOverlay = document.createElement('div');
@@ -31,7 +18,7 @@ const createModal = ({ uid, bodyContent }): void => {
 
   const modalStyleProps = {};
   const modalOverlayStyleProps = {};
-  bodyContent = bodyContent || "<h2>Modal Content</h2>";
+  bodyContent = bodyContent || "<h2>Default Modal Content</h2>";
 
   modalOverlay.style.cssText = styleObjectToString({
     position: 'absolute',
@@ -67,7 +54,7 @@ const createModal = ({ uid, bodyContent }): void => {
 
   modal.innerHTML = `
   ${renderProgressBar()}
-  ${renderCloseXButton(closeButton)}
+  ${renderCloseXButton(closeButton, 'modal')}
     <section class="body-content">
       ${bodyContent}
       <div>
@@ -79,7 +66,6 @@ const createModal = ({ uid, bodyContent }): void => {
   lusiftWrapper.classList.add('lusift');
   lusiftWrapper.appendChild(modal);
 
-  // modalOverlay.appendChild(modal);
   document.body.appendChild(modalOverlay);
   document.body.appendChild(lusiftWrapper);
 }

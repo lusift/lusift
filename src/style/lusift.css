@@ -62,8 +62,13 @@
 }
 
 /*modal*/
-/*modal closeX*/
 
+/*modal overlay*/
+.lusift-modal-overlay {
+
+}
+
+/*modal closeX*/
 
 .lusift .modal section.close-btn{
     display: flex;

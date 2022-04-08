@@ -1,5 +1,6 @@
 import styleObjectToString from './utils/styleObjectToString';
 import renderProgressBar from './renderProgressBar';
+import renderCloseXButton from './renderCloseXButton';
 import createTippy from './createTippy';
 import { DEFAULT_TOOLTIP_BORDER_RADIUS } from './constants';
 
@@ -8,21 +9,6 @@ const defaultBodyContent = `
   <p style="font-weight: normal;">Default tooltip content</p>
 `;
 
-
-const renderCloseXButton = (closeButton: any): string => {
-  if (closeButton.disable) return;
-  return `
-    <style>
-      .lusift .tooltip .closeX{
-        ${styleObjectToString(closeButton.styleProps)}
-      }
-    </style>
-
-    <section class="close-btn">
-      <button onclick="Lusift.close()" class="closeX close">&times;</button>
-    </section>
-  `;
-}
 
 const renderNavButtons = (navSection: any): string => {
   const { nextButton, prevButton, dismissLink } = navSection;
@@ -74,7 +60,7 @@ const renderTooltip = ({ data, target, styleProps, actions, uid }) => {
     <div class="lusift">
       ${renderProgressBar()}
       <div class="tooltip" id="tooltip-${uid}">
-        ${renderCloseXButton(closeButton)}
+        ${renderCloseXButton(closeButton, 'tooltip')}
         <section class="body-content">
           ${bodyContent}
         </section>

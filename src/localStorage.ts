@@ -4,7 +4,6 @@ import { window, document } from 'global';
  * @param state
  */
 
-console.log('localStorage***********');
 if(!window) {
     console.log('window is undefined')
 }
