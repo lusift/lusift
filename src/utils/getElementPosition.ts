@@ -1,13 +1,5 @@
 import { window, document } from 'global';
-
-interface ElementPosition {
-  top: number;
-  left: number;
-  right: number;
-  bottom: number;
-  height: number;
-  width: number;
-}
+import { ElementPosition } from '../types';
 
 const getElementPosition = (element: document.HTMLElement): ElementPosition => {
     const documentElement = document;

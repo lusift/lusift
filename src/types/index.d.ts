@@ -168,3 +168,11 @@ export interface Modal {
   }
 }
 
+export interface ElementPosition {
+  top: number;
+  left: number;
+  right: number;
+  bottom: number;
+  height: number;
+  width: number;
+}
