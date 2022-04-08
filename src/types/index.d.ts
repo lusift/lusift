@@ -2,24 +2,24 @@ export interface StepActions {
   styleProps: Object;
   closeButton: {
     styleProps: Object;
-    disable: boolean;
+    disabled: boolean;
   };
   navSection: {
     styleProps: Object;
     nextButton: {
       text: string;
       styleProps: Object;
-      disable: boolean;
+      disabled: boolean;
     };
     prevButton: {
       text: string;
       styleProps: Object;
-      disable: boolean;
+      disabled: boolean;
     };
     dismissLink: {
       text: string;
       styleProps: Object;
-      disable: boolean;
+      disabled: boolean;
     };
   };
 }
