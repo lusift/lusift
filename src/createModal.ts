@@ -6,7 +6,7 @@ import renderCloseXButton from './renderCloseXButton';
 
 // TODO onNext, onPrev, onClose not working
 
-const createModal = ({ uid, bodyContent, closeButton }): void => {
+const createModal = ({ uid, bodyContent, closeButton={} }): void => {
   const modalOverlay = document.createElement('div');
   const modal = document.createElement('div');
   modal.id = uid;
@@ -14,8 +14,11 @@ const createModal = ({ uid, bodyContent, closeButton }): void => {
 
   const modalStyleProps = {};
   const modalOverlayStyleProps = {};
-  bodyContent = bodyContent || "<h2>Default Modal Content</h2>";
-  closeButton = closeButton || {};
+  bodyContent = bodyContent || `
+    <div>
+      <h2>Default Modal Content</h2>
+      <button class="button" onclick="Lusift.next()">OK</button>
+    </div>`;
 
   modalOverlay.style.cssText = styleObjectToString({
     position: 'absolute',
@@ -50,13 +53,10 @@ const createModal = ({ uid, bodyContent, closeButton }): void => {
   modal.classList.add('modal');
 
   modal.innerHTML = `
-  ${renderProgressBar()}
-  ${renderCloseXButton(closeButton, 'modal')}
+    ${renderProgressBar()}
+    ${renderCloseXButton(closeButton, 'modal')}
     <section class="body-content">
       ${bodyContent}
-      <div>
-        <button class="button" onclick="Lusift.next()">OK</button>
-      </div>
     </section>
   `;
   const lusiftWrapper = document.createElement('div');
