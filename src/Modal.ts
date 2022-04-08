@@ -7,10 +7,12 @@ import { MODAL_OVERLAY_CLASS } from './constants';
 class Modal {
   private uid: string;
   private data: any;
+  private closeButton: any;
 
-  constructor({ index, guideID, data }) {
+  constructor({ index, guideID, data, closeButton }) {
     this.uid = getStepUID({guideID, type:'modal', index});
     this.data = data;
+    this.closeButton = closeButton;
     this.addModal();
   }
 
@@ -19,7 +21,8 @@ class Modal {
 
     createModal({
       uid: this.uid,
-      bodyContent
+      bodyContent,
+      closeButton: this.closeButton
     });
   }
 

@@ -61,7 +61,8 @@ export function isOfTypeTooltip(object: any): boolean {
 
 export function isOfTypeModal(object: any): boolean {
   return (object.type === 'modal') &&
-    isObject(object.data);
+    isObject(object.data) &&
+    isObjectOrUndefined(object.closeButton);
 }
 
 export function isOfTypeHotspot(object: any): boolean {

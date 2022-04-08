@@ -162,6 +162,9 @@ export interface Modal {
   target: ModalTarget;
   data: {
     bodyContent: string;
+  };
+  closeButton: {
+    disabled: boolean;
   }
 }
 
