@@ -16,7 +16,6 @@ import startStepInstance from './startStepInstance';
 // TODO see how to bundle ts and css where we reference css files inside ts
 // TODO publish scrapped version to npm
 
-
 class Lusift {
   private content: Content;
   private guideInstance: any;
@@ -155,6 +154,12 @@ class Lusift {
     // and then save to localStorage
     this.reconcileContentWithLocalState();
     //content has been set to local
+  }
+
+  public clearContent(): void {
+    saveState({});
+    this.content = {};
+    this.contentSet = false;
   }
 
   public refresh(): void {

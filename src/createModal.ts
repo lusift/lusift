@@ -4,9 +4,7 @@ import { MODAL_OVERLAY_CLASS, DEFAULT_MODAL_BORDER_RADIUS } from './constants';
 import renderProgressBar from './renderProgressBar';
 import renderCloseXButton from './renderCloseXButton';
 
-// TODO add option for closeXButton in Modal
 // TODO onNext, onPrev, onClose not working
-
 
 const createModal = ({ uid, bodyContent, closeButton }): void => {
   const modalOverlay = document.createElement('div');

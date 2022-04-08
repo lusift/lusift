@@ -22,19 +22,6 @@ const renderTooltip = ({ remove, data, target, styleProps, uid }) => {
         z-index: 999999;
         ${styleObjectToString(styleProps)}
       }
-      .lusift .hotspot-tooltip {
-        font-weight: bold;
-        font-size: 1rem;
-        display: block;
-        padding: 5px 9px;
-      }
-      .lusift .hotspot-tooltip > * {
-        margin: 3px 6px;
-      }
-      .lusift .hotspot-tooltip .body-content{
-        margin-top: 0 !important;
-        min-width: 100px;
-      }
     </style>
 
     ${renderProgressBar()}

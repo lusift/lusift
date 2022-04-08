@@ -8,8 +8,6 @@ import { GuideType, TrackingState } from './types';
 
 // TODO make it installable
 // TODO refactor this class
-// TODO fix type definitions
-
 
 export default class Guide {
   readonly guideData: GuideType;
@@ -37,6 +35,7 @@ export default class Guide {
       asyncSteps: {}
     };
 
+    //for async steps
     this.guideData.steps.forEach(step => {
       if(step.async && step.type==='hotspot') {
         newTrackingState.asyncSteps[step.index] = {
@@ -48,19 +47,15 @@ export default class Guide {
   }
 
   public start(): void {
-    console.log('start begin-----------');
     const { finished, prematurelyClosed } = this.trackingState;
     this.removeIllegalSteps();
     this.attemptToStartAsyncSteps();
-    // if finished or completed
+
     if(finished || prematurelyClosed) {
-      console.log('Guide is already finished or closed');
+      console.warn('Guide is already finished or closed');
     } else {
       this.attemptToShowActiveStep();
     }
-    console.log('active instance started')
-    console.log(this.activeStepInstances);
-    console.log('start end-------------');
   }
 
   private attemptToShowActiveStep(): void {
@@ -83,7 +78,7 @@ export default class Guide {
         changeAsyncStepStatus(stepIndex, true);
         this.trackingState = loadState()[this.guideData.id].trackingState;
       }
-      if(displayCriteriaMatches && !this.stepAlreadyActive(stepIndex)) {
+      if(displayCriteriaMatches && !this.isStepAlreadyActive(stepIndex)) {
         this.activeStepInstance = startStepInstance(
           steps[stepIndex],
           this.guideData.id
@@ -101,7 +96,7 @@ export default class Guide {
     this.updateLocalTrackingState();
   }
 
-  private stepAlreadyActive(stepIndex: number): boolean {
+  private isStepAlreadyActive(stepIndex: number): boolean {
     return this.activeStepInstances.some(stepInstance => stepInstance.index === stepIndex);
   }
 
@@ -113,7 +108,7 @@ export default class Guide {
         if(doesStepMatchDisplayCriteria({ target, type }) && this.trackingState.asyncSteps[index].toOpen) {
           console.log(`Step ${index}: target path and element matched. toOpen is true`);
           // if step is already active console.warn that the step is already active
-          if(this.stepAlreadyActive(index)) {
+          if(this.isStepAlreadyActive(index)) {
             return console.warn(`Step ${index} is already active`);
           }
           this.activeStepInstance = startStepInstance(
@@ -194,7 +189,9 @@ export default class Guide {
   private closeCurrentStep(): void {
     if(this.activeStepInstance) {
       this.activeStepInstance.remove();
-      this.activeStepInstances = this.activeStepInstances.filter(instance => instance.index !==this.trackingState.activeStep);
+      this.activeStepInstances = this.activeStepInstances
+        .filter(instance => instance.index !==this.trackingState.activeStep);
+
       this.activeStepInstance = null;
     } else {
       console.warn('There\'s no active step to close');

@@ -6,7 +6,6 @@ import defaultToolipActions from './defaultTooltipActions';
 import Backdrop from './Backdrop';
 
 // TODO refactor entire codebase into modular files and directory structure
-// TODO add styleprops to hotspot's tooltip
 
 const defaultBackdropData = {
     disabled: false,
@@ -78,7 +77,6 @@ export default class Tooltip {
             this.uid=getStepUID({ guideID, index, type: 'tooltip' });
             this.backdropID=getStepUID({ guideID, index, type: 'backdrop' });
             this.targetElement = document.querySelector(this.target.elementSelector);
-            // window.alert('tooltip initiated')
             this.attachIntersectionObserver();
         }
 
@@ -112,8 +110,6 @@ export default class Tooltip {
         private consolidateActions(actions: StepActions) {
           // merge default actions with incoming actions provided by the developer(user)
           this.actions = mergeObjects(this.actions, actions);
-          /* console.log('consolidateActions')
-          console.log(this.actions); */
         }
 
         private hide(): void {
@@ -129,7 +125,8 @@ export default class Tooltip {
                 data: this.data.backdrop
             });
             if (this.data.backdrop.nextOnOverlayClick){
-                Array.from(document.getElementsByClassName(this.backdrop.overlaySelectorClass)).forEach(target => {
+                Array.from(document.getElementsByClassName(this.backdrop.overlaySelectorClass))
+                .forEach(target => {
                     this.addEventListenerToTarget(target, 'next');
                 });
             }
@@ -137,7 +134,7 @@ export default class Tooltip {
 
         public show(): void {
             if (!this.targetElement) return console.warn('Error: target element not found');
-            if (this.isTooltipShown) return console.log('Tooltip is already displayed');
+            if (this.isTooltipShown) return console.warn('Tooltip is already displayed');
 
             const { progressOn, backdrop } = this.data;
 
@@ -163,7 +160,7 @@ export default class Tooltip {
         }
 
         public remove(): void {
-            if (!this.isTooltipShown) return console.log('Attempted to remove but tooltip is not shown');
+            if (!this.isTooltipShown) return console.error('Attempted to remove but tooltip is not shown');
             console.log(`removing tooltip ${this.uid}`);
             this.removeAllEventListeners();
             this.backdrop && this.backdrop.remove();
@@ -188,7 +185,6 @@ export default class Tooltip {
             // remove it at removal of it
             target.addEventListener(eventType, this.getListenerFromMethod(method));
             this.targetsAndEventListeners.push({ method, target, eventType });
-            // console.log(this.targetsAndEventListeners);
         }
 
         private removeAllEventListeners(): void {
@@ -197,6 +193,5 @@ export default class Tooltip {
                 console.log(`remove event listener of type ${eventType} and method ${method}`);
             });
             this.targetsAndEventListeners = [];
-            // console.log(this.targetsAndEventListeners);
         }
 }

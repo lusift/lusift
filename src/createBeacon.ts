@@ -73,14 +73,10 @@ const createBeacon = ({ targetPosition, beaconData, beaconID, toggleTooltip }) =
     width: `${width}px`,
     height: `${height}px`,
     background: 'transparent',
-    // position: 'absolute',
-    // backgroundColor: 'red',
     zIndex: '394490',
-    // pointerEvents: 'none'
   });
   beaconElement.appendChild(beaconEventReceiver);
 
-  // beaconElement.addEventListener('click', () => window.alert('byyyeee'))
   beaconEventReceiver.addEventListener('click', toggleTooltip);
 }
 

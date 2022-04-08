@@ -131,6 +131,22 @@ export default () => {
       .lusift-progress::-webkit-progress-value {
         initial: none;
       }
+
+      /*hotspot */
+
+      .lusift .hotspot-tooltip {
+        font-weight: bold;
+        font-size: 1rem;
+        display: block;
+        padding: 5px 9px;
+      }
+      .lusift .hotspot-tooltip > * {
+        margin: 3px 6px;
+      }
+      .lusift .hotspot-tooltip .body-content{
+        margin-top: 0 !important;
+        min-width: 100px;
+      }
       `.replace(/(\r\n|\n|\r)/gm, "");
 
       const styleSheet = document.createElement("style");
