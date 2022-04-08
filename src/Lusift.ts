@@ -1,5 +1,5 @@
 import Guide from './Guide';
-import { saveState, loadState } from './localStorage';
+import { saveState, loadState } from './store';
 import { GuideType } from './types';
 import isEqual from 'lodash.isequal';
 import doesStepMatchDisplayCriteria from './doesStepMatchDisplayCriteria';
