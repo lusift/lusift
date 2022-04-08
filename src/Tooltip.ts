@@ -6,6 +6,7 @@ import defaultToolipActions from './defaultTooltipActions';
 import Backdrop from './Backdrop';
 
 // TODO refactor entire codebase into modular files and directory structure
+// TODO add styleprops to hotspot's tooltip
 
 const defaultBackdropData = {
     disabled: false,

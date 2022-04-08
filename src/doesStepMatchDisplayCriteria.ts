@@ -5,8 +5,6 @@ const doesStepPathMatch = (targetPath): boolean => {
   // is, endsWith, startsWith, contains, regex
   const { value, comparator } = targetPath;
   const { pathname } = window.location;
-  /* console.log('value, pathname, comparator:')
-     console.log(value, pathname, comparator) */
   switch(comparator) {
     case 'is':
       return pathname===value;

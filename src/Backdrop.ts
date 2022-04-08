@@ -1,5 +1,6 @@
 import { document, window } from 'global';
 import { styleObjectToString, getStepUID, onElementResize, getElementPosition } from './utils/';
+import { BackdropData, BackdropParameters } from './types';
 
 const roundNum = (value: number, decimalPlaces: number=2) => {
   return Math.round((value + Number.EPSILON) * Math.pow(10, decimalPlaces)) / (Math.pow(10, decimalPlaces));
@@ -29,27 +30,6 @@ const defaultBackdropData = {
   opacity: '0.5',
   color: '#444',
 }
-
-interface BackdropData{
-  stageGap: number;
-  opacity: string;
-  color: string;
-}
-
-interface BackdropForTooltipParameters{
-  targetSelector: string;
-  uid: string;
-  data: BackdropData;
-}
-
-interface BackdropAsStepParameters{
-  targetSelector: string;
-  index: number;
-  guideID: string;
-  data: BackdropData;
-}
-
-type BackdropParameters = BackdropForTooltipParameters & BackdropAsStepParameters;
 
 
 class Backdrop {
