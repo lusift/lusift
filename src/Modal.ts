@@ -1,5 +1,5 @@
 import createModal from './createModal';
-import { document } from 'global';
+import { document, window } from 'global';
 import { getStepUID } from './utils';
 import { Modal as ModalData } from './types';
 import { MODAL_OVERLAY_CLASS } from './constants';

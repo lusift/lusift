@@ -1,7 +1,7 @@
 import { styleObjectToString } from './utils';
 
 const renderCloseXButton = (closeButton: any, stepType: string): string => {
-  if (closeButton.disable) return;
+  if (closeButton.disabled) return;
   return `
     <style>
       .lusift .${stepType.toLowerCase()} .closeX{

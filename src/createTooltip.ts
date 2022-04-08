@@ -27,13 +27,13 @@ const renderNavButtons = (navSection: any): string => {
     </style>
 
     <section class="nav-buttons">
-      ${dismissLink.disable ? '': `
+      ${dismissLink.disabled ? '': `
         <button onclick="Lusift.close()" class="close dismiss-link">
           skip this
         </button>
         `}
-      ${prevButton.disable ? '': `<button onclick="Lusift.prev()" class="prev lusift-button">Prev</button>`}
-      ${nextButton.disable ? '': `<button onclick="Lusift.next()" class="next lusift-button">Next</button>`}
+      ${prevButton.disabled ? '': `<button onclick="Lusift.prev()" class="prev lusift-button">Prev</button>`}
+      ${nextButton.disabled ? '': `<button onclick="Lusift.next()" class="next lusift-button">Next</button>`}
     </section>
   `;
 }

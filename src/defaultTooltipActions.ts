@@ -2,24 +2,24 @@ export default {
   styleProps: {},
   closeButton: {
     styleProps: {},
-    disable: false,
+    disabled: false,
   },
   navSection: {
     styleProps: {},
     nextButton: {
       text: 'next',
       styleProps: {},
-      disable: false,
+      disabled: false,
     },
     prevButton: {
       text: 'prev',
       styleProps: {},
-      disable: true,
+      disabled: true,
     },
     dismissLink: {
       text: 'skip this',
       styleProps: {},
-      disable: true,
+      disabled: true,
     }
   },
 }
