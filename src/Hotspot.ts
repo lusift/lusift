@@ -4,12 +4,10 @@ import createBeacon from './createBeacon';
 import { getElementPosition, getStepUID, changeAsyncStepStatus } from './utils';
 import { Hotspot as HotspotData } from './types';
 
-// TODO bug - sometimes the elements persist on page navigation and can't be referenced and removed from the dom either
-// is there an event like beforepagenav
 
 class Hotspot {
   private tipID: string;
-  readonly tippyInstance: any;
+  private tippyInstance: any;
   private targetElement: document.HTMLElement;
   readonly data: HotspotData;
   private beaconID: string;
@@ -89,6 +87,7 @@ class Hotspot {
   }
 
   private remove(): void {
+    console.log(`Removing id: ${this.data.index} hotspot`);
     if(this.tippyInstance) {
       this.tippyInstance.unmount();
       this.tippyInstance.destroy();

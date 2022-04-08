@@ -58,6 +58,8 @@ export default class Guide {
     } else {
       this.attemptToShowActiveStep();
     }
+    console.log('active instance started')
+    console.log(this.activeStepInstances);
     console.log('start end-------------');
   }
 
@@ -131,11 +133,13 @@ export default class Guide {
   }
 
   private removeIllegalSteps(): void {
-    this.activeStepInstances.forEach(stepInstance => {
+    this.activeStepInstances = this.activeStepInstances.filter(stepInstance => {
       // if step display criteria doesn't match, then run remove() and remove from this.activeStepInstances
       if(!doesStepMatchDisplayCriteria({ target: stepInstance.target, type: stepInstance.type })) {
         stepInstance.instance.remove();
-        this.activeStepInstances.splice(this.activeStepInstances.indexOf(stepInstance), 1);
+        return false;
+      } else {
+        return true;
       }
     });
   }

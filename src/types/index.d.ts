@@ -75,13 +75,15 @@ export interface Tooltip {
   styleProps: Object;
 }
 
+export type StepType = Tooltip | HotspotData;
 
 export interface GuideType {
   id: string;
   name: string;
   description?: string;
-  steps: Tooltip[] | HotspotData[];
+  steps: StepType[];
 }
+
 
 export interface TrackingState {
   activeStep: number;

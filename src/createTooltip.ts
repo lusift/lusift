@@ -8,8 +8,6 @@ const defaultBodyContent = `
   <p style="font-weight: normal;">Default tooltip content</p>
 `;
 
-// TODO I am tired of writing html and css like this in a script file
-// I'm sure you could find project where they use a lot of html, css and js to modify webpages
 
 const renderCloseXButton = (closeButton: any): string => {
   if (closeButton.disable) return;

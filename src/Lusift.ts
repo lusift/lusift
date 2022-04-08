@@ -13,7 +13,6 @@ import addLusiftCSS from './addLusiftCSS';
 import addDefaultCSS from './addDefaultCSS';
 import startStepInstance from './startStepInstance';
 
-// TODO --- do all of the feature work first and then refactoring of stuff here and there, and then loaders and stuff ----
 // TODO see how to bundle ts and css where we reference css files inside ts
 // TODO publish scrapped version to npm
 
@@ -140,8 +139,6 @@ class Lusift {
 
   public setContent(content: Content): void {
     // filter and validate this.content
-    console.log('validating content: ');
-    console.log(content)
     if(!isOfTypeContent(content)) {
       return console.warn('Content data type is invalid');
     }
