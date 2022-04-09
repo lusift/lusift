@@ -8,8 +8,6 @@ import { window, document } from 'global';
 
 import { Content } from './types';
 import { isOfTypeContent, isObject } from './utils/isOfType';
-import addTippyCSS from './addTippyCSS';
-import addLusiftCSS from './addLusiftCSS';
 import addDefaultCSS from './addDefaultCSS';
 
 // TODO publish scrapped version to npm

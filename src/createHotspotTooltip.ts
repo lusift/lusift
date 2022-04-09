@@ -1,6 +1,7 @@
 import styleObjectToString from './utils/styleObjectToString';
 import createTippy from './createTippy';
 import renderProgressBar from './renderProgressBar';
+import { DEFAULT_TOOLTIP_BORDER_RADIUS } from './constants';
 
 const defaultBodyContent = `
   <h3 style="font-weight: bold;">Default title</h3>
@@ -20,6 +21,7 @@ const renderTooltip = ({ remove, data, target, styleProps, uid }) => {
     <style>
       .tippy-box{
         z-index: 999999;
+        border-radius: ${DEFAULT_TOOLTIP_BORDER_RADIUS};
         ${styleObjectToString(styleProps)}
       }
     </style>
