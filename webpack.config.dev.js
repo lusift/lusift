@@ -23,11 +23,11 @@ module.exports = {
     },
     devtool: 'eval-source-map',
     devServer: {
-        static: './build',
+        static: './dev',
     },
     output: {
-        filename: 'bundle.js',
-        path: path.resolve(__dirname, 'build'),
+        filename: 'index.js',
+        path: path.resolve(__dirname, 'dev'),
         libraryTarget: 'commonjs2'
     },
 };
