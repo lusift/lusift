@@ -1,8 +1,6 @@
 import { window } from 'global';
 import { saveState, loadState } from './store';
-import doesStepMatchDisplayCriteria from './doesStepMatchDisplayCriteria';
-import { changeAsyncStepStatus } from './utils';
-import startStepInstance from './startStepInstance';
+import { changeAsyncStepStatus, startStepInstance, doesStepMatchDisplayCriteria } from './utils';
 
 import { GuideType, TrackingState } from './types';
 

@@ -7,6 +7,8 @@ import getElementPosition from './getElementPosition';
 import doesStringMatchRegex from './doesStringMatchRegex';
 import changeAsyncStepStatus from './changeAsyncStepStatus';
 import roundNum from './roundNum';
+import doesStepMatchDisplayCriteria from './doesStepMatchDisplayCriteria';
+import startStepInstance from './startStepInstance';
 
 export {
   htmlStringToElement,
@@ -17,5 +19,7 @@ export {
   getElementPosition,
   doesStringMatchRegex,
   changeAsyncStepStatus,
+  doesStepMatchDisplayCriteria,
+  startStepInstance,
   roundNum
 };

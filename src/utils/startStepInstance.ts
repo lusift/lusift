@@ -1,6 +1,6 @@
-import Tooltip from './Tooltip';
-import Modal from './Modal';
-import Hotspot from './Hotspot';
+import Tooltip from '../Tooltip';
+import Modal from '../Modal';
+import Hotspot from '../Hotspot';
 
 const startStepInstance = (stepData: any, guideID: string): void => {
   const { index, target, type, data, closeButton } = stepData;

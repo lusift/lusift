@@ -2,7 +2,7 @@ import Guide from './Guide';
 import { saveState, loadState } from './store';
 import { GuideType } from './types';
 import isEqual from 'lodash.isequal';
-import doesStepMatchDisplayCriteria from './doesStepMatchDisplayCriteria';
+import { doesStepMatchDisplayCriteria, startStepInstance } from './utils';
 
 import { window, document } from 'global';
 
@@ -11,7 +11,6 @@ import { isOfTypeContent, isObject } from './utils/isOfType';
 import addTippyCSS from './addTippyCSS';
 import addLusiftCSS from './addLusiftCSS';
 import addDefaultCSS from './addDefaultCSS';
-import startStepInstance from './startStepInstance';
 
 // TODO see how to bundle ts and css where we reference css files inside ts
 // TODO publish scrapped version to npm
