@@ -1,5 +1,5 @@
 import { window } from 'global';
-import { loadState } from './localStorage';
+import { loadState } from './store';
 import {
   DEFAULT_TOOLTIP_BORDER_RADIUS,
   DEFAULT_MODAL_BORDER_RADIUS,

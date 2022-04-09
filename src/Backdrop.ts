@@ -44,13 +44,14 @@ class Backdrop {
   private toStopOverlay: boolean;
   private resizeObservers: any[] = [];
 
+  // TODO types here
   constructor({
     targetSelector,
     uid,
     guideID,
     index,
     data
-  }: BackdropParameters) { //BackdropParameters
+  }: any) { //BackdropParameters
     uid = uid || getStepUID({ guideID, index, type: 'backdrop' });
     this.stagedTargetClass = `${uid}__target`;
 

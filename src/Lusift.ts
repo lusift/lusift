@@ -12,8 +12,8 @@ import addTippyCSS from './addTippyCSS';
 import addLusiftCSS from './addLusiftCSS';
 import addDefaultCSS from './addDefaultCSS';
 
-// TODO see how to bundle ts and css where we reference css files inside ts
 // TODO publish scrapped version to npm
+// TODO set default styles for each type of content, and html elements (like button), and for responsive screen sizes
 
 class Lusift {
   private content: Content;
@@ -38,17 +38,7 @@ class Lusift {
     if(!isObject(localData)) {
       saveState({});
     }
-
-    // TODO put below functions in a seperate function that imports, prepares, and injects css
-    addTippyCSS();
-    addLusiftCSS();
-    // addDefaultCSS();
-    if(typeof document !=='undefined') {
-      const customStyle = document.createElement("style");
-      customStyle.type = "text/css";
-      customStyle.setAttribute("lusift-custom-css", "");
-      document.head.appendChild(customStyle);
-    }
+    addDefaultCSS();
   }
 
   public setGlobalStyle(styleText: string): void {
