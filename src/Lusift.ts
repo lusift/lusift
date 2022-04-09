@@ -10,9 +10,9 @@ import { Content } from './types';
 import { isOfTypeContent, isObject } from './utils/isOfType';
 import addDefaultCSS from './addDefaultCSS';
 
-// TODO publish scrapped version to npm
 // TODO set default styles for each type of content, and html elements (like button), and for responsive screen sizes
 // TODO setup tree-shaking
+// TODO Refactor
 
 class Lusift {
   private content: Content;

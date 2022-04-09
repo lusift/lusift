@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "webpack --watch --config webpack.config.dev.js",
-    "build": "webpack --config webpack.prod.config.js",
+    "build": "webpack --config webpack.config.prod.js",
     "test": "jest --watchAll",
     "lint": "npm run lint:js",
     "lint:eslint": "eslint --ignore-path .gitignore --ext .ts",
