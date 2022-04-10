@@ -1,11 +1,9 @@
 import { document, window } from 'global';
 import createTooltip from './createTooltip';
 import { mergeObjects, getStepUID } from './utils';
-import { TooltipData, HotspotAndTooltipTarget as Target, StepActions } from './types';
+import { TooltipData, HotspotAndTooltipTarget as Target, StepActions } from '../types';
 import defaultToolipActions from './defaultTooltipActions';
 import Backdrop from './Backdrop';
-
-// TODO refactor entire codebase into modular files and directory structure
 
 const defaultBackdropData = {
     disabled: false,

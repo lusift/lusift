@@ -1,4 +1,4 @@
-import { GuideType, Content } from '../../types';
+import { GuideType, Content } from '../../../types';
 
 export function isObject(item: any): boolean {
   return (item instanceof Object && item.constructor === Object);

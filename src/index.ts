@@ -1,5 +1,6 @@
 import { window, document } from 'global';
 import Lusift from './Lusift';
+import { Content } from '../types';
 
 if (typeof window !== "undefined") {
   window.addEventListener('error', function(event) {
@@ -11,4 +12,4 @@ if (typeof window !== "undefined") {
 
 console.log('%c index file runs ', 'background: #222; color: #bada55');
 
-export { Lusift as default };
+export { Lusift as default, Content as LusiftContent };

@@ -1,18 +1,18 @@
 import Guide from './Guide';
 import { saveState, loadState } from './store';
-import { GuideType } from './types';
 import isEqual from 'lodash.isequal';
 import { doesStepMatchDisplayCriteria, startStepInstance } from './utils';
 
 import { window, document } from 'global';
 
-import { Content } from './types';
+import { GuideType, Content } from '../types';
 import { isOfTypeContent, isObject } from './utils/isOfType';
 import addDefaultCSS from './addDefaultCSS';
 
 // TODO set default styles for each type of content, and html elements (like button), and for responsive screen sizes
-// TODO setup tree-shaking
-// TODO Refactor
+// TODO Refactor - architecting library code
+// TODO export types of lusiftContent
+// TODO es2017 vs es5 in tsconfig
 
 class Lusift {
   private content: Content;

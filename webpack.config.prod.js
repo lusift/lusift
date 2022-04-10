@@ -22,8 +22,12 @@ module.exports = {
         extensions: ['', '.ts', '.js', '.css']
     },
     output: {
-        filename: 'bundle.js',
+        filename: 'lusift.js',
+        library: {
+            name: 'lusift',
+            type: 'umd'
+        },
         path: path.resolve(__dirname, 'dist'),
-        libraryTarget: 'commonjs2'
+        globalObject: 'this'
     },
 };

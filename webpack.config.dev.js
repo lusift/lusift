@@ -26,8 +26,12 @@ module.exports = {
         static: './dev',
     },
     output: {
-        filename: 'index.js',
+        filename: 'lusift.js',
+        library: {
+            name: 'lusift',
+            type: 'umd'
+        },
         path: path.resolve(__dirname, 'dev'),
-        libraryTarget: 'commonjs2'
+        globalObject: 'this'
     },
 };

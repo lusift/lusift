@@ -1,14 +1,16 @@
 {
   "compilerOptions": {
     "target": "es2017",
+    "declaration": true,
     "skipLibCheck": true,
     "lib": [
+      "dom",
       "es2017",
       "esnext.asynciterable"
     ],
     "typeRoots": [
       "./node_modules/@types",
-      "./src/types"
+      "./types"
     ],
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
@@ -17,7 +19,7 @@
     "moduleResolution": "node",
     "pretty": true,
     "sourceMap": true,
-    "outDir": "./build",
+    "outDir": "./dist",
     "allowJs": true,
     "noEmit": false,
     "esModuleInterop": true
@@ -27,6 +29,8 @@
   ],
   "exclude": [
     "node_modules",
-    "tests"
+    "tests",
+    "dev",
+    "dist"
   ]
 }

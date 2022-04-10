@@ -1,5 +1,5 @@
 import { window, document } from 'global';
-import { ElementPosition } from '../types';
+import { ElementPosition } from '../../types';
 
 const getElementPosition = (element: document.HTMLElement): ElementPosition => {
     const documentElement = document;

@@ -2,9 +2,8 @@ import { window } from 'global';
 import { saveState, loadState } from './store';
 import { changeAsyncStepStatus, startStepInstance, doesStepMatchDisplayCriteria } from './utils';
 
-import { GuideType, TrackingState } from './types';
+import { GuideType, TrackingState } from '../types';
 
-// TODO make it installable
 
 export default class Guide {
   readonly guideData: GuideType;

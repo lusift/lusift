@@ -2,7 +2,7 @@ import { document, window } from 'global';
 import createHotspotTooltip from './createHotspotTooltip';
 import createBeacon from './createBeacon';
 import { getElementPosition, getStepUID, changeAsyncStepStatus } from './utils';
-import { Hotspot as HotspotData } from './types';
+import { Hotspot as HotspotData } from '../types';
 
 
 class Hotspot {

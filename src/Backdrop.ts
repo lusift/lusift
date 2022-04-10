@@ -6,7 +6,7 @@ import {
   getElementPosition,
   roundNum
 } from './utils/';
-import { BackdropData, BackdropParameters } from './types';
+import { BackdropData, BackdropParameters } from '../types';
 
 
 const areNumbersEqual = (num1: number, num2: number): boolean => {
