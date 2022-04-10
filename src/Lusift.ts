@@ -11,7 +11,7 @@ import addDefaultCSS from './addDefaultCSS';
 
 // TODO set default styles for each type of content, and html elements (like button), and for responsive screen sizes
 // TODO Refactor - architecting library code
-// TODO export types of lusiftContent
+// - move webpack configs to /config
 
 class Lusift {
   private content: Content;
