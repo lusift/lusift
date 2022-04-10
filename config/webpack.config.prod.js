@@ -27,7 +27,7 @@ module.exports = {
             name: 'lusift',
             type: 'umd'
         },
-        path: path.resolve(__dirname, 'dist'),
+        path: path.resolve(__dirname, '../dist'),
         globalObject: 'this'
     },
 };

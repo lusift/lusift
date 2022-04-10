@@ -10,8 +10,14 @@ import { isOfTypeContent, isObject } from './utils/isOfType';
 import addDefaultCSS from './addDefaultCSS';
 
 // TODO set default styles for each type of content, and html elements (like button), and for responsive screen sizes
+// TODO split code for each type of step into seperate packages
+// TODO push to npm and bower
+// TODO add autoprefixer to webpack and rollup
+// TODO fix circular dependencies with rollup
+// TODO documentation
 // TODO Refactor - architecting library code
-// - move webpack configs to /config
+// - chakra-ui and tippyjs repos are good
+// NOTE** when webpack config was commited, lusift/dev import on the host was working no problem
 
 class Lusift {
   private content: Content;

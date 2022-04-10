@@ -1,0 +1,13 @@
+import { Content } from '../../../types';
+export declare function isObject(item: any): boolean;
+export declare function isObjectOrUndefined(object: any): boolean;
+export declare function isOfTypeTooltipData(object: any): boolean;
+export declare function isOfTypeTarget(object: any, type: string): boolean;
+export declare function isOfTypeTooltipActions(object: any): boolean;
+export declare function isOfTypeTooltip(object: any): boolean;
+export declare function isOfTypeModal(object: any): boolean;
+export declare function isOfTypeHotspot(object: any): boolean;
+export declare function isOfTypeStep(object: any): boolean;
+export declare function isOfTypeGuide(object: any): boolean;
+export declare function isOfTypeContent(object: Content): boolean;
+export declare function isOfTypeHtmlElement(element: any): boolean;
