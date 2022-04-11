@@ -6,6 +6,7 @@ import replace from '@rollup/plugin-replace';
 import { terser } from "rollup-plugin-terser";
 import { DEFAULT_EXTENSIONS } from '@babel/core';
 import { babel } from '@rollup/plugin-babel';
+import alias from '@rollup/plugin-alias';
 
 const mode = process.env.NODE_ENV === 'development' ? 'development' : 'production';
 
@@ -18,6 +19,15 @@ export default {
         sourcemap: mode === 'development',
     },
     plugins: [
+        alias({
+            entries: {
+                common: '../src/common',
+                hospot: '../src/hospot',
+                tooltip: '../src/tooltip',
+                modal: '../src/modal',
+                lusift: '../src/lusift',
+            }
+        }),
         replace({
             'process.env.NODE_ENV': JSON.stringify('production'),
             __buildDate__: () => JSON.stringify(new Date()),

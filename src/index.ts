@@ -1,6 +1,6 @@
 import { window, document } from 'global';
-import Lusift from './Lusift';
-import { Content } from '../types';
+import Lusift from 'lusift';
+import { Content } from '../src/common/types';
 
 if (typeof window !== "undefined") {
   window.addEventListener('error', function(event) {

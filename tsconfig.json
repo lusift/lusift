@@ -12,6 +12,24 @@
       "./node_modules/@types",
       "./types"
     ],
+    "baseUrl": "./src",
+    "paths": {
+      "@common/*": [
+        "./src/common/*"
+      ],
+      "@hotspot/*": [
+        "./src/hotspot/*"
+      ],
+      "@lusift/*": [
+        "./src/lusift/*"
+      ],
+      "@modal/*": [
+        "./src/modal/*"
+      ],
+      "@tooltip/*": [
+        "./src/tooltip/*"
+      ]
+    },
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
