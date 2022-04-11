@@ -13,7 +13,7 @@ const mode = process.env.NODE_ENV === 'development' ? 'development' : 'productio
 export default {
     input: 'src/index.ts',
     output: {
-        file: `${mode === 'development' ? 'dev' : 'dist'}/lusift.js`,
+        file: `${mode === 'development' ? 'dev/index.js' : 'dist/lusift.js'}`,
         name: 'Lusift',
         format: 'umd',
         sourcemap: mode === 'development',
