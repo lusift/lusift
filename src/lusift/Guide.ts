@@ -102,7 +102,6 @@ export default class Guide {
     steps.forEach(({ async, type, index, target }) => {
       if(async && (type==='hotspot')) {
         console.log(`step: ${index}`)
-        // TODO bug - step 5 is not in trackingState.asyncSteps, why is that?
         if(doesStepMatchDisplayCriteria({ target, type }) && this.trackingState.asyncSteps[index].toOpen) {
           console.log(`Step ${index}: target path and element matched. toOpen is true`);
           // if step is already active console.warn that the step is already active

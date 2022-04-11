@@ -10,7 +10,7 @@ const changeAsyncStepStatus = (stepIndex: number, toOpen: boolean): void => {
       trackingState: {
         ...exisitingState[window.Lusift.activeGuideID].trackingState,
         asyncSteps: {
-          ...exisitingState[window.Lusift.activeGuideID].asyncSteps,
+          ...exisitingState[window.Lusift.activeGuideID].trackingState.asyncSteps,
           [stepIndex]: {
             toOpen
           }

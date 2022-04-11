@@ -12,10 +12,8 @@ import addDefaultCSS from './addDefaultCSS';
 // TODO set default styles for each type of content, and html elements (like button), and for responsive screen sizes
 // TODO push to npm and bower
 // TODO fix circular dependencies with rollup
-// TODO in rollup config file for dev is index.js
 // TODO add methods like window.Lusift.next as constants NEXT_STEP_HANDLER
 // TODO documentation
-// NOTE** when webpack config was commited, lusift/dev import on the host was working no problem
 
 class Lusift {
   private content: Content;

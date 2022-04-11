@@ -102,6 +102,7 @@ class Hotspot {
   }
 
   private removeAndCloseAsync(): void {
+    // TODO - bug not actually setting toOpen to false
     this.remove();
     this.changeAsyncStepStatus(false);
   }
