@@ -11,6 +11,7 @@ const renderProgressBar = () => {
 
   const currentGuide = loadState()[window.Lusift.activeGuideID];
 
+  if(!currentGuide) return '';
   if (!currentGuide) {
     // Assuming that this is dev mode
     let progress = '66.66';
