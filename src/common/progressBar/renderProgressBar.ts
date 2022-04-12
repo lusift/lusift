@@ -10,6 +10,19 @@ import {
 const renderProgressBar = () => {
 
   const currentGuide = loadState()[window.Lusift.activeGuideID];
+
+  if (!currentGuide) {
+    // Assuming that this is dev mode
+    let progress = '66.66';
+    let max = 100;
+    return `
+      <progress class="lusift-progress" aria-label="progressbar" max="${max}" value="${progress}">
+        ${progress}%
+      </progress>
+    `;
+  }
+
+
   const currentStep = currentGuide.steps[currentGuide.trackingState.activeStep];
   const progressBarData = currentGuide.progressBar || {};
 
@@ -37,6 +50,7 @@ const renderProgressBar = () => {
 
   const max = 100;
 
+  // TODO put this with right defaults in global default css file
   return `
     <style>
       .lusift-progress {
