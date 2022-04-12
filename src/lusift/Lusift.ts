@@ -15,6 +15,7 @@ import addDefaultCSS from './addDefaultCSS';
 // -- modal
 // TODO push to npm and bower
 // TODO debug some mess in async step in dev mode
+// TODO beacon relative position
 // TODO documentation
 // TODO have an option that decides when hasGuideDataChanged resolves to true
 // TODO just return nothing for progress bar in dev mode, instead of a misleading dummy

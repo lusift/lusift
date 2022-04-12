@@ -19,6 +19,7 @@
     font-weight: normal;
 }
 
+
 /*tooltip closeX*/
 .lusift .tooltip section.close-btn{
     display: flex;
@@ -78,6 +79,7 @@
 .lusift .tooltip .body-content{
     margin-top: 0 !important;
     min-width: 80px;
+    white-space: nowrap;
 }
 
 /*modal*/
@@ -110,6 +112,7 @@
     color: #111;
     background: #fff;
     flex-grow: 1;
+    white-space: nowrap;
 }
 
 .lusift-button{
@@ -157,11 +160,13 @@
 
 /*hotspot */
 
+/*width, text is getting wrapped*/
 .lusift .hotspot-tooltip {
     font-weight: bold;
     font-size: 1rem;
     display: block;
     padding: 5px 9px;
+    white-space: nowrap;
 }
 .lusift .hotspot-tooltip > * {
     margin: 3px 6px;
