@@ -15,6 +15,10 @@ const createModal = ({ uid, bodyContent, closeButton={} }): void => {
   const modalStyleProps = {};
   const modalOverlayStyleProps = {};
   bodyContent = bodyContent || `
+    <style>
+      height: 500px;
+      width: 600px;
+    </style>
     <div>
       <h2>Default Modal Content</h2>
       <button class="button" onclick="Lusift.next()">OK</button>
@@ -37,17 +41,6 @@ const createModal = ({ uid, bodyContent, closeButton={} }): void => {
 
   modal.style.cssText = styleObjectToString({
     borderRadius: DEFAULT_MODAL_BORDER_RADIUS,
-    background: '#fff',
-    height: '500px',
-    width: '600px',
-    top: '50%',
-    display: 'flex',
-    flexDirection: 'column',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    position: 'absolute',
-    zIndex: '99999',
-    opacity: '1',
     ...modalStyleProps
   });
   modal.classList.add('modal');

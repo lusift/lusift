@@ -10,12 +10,15 @@ import { isOfTypeContent, isObject } from '../common/utils/isOfType';
 import addDefaultCSS from './addDefaultCSS';
 
 // TODO set default styles for each type of content, and html elements (like button), and for responsive screen sizes
-// -- buttons
 // -- tooltip (and that gap between [data-tippy-root] and .tippy-box)
 // -- modal
 // TODO push to npm and bower
 // TODO debug some mess in async step in dev mode
 // TODO beacon relative position
+// TODO modal - click outside to close
+// TODO for both tooltip+backdrop and modal:
+// - change focus to tooltip/modal, then change it back to original when closed
+// - do not allow focusing on elements outside of tooltip/modal
 // TODO documentation
 // TODO have an option that decides when hasGuideDataChanged resolves to true
 // TODO just return nothing for progress bar in dev mode, instead of a misleading dummy

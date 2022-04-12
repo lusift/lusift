@@ -89,6 +89,18 @@
 
 }
 
+.lusift .modal {
+    background: #fff;
+    top: 50%;
+    display: flex;
+    flex-direction: column;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    z-index: 99999;
+    opacity: 1;
+}
+
 /*modal closeX*/
 
 .lusift .modal section.close-btn{
@@ -109,10 +121,17 @@
 
 .lusift .modal .body-content{
     padding: 3px 15px;
+    padding-bottom: 8px;
     color: #111;
     background: #fff;
     flex-grow: 1;
     white-space: nowrap;
+    overflow-y: auto;
+    overflow-x: none;
+    min-height: 30px;
+    min-width: 200px;
+    max-height: 500px;
+    max-width: 600px;
 }
 
 .lusift-button{
@@ -173,5 +192,5 @@
 }
 .lusift .hotspot-tooltip .body-content{
     margin-top: 0 !important;
-    min-width: 100px;
+    min-width: 80px;
 }
