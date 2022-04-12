@@ -10,7 +10,7 @@ import alias from '@rollup/plugin-alias';
 
 const mode = process.env.NODE_ENV === 'development' ? 'development' : 'production';
 
-export default {
+const config = {
     input: 'src/index.ts',
     output: {
         file: `${mode === 'development' ? 'dev/index.js' : 'dist/lusift.js'}`,
@@ -65,6 +65,14 @@ export default {
             sourceMap: (mode === 'production' ? false : 'inline'),
             minimize: mode === 'production',
         }),
-        terser(),
     ]
 };
+
+if (mode === 'production') {
+    config.plugins = [
+        ...config.plugins,
+        terser(),
+    ];
+}
+
+export default config;

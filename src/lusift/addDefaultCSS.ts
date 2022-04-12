@@ -2,6 +2,7 @@ import { window, document } from 'global';
 import lusiftDefaultCSS from './style/lusift.css';
 import lusiftTippyCSS from './style/tippy.lusift.css';
 
+// Inject default lusift global styles
 export default () => {
   if (typeof document ==='undefined') return;
   const lusiftDefault = document.createElement('style');

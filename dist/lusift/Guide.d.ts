@@ -1,17 +1,17 @@
-import { GuideType } from '../common/types';
+import { GuideType, TrackingState } from '../common/types';
 export default class Guide {
     readonly guideData: GuideType;
-    private trackingState;
     private activeStepInstance;
     private activeStepInstances;
     constructor(guideID: string);
-    private generateTrackingState;
+    private generateNewTrackingState;
     start(): void;
     private attemptToShowActiveStep;
     private isStepAlreadyActive;
     private attemptToStartAsyncSteps;
     private removeIllegalSteps;
-    private updateLocalTrackingState;
+    private setTrackingState;
+    getTrackingState(): TrackingState;
     private clearTrackingState;
     setStep(newStepNum: number): void;
     private close;

@@ -11,9 +11,8 @@ import addDefaultCSS from './addDefaultCSS';
 
 // TODO set default styles for each type of content, and html elements (like button), and for responsive screen sizes
 // TODO push to npm and bower
-// TODO fix circular dependencies with rollup
-// TODO add methods like window.Lusift.next as constants NEXT_STEP_HANDLER
 // TODO documentation
+// TODO remove duplication of getTrackingState in Guide and Lusift
 
 class Lusift {
   private content: Content;
@@ -71,13 +70,16 @@ class Lusift {
 
   public devShowStep(guideID: string, stepNumber: number): void {
     // dev mode: to be used to develop/style step elements
-
+    window.alert('dev mode!')
     // if there is some other content active already, refuse to show dev mode
     if (typeof this.activeGuideID ==='string') {
       return console.warn('Can\'t enable dev mode because a guide is active using showContent()');
     }
     if(!this.content || !this.contentSet) {
-      return console.warn(`Content not set, pass valid content object to setContent()`);
+      return console.warn(`Content not set, pass valid content object to setContent() before running devShowStep()`);
+    }
+    this.next = this.prev = this.close = this.showContent = function() {
+      window.alert(`Can't run this method in dev mode`);
     }
 
     if (this.content[guideID]) {
@@ -85,20 +87,19 @@ class Lusift {
       const { target, type } = steps[stepNumber];
 
       if(!doesStepMatchDisplayCriteria({ target, type })) {
-        return console.warn('Display criteria for step do not match');
+        return console.warn('Display criteria for step do not match. Navigate to\
+                            the right target page and make sure that the target element\
+                          is in the visible screen');
       }
 
       if (steps[stepNumber]) {
         startStepInstance(steps[stepNumber], guideID);
+        console.log(`%c Showing step ${stepNumber} of ${guideID} in dev mode`, 'background: #222; color: #bada55');
       } else {
-        console.warn(`${guideID} doesn't have a step ${stepNumber}`);
+        console.error(`Guide '${guideID}' doesn't have a step ${stepNumber}`);
       }
     } else {
-      console.warn(`${guideID} doesn't exist`);
-    }
-    console.log(`%c Showing step ${stepNumber} of ${guideID} in dev mode`, 'background: #222; color: #bada55');
-    this.next = this.prev = this.close = this.showContent = function() {
-      window.alert(`Can't run this method in dev mode`);
+      console.error(`Guide with id '${guideID}' doesn't exist`);
     }
   }
 
