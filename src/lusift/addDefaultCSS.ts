@@ -1,14 +1,38 @@
 import { window, document } from 'global';
 import lusiftDefaultCSS from './style/lusift.css';
 import lusiftTippyCSS from './style/tippy.lusift.css';
+import { PRIMARY_COLOR, DEFAULT_MODAL_BORDER_RADIUS, DEFAULT_TOOLTIP_BORDER_RADIUS, DEFAULT_PROGRESS_BAR_HEIGHT } from '../common/constants';
 
 // Inject default lusift global styles
+// TODO what's that thick layer thing beneath tippy tooltip content? zoom in with ctrl+
+
+const getDynamicDefaultCSS = () => {
+
+  return `\n
+    /* from dynamic javascript variables*/
+
+    .lusift-progress {
+      height: ${DEFAULT_PROGRESS_BAR_HEIGHT};
+    }
+    .lusift-progress::-webkit-progress-bar {
+      border-radius: ${DEFAULT_TOOLTIP_BORDER_RADIUS}; /*border-radius of tooltip*/
+    }
+    .modal .lusift-progress::-webkit-progress-bar {
+      border-radius: ${DEFAULT_MODAL_BORDER_RADIUS}; /*border-radius of modal*/
+    }
+    .lusift-progress::-webkit-progress-value {
+      background-color: ${PRIMARY_COLOR}; /*color of progress bar*/
+    }
+  `;
+}
+
 export default () => {
   if (typeof document ==='undefined') return;
   const lusiftDefault = document.createElement('style');
   lusiftDefault.type = 'text/css';
   lusiftDefault.setAttribute('lusift-default', '');
   lusiftDefault.textContent = lusiftDefaultCSS;
+  lusiftDefault.textContent += getDynamicDefaultCSS();
 
   const tippyStyle = document.createElement('style');
   tippyStyle.type = 'text/css';

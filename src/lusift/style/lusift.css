@@ -1,5 +1,24 @@
 /*default*/
 
+.lusift button {
+    background: rgb(17, 153, 158);
+    border-radius: 6px;
+    padding: 0.3rem 0.45rem;
+    color: #fff;
+    font-weight: bold;
+}
+
+.lusift .tooltip button {
+    padding: 0.2rem 0.35rem;
+    font-size: 0.75rem;
+}
+
+.lusift .closeX {
+    background-color: inherit;
+    border: none;
+    font-weight: normal;
+}
+
 /*tooltip closeX*/
 .lusift .tooltip section.close-btn{
     display: flex;

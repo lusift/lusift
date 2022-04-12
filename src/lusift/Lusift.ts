@@ -5,14 +5,19 @@ import { doesStepMatchDisplayCriteria, startStepInstance } from '../common/utils
 
 import { window, document } from 'global';
 
-import { GuideType, Content } from '../common/types';
+import { GuideType, Content, TrackingState } from '../common/types';
 import { isOfTypeContent, isObject } from '../common/utils/isOfType';
 import addDefaultCSS from './addDefaultCSS';
 
 // TODO set default styles for each type of content, and html elements (like button), and for responsive screen sizes
+// -- buttons
+// -- tooltip (and that gap between [data-tippy-root] and .tippy-box)
+// -- modal
 // TODO push to npm and bower
+// TODO debug some mess in async step in dev mode
 // TODO documentation
-// TODO remove duplication of getTrackingState in Guide and Lusift
+// TODO have an option that decides when hasGuideDataChanged resolves to true
+// TODO just return nothing for progress bar in dev mode, instead of a misleading dummy
 
 class Lusift {
   private content: Content;
@@ -51,7 +56,7 @@ class Lusift {
     customStyle.textContent = styleText;
   }
 
-  public getTrackingState(): object {
+  public getTrackingState(): TrackingState {
     if(this.contentSet && this.activeGuideID) {
       return loadState()[this.activeGuideID].trackingState;
     } else {
@@ -70,7 +75,6 @@ class Lusift {
 
   public devShowStep(guideID: string, stepNumber: number): void {
     // dev mode: to be used to develop/style step elements
-    window.alert('dev mode!')
     // if there is some other content active already, refuse to show dev mode
     if (typeof this.activeGuideID ==='string') {
       return console.warn('Can\'t enable dev mode because a guide is active using showContent()');
@@ -79,7 +83,7 @@ class Lusift {
       return console.warn(`Content not set, pass valid content object to setContent() before running devShowStep()`);
     }
     this.next = this.prev = this.close = this.showContent = function() {
-      window.alert(`Can't run this method in dev mode`);
+      console.error(`Can't run this method in dev mode`);
     }
 
     if (this.content[guideID]) {
