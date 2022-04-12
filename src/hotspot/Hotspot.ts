@@ -89,6 +89,9 @@ class Hotspot {
   private remove(): void {
     console.log(`Removing id: ${this.data.index} hotspot`);
     if(this.tippyInstance) {
+      if(this.tippyInstance.state.isDestroyed) {
+        console.log('Hotspot\'s tooltip is already destroyed');
+      }
       this.tippyInstance.unmount();
       this.tippyInstance.destroy();
     } else {
@@ -103,6 +106,10 @@ class Hotspot {
 
   private removeAndCloseAsync(): void {
     // TODO - bug not actually setting toOpen to false
+    // Oh so it does actually, but Guide's updateTrackingState needs to be run immediately after - poor syncing gimmick
+    // Additionally, can we run Lusift.guideInstance.removeIllegalSteps() here?
+    // And maybe, in removeIllegalSteps method, check if stepInstance is closed using a new
+    // property we insert for each step - isClosed: boolean;
     this.remove();
     this.changeAsyncStepStatus(false);
   }

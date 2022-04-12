@@ -2,6 +2,7 @@ import { window } from 'global';
 import { loadState, saveState } from '../store';
 
 const changeAsyncStepStatus = (stepIndex: number, toOpen: boolean): void => {
+
   const exisitingState = loadState();
   saveState({
     ...exisitingState,

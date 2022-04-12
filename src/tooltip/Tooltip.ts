@@ -76,6 +76,7 @@ export default class Tooltip {
             this.backdropID=getStepUID({ guideID, index, type: 'backdrop' });
             this.targetElement = document.querySelector(this.target.elementSelector);
             this.attachIntersectionObserver();
+            console.log('tooltip started')
         }
 
         private attachIntersectionObserver(): void {

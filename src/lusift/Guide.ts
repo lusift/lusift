@@ -7,9 +7,9 @@ import { GuideType, TrackingState } from '../common/types';
 
 export default class Guide {
   readonly guideData: GuideType;
-  private trackingState: TrackingState;
   private activeStepInstance: any;
   private activeStepInstances: any[] = [];
+  // ^For limited use only, doesn't update after a step is closed
 
   constructor(guideID: string) {
     // localGuideState consists of trackingState and guideData
@@ -19,11 +19,14 @@ export default class Guide {
 
     this.guideData = guideData;
     console.log(`%c Welcome to guide: ${this.guideData.name || this.guideData.id}`, 'background: #222; color: #bada55');
-    this.trackingState = localGuideState.trackingState || this.generateTrackingState();
-    this.updateLocalTrackingState();
+
+    if(!localGuideState.trackingState){
+      const newTrackingState = this.generateNewTrackingState();
+      this.setTrackingState(newTrackingState);
+    }
   }
 
-  private generateTrackingState(): any {
+  private generateNewTrackingState(): TrackingState {
     let newTrackingState = {
       activeStep: 0,
       finished: undefined,
@@ -43,7 +46,7 @@ export default class Guide {
   }
 
   public start(): void {
-    const { finished, prematurelyClosed } = this.trackingState;
+    const { finished, prematurelyClosed } = this.getTrackingState();
     this.removeIllegalSteps();
     this.attemptToStartAsyncSteps();
 
@@ -59,7 +62,7 @@ export default class Guide {
     // if the step is async, set toOpen to true
     // if display criteria matches and step isn't already displayed, then startStep
     // if the step is async, loop back with stepIndex++
-    const { activeStep } = this.trackingState;
+    const { activeStep } = this.getTrackingState();
     let stepIndex=activeStep-1;
     const steps = this.guideData.steps;
     let isAsyncStep: boolean;
@@ -72,7 +75,6 @@ export default class Guide {
 
       if (isAsyncStep){
         changeAsyncStepStatus(stepIndex, true);
-        this.trackingState = loadState()[this.guideData.id].trackingState;
       }
       if(displayCriteriaMatches && !this.isStepAlreadyActive(stepIndex)) {
         this.activeStepInstance = startStepInstance(
@@ -88,8 +90,10 @@ export default class Guide {
       }
     }
     while (isAsyncStep)
-    this.trackingState.activeStep=stepIndex;
-    this.updateLocalTrackingState();
+
+    let newTrackingState = this.getTrackingState()
+    newTrackingState.activeStep=stepIndex;
+    this.setTrackingState(newTrackingState);
   }
 
   private isStepAlreadyActive(stepIndex: number): boolean {
@@ -101,8 +105,7 @@ export default class Guide {
     const steps = this.guideData.steps;
     steps.forEach(({ async, type, index, target }) => {
       if(async && (type==='hotspot')) {
-        console.log(`step: ${index}`)
-        if(doesStepMatchDisplayCriteria({ target, type }) && this.trackingState.asyncSteps[index].toOpen) {
+        if(doesStepMatchDisplayCriteria({ target, type }) && this.getTrackingState().asyncSteps[index].toOpen) {
           console.log(`Step ${index}: target path and element matched. toOpen is true`);
           // if step is already active console.warn that the step is already active
           if(this.isStepAlreadyActive(index)) {
@@ -136,48 +139,52 @@ export default class Guide {
     });
   }
 
-  private updateLocalTrackingState(): void {
-    // save/sync class object to localstorage
+  private setTrackingState(trackingState: TrackingState): void {
     const existingState = loadState();
     saveState({
       ...existingState,
       [this.guideData.id]: {
         ...existingState[this.guideData.id],
-        trackingState: this.trackingState
+        trackingState
       }
     });
   }
 
+  public getTrackingState(): TrackingState {
+    return loadState()[this.guideData.id].trackingState;
+  }
+
   private clearTrackingState(): void {
-    this.trackingState = undefined;
-    this.updateLocalTrackingState();
+    this.setTrackingState(undefined);
   }
 
   public setStep(newStepNum: number): void {
     // change step and see which steps need to be unmounted or mounted
-    // this.closeCurrentStep();
+    let newTrackingState = this.getTrackingState();
     if (newStepNum < 0) {
       return console.warn('Step index can\'t be less than 0');
     } else if (newStepNum+1>this.guideData.steps.length) {
-      this.trackingState.finished=true;
+      newTrackingState.finished = true;
+      this.setTrackingState(newTrackingState);
       console.log('guide finished');
 
     } else {
-      this.trackingState.activeStep=newStepNum;
+      newTrackingState.activeStep=newStepNum;
+      this.setTrackingState(newTrackingState);
       this.start();
     }
-    this.updateLocalTrackingState();
   }
 
   private close(): void {
     // close guide
     // if current step is last step then finished=true, else prematurelyClosed=true
-    if(this.trackingState.activeStep+1 === this.guideData.steps.length) {
-      this.trackingState.finished = true;
+    let newTrackingState = this.getTrackingState();
+    if(newTrackingState.activeStep+1 === this.guideData.steps.length) {
+      newTrackingState.finished = true;
     } else {
-      this.trackingState.prematurelyClosed=true;
+      newTrackingState.prematurelyClosed=true;
     }
-    this.updateLocalTrackingState();
+    this.setTrackingState(newTrackingState);
     this.closeCurrentStep();
     console.log('guide closed');
     typeof window.Lusift.onClose === 'function' && window.Lusift.onClose();
@@ -187,7 +194,7 @@ export default class Guide {
     if(this.activeStepInstance) {
       this.activeStepInstance.remove();
       this.activeStepInstances = this.activeStepInstances
-        .filter(instance => instance.index !==this.trackingState.activeStep);
+        .filter(instance => instance.index !==this.getTrackingState().activeStep);
 
       this.activeStepInstance = null;
     } else {
@@ -196,7 +203,7 @@ export default class Guide {
   }
 
   private nextStep(): void {
-    const newStep = this.trackingState.activeStep+1;
+    const newStep = this.getTrackingState().activeStep+1;
     if (newStep+1>this.guideData.steps.length) {
       return console.warn('No new steps');
     }
@@ -208,7 +215,7 @@ export default class Guide {
 
   private prevStep(): void {
     // make newStep the index of the closest previus step with !step.async
-    let newStep = this.trackingState.activeStep;
+    let newStep = this.getTrackingState().activeStep;
 
     while(newStep>-2) {
       newStep--;
