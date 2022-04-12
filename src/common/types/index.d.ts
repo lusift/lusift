@@ -97,6 +97,7 @@ export interface GuideType {
   name: string;
   description?: string;
   steps: StepType[];
+  doNotResetTrackerOnContentChange: boolean;
 }
 
 

@@ -21,7 +21,6 @@ import addDefaultCSS from './addDefaultCSS';
 // - do not allow focusing on elements outside of tooltip/modal
 // TODO documentation
 // TODO have an option that decides when hasGuideDataChanged resolves to true
-// TODO just return nothing for progress bar in dev mode, instead of a misleading dummy
 
 class Lusift {
   private content: Content;
@@ -120,8 +119,8 @@ class Lusift {
     Object.keys(this.content).forEach((key) => {
       if(this.content[key].type==='guide'){
         const guideData = this.content[key].data; //prolly a guide
-        if(this.hasGuideDataChanged(guideData)) {
-          console.log(`${key} changed`);
+        if(this.hasGuideDataChanged(guideData) && !guideData.doNotResetTrackerOnContentChange) {
+          console.log(`guide with id '${key}' changed`);
           // clear tracking data
           stateToSave[guideData.id] = guideData;
         } else {
@@ -144,8 +143,9 @@ class Lusift {
     this.contentSet = true;
     // console.log('filtering')
     Object.keys(this.content).forEach((key) => {
-      const { id, name, description, steps } = this.content[key].data;
-      this.content[key].data = { id, name, description, steps };
+
+      const { id, name, description, steps, doNotResetTrackerOnContentChange } = this.content[key].data;
+      this.content[key].data = { id, name, description, steps, doNotResetTrackerOnContentChange };
     });
 
     // iterate through each content item to note changes and conditionally preserve trackingState
