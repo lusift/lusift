@@ -13,6 +13,7 @@ import addDefaultCSS from './addDefaultCSS';
 // -- tooltip (and that gap between [data-tippy-root] and .tippy-box)
 // -- hotspot
 // -- modal
+// TODO beacon/hotspot needs repositioning on screen resize, and potentially scrolling
 // TODO push to npm and bower
 // TODO beacon relative position
 // TODO for both tooltip+backdrop and modal:

@@ -1,7 +1,7 @@
 import { document, window } from 'global';
 import createHotspotTooltip from './createHotspotTooltip';
 import createBeacon from './createBeacon';
-import { getElementPosition, getStepUID, changeAsyncStepStatus } from '../common/utils';
+import { getElementPosition, getStepUID, changeAsyncStepStatus, onElementResize } from '../common/utils';
 import { Hotspot as HotspotData } from '../common/types';
 
 
@@ -11,6 +11,7 @@ class Hotspot {
   private targetElement: document.HTMLElement;
   readonly data: HotspotData;
   private beaconID: string;
+  private resizeObservers: any[] = [];
 
   constructor({ data, guideID }) {
     console.log(data);
@@ -20,6 +21,17 @@ class Hotspot {
     this.beaconID = getStepUID({guideID, type:'beacon', index});
     this.targetElement = document.querySelector(target.elementSelector);
     this.addBeacon();
+    this.resizeObservers.push(onElementResize(
+      document.body,
+      this.repositionBeacon.bind(this)
+    ));
+  }
+
+  private repositionBeacon(): void {
+    this.remove();
+    this.tippyInstance = null;
+    this.addBeacon();
+    console.log('reset beacon position');
   }
 
   private addBeacon(): void {
@@ -68,7 +80,7 @@ class Hotspot {
       });
       window.Lusift.activeHotspot = this;
     }  else if(this.tippyInstance.state.isDestroyed) {
-      console.warn('Uh... but it doesn\'t exist');
+      console.error('Uh... but it doesn\'t exist. unexpected');
       // if it's removed
 
     } else if(this.tippyInstance.state.isShown) {
@@ -111,6 +123,7 @@ class Hotspot {
   private removeAndCloseAsync(): void {
     this.remove();
     this.changeAsyncStepStatus(false);
+    this.resizeObservers.forEach(ro => ro.disconnect());
   }
 }
 

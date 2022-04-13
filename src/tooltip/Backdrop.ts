@@ -73,7 +73,7 @@ class Backdrop {
     // remove focus from focused element
     document.activeElement.blur();
 
-    // HACK
+    // HACK to remove resize event listener on remove() (see: remove())
     this.dummyElement.addEventListener('click', () => {
       window.removeEventListener('resize', this.resetBackdrop, true);
     }, true);
@@ -90,6 +90,7 @@ class Backdrop {
 
   private resetBackdrop(): void {
     window.setTimeout(() => {
+      // hack to intervene in the event backdrop has already been closed
       if(this.toStopOverlay) return console.log('no showing overlay anymore');
       this.removeOverlay();
       this.addBackdop();
