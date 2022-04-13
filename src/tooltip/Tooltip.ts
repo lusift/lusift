@@ -96,7 +96,10 @@ export default class Tooltip {
                     if(isIntersecting){
                         this.show();
                     } else {
-                        this.hide();
+                        if(this.tippyInstance){
+                            // if it has been created yet at all
+                            this.hide();
+                        }
                     }
                 });
             }, {

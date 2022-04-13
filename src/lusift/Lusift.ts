@@ -15,14 +15,10 @@ import addDefaultCSS from './addDefaultCSS';
 // -- modal
 // TODO push to npm and bower
 // TODO onNext, onPrev, onClose not working
-// TODO add screen-reader accessibility
-// TODO for both tooltip+backdrop and modal:
-// - change focus to tooltip/modal, then change it back to original when closed
-// - do not allow focusing on elements outside of tooltip/modal
+// TODO add scrollIntoView: boolean prop that will scroll to the target element when on the same page
+// - only valid for tooltip
 // TODO Write documentation
 // TODO attach License
-// TODO refresh() should work for dev mode too, try navigating to a different page
-// than that of target element
 
 class Lusift {
   private content: Content;
@@ -98,7 +94,7 @@ class Lusift {
       if(!doesStepMatchDisplayCriteria({ target, type })) {
         return console.warn('Display criteria for step do not match. Navigate to\
                             the right target page and make sure that the target element\
-                          is in the visible screen');
+                          is in the visible screen, then reload page.');
       }
 
       if (steps[stepNumber]) {
