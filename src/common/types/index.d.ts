@@ -51,6 +51,7 @@ export interface TooltipData {
   placement: any; // Placement type from popper or manually
   offset: number[];
   arrow: boolean;
+  scrollIntoView: boolean;
   backdrop?: {
     disabled?: boolean;
     color?: string;

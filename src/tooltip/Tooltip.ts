@@ -99,6 +99,14 @@ export default class Tooltip {
                         if(this.tippyInstance){
                             // if it has been created yet at all
                             this.hide();
+                        } else {
+                            if(this.data.scrollIntoView) {
+                                this.targetElement.scrollIntoView({
+                                    behavior: 'smooth',
+                                    block: 'center',
+                                    inline: 'center'
+                                });
+                            }
                         }
                     }
                 });
