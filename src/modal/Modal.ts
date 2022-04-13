@@ -18,12 +18,21 @@ class Modal {
     if(this.data.escToClose) {
       window.addEventListener('keydown', this.escEventListener, true);
     }
+    if(this.data.clickOutsideToClose) {
+      const overlayElement = document.querySelector(`.${MODAL_OVERLAY_CLASS}`)
+      overlayElement.addEventListener('click', this.overlayClickEventListener, true);
+    }
   }
 
   private escEventListener(e): void {
     if((e.key=='Escape'||e.key=='Esc'||e.keyCode==27) && (e.target.nodeName=='BODY')){
       window.Lusift.close();
       // e.preventDefault();
+    }
+  }
+  private overlayClickEventListener(e): void {
+    if (!e.target.classList.contains('modal')) {
+      window.Lusift.close();
     }
   }
 
@@ -41,9 +50,14 @@ class Modal {
   private remove(): void {
     document.getElementsByClassName(MODAL_OVERLAY_CLASS)[0].remove();
     document.getElementById(this.uid).remove();
-    // TODO remove event listener
+
+    // remove event listeners
     if(this.data.escToClose) {
       window.removeEventListener('keydown', this.escEventListener, true);
+    }
+    if(this.data.clickOutsideToClose) {
+      const overlayElement = document.querySelector(`.${MODAL_OVERLAY_CLASS}`)
+      overlayElement.removeEventListener('click', this.overlayClickEventListener, true);
     }
   }
 }
