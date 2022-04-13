@@ -9,6 +9,7 @@ import changeAsyncStepStatus from './changeAsyncStepStatus';
 import roundNum from './roundNum';
 import doesStepMatchDisplayCriteria from './doesStepMatchDisplayCriteria';
 import startStepInstance from './startStepInstance';
+import addFocusTrap from './addFocusTrap';
 
 export {
   htmlStringToElement,
@@ -21,5 +22,6 @@ export {
   changeAsyncStepStatus,
   doesStepMatchDisplayCriteria,
   startStepInstance,
-  roundNum
+  roundNum,
+  addFocusTrap
 };

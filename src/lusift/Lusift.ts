@@ -14,11 +14,15 @@ import addDefaultCSS from './addDefaultCSS';
 // -- hotspot
 // -- modal
 // TODO push to npm and bower
+// TODO onNext, onPrev, onClose not working
+// TODO add screen-reader accessibility
 // TODO for both tooltip+backdrop and modal:
 // - change focus to tooltip/modal, then change it back to original when closed
 // - do not allow focusing on elements outside of tooltip/modal
 // TODO Write documentation
 // TODO attach License
+// TODO refresh() should work for dev mode too, try navigating to a different page
+// than that of target element
 
 class Lusift {
   private content: Content;

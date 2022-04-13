@@ -140,7 +140,6 @@ export default class Tooltip {
             const { eventType, disabled } = progressOn;
             disabled || this.addEventListenerToTarget(this.targetElement, 'next', eventType);
 
-            backdrop.disabled || this.addBackdrop();
 
             if(!this.tippyInstance) {
                 // tippy was never initiated
@@ -156,6 +155,7 @@ export default class Tooltip {
                 this.tippyInstance.show();
             }
             this.isTooltipShown = true;
+            backdrop.disabled || this.addBackdrop();
         }
 
         public remove(): void {

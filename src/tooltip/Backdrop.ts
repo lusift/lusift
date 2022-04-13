@@ -4,7 +4,8 @@ import {
   getStepUID,
   onElementResize,
   getElementPosition,
-  roundNum
+  roundNum,
+  addFocusTrap
 } from '../common/utils/';
 import { BackdropData, BackdropParameters } from '../common/types';
 
@@ -43,6 +44,7 @@ class Backdrop {
   private dummyElement: document.HTMLElement;
   private toStopOverlay: boolean;
   private resizeObservers: any[] = [];
+  private focusTrap: any;
 
   // TODO types here
   constructor({
@@ -70,8 +72,13 @@ class Backdrop {
 
     this.resetBackdrop = this.resetBackdrop.bind(this);
     window.addEventListener('resize', this.resetBackdrop, true);
-    // remove focus from focused element
-    document.activeElement.blur();
+
+    // trap focus inside tooltip
+    this.focusTrap = addFocusTrap({
+      target: '.lusift .tooltip',
+      escToClose: false,
+      clickOutsideToClose: false
+    });
 
     // HACK to remove resize event listener on remove() (see: remove())
     this.dummyElement.addEventListener('click', () => {
@@ -208,6 +215,9 @@ class Backdrop {
     this.dummyElement.click();
     this.dummyElement.remove();
     this.resizeObservers.forEach(ro => ro.disconnect());
+    if (this.focusTrap){
+      this.focusTrap.deactivate();
+    }
     // console.log('overlay and stage removed')
   }
 }

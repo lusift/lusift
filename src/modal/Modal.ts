@@ -1,24 +1,33 @@
 import createModal from './createModal';
 import { document, window } from 'global';
-import { getStepUID } from '../common/utils';
+import { getStepUID, addFocusTrap } from '../common/utils';
 import { Modal as ModalData } from '../common/types';
 import { MODAL_OVERLAY_CLASS } from '../common/constants';
-
 
 class Modal {
   private uid: string;
   private data: any;
   private closeButton: any;
+  private focusTrap: any;
 
   constructor({ index, guideID, data, closeButton }) {
     this.uid = getStepUID({guideID, type:'modal', index});
     this.data = data;
     this.closeButton = closeButton;
     this.addModal();
-    if(this.data.escToClose) {
+
+    const { escToClose, clickOutsideToClose } = this.data;
+
+    this.focusTrap = addFocusTrap({
+      target: '.modal',
+      escToClose,
+      clickOutsideToClose
+    });
+
+    if(escToClose) {
       window.addEventListener('keydown', this.escEventListener, true);
     }
-    if(this.data.clickOutsideToClose) {
+    if(clickOutsideToClose) {
       const overlayElement = document.querySelector(`.${MODAL_OVERLAY_CLASS}`)
       overlayElement.addEventListener('click', this.overlayClickEventListener, true);
     }
@@ -49,6 +58,7 @@ class Modal {
   private remove(): void {
     document.getElementsByClassName(MODAL_OVERLAY_CLASS)[0].remove();
     document.getElementById(this.uid).remove();
+    this.focusTrap.deactivate();
 
     // remove event listeners
     if(this.data.escToClose) {
