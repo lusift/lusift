@@ -53,10 +53,14 @@ class Hotspot {
       window.Lusift.activeHotspot.hideTooltip();
     }
 
+    // do not allow async step to close in dev mode
+    const isDevMode = !Boolean(window.Lusift.activeGuideID);
+    let removeMethod = isDevMode? window.Lusift.close : this.removeAndCloseAsync.bind(this);
+
     if(!this.tippyInstance){
       // if it was never initiated
       this.tippyInstance = createHotspotTooltip({
-        remove: this.removeAndCloseAsync.bind(this),
+        remove: removeMethod,
         uid: this.tipID,
         target,
         styleProps,

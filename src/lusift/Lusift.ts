@@ -14,10 +14,7 @@ import addDefaultCSS from './addDefaultCSS';
 // -- hotspot
 // -- modal
 // TODO push to npm and bower
-// TODO debug some mess in async step in dev mode
 // TODO beacon relative position
-// TODO modal - click outside to close
-// TODO modal - escToClose
 // TODO for both tooltip+backdrop and modal:
 // - change focus to tooltip/modal, then change it back to original when closed
 // - do not allow focusing on elements outside of tooltip/modal

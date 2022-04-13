@@ -167,6 +167,7 @@ export interface Modal {
   closeButton: {
     disabled: boolean;
     escToClose: boolean;
+    clickOutsideToClose: boolean;
   }
 }
 

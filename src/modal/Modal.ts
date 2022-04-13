@@ -27,7 +27,6 @@ class Modal {
   private escEventListener(e): void {
     if((e.key=='Escape'||e.key=='Esc'||e.keyCode==27) && (e.target.nodeName=='BODY')){
       window.Lusift.close();
-      // e.preventDefault();
     }
   }
   private overlayClickEventListener(e): void {
