@@ -8,15 +8,49 @@
     font-weight: bold;
 }
 
-.lusift .tooltip button {
+.lusift button:focus{
+    outline: 1px solid #333;
+}
+
+.lusift .tooltip button{
+    color: #fff;
+    background-color: rgb(17, 153, 158);
     padding: 0.2rem 0.35rem;
     font-size: 0.75rem;
+    font-weight: bold;
+    border-radius: 8px;
 }
+
+.lusift .modal button {
+    font-size: 1.1rem;
+    padding: 0.45rem 0.75rem;
+}
+
+.lusift h1,
+.lusift h2,
+.lusift h3{
+    text-align: center;
+}
+
 
 .lusift .closeX {
     background-color: inherit;
     border: none;
     font-weight: normal;
+}
+
+.lusift .modal h1,
+.lusift .modal h2,
+.lusift .modal h3,
+.lusift .modal p{
+    margin: 0 0 0.85rem 0;
+}
+
+
+.lusift .modal h1,
+.lusift .modal h2,
+.lusift .modal h3{
+    line-height: 1.2;
 }
 
 
@@ -111,7 +145,7 @@
     /* border: 1px solid blue; */
     margin-bottom: 0 !important;
     font-weight: normal;
-    font-size: 1.25rem;
+    font-size: 1.45rem;
     padding: 0 2px;
     margin-right: 0.2rem;
     color: #666;
@@ -134,14 +168,6 @@
     max-width: 600px;
 }
 
-.lusift-button{
-    color: #fff;
-    background-color: rgb(17, 153, 158);
-    padding: 0.2rem 0.35rem;
-    font-size: 0.75rem;
-    font-weight: bold;
-    border-radius: 8px;
-}
 
 /*tooltip-progress*/
 

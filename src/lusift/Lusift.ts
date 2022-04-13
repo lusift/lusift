@@ -9,16 +9,10 @@ import { GuideType, Content, TrackingState } from '../common/types';
 import { isOfTypeContent, isObject } from '../common/utils/isOfType';
 import addDefaultCSS from './addDefaultCSS';
 
-// TODO set default styles for each type of content, and for responsive screen sizes
-// -- tooltip (and that gap between [data-tippy-root] and .tippy-box)
-// -- hotspot
-// -- modal
-// TODO push to npm and bower
 // TODO onNext, onPrev, onClose not working
-// TODO add scrollIntoView: boolean prop that will scroll to the target element when on the same page
-// - only valid for tooltip
 // TODO Write documentation
 // TODO attach License
+// TODO push to npm and bower
 
 class Lusift {
   private content: Content;

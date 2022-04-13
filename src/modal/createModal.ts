@@ -15,12 +15,28 @@ const createModal = ({ uid, bodyContent, closeButton={} }): void => {
   const modalOverlayStyleProps = {};
   bodyContent = bodyContent || `
     <style>
-      height: 500px;
+    .modal .body-content {
+      max-height: 500px;
       width: 600px;
+      display: flex;
+      flex-direction: column;
+    }
+    h2{
+      font-weight: bold;
+      font-size: 1.5rem;
+    }
+    .button-area{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 2rem 0;
+    }
     </style>
-    <div>
-      <h2>Default Modal Content</h2>
-      <button class="button" onclick="Lusift.next()">OK</button>
+    <h2>Default Modal Content</h2>
+    <div class="button-area">
+      <button class="button" onclick="Lusift.next()">
+        Next
+      </button>
     </div>`;
 
   modalOverlay.style.cssText = styleObjectToString({
