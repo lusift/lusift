@@ -9,18 +9,20 @@ import { GuideType, Content, TrackingState } from '../common/types';
 import { isOfTypeContent, isObject } from '../common/utils/isOfType';
 import addDefaultCSS from './addDefaultCSS';
 
-// TODO set default styles for each type of content, and html elements (like button), and for responsive screen sizes
+// TODO set default styles for each type of content, and for responsive screen sizes
 // -- tooltip (and that gap between [data-tippy-root] and .tippy-box)
+// -- hotspot
 // -- modal
 // TODO push to npm and bower
 // TODO debug some mess in async step in dev mode
 // TODO beacon relative position
 // TODO modal - click outside to close
+// TODO modal - escToClose
 // TODO for both tooltip+backdrop and modal:
 // - change focus to tooltip/modal, then change it back to original when closed
 // - do not allow focusing on elements outside of tooltip/modal
-// TODO documentation
-// TODO have an option that decides when hasGuideDataChanged resolves to true
+// TODO Write documentation
+// TODO attach License
 
 class Lusift {
   private content: Content;
@@ -196,7 +198,7 @@ class Lusift {
   }
 
   private prepareHooks(): void {
-    // attatch active content's navigation methods to Lusift instance
+    // attach active content's navigation methods to Lusift instance
     this.next = this.guideInstance.nextStep.bind(this.guideInstance);
     this.prev = this.guideInstance.prevStep.bind(this.guideInstance);
     this.close = this.guideInstance.close.bind(this.guideInstance);
