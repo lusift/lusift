@@ -21,8 +21,14 @@ class Hotspot {
     this.beaconID = getStepUID({guideID, type:'beacon', index});
     this.targetElement = document.querySelector(target.elementSelector);
     this.addBeacon();
+
+    // reposition beacon on body and targetElement resize
     this.resizeObservers.push(onElementResize(
       document.body,
+      this.repositionBeacon.bind(this)
+    ));
+    this.resizeObservers.push(onElementResize(
+      this.targetElement,
       this.repositionBeacon.bind(this)
     ));
   }
