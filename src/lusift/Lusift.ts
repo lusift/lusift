@@ -9,7 +9,6 @@ import { GuideType, Content, TrackingState } from '../common/types';
 import { isOfTypeContent, isObject } from '../common/utils/isOfType';
 import addDefaultCSS from './addDefaultCSS';
 
-// TODO onNext, onPrev, onClose not working
 // TODO Write documentation
 // TODO attach License
 // TODO push to npm and bower
@@ -65,7 +64,11 @@ class Lusift {
     if(!localData[guideData.id]) return true;
     const localGuideData = localData[guideData.id];
     delete localGuideData.trackingState;
-    return !isEqual(localGuideData, guideData);
+    const guideDataWithoutHooks = { ...guideData };
+    delete guideDataWithoutHooks.onNext;
+    delete guideDataWithoutHooks.onClose;
+    delete guideDataWithoutHooks.onPrev;
+    return !isEqual(localGuideData, guideDataWithoutHooks);
   }
 
   public devShowStep(guideID: string, stepNumber: number): void {
@@ -136,8 +139,28 @@ class Lusift {
     // console.log('filtering')
     Object.keys(this.content).forEach((key) => {
 
-      const { id, name='', description='', steps, doNotResetTrackerOnContentChange=false } = this.content[key].data;
-      this.content[key].data = { id, name, description, steps, doNotResetTrackerOnContentChange };
+      const {
+        id,
+        name='',
+        description='',
+        steps,
+        onNext,
+        onPrev,
+        onClose,
+        doNotResetTrackerOnContentChange=false
+      } = this.content[key].data;
+      console.log(onNext, onClose, onPrev);
+
+      this.content[key].data = {
+        id,
+        name,
+        description,
+        steps,
+        onNext,
+        onPrev,
+        onClose,
+        doNotResetTrackerOnContentChange
+      };
     });
 
     // iterate through each content item to note changes and conditionally preserve trackingState
@@ -180,6 +203,7 @@ class Lusift {
     }
 
     this.activeGuideID = contentID;
+    // TODO why the setTimeout
     setTimeout(() => {
       this.guideInstance = new Guide(contentID);
       this.guideInstance.start();
@@ -194,8 +218,7 @@ class Lusift {
     this.close = this.guideInstance.close.bind(this.guideInstance);
     this.goto = this.guideInstance.setStep.bind(this.guideInstance);
 
-    const { onNext, onPrev, onClose } = this.content[this.activeGuideID];
-    console.log(onNext)
+    const { onNext, onPrev, onClose } = this.content[this.activeGuideID].data;
     this.onNext = onNext;
     this.onPrev = onPrev;
     this.onClose = onClose;

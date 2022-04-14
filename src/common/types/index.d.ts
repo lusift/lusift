@@ -99,6 +99,9 @@ export interface GuideType {
   description?: string;
   steps: StepType[];
   doNotResetTrackerOnContentChange: boolean;
+  onNext?: Function;
+  onPrev?: Function;
+  onClose?: Function;
 }
 
 
@@ -117,9 +120,6 @@ export interface Content {
   [guideID: string]: {
     type: string;
     data: GuideType;
-    onNext?: Function;
-    onPrev?: Function;
-    onClose?: Function;
   }
 }
 
