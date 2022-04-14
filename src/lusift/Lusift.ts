@@ -136,7 +136,7 @@ class Lusift {
     // console.log('filtering')
     Object.keys(this.content).forEach((key) => {
 
-      const { id, name, description, steps, doNotResetTrackerOnContentChange } = this.content[key].data;
+      const { id, name='', description='', steps, doNotResetTrackerOnContentChange=false } = this.content[key].data;
       this.content[key].data = { id, name, description, steps, doNotResetTrackerOnContentChange };
     });
 
