@@ -1,4 +1,4 @@
-import { Content } from '../common/types';
+import { Content, TrackingState } from '../common/types';
 declare class Lusift {
     private content;
     private guideInstance;
@@ -14,7 +14,7 @@ declare class Lusift {
     private onClose;
     constructor();
     setGlobalStyle(styleText: string): void;
-    getTrackingState(): object;
+    getTrackingState(): TrackingState;
     private hasGuideDataChanged;
     devShowStep(guideID: string, stepNumber: number): void;
     private reconcileContentWithLocalState;

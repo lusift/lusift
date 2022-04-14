@@ -6,6 +6,7 @@ declare class Backdrop {
     private dummyElement;
     private toStopOverlay;
     private resizeObservers;
+    private focusTrap;
     constructor({ targetSelector, uid, guideID, index, data }: any);
     private resetBackdrop;
     private getScreenDimensions;

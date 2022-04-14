@@ -34,7 +34,7 @@
 
 
 .lusift .closeX {
-    background-color: inherit;
+    background-color: transparent;
     border: none;
     font-weight: normal;
 }
@@ -67,6 +67,7 @@
     font-size: 1rem;
     padding: 0 2px;
     color: #666;
+    background: transparent;
 }
 
 
@@ -149,6 +150,7 @@
     padding: 0 2px;
     margin-right: 0.2rem;
     color: #666;
+    background: transparent;
 }
 
 /*modal body-content*/

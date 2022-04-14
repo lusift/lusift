@@ -9,4 +9,5 @@ import changeAsyncStepStatus from './changeAsyncStepStatus';
 import roundNum from './roundNum';
 import doesStepMatchDisplayCriteria from './doesStepMatchDisplayCriteria';
 import startStepInstance from './startStepInstance';
-export { htmlStringToElement, mergeObjects, styleObjectToString, getStepUID, onElementResize, getElementPosition, doesStringMatchRegex, changeAsyncStepStatus, doesStepMatchDisplayCriteria, startStepInstance, roundNum };
+import addFocusTrap from './addFocusTrap';
+export { htmlStringToElement, mergeObjects, styleObjectToString, getStepUID, onElementResize, getElementPosition, doesStringMatchRegex, changeAsyncStepStatus, doesStepMatchDisplayCriteria, startStepInstance, roundNum, addFocusTrap };

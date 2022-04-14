@@ -12,6 +12,8 @@ import addDefaultCSS from './addDefaultCSS';
 // TODO Write documentation
 // TODO attach License
 // TODO push to npm and bower
+// TODO try globalThis instead of global package
+// TODO focus trap is making the target un-interactive
 
 class Lusift {
   private content: Content;

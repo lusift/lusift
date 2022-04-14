@@ -5,10 +5,12 @@ declare class Hotspot {
     private targetElement;
     readonly data: HotspotData;
     private beaconID;
+    private resizeObservers;
     constructor({ data, guideID }: {
         data: any;
         guideID: any;
     });
+    private repositionBeacon;
     private addBeacon;
     private toggleTooltip;
     hideTooltip(): void;
