@@ -1,6 +1,6 @@
-declare const createModal: ({ uid, bodyContent, closeButton }: {
+declare const createModal: ({ uid, index, closeButton }: {
     uid: any;
-    bodyContent: any;
+    index: any;
     closeButton?: {};
 }) => void;
 export default createModal;

@@ -10,6 +10,7 @@ export default class Tooltip {
     readonly styleProps: Object;
     private targetsAndEventListeners;
     private backdrop;
+    private index;
     private isTooltipShown;
     constructor({ target, guideID, index, data, actions, styleProps }: {
         target: Target;

@@ -13,11 +13,14 @@ import addDefaultCSS from './addDefaultCSS';
 // TODO attach License
 // TODO push to npm and bower
 // TODO try globalThis instead of global package
-// TODO focus trap is making the target un-interactive
+// TODO should we really have progress bar on hotspots? is the progress calculated correctly
+// TODO give ability to focus out of elements: trap-focus
+// TODO bug - hotspot beacon's resize observer not cleaned
 
 class Lusift {
   private content: Content;
   private guideInstance: any;
+  public render: Function;
   private contentSet: boolean;
   public activeGuideID: string;
   public progress: number = 0;
@@ -62,6 +65,8 @@ class Lusift {
   }
 
   private hasGuideDataChanged(guideData: GuideType): boolean {
+    // TODO just for testing a feature
+    // return false;
     const localData = loadState();
     if(!localData[guideData.id]) return true;
     const localGuideData = localData[guideData.id];
@@ -151,13 +156,22 @@ class Lusift {
         onClose,
         doNotResetTrackerOnContentChange=false
       } = this.content[key].data;
-      console.log(onNext, onClose, onPrev);
+
+      // remove bodyContent from steps
+      let stepsWithoutBodyContent = steps.map(step => {
+        if(step.type==='tooltip' || step.type==='modal') {
+          delete step.data.bodyContent;
+        } else if (step.type==='hotspot') {
+          delete step.tip.data.bodyContent;
+        }
+        return step;
+      })
 
       this.content[key].data = {
         id,
         name,
         description,
-        steps,
+        steps: stepsWithoutBodyContent,
         onNext,
         onPrev,
         onClose,

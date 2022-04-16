@@ -13,6 +13,8 @@ export default class Guide {
 
   constructor(guideID: string) {
     // localGuideState consists of trackingState and guideData
+    console.log('guide constructor');
+    console.log(loadState())
     const localGuideState = loadState()[guideID];
     const guideData = Object.assign({}, localGuideState);
     delete guideData.trackingState;

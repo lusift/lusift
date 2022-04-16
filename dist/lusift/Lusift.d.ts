@@ -2,6 +2,7 @@ import { Content, TrackingState } from '../common/types';
 declare class Lusift {
     private content;
     private guideInstance;
+    render: Function;
     private contentSet;
     activeGuideID: string;
     progress: number;

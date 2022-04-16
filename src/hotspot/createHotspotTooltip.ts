@@ -8,13 +8,13 @@ const defaultBodyContent = `
   <p style="font-weight: normal;">Default tooltip content</p>
 `;
 
-const renderTooltip = ({ remove, data, target, styleProps, uid }) => {
+const renderTooltip = ({ remove, data, target, styleProps, uid, index }) => {
 
   const {
     arrow,
     placement,
     offset,
-    bodyContent = defaultBodyContent,
+    // bodyContent = defaultBodyContent,
   } = data;
 
   const content = `
@@ -30,7 +30,6 @@ const renderTooltip = ({ remove, data, target, styleProps, uid }) => {
     <div class="lusift">
       <div class="hotspot-tooltip" id="tooltip-${uid}">
         <section class="body-content">
-          ${bodyContent}
         </section>
       </div>
     </div>
@@ -44,6 +43,17 @@ const renderTooltip = ({ remove, data, target, styleProps, uid }) => {
     placement,
     remove
   });
+  tippyInstance.show();
+
+  const Lusift = window['Lusift'];
+
+  const bodyContent = Lusift.content[Lusift.activeGuideID]
+    .data.steps[index].tip.data.bodyContent || defaultBodyContent;
+
+  Lusift.render(
+    bodyContent,
+    '.lusift > .hotspot-tooltip > .body-content'
+  );
 
   return tippyInstance;
 }

@@ -9,6 +9,7 @@ class Modal {
   private data: any;
   private closeButton: any;
   private focusTrap: any;
+  private index: number;
 
   constructor({ index, guideID, data, closeButton }) {
     this.uid = getStepUID({guideID, type:'modal', index});
@@ -49,7 +50,7 @@ class Modal {
 
     createModal({
       uid: this.uid,
-      bodyContent,
+      index: this.data.index,
       closeButton: this.closeButton
     });
   }

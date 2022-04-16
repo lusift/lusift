@@ -5,7 +5,7 @@ import renderProgressBar from '../common/progressBar';
 import renderCloseXButton from '../common/closeXButton';
 
 
-const createModal = ({ uid, bodyContent, closeButton={} }): void => {
+const createModal = ({ uid, index, closeButton={} }): void => {
   const modalOverlay = document.createElement('div');
   const modal = document.createElement('div');
   modal.id = uid;
@@ -13,7 +13,7 @@ const createModal = ({ uid, bodyContent, closeButton={} }): void => {
 
   const modalStyleProps = {};
   const modalOverlayStyleProps = {};
-  bodyContent = bodyContent || `
+  const defaultBodyContent = `
     <style>
     .modal .body-content {
       max-height: 500px;
@@ -64,7 +64,6 @@ const createModal = ({ uid, bodyContent, closeButton={} }): void => {
     ${renderProgressBar()}
     ${renderCloseXButton(closeButton, 'modal')}
     <section class="body-content">
-      ${bodyContent}
     </section>
   `;
   const lusiftWrapper = document.createElement('div');
@@ -73,6 +72,15 @@ const createModal = ({ uid, bodyContent, closeButton={} }): void => {
 
   document.body.appendChild(modalOverlay);
   document.body.appendChild(lusiftWrapper);
+
+  const Lusift = window['Lusift'];
+
+  const bodyContent = Lusift.content[Lusift.activeGuideID]
+    .data.steps[index].data.bodyContent || defaultBodyContent;
+
+  Lusift.render(
+    bodyContent,
+    '.lusift > .modal > .body-content');
 }
 
 export default createModal;

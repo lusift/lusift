@@ -39,12 +39,12 @@ const renderNavButtons = (navSection: any): string => {
 }
 
 
-const renderTooltip = ({ data, target, styleProps, actions, uid }) => {
+const renderTooltip = ({ data, target, styleProps, actions, uid, index }) => {
 
   const { closeButton, navSection } = actions;
   const {
     arrow,
-    bodyContent = defaultBodyContent,
+    // bodyContent = defaultBodyContent,
     placement,
     offset
   } = data;
@@ -62,7 +62,6 @@ const renderTooltip = ({ data, target, styleProps, actions, uid }) => {
       <div class="tooltip" id="tooltip-${uid}">
         ${renderCloseXButton(closeButton, 'tooltip')}
         <section class="body-content">
-          ${bodyContent}
         </section>
         ${renderNavButtons(navSection)}
       </div>
@@ -79,6 +78,15 @@ const renderTooltip = ({ data, target, styleProps, actions, uid }) => {
   });
 
   tippyInstance.show();
+
+  const Lusift = window['Lusift'];
+
+  const bodyContent = Lusift.content[Lusift.activeGuideID]
+    .data.steps[index].data.bodyContent || defaultBodyContent;
+  Lusift.render(
+    bodyContent,
+    '.lusift > .tooltip > .body-content'
+  );
 
   return tippyInstance;
 }

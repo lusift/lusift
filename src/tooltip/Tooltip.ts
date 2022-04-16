@@ -28,6 +28,7 @@ export default class Tooltip {
         eventType: string;
     }[] = [];
     private backdrop: any;
+    private index: number;
     private isTooltipShown: boolean;
 
     constructor(
@@ -53,6 +54,7 @@ export default class Tooltip {
             this.target = target;
             this.styleProps = styleProps || {};
             this.data = data;
+            this.index = index;
 
             const progressOn = data.progressOn || {};
             this.data.progressOn = {
@@ -154,12 +156,14 @@ export default class Tooltip {
 
             if(!this.tippyInstance) {
                 // tippy was never initiated
+                const { uid, actions, styleProps, data, index } = this;
                 this.tippyInstance = createTooltip({
-                    uid: this.uid,
+                    uid,
                     target: this.targetElement,
-                    actions: this.actions,
-                    styleProps: this.styleProps,
-                    data: this.data,
+                    actions,
+                    styleProps,
+                    data,
+                    index
                 });
             } else {
                 // tippy was hidden

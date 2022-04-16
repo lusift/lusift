@@ -3,6 +3,7 @@ declare class Modal {
     private data;
     private closeButton;
     private focusTrap;
+    private index;
     constructor({ index, guideID, data, closeButton }: {
         index: any;
         guideID: any;

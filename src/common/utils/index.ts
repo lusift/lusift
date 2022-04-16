@@ -10,6 +10,7 @@ import roundNum from './roundNum';
 import doesStepMatchDisplayCriteria from './doesStepMatchDisplayCriteria';
 import startStepInstance from './startStepInstance';
 import addFocusTrap from './addFocusTrap';
+import vanillaRender from './vanillaRender';
 
 export {
   htmlStringToElement,
@@ -23,5 +24,6 @@ export {
   doesStepMatchDisplayCriteria,
   startStepInstance,
   roundNum,
-  addFocusTrap
+  addFocusTrap,
+  vanillaRender,
 };

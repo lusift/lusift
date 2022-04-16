@@ -10,4 +10,5 @@ import roundNum from './roundNum';
 import doesStepMatchDisplayCriteria from './doesStepMatchDisplayCriteria';
 import startStepInstance from './startStepInstance';
 import addFocusTrap from './addFocusTrap';
-export { htmlStringToElement, mergeObjects, styleObjectToString, getStepUID, onElementResize, getElementPosition, doesStringMatchRegex, changeAsyncStepStatus, doesStepMatchDisplayCriteria, startStepInstance, roundNum, addFocusTrap };
+import vanillaRender from './vanillaRender';
+export { htmlStringToElement, mergeObjects, styleObjectToString, getStepUID, onElementResize, getElementPosition, doesStringMatchRegex, changeAsyncStepStatus, doesStepMatchDisplayCriteria, startStepInstance, roundNum, addFocusTrap, vanillaRender, };

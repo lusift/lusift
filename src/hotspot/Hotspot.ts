@@ -80,9 +80,10 @@ class Hotspot {
       this.tippyInstance = createHotspotTooltip({
         remove: removeMethod,
         uid: this.tipID,
+        index: this.data.index,
         target,
         styleProps,
-        data
+        data,
       });
       window.Lusift.activeHotspot = this;
     }  else if(this.tippyInstance.state.isDestroyed) {
