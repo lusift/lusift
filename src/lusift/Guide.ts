@@ -5,7 +5,6 @@ import { changeAsyncStepStatus, startStepInstance, doesStepMatchDisplayCriteria 
 import { GuideType, TrackingState } from '../common/types';
 
 // TODO types for stepInstance, activeStepInstances. Possibly create an intermediary class Step
-// TODO createModal bug
 
 export default class Guide {
   readonly guideData: GuideType;

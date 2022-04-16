@@ -14,6 +14,7 @@ class Modal {
   constructor({ index, guideID, data, closeButton }) {
     this.uid = getStepUID({guideID, type:'modal', index});
     this.data = data;
+    this.index = index;
     this.closeButton = closeButton;
     this.addModal();
 
@@ -50,7 +51,7 @@ class Modal {
 
     createModal({
       uid: this.uid,
-      index: this.data.index,
+      index: this.index,
       closeButton: this.closeButton
     });
   }

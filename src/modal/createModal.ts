@@ -80,7 +80,8 @@ const createModal = ({ uid, index, closeButton={} }): void => {
 
   Lusift.render(
     bodyContent,
-    '.lusift > .modal > .body-content');
+    '.lusift > .modal > .body-content'
+  );
 }
 
 export default createModal;
