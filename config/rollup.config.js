@@ -29,11 +29,21 @@ function getConfig({ input, name, outputFile, tsconfig }) {
 
     let config = {
         input,
+        external: [
+            'react',
+            'react-dom',
+            'tslib'
+        ],
         output: {
             file: outputFile,
             name,
             format: 'umd',
             sourcemap: mode === 'development',
+            globals: {
+                'react': 'React',
+                'react-dom': 'ReactDOM',
+                'tslib': 'tslib'
+            }
         },
         plugins: [
             /* alias({
