@@ -58,7 +58,7 @@ class Modal {
 
 
   private remove(): void {
-    document.getElementsByClassName(MODAL_OVERLAY_CLASS)[0].remove();
+    const overlayElement = document.querySelector(`.${MODAL_OVERLAY_CLASS}`)
     document.getElementById(this.uid).remove();
     this.focusTrap.deactivate();
 
@@ -67,9 +67,9 @@ class Modal {
       window.removeEventListener('keydown', this.escEventListener, true);
     }
     if(this.data.clickOutsideToClose) {
-      const overlayElement = document.querySelector(`.${MODAL_OVERLAY_CLASS}`)
       overlayElement.removeEventListener('click', this.overlayClickEventListener, true);
     }
+    overlayElement.remove();
   }
 }
 
