@@ -4,7 +4,6 @@ import createBeacon from './createBeacon';
 import { getElementPosition, getStepUID, changeAsyncStepStatus, onElementResize } from '../common/utils';
 import { Hotspot as HotspotData } from '../common/types';
 
-
 class Hotspot {
   private tipID: string;
   private tippyInstance: any;
@@ -127,10 +126,14 @@ class Hotspot {
     }
   }
 
+  private removeResizeObservers(): void {
+    this.resizeObservers.forEach(ro => ro.disconnect());
+  }
+
   private removeAndCloseAsync(): void {
     this.remove();
     this.changeAsyncStepStatus(false);
-    this.resizeObservers.forEach(ro => ro.disconnect());
+    this.removeResizeObservers();
   }
 }
 

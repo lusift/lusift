@@ -4,6 +4,8 @@ import { changeAsyncStepStatus, startStepInstance, doesStepMatchDisplayCriteria 
 
 import { GuideType, TrackingState } from '../common/types';
 
+// TODO types for stepInstance, activeStepInstances. Possibly create an intermediary class Step
+// TODO createModal bug
 
 export default class Guide {
   readonly guideData: GuideType;
@@ -87,13 +89,14 @@ export default class Guide {
           instance: this.activeStepInstance,
           index: stepIndex,
           target,
-          type
+          type,
+          async
         });
       }
     }
     while (isAsyncStep)
 
-    let newTrackingState = this.getTrackingState()
+    let newTrackingState = this.getTrackingState();
     newTrackingState.activeStep=stepIndex;
     this.setTrackingState(newTrackingState);
   }
@@ -121,7 +124,8 @@ export default class Guide {
             index,
             instance: this.activeStepInstance,
             target,
-            type
+            type,
+            async
           });
           this.activeStepInstance = null;
         }
@@ -132,8 +136,12 @@ export default class Guide {
   private removeIllegalSteps(): void {
     this.activeStepInstances = this.activeStepInstances.filter(stepInstance => {
       // if step display criteria doesn't match, then run remove() and remove from this.activeStepInstances
-      if(!doesStepMatchDisplayCriteria({ target: stepInstance.target, type: stepInstance.type })) {
-        stepInstance.instance.remove();
+      const { type, target, instance, async } = stepInstance;
+      if(!doesStepMatchDisplayCriteria({ target, type })) {
+        if(async && type === 'hotspot') {
+          instance.removeResizeObservers();
+        }
+        instance.remove();
         return false;
       } else {
         return true;

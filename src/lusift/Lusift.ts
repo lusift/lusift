@@ -13,9 +13,11 @@ import addDefaultCSS from './addDefaultCSS';
 // TODO attach License
 // TODO push to npm and bower
 // TODO try globalThis instead of global package
-// TODO should we really have progress bar on hotspots? is the progress calculated correctly
 // TODO give ability to focus out of elements: trap-focus
 // TODO bug - hotspot beacon's resize observer not cleaned
+//
+// TODO decide on making configuring easier, with inheritence, global levels, etc.
+// TODO add support for vue and angul*ar
 
 class Lusift {
   private content: Content;

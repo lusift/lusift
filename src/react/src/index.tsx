@@ -5,10 +5,6 @@ import ReactDOM from 'react-dom';
 import { Content } from '../../common/types';
 import { vanillaRender } from '../../common/utils';
 
-// TODO 1. connect hooks, including refresh()
-// TODO 2. perf: bundle size of dist/lusift-react.js is too big
-// TODO 3. refactor
-
 // In case of customizing hotspot's beacon, we can just have a beaconElement property
 // that is processed by Hotspot class, at guide level and step level
 
