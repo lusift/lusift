@@ -6,9 +6,6 @@ import { Content } from '../../common/types';
 import { vanillaRender } from '../../common/utils';
 import { isReactComponent, isReactClassComponent } from '../../common/utils/isOfType';
 
-// In case of customizing hotspot's beacon, we can just have a beaconElement property
-// that is processed by Hotspot class, at guide level and step level
-
 const reactRender = (BodyComponent: any, targetPath: string, callback?: Function) => {
     const target = document.querySelector(targetPath);
     ReactDOM.render(<BodyComponent />, target);

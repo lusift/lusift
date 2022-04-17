@@ -122,6 +122,9 @@ class Backdrop {
     const { screenHeight, screenWidth } = this.getScreenDimensions();
 
     const targetPosition = getElementPosition(targetElement);
+    console.log('targetPosition for element:')
+    console.log(targetPosition);
+    window.getElementPosition = getElementPosition;
 
     const hTop = document.createElement('div');
     hTop.id = 'hTop';

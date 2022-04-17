@@ -86,6 +86,8 @@ export default class Tooltip {
             this.show = this.show.bind(this);
             this.remove = this.remove.bind(this);
             this.hide = this.hide.bind(this);
+            console.log('IntersectionObserver attached');
+            console.log(window);
 
             const { IntersectionObserver } = window;
 

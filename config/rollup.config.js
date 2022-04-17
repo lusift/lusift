@@ -48,7 +48,8 @@ function getConfig({ input, name, outputFile, tsconfig, packageJsonPath }) {
             'react',
             'react-dom',
             'tslib',
-            'vue'
+            'vue',
+            'core-js'
         ],
         output: {
             file: outputFile,
@@ -59,7 +60,8 @@ function getConfig({ input, name, outputFile, tsconfig, packageJsonPath }) {
                 'react': 'React',
                 'react-dom': 'ReactDOM',
                 'tslib': 'tslib',
-                'vue': 'Vue'
+                'vue': 'Vue',
+                'core-js': 'coreJs'
             }
         },
         plugins: [
@@ -97,7 +99,7 @@ function getConfig({ input, name, outputFile, tsconfig, packageJsonPath }) {
                 tsconfig,
                 // HACK: Can't build dist/lusift-react with check true
                 check: !(name === 'Lusift-react' &&
-                         mode === 'production'),
+                    mode === 'production'),
                 tsconfigOverride: {
                     compilerOptions: {
                         sourceMap: mode === 'development',
