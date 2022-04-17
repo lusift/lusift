@@ -75,7 +75,7 @@ class Backdrop {
 
     // trap focus inside tooltip
     this.focusTrap = addFocusTrap({
-      target: ['.lusift .tooltip', this.targetSelector],
+      target: ['.lusift > .tooltip', this.targetSelector],
       escToClose: false,
       clickOutsideToClose: false
     });

@@ -10,33 +10,30 @@ import { babel } from '@rollup/plugin-babel';
 import alias from '@rollup/plugin-alias';
 import vuePlugin from 'rollup-plugin-vue'
 import peerDepsExternal from "rollup-plugin-peer-deps-external";
-import { visualizer } from 'rollup-plugin-visualizer';
-
-const path = require('path');
 
 const mode = process.env.NODE_ENV === 'development' ? 'development' : 'production';
 
 const configOptions = [
-    {
+    /* {
         input: 'src/index.ts',
         outputFile: `${mode === 'development' ? 'dev/index.js' : 'dist/lusift.js'}`,
         name: 'Lusift',
         tsconfig: 'tsconfig.json',
         packageJsonPath: 'package.json',
-    },
-    {
+    }, */
+    /* {
         input: 'src/react/src/index.tsx',
         outputFile: `${mode === 'development' ? 'dev/lusift-react.js' : 'dist/lusift-react.js'}`,
         name: 'Lusift-react',
         tsconfig: 'tsconfig.react.json',
         packageJsonPath: 'src/react/package.json',
-    },
+    }, */
     {
-        input: 'src/vue/src/main.ts',
+        input: 'src/lusift-vue/src/main.ts',
         outputFile: `${mode === 'development' ? 'dev/lusift-vue.js' : 'dist/lusift-vue.js'}`,
         name: 'Lusift-vue',
         tsconfig: 'tsconfig.vue.json',
-        packageJsonPath: 'src/vue/package.json',
+        packageJsonPath: 'src/lusift-vue/package.json',
     }
 ];
 
@@ -48,7 +45,10 @@ function getConfig({ input, name, outputFile, tsconfig, packageJsonPath }) {
             'react',
             'react-dom',
             'tslib',
-            'vue'
+            'vue',
+            'global',
+            'lodash.isequal',
+            'core-js'
         ],
         output: {
             file: outputFile,
@@ -63,20 +63,6 @@ function getConfig({ input, name, outputFile, tsconfig, packageJsonPath }) {
             }
         },
         plugins: [
-            alias({
-                entries: {
-                    '@': path.resolve(__dirname, '../src'),
-                    common: path.resolve(__dirname, '../src/common'),
-                    hospot: path.resolve(__dirname, '../src/hospot'),
-                    tooltip: path.resolve(__dirname, '../src/tooltip'),
-                    modal: path.resolve(__dirname, '../src/modal'),
-                    lusift: path.resolve(__dirname, '../src/lusift'),
-                    // react: path.resolve('./node_modules/react'),
-                    react: path.resolve(path.join(__dirname, './node_modules/react')),
-                    'react-dom': path.resolve(path.join(__dirname, './node_modules/react-dom')),
-                    // 'react-dom': path.resolve('./node_modules/react-dom'),
-                }
-            }),
             replace({
                 'process.env.NODE_ENV': JSON.stringify('production'),
                 __buildDate__: () => JSON.stringify(new Date()),
@@ -86,18 +72,13 @@ function getConfig({ input, name, outputFile, tsconfig, packageJsonPath }) {
             peerDepsExternal({
                 packageJsonPath,
             }),
-            ...name === 'Lusift-vue' ? [
-                resolve(),
-            ] : [],
+            resolve(),
             commonjs(),
             nodeResolve({
                 browser: true,
             }),
             typescript({
                 tsconfig,
-                // HACK: Can't build dist/lusift-react with check true
-                check: !(name === 'Lusift-react' &&
-                         mode === 'production'),
                 tsconfigOverride: {
                     compilerOptions: {
                         sourceMap: mode === 'development',
@@ -106,29 +87,23 @@ function getConfig({ input, name, outputFile, tsconfig, packageJsonPath }) {
                     }
                 }
             }),
-            ...name === 'Lusift-vue' ? [
-                babel({
-                    extensions: [
-                        ...DEFAULT_EXTENSIONS,
-                        '.ts',
-                        '.tsx',
-                    ],
-                    exclude: 'node_modules/**',
-                    babelrc: true,
-                    include: ["src", "**", "*.ts"],
-                    babelHelpers: 'runtime',
-                    inputSourceMap: mode === 'development',
-                }),
-                vuePlugin(),
-            ] : [],
+            babel({
+                extensions: [
+                    ...DEFAULT_EXTENSIONS,
+                    '.ts',
+                    '.tsx',
+                ],
+                exclude: 'node_modules/**',
+                babelrc: true,
+                include: ["src", "**", "*.ts"],
+                babelHelpers: 'runtime',
+                inputSourceMap: mode === 'development',
+            }),
+            vuePlugin(),
             postcss({
                 inject: false,
                 sourceMap: (mode === 'production' ? false : 'inline'),
                 minimize: mode === 'production',
-            }),
-            visualizer({
-                filename: `.rollup-build-stats/${name.toLowerCase()}-${mode.toLowerCase()}.html`,
-                title: 'Lusift Rollup Visualizer',
             }),
             ...mode === 'production' ? [
                 terser()

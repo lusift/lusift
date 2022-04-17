@@ -1,4 +1,5 @@
 .devnotes
-/node_modules
+node_modules/
 /build
 /dev
+.rollup-build-stats/

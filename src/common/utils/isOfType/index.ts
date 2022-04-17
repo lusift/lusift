@@ -90,8 +90,6 @@ export function isOfTypeGuide(object: any): boolean {
     (object.steps.every(isOfTypeStep))
 }
 
-type ContentItem = GuideType;
-
 export function isOfTypeContent(object: Content): boolean {
   const itemTypes = ['guide'];
   return isObject(object) &&
@@ -107,5 +105,18 @@ export function isOfTypeHtmlElement(element): boolean {
   return (
     element.constructor.name.startsWith('HTML') &&
     element.constructor.name.endsWith('Element')
+  );
+}
+
+export const isReactComponent = (component: any): boolean => {
+  console.log(component);
+  return typeof component === 'function';
+}
+
+export const isReactClassComponent = (component: any): boolean => {
+  // there's component.prototype.isReactComponent too
+  return (
+    isReactComponent(component) &&
+      typeof component.prototype.render === 'function'
   );
 }

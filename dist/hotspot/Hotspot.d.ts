@@ -16,6 +16,7 @@ declare class Hotspot {
     hideTooltip(): void;
     private changeAsyncStepStatus;
     private remove;
+    private removeResizeObservers;
     private removeAndCloseAsync;
 }
 export default Hotspot;

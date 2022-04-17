@@ -68,6 +68,7 @@
     padding: 0 2px;
     color: #666;
     background: transparent;
+    border-radius: 2px;
 }
 
 
@@ -151,6 +152,7 @@
     margin-right: 0.2rem;
     color: #666;
     background: transparent;
+    border-radius: 2px;
 }
 
 /*modal body-content*/

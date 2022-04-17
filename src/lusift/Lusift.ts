@@ -9,15 +9,16 @@ import { GuideType, Content, TrackingState } from '../common/types';
 import { isOfTypeContent, isObject } from '../common/utils/isOfType';
 import addDefaultCSS from './addDefaultCSS';
 
-// TODO Write documentation
-// TODO attach License
-// TODO push to npm and bower
-// TODO try globalThis instead of global package
-// TODO give ability to focus out of elements: trap-focus
-// TODO bug - hotspot beacon's resize observer not cleaned
+// TODO: Write documentation
+// TODO: attach License
+// TODO: push to npm and bower
+// TODO: try globalThis instead of global package
 //
-// TODO decide on making configuring easier, with inheritence, global levels, etc.
-// TODO add support for vue and angul*ar
+// TODO: decide on making configuring easier, with inheritence, global levels, etc.
+// TODO: add support for angul*r
+// BUG: React component doesn't render for step(vanillaRender does) when the page is refreshed
+// TODO: Make development easier.
+// --- when host site is in dev watch mode, lusift rendering gets all messed up. why?
 
 class Lusift {
   private content: Content;
@@ -67,8 +68,6 @@ class Lusift {
   }
 
   private hasGuideDataChanged(guideData: GuideType): boolean {
-    // TODO just for testing a feature
-    // return false;
     const localData = loadState();
     if(!localData[guideData.id]) return true;
     const localGuideData = localData[guideData.id];
@@ -100,7 +99,7 @@ class Lusift {
       if(!doesStepMatchDisplayCriteria({ target, type })) {
         return console.warn('Display criteria for step do not match. Navigate to\
                             the right target page and make sure that the target element\
-                          is in the visible screen, then reload page.');
+                            is in the visible screen, then reload page.');
       }
 
       if (steps[stepNumber]) {
@@ -206,27 +205,29 @@ class Lusift {
   }
 
   public showContent(contentID: string): void {
-    //Forces specific Lusift content to appear for the current user by passing in the ID.
+    // Forces specific Lusift content to appear for the current user by passing in the ID.
     if(!this.content || !this.contentSet) {
       return console.warn(`Content not set, pass valid content object to setContent()`);
     }
-    // see if content exists for ID
+    // see if content exists for contentID
     if(!this.content[contentID]) {
       return console.warn(`Content with id of ${contentID} doesn't exist`);
     }
     if(this.guideInstance){
       this.guideInstance.close();
-      // make sure the trackingState of the contentID is empty
+      // make sure the trackingState of the contentID is emptied
       this.guideInstance.clearTrackingState();
     }
 
-    this.activeGuideID = contentID;
-    // TODO why the setTimeout
-    setTimeout(() => {
+    window.setTimeout(() => {
+      // HACK:
+      // There's a noticeable delay in react component appearing as bodyContent properties
+      // on page load, so we arbitrarily wait 500ms before running this section
+      this.activeGuideID = contentID;
       this.guideInstance = new Guide(contentID);
       this.guideInstance.start();
       this.prepareHooks();
-    }, 0);
+    }, 500);
   }
 
   private prepareHooks(): void {

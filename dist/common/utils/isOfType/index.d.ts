@@ -11,3 +11,5 @@ export declare function isOfTypeStep(object: any): boolean;
 export declare function isOfTypeGuide(object: any): boolean;
 export declare function isOfTypeContent(object: Content): boolean;
 export declare function isOfTypeHtmlElement(element: any): boolean;
+export declare const isReactComponent: (component: any) => boolean;
+export declare const isReactClassComponent: (component: any) => boolean;
