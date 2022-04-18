@@ -21,8 +21,8 @@ export default class Tooltip {
         styleProps: Object;
     });
     private attachIntersectionObserver;
-    private consolidateActions;
     private hide;
+    private consolidateActions;
     private addBackdrop;
     show(): void;
     remove(): void;

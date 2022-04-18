@@ -36,6 +36,7 @@ const defaultBackdropData = {
 }
 
 // TODO: Make this a cleaner class
+// TODO: Occupy the entire screen even when the document height is smaller than the window height
 
 class Backdrop {
 
@@ -84,6 +85,7 @@ class Backdrop {
       document.body,
       this.resetBackdrop
     ));
+    console.log('--- BACKDROP ADDED ---');
   }
 
   private resetBackdrop(): void {
@@ -95,12 +97,12 @@ class Backdrop {
     }, 500);
   }
 
-  private getScreenDimensions(): { screenWidth: number; screenHeight: number } {
+  private getDocumentDimensions(): { documentWidth: number; documentHeight: number } {
     const { height, width } = getElementPosition(document.documentElement);
 
     return {
-      screenWidth: width,
-      screenHeight: height
+      documentWidth: width,
+      documentHeight: height
     }
   }
 
@@ -110,7 +112,13 @@ class Backdrop {
     const targetElement = document.querySelector(this.targetSelector);
     const padding = this.data.stageGap;
 
-    const { screenHeight, screenWidth } = this.getScreenDimensions();
+    const { documentHeight, documentWidth } = this.getDocumentDimensions();
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+
+    // compare the document height and width to the viewport height and width (rounded up)
+
+    console.log(documentHeight, documentWidth);
 
     const targetPosition = getElementPosition(targetElement);
 
@@ -147,7 +155,7 @@ class Backdrop {
 
     hBottom.style.cssText = styleObjectToString({
       ...overlayStyle,
-      height: `${screenHeight - (targetPosition.top + targetPosition.height + padding)}px`,
+      height: `${documentHeight - (targetPosition.top + targetPosition.height + padding)}px`,
       width: `${targetPosition.right - targetPosition.left + 2*padding}px`,
       left: `${targetPosition.left - padding}px`,
       top: `${targetPosition.bottom + padding}px`
@@ -156,16 +164,20 @@ class Backdrop {
     vLeft.style.cssText = styleObjectToString({
       ...overlayStyle,
       width: `${targetPosition.left - padding}px`,
-      height: `${screenHeight}px`,
+      height: `${documentHeight}px`,
       right: ''
     });
     vRight.style.cssText = styleObjectToString({
       ...overlayStyle,
-      width: `${screenWidth - (targetPosition.left+targetPosition.width) - padding}px`,
-      height: `${screenHeight}px`,
+      width: `${documentWidth - (targetPosition.left+targetPosition.width) - padding}px`,
+      height: `${documentHeight}px`,
       bottom: '0px',
       left: ''
     });
+
+    // TODO: Modify overlay elements' css for when
+    // -- viewportHeight greater than documentHeight
+    // -- viewportWidth greater than documentWidth (rounded up)
 
     [hTop, hBottom, vLeft, vRight].forEach(el => {
       el.classList.add(this.overlaySelectorClass);
@@ -186,7 +198,7 @@ class Backdrop {
     /* console.log(screenWidth, overlaySumWidth);
     console.log(screenHeight, overlaySumHeight); */
 
-    if(!areNumbersEqual(screenWidth, overlaySumWidth) || !areNumbersEqual(screenHeight, overlaySumHeight)){
+    if(!areNumbersEqual(documentWidth, overlaySumWidth) || !areNumbersEqual(documentHeight, overlaySumHeight)){
       this.resetBackdrop();
     }
   }
@@ -214,6 +226,7 @@ class Backdrop {
     if (this.focusTrap){
       this.focusTrap.deactivate();
     }
+    console.log('--- BACKDROP REMOVED ---');
     // console.log('overlay and stage removed')
   }
 }

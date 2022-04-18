@@ -31,6 +31,7 @@ import addDefaultCSS from './addDefaultCSS';
 // BUG: So this page with 2 tooltip targets 1 after the other, when scrolling deactivates one tooltip (w/o clicking next), other
 // BUG: Backdrop isn't being removed on client side rendering
 // TODO: Reference react-modal package
+// NOTE: Should we build /dist before making commits?
 // tooltip activates on target detection
 
 class Lusift {

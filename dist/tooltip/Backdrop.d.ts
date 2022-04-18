@@ -3,7 +3,6 @@ declare class Backdrop {
     readonly stagedTargetClass: string;
     overlaySelectorClass: string;
     private data;
-    private dummyElement;
     private toStopOverlay;
     private resizeObservers;
     private focusTrap;

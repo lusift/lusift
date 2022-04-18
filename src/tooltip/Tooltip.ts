@@ -13,6 +13,8 @@ const defaultBackdropData = {
     nextOnOverlayClick: false,
 }
 
+// TODO: Look up support for and npm polyfill packages for resize-observer and IntersectionObserver
+
 export default class Tooltip {
     private targetElement: document.HTMLElement;
     readonly target: Target;
@@ -29,6 +31,7 @@ export default class Tooltip {
     }[] = [];
     private backdrop: any;
     private index: number;
+    private intersectionObserver: any;
     private isTooltipShown: boolean;
 
     constructor(
@@ -89,7 +92,7 @@ export default class Tooltip {
 
             const { IntersectionObserver } = window;
 
-            const observer = new IntersectionObserver((entries, observer) => {
+            this.intersectionObserver = new IntersectionObserver((entries, observer) => {
                 entries.forEach(entry => {
                     const { isIntersecting, target } = entry;
                     if(!target.isSameNode(this.targetElement)){
@@ -116,7 +119,7 @@ export default class Tooltip {
                 root: null,
                 threshold: 0.95
             });
-            observer.observe(this.targetElement);
+            this.intersectionObserver.observe(this.targetElement);
         }
 
         private hide(): void {
@@ -208,5 +211,6 @@ export default class Tooltip {
                 console.log(`remove event listener of type ${eventType} and method ${method}`);
             });
             this.targetsAndEventListeners = [];
+            this.intersectionObserver.disconnect();
         }
 }
