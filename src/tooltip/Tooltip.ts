@@ -86,8 +86,6 @@ export default class Tooltip {
             this.show = this.show.bind(this);
             this.remove = this.remove.bind(this);
             this.hide = this.hide.bind(this);
-            console.log('IntersectionObserver attached');
-            console.log(window);
 
             const { IntersectionObserver } = window;
 
@@ -121,15 +119,16 @@ export default class Tooltip {
             observer.observe(this.targetElement);
         }
 
-        private consolidateActions(actions: StepActions) {
-            // merge default actions with incoming actions provided by the developer(user)
-            this.actions = mergeObjects(this.actions, actions);
-        }
-
         private hide(): void {
+            console.log('tooltip hide');
             this.tippyInstance.hide();
             this.backdrop && this.backdrop.remove();
             this.isTooltipShown = false;
+        }
+
+        private consolidateActions(actions: StepActions) {
+            // merge default actions with incoming actions provided by the developer(user)
+            this.actions = mergeObjects(this.actions, actions);
         }
 
         private addBackdrop(): void {

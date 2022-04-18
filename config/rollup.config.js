@@ -17,13 +17,13 @@ const path = require('path');
 const mode = process.env.NODE_ENV === 'development' ? 'development' : 'production';
 
 const configOptions = [
-    {
+    /* {
         input: 'src/index.ts',
         outputFile: `${mode === 'development' ? 'dev/index.js' : 'dist/lusift.js'}`,
         name: 'Lusift',
         tsconfig: 'tsconfig.json',
         packageJsonPath: 'package.json',
-    },
+    }, */
     {
         input: 'src/react/src/index.tsx',
         outputFile: `${mode === 'development' ? 'dev/lusift-react.js' : 'dist/lusift-react.js'}`,
@@ -31,13 +31,13 @@ const configOptions = [
         tsconfig: 'tsconfig.react.json',
         packageJsonPath: 'src/react/package.json',
     },
-    {
+    /* {
         input: 'src/vue/src/main.ts',
         outputFile: `${mode === 'development' ? 'dev/lusift-vue.js' : 'dist/lusift-vue.js'}`,
         name: 'Lusift-vue',
         tsconfig: 'tsconfig.vue.json',
         packageJsonPath: 'src/vue/package.json',
-    }
+    } */
 ];
 
 function getConfig({ input, name, outputFile, tsconfig, packageJsonPath }) {

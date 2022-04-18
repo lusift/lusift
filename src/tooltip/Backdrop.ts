@@ -64,6 +64,7 @@ class Backdrop {
     this.targetSelector = targetSelector;
     /* document.body.style.height='1000px'
     document.body.style.width='1000px' */
+    document.body.style.height='2000px'
     this.addBackdop();
 
     this.dummyElement = document.createElement('div');
@@ -71,7 +72,6 @@ class Backdrop {
     document.body.appendChild(this.dummyElement);
 
     this.resetBackdrop = this.resetBackdrop.bind(this);
-    window.addEventListener('resize', this.resetBackdrop, true);
 
     // trap focus inside tooltip
     this.focusTrap = addFocusTrap({
@@ -80,8 +80,12 @@ class Backdrop {
       clickOutsideToClose: false
     });
 
-    // HACK to remove resize event listener on remove() (see: remove())
+    // TODO: it's the resize event listener that's causing issues
+    // -- see when it' triggered and if it would be approprtiate to remove
+    window.addEventListener('resize', this.resetBackdrop, true);
+    // HACK: remove resize event listener on remove() (see: remove())
     this.dummyElement.addEventListener('click', () => {
+      console.log('removing resize event listener');
       window.removeEventListener('resize', this.resetBackdrop, true);
     }, true);
 
@@ -122,9 +126,6 @@ class Backdrop {
     const { screenHeight, screenWidth } = this.getScreenDimensions();
 
     const targetPosition = getElementPosition(targetElement);
-    console.log('targetPosition for element:')
-    console.log(targetPosition);
-    window.getElementPosition = getElementPosition;
 
     const hTop = document.createElement('div');
     hTop.id = 'hTop';
@@ -162,16 +163,20 @@ class Backdrop {
       height: `${screenHeight - (targetPosition.top + targetPosition.height + padding)}px`,
       width: `${targetPosition.right - targetPosition.left + 2*padding}px`,
       left: `${targetPosition.left - padding}px`,
-      top: ''
+      top: `${targetPosition.bottom + padding}px`
     });
 
     vLeft.style.cssText = styleObjectToString({
       ...overlayStyle,
-      width: `${targetPosition.right - targetPosition.width - padding}px`,
+      width: `${targetPosition.left - padding}px`,
+      height: `${screenHeight}px`,
+      right: ''
     });
     vRight.style.cssText = styleObjectToString({
       ...overlayStyle,
       width: `${screenWidth - (targetPosition.left+targetPosition.width) - padding}px`,
+      height: `${screenHeight}px`,
+      bottom: '0px',
       left: ''
     });
 
@@ -200,6 +205,7 @@ class Backdrop {
   }
 
   private removeOverlay(): void {
+    // NOTE: Do we really need to be checking if element exists before removing?
     document.querySelectorAll(`.${this.overlaySelectorClass}`)
     .forEach((el: document.HTMLElement) => {
       if(el) el.remove();
@@ -212,12 +218,16 @@ class Backdrop {
   }
 
   public remove(): void {
+    console.log('removing overlay');
     this.removeOverlay();
     this.toStopOverlay=true;
     // remove event listeners
+    this.resetBackdrop = this.resetBackdrop.bind(this);
+    window.removeEventListener('resize', this.resetBackdrop, true);
     this.dummyElement.click();
     this.dummyElement.remove();
     this.resizeObservers.forEach(ro => ro.disconnect());
+    console.log(this.resizeObservers)
     if (this.focusTrap){
       this.focusTrap.deactivate();
     }

@@ -28,6 +28,10 @@ import addDefaultCSS from './addDefaultCSS';
 // BUG: There's definitely some mess in goint from server side to client side
 // -- suspected some faults with the document object Lusift is using
 // package manager notes section at https://github.com/defunctzombie/node-process#readme (process is a dependency to global)
+// BUG: So this page with 2 tooltip targets 1 after the other, when scrolling deactivates one tooltip (w/o clicking next), other
+// BUG: Backdrop isn't being removed on client side rendering
+// TODO: Reference react-modal package
+// tooltip activates on target detection
 
 class Lusift {
   private content: Content;
