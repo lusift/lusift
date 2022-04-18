@@ -35,13 +35,14 @@ const defaultBackdropData = {
   color: '#444',
 }
 
+// TODO: Make this a cleaner class
+
 class Backdrop {
 
   private targetSelector: string;
   readonly stagedTargetClass: string;
   public overlaySelectorClass: string = 'lusift-overlay';
   private data: any;
-  private dummyElement: document.HTMLElement;
   private toStopOverlay: boolean;
   private resizeObservers: any[] = [];
   private focusTrap: any;
@@ -64,12 +65,7 @@ class Backdrop {
     this.targetSelector = targetSelector;
     /* document.body.style.height='1000px'
     document.body.style.width='1000px' */
-    document.body.style.height='2000px'
     this.addBackdop();
-
-    this.dummyElement = document.createElement('div');
-    this.dummyElement.id = 'lusift-backdrop-dummy';
-    document.body.appendChild(this.dummyElement);
 
     this.resetBackdrop = this.resetBackdrop.bind(this);
 
@@ -79,15 +75,6 @@ class Backdrop {
       escToClose: false,
       clickOutsideToClose: false
     });
-
-    // TODO: it's the resize event listener that's causing issues
-    // -- see when it' triggered and if it would be approprtiate to remove
-    window.addEventListener('resize', this.resetBackdrop, true);
-    // HACK: remove resize event listener on remove() (see: remove())
-    this.dummyElement.addEventListener('click', () => {
-      console.log('removing resize event listener');
-      window.removeEventListener('resize', this.resetBackdrop, true);
-    }, true);
 
     this.resizeObservers.push(onElementResize(
       document.querySelector(`.${this.overlaySelectorClass}`),
@@ -102,7 +89,7 @@ class Backdrop {
   private resetBackdrop(): void {
     window.setTimeout(() => {
       // hack to intervene in the event backdrop has already been closed
-      if(this.toStopOverlay) return console.log('no showing overlay anymore');
+      if(this.toStopOverlay) return console.log('This overlay instance should be removed');
       this.removeOverlay();
       this.addBackdop();
     }, 500);
@@ -222,10 +209,6 @@ class Backdrop {
     this.removeOverlay();
     this.toStopOverlay=true;
     // remove event listeners
-    this.resetBackdrop = this.resetBackdrop.bind(this);
-    window.removeEventListener('resize', this.resetBackdrop, true);
-    this.dummyElement.click();
-    this.dummyElement.remove();
     this.resizeObservers.forEach(ro => ro.disconnect());
     console.log(this.resizeObservers)
     if (this.focusTrap){
