@@ -18,10 +18,9 @@ import addDefaultCSS from './addDefaultCSS';
 // TODO: add support for angul*r
 // BUG: React component doesn't render for step(vanillaRender does) when the page is refreshed
 // TODO: Make development easier.
-// TODO: Test in csr/ssr react, angular, vue, vanilla
-// TODO: Customising beacon element
-// TODO: Clean up the messy implementation of Tooltip and Backdrop
 // --- when host site is in dev watch mode, lusift rendering gets all messed up. why?
+// TODO: Test in csr/ssr react, angular, vue, vanilla
+// TODO: Clean up the messy implementation of Tooltip and Backdrop
 // TODO: In case of customizing hotspot's beacon, we can just have a beaconElement property
 // BUG: Why is it that the element is hidden beneath the overlay sometimes
 // --- what are the condition for these cases and how to solve them?

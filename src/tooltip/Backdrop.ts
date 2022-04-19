@@ -5,7 +5,8 @@ import {
   onElementResize,
   getElementPosition,
   roundNum,
-  addFocusTrap
+  addFocusTrap,
+  getScrollBarWidth
 } from '../common/utils/';
 import { BackdropData, BackdropParameters } from '../common/types';
 
@@ -112,12 +113,19 @@ class Backdrop {
     const padding = this.data.stageGap;
 
     const { documentHeight, documentWidth } = this.getDocumentDimensions();
-    const viewportWidth = window.innerWidth;
+    const viewportWidth = window.innerWidth - getScrollBarWidth();
     const viewportHeight = window.innerHeight;
 
     // compare the document height and width to the viewport height and width (rounded up)
+    const overlayAreaHeight = Math.round(viewportHeight) > Math.round(documentHeight)? viewportHeight : documentHeight;
+    const overlayAreaWidth = Math.round(viewportWidth) > Math.round(documentWidth)? viewportWidth : documentWidth;
 
+    console.log('doc: h, w')
     console.log(documentHeight, documentWidth);
+    console.log('vp');
+    console.log(viewportHeight, viewportWidth);
+    console.log('ov');
+    console.log(overlayAreaHeight, overlayAreaWidth);
 
     const targetPosition = getElementPosition(targetElement);
 
@@ -154,7 +162,7 @@ class Backdrop {
 
     hBottom.style.cssText = styleObjectToString({
       ...overlayStyle,
-      height: `${documentHeight - (targetPosition.top + targetPosition.height + padding)}px`,
+      height: `${overlayAreaHeight - (targetPosition.top + targetPosition.height + padding)}px`,
       width: `${targetPosition.right - targetPosition.left + 2*padding}px`,
       left: `${targetPosition.left - padding}px`,
       top: `${targetPosition.bottom + padding}px`
@@ -163,20 +171,17 @@ class Backdrop {
     vLeft.style.cssText = styleObjectToString({
       ...overlayStyle,
       width: `${targetPosition.left - padding}px`,
-      height: `${documentHeight}px`,
+      height: `${overlayAreaHeight}px`,
       right: ''
     });
     vRight.style.cssText = styleObjectToString({
       ...overlayStyle,
-      width: `${documentWidth - (targetPosition.left+targetPosition.width) - padding}px`,
-      height: `${documentHeight}px`,
+      width: `${overlayAreaWidth - (targetPosition.left+targetPosition.width) - padding}px`,
+      height: `${overlayAreaHeight}px`,
       bottom: '0px',
       left: ''
     });
 
-    // TODO: Modify overlay elements' css for when
-    // -- viewportHeight greater than documentHeight
-    // -- viewportWidth greater than documentWidth (rounded up)
 
     [hTop, hBottom, vLeft, vRight].forEach(el => {
       el.classList.add(this.overlaySelectorClass);
@@ -197,7 +202,7 @@ class Backdrop {
     /* console.log(screenWidth, overlaySumWidth);
     console.log(screenHeight, overlaySumHeight); */
 
-    if(!areNumbersEqual(documentWidth, overlaySumWidth) || !areNumbersEqual(documentHeight, overlaySumHeight)){
+    if(!areNumbersEqual(overlayAreaWidth, overlaySumWidth) || !areNumbersEqual(overlayAreaHeight, overlaySumHeight)){
       this.resetBackdrop();
     }
   }

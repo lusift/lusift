@@ -11,6 +11,7 @@ import doesStepMatchDisplayCriteria from './doesStepMatchDisplayCriteria';
 import startStepInstance from './startStepInstance';
 import addFocusTrap from './addFocusTrap';
 import vanillaRender from './vanillaRender';
+import getScrollBarWidth from './getScrollBarWidth';
 
 export {
   htmlStringToElement,
@@ -26,4 +27,5 @@ export {
   roundNum,
   addFocusTrap,
   vanillaRender,
+  getScrollBarWidth
 };
