@@ -1,12 +1,10 @@
 import { window, document } from 'global';
+import ResizeObserver from 'resize-observer-polyfill';
 
 const onElementResize = (element: document.HTMLElement, callback: Function) => {
-  if (typeof window !== "undefined") {
-    const { ResizeObserver } = window;
-    const resizeObserver = new ResizeObserver(() => callback());
-    resizeObserver.observe(element);
-    return resizeObserver;
-  }
+  const resizeObserver = new ResizeObserver(() => callback());
+  resizeObserver.observe(element);
+  return resizeObserver;
 };
 
 export default onElementResize;

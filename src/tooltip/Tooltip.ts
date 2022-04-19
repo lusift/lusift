@@ -4,6 +4,7 @@ import { mergeObjects, getStepUID } from '../common/utils';
 import { TooltipData, HotspotAndTooltipTarget as Target, StepActions } from '../common/types';
 import defaultToolipActions from './defaultTooltipActions';
 import Backdrop from './Backdrop';
+import 'intersection-observer';
 
 const defaultBackdropData = {
     disabled: false,
@@ -13,7 +14,8 @@ const defaultBackdropData = {
     nextOnOverlayClick: false,
 }
 
-// TODO: Look up support for and npm polyfill packages for resize-observer and IntersectionObserver
+// TODO: Remove event listeners set in show() and addBackdrop() at appropriate times, not just at final remove()
+// --check number of times removal of single event listener is logged at remove()
 
 export default class Tooltip {
     private targetElement: document.HTMLElement;

@@ -36,7 +36,7 @@ const defaultBackdropData = {
 }
 
 // TODO: Make this a cleaner class
-// TODO: Occupy the entire screen even when the document height is smaller than the window height
+// TODO: Occupy the entire screen even when the document height/width are smaller than the window height/width
 
 class Backdrop {
 

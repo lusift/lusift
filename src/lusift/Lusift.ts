@@ -18,22 +18,16 @@ import addDefaultCSS from './addDefaultCSS';
 // TODO: add support for angul*r
 // BUG: React component doesn't render for step(vanillaRender does) when the page is refreshed
 // TODO: Make development easier.
-// TODO: Test in client side react
+// TODO: Test in csr/ssr react, angular, vue, vanilla
 // TODO: Customising beacon element
 // TODO: Clean up the messy implementation of Tooltip and Backdrop
 // --- when host site is in dev watch mode, lusift rendering gets all messed up. why?
 // TODO: In case of customizing hotspot's beacon, we can just have a beaconElement property
 // BUG: Why is it that the element is hidden beneath the overlay sometimes
 // --- what are the condition for these cases and how to solve them?
-// BUG: There's definitely some mess in goint from server side to client side
-// -- suspected some faults with the document object Lusift is using
-// package manager notes section at https://github.com/defunctzombie/node-process#readme (process is a dependency to global)
-// BUG: So this page with 2 tooltip targets 1 after the other, when scrolling deactivates one tooltip (w/o clicking next), other
-// BUG: Backdrop isn't being removed on client side rendering
 // TODO: Reference react-modal package
 // NOTE: Should we build /dist before making commits?
 // TODO: Typescript not working in /vue dir
-// tooltip activates on target detection
 
 class Lusift {
   private content: Content;

@@ -1,4 +1,5 @@
 import { TooltipData, HotspotAndTooltipTarget as Target, StepActions } from '../common/types';
+import 'intersection-observer';
 export default class Tooltip {
     private targetElement;
     readonly target: Target;
