@@ -52,7 +52,10 @@ const renderTooltip = ({ remove, data, target, styleProps, uid, index }) => {
 
   Lusift.render(
     bodyContent,
-    '.lusift > .hotspot-tooltip > .body-content'
+    '.lusift > .hotspot-tooltip > .body-content',
+    () => {
+      tippyInstance.popperInstance.update();
+    }
   );
 
   return tippyInstance;

@@ -8,7 +8,7 @@ declare class Backdrop {
     private focusTrap;
     constructor({ targetSelector, uid, guideID, index, data }: any);
     private resetBackdrop;
-    private getScreenDimensions;
+    private getDocumentDimensions;
     private addBackdop;
     private removeOverlay;
     remove(): void;

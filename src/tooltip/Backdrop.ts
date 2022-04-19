@@ -85,7 +85,6 @@ class Backdrop {
       document.body,
       this.resetBackdrop
     ));
-    console.log('--- BACKDROP ADDED ---');
   }
 
   private resetBackdrop(): void {
@@ -222,11 +221,9 @@ class Backdrop {
     this.toStopOverlay=true;
     // remove event listeners
     this.resizeObservers.forEach(ro => ro.disconnect());
-    console.log(this.resizeObservers)
     if (this.focusTrap){
       this.focusTrap.deactivate();
     }
-    console.log('--- BACKDROP REMOVED ---');
     // console.log('overlay and stage removed')
   }
 }

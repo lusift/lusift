@@ -11,6 +11,7 @@ export default class Tooltip {
     private targetsAndEventListeners;
     private backdrop;
     private index;
+    private intersectionObserver;
     private isTooltipShown;
     constructor({ target, guideID, index, data, actions, styleProps }: {
         target: Target;

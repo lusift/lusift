@@ -32,6 +32,7 @@ import addDefaultCSS from './addDefaultCSS';
 // BUG: Backdrop isn't being removed on client side rendering
 // TODO: Reference react-modal package
 // NOTE: Should we build /dist before making commits?
+// TODO: Typescript not working in /vue dir
 // tooltip activates on target detection
 
 class Lusift {

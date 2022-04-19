@@ -85,7 +85,10 @@ const renderTooltip = ({ data, target, styleProps, actions, uid, index }) => {
     .data.steps[index].data.bodyContent || defaultBodyContent;
   Lusift.render(
     bodyContent,
-    '.lusift > .tooltip > .body-content'
+    '.lusift > .tooltip > .body-content',
+    () => {
+      tippyInstance.popperInstance.update();
+    }
   );
 
   return tippyInstance;

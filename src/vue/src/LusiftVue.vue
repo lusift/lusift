@@ -26,6 +26,11 @@ export default {
         const target = document.querySelector(targetPath);
         bodyComponent.$mount(targetPath)
         if (callback) callback();
+        /*
+        bodyComponent.$nextTick(() => {
+          if (callback) callback();
+        });
+        */
       } else {
         vanillaRender(bodyComponent, targetPath, callback);
       }

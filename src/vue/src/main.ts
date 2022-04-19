@@ -37,6 +37,7 @@ const vueRender = (BodyComponent: any, targetPath: string, callback?: Function) 
   // TODO: Inject vue component BodyComponent into html path with html selector targetPath
   const app = createApp(BodyComponent);
   app.mount(targetPath);
+  console.log(app);
   console.log('mount!!!!!!!!')
   if (callback) callback();
 }
