@@ -48,7 +48,7 @@ class Backdrop {
   private resizeObservers: any[] = [];
   private focusTrap: any;
 
-  // TODO types here
+  // TODO: types here
   constructor({
     targetSelector,
     uid,

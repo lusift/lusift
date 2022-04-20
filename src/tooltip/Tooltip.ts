@@ -14,9 +14,6 @@ const defaultBackdropData = {
     nextOnOverlayClick: false,
 }
 
-// TODO: Remove event listeners set in show() and addBackdrop() at appropriate times, not just at final remove()
-// --check number of times removal of single event listener is logged at remove()
-
 export default class Tooltip {
     private targetElement: document.HTMLElement;
     readonly target: Target;
@@ -127,6 +124,7 @@ export default class Tooltip {
         private hide(): void {
             console.log('tooltip hide');
             this.tippyInstance.hide();
+            this.removeAllEventListeners();
             this.backdrop && this.backdrop.remove();
             this.isTooltipShown = false;
         }
@@ -159,7 +157,6 @@ export default class Tooltip {
             const { eventType, disabled } = progressOn;
             disabled || this.addEventListenerToTarget(this.targetElement, 'next', eventType);
 
-
             if(!this.tippyInstance) {
                 // tippy was never initiated
                 const { uid, actions, styleProps, data, index } = this;
@@ -183,6 +180,7 @@ export default class Tooltip {
             if (!this.isTooltipShown) return console.error('Attempted to remove but tooltip is not shown');
             console.log(`removing tooltip ${this.uid}`);
             this.removeAllEventListeners();
+            this.intersectionObserver.disconnect();
             this.backdrop && this.backdrop.remove();
             this.tippyInstance.unmount();
             this.tippyInstance.destroy();
@@ -213,6 +211,5 @@ export default class Tooltip {
                 console.log(`remove event listener of type ${eventType} and method ${method}`);
             });
             this.targetsAndEventListeners = [];
-            this.intersectionObserver.disconnect();
         }
 }
