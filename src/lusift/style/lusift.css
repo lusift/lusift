@@ -176,11 +176,11 @@
 /*tooltip-progress*/
 
 .lusift-progress {
-    initial: none;
     margin: 0;
     padding: 0;
     display: block;
     width: 100%;
+    -webkit-appearance: none;
 }
 .lusift-progress {
     margin-top: -1px;
@@ -194,6 +194,8 @@
 }
 .lusift-progress::-webkit-progress-value {
     initial: none;
+}
+.lusift-progress::-moz-progress-bar {
 }
 
 /*beacon*/

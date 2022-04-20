@@ -11,23 +11,22 @@ import addDefaultCSS from './addDefaultCSS';
 
 // TODO: Write documentation
 // TODO: attach License
-// TODO: push to npm and bower
 // TODO: try globalThis instead of global package
 //
 // TODO: decide on making configuring easier, with inheritence, global levels, etc.
 // TODO: add support for angul*r
-// BUG: React component doesn't render for step(vanillaRender does) when the page is refreshed
+// TODO: add support for vue version 2 and 3
 // TODO: Make development easier.
 // --- when host site is in dev watch mode, lusift rendering gets all messed up. why?
+// -- can we detect dev server refresh and do Lusift.refresh()?
 // TODO: Test in csr/ssr react, angular, vue, vanilla
-// TODO: Style the progress bar better: https://tippingpoint.dev/progress-bar-css
 // TODO: Test in different browsers and OS'
 // TODO: Clean up the messy implementation of Tooltip and Backdrop
 // TODO: In case of customizing hotspot's beacon, we can just have a beaconElement property
 // BUG: Why is it that the element is hidden beneath the overlay sometimes
 // --- what are the condition for these cases and how to solve them?
 // TODO: Reference react-modal package
-// NOTE: Should we build /dist before making commits?
+// NOTE: Handling versioning
 // TODO: Typescript not working in /vue dir
 
 class Lusift {

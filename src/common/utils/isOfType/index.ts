@@ -109,7 +109,6 @@ export function isOfTypeHtmlElement(element): boolean {
 }
 
 export const isReactComponent = (component: any): boolean => {
-  console.log(component);
   return typeof component === 'function';
 }
 
