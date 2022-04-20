@@ -37,7 +37,6 @@ const defaultBackdropData = {
 }
 
 // TODO: Make this a cleaner class
-// TODO: Occupy the entire screen even when the document height/width are smaller than the window height/width
 
 class Backdrop {
 
@@ -98,11 +97,30 @@ class Backdrop {
   }
 
   private getDocumentDimensions(): { documentWidth: number; documentHeight: number } {
-    const { height, width } = getElementPosition(document.documentElement);
+    const {
+      height: clientHeight,
+      width: clientWidth
+    } = getElementPosition(document.documentElement);
+    // utils/dimensions.ts
+
+    const documentWidth = Math.max(
+      clientWidth,
+      document.body["scrollWidth"],
+      document.documentElement["scrollWidth"],
+      document.body["offsetWidth"],
+      document.documentElement["offsetWidth"]
+    );
+    const documentHeight = Math.max(
+      clientHeight,
+      document.body.scrollHeight,
+      document.documentElement.scrollHeight,
+      document.body.offsetHeight,
+      document.documentElement.offsetHeight,
+    );
 
     return {
-      documentWidth: width,
-      documentHeight: height
+      documentWidth,
+      documentHeight
     }
   }
 
@@ -113,19 +131,6 @@ class Backdrop {
     const padding = this.data.stageGap;
 
     const { documentHeight, documentWidth } = this.getDocumentDimensions();
-    const viewportWidth = window.innerWidth - getScrollBarWidth();
-    const viewportHeight = window.innerHeight;
-
-    // compare the document height and width to the viewport height and width (rounded up)
-    const overlayAreaHeight = Math.round(viewportHeight) > Math.round(documentHeight)? viewportHeight : documentHeight;
-    const overlayAreaWidth = Math.round(viewportWidth) > Math.round(documentWidth)? viewportWidth : documentWidth;
-
-    console.log('doc: h, w')
-    console.log(documentHeight, documentWidth);
-    console.log('vp');
-    console.log(viewportHeight, viewportWidth);
-    console.log('ov');
-    console.log(overlayAreaHeight, overlayAreaWidth);
 
     const targetPosition = getElementPosition(targetElement);
 
@@ -156,13 +161,12 @@ class Backdrop {
       height: `${targetPosition.bottom - targetPosition.height - padding}px`,
       width: `${targetPosition.right - targetPosition.left + 2*padding}px`,
       left: `${targetPosition.left - padding}px`,
-      bottom: ''
+      bottom: `${targetPosition.top - padding}px`
     });
-
 
     hBottom.style.cssText = styleObjectToString({
       ...overlayStyle,
-      height: `${overlayAreaHeight - (targetPosition.top + targetPosition.height + padding)}px`,
+      height: `${documentHeight - (targetPosition.top + targetPosition.height + padding)}px`,
       width: `${targetPosition.right - targetPosition.left + 2*padding}px`,
       left: `${targetPosition.left - padding}px`,
       top: `${targetPosition.bottom + padding}px`
@@ -171,15 +175,15 @@ class Backdrop {
     vLeft.style.cssText = styleObjectToString({
       ...overlayStyle,
       width: `${targetPosition.left - padding}px`,
-      height: `${overlayAreaHeight}px`,
-      right: ''
+      height: `${documentHeight}px`,
+      right: `${targetPosition.left - padding}px`,
     });
+
     vRight.style.cssText = styleObjectToString({
       ...overlayStyle,
-      width: `${overlayAreaWidth - (targetPosition.left+targetPosition.width) - padding}px`,
-      height: `${overlayAreaHeight}px`,
-      bottom: '0px',
-      left: ''
+      width: `${documentWidth - (targetPosition.left+targetPosition.width) - padding}px`,
+      height: `${documentHeight}px`,
+      left: `${targetPosition.right + padding}px`,
     });
 
 
@@ -195,14 +199,13 @@ class Backdrop {
     const vLeftWidth = getElementPosition(vLeft).width;
     const vRightWidth = getElementPosition(vRight).width;
 
-
     const overlaySumWidth = hTopWidth+vLeftWidth+vRightWidth;
     const overlaySumHeight = hTopHeight+hBottomHeight+targetPosition.height+2*padding;
 
     /* console.log(screenWidth, overlaySumWidth);
     console.log(screenHeight, overlaySumHeight); */
 
-    if(!areNumbersEqual(overlayAreaWidth, overlaySumWidth) || !areNumbersEqual(overlayAreaHeight, overlaySumHeight)){
+    if(!areNumbersEqual(documentWidth, overlaySumWidth) || !areNumbersEqual(documentHeight, overlaySumHeight)){
       this.resetBackdrop();
     }
   }

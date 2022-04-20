@@ -20,6 +20,8 @@ import addDefaultCSS from './addDefaultCSS';
 // TODO: Make development easier.
 // --- when host site is in dev watch mode, lusift rendering gets all messed up. why?
 // TODO: Test in csr/ssr react, angular, vue, vanilla
+// TODO: Style the progress bar better: https://tippingpoint.dev/progress-bar-css
+// TODO: Test in different browsers and OS'
 // TODO: Clean up the messy implementation of Tooltip and Backdrop
 // TODO: In case of customizing hotspot's beacon, we can just have a beaconElement property
 // BUG: Why is it that the element is hidden beneath the overlay sometimes
