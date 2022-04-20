@@ -27,7 +27,6 @@ import addDefaultCSS from './addDefaultCSS';
 // --- what are the condition for these cases and how to solve them?
 // TODO: Reference react-modal package
 // NOTE: Handling versioning
-// TODO: Typescript not working in /vue dir
 
 class Lusift {
   private content: Content;
@@ -168,6 +167,7 @@ class Lusift {
       } = this.content[key].data;
 
       // remove bodyContent from steps
+      // TODO: Wait why remove bodyContent??
       let stepsWithoutBodyContent = steps.map(step => {
         if(step.type==='tooltip' || step.type==='modal') {
           delete step.data.bodyContent;
@@ -222,6 +222,8 @@ class Lusift {
     if(!this.content[contentID]) {
       return console.warn(`Content with id of ${contentID} doesn't exist`);
     }
+    // TODO: If the contentID is guideInstance.guideID, then don't do anything
+    if(window['Lusift'].activeGuideID === contentID) return console.log(`${contentID} already active`);
     if(this.guideInstance){
       this.guideInstance.close();
       // make sure the trackingState of the contentID is emptied
