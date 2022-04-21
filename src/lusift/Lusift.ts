@@ -126,10 +126,47 @@ class Lusift {
     // --clear tracking data if item data has changed
     // --conserve otherwise
     let stateToSave = {};
+    let contentWithoutBodyContent = JSON.parse(JSON.stringify(this.content));
+    // TODO: aside: Check where in the codebase we may be using Object.assign and spread syntax
 
     Object.keys(this.content).forEach((key) => {
-      if(this.content[key].type==='guide'){
-        const guideData = this.content[key].data; //prolly a guide
+
+      const {
+        id,
+        name='',
+        description='',
+        steps,
+        onNext,
+        onPrev,
+        onClose,
+        doNotResetTrackerOnContentChange=false
+      } = contentWithoutBodyContent[key].data;
+
+      // remove bodyContent from steps
+      let stepsWithoutBodyContent = steps.map(step => {
+        if(step.type==='tooltip' || step.type==='modal') {
+          delete step.data.bodyContent;
+        } else if (step.type==='hotspot') {
+          delete step.tip.data.bodyContent;
+        }
+        return step;
+      });
+
+      contentWithoutBodyContent[key].data = {
+        id,
+        name,
+        description,
+        steps: stepsWithoutBodyContent,
+        onNext,
+        onPrev,
+        onClose,
+        doNotResetTrackerOnContentChange
+      };
+    });
+
+    Object.keys(contentWithoutBodyContent).forEach((key) => {
+      if(contentWithoutBodyContent[key].type==='guide'){
+        const guideData = contentWithoutBodyContent[key].data; //prolly a guide
         if(this.hasGuideDataChanged(guideData) && !guideData.doNotResetTrackerOnContentChange) {
           console.log(`guide with id '${key}' changed`);
           // clear tracking data
@@ -149,11 +186,11 @@ class Lusift {
     if(!isOfTypeContent(content)) {
       return console.warn('Content data type is invalid');
     }
-    this.content = content;
 
     this.contentSet = true;
+    this.content = content;
     // console.log('filtering')
-    Object.keys(this.content).forEach((key) => {
+    Object.keys(content).forEach((key) => {
 
       const {
         id,
@@ -164,24 +201,18 @@ class Lusift {
         onPrev,
         onClose,
         doNotResetTrackerOnContentChange=false
-      } = this.content[key].data;
+      } = content[key].data;
+
+      // TODO: Also how should this function factor in already active guide? close it?
+      // -- imagine if the active guide changed or was removed entirely?
 
       // remove bodyContent from steps
-      // TODO: Wait why remove bodyContent??
-      let stepsWithoutBodyContent = steps.map(step => {
-        if(step.type==='tooltip' || step.type==='modal') {
-          delete step.data.bodyContent;
-        } else if (step.type==='hotspot') {
-          delete step.tip.data.bodyContent;
-        }
-        return step;
-      })
-
+      // TODO: Do we want doNotResetTrackerOnContentChange variable to be saved to localState?
       this.content[key].data = {
         id,
         name,
         description,
-        steps: stepsWithoutBodyContent,
+        steps,
         onNext,
         onPrev,
         onClose,
@@ -224,6 +255,7 @@ class Lusift {
     }
     // TODO: If the contentID is guideInstance.guideID, then don't do anything
     if(window['Lusift'].activeGuideID === contentID) return console.log(`${contentID} already active`);
+    // TODO: Maybe re-render the disaplayed steps
     if(this.guideInstance){
       this.guideInstance.close();
       // make sure the trackingState of the contentID is emptied
