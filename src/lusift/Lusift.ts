@@ -184,6 +184,7 @@ class Lusift {
   public setContent(content: Content): void {
     // filter and validate this.content
     if(!isOfTypeContent(content)) {
+      // TODO: Make sure there's a check for empty string as guide id
       return console.warn('Content data type is invalid');
     }
 
@@ -224,12 +225,24 @@ class Lusift {
     // and then save to localStorage
     this.reconcileContentWithLocalState();
     //content has been set to local
+
+    if (this.guideInstance) {
+
+    }
   }
 
   public clearContent(): void {
     saveState({});
     this.content = {};
     this.contentSet = false;
+  }
+
+  private closeActiveGuide(): void {
+
+    // TODO: Set Lusift.activeGuideID and Lusift.guideInstance to null
+    this.activeGuideID=null;
+    this.guideInstance=null;
+    typeof window.Lusift.onClose === 'function' && window.Lusift.onClose();
   }
 
   public refresh(): void {

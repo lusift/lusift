@@ -196,7 +196,7 @@ export default class Guide {
     this.setTrackingState(newTrackingState);
     this.closeCurrentStep();
     console.log('guide closed');
-    typeof window.Lusift.onClose === 'function' && window.Lusift.onClose();
+    window.Lusift.closeActiveGuide();
   }
 
   private closeCurrentStep(): void {
