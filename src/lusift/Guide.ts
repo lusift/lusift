@@ -60,6 +60,26 @@ export default class Guide {
     }
   }
 
+  private removeAllActiveSteps(): void {
+    this.activeStepInstances.forEach(stepInstance => {
+      // instance.reRenderPageElements();
+      const { type, target, instance, async } = stepInstance;
+      if(async && type === 'hotspot') {
+        instance.removeResizeObservers();
+      }
+      instance.remove();
+    });
+    this.activeStepInstances=[];
+    this.activeStepInstance=null;
+
+  }
+
+  public reRenderStepElements(): void {
+    console.log('re-render step elements');
+    this.removeAllActiveSteps();
+    this.start();
+  }
+
   private attemptToShowActiveStep(): void {
     // we start with some activeStep from this.trackingState
     // if the step is async, set toOpen to true
@@ -194,9 +214,9 @@ export default class Guide {
       newTrackingState.prematurelyClosed=true;
     }
     this.setTrackingState(newTrackingState);
-    this.closeCurrentStep();
+    this.removeAllActiveSteps();
     console.log('guide closed');
-    window.Lusift.closeActiveGuide();
+    typeof window.Lusift.onClose === 'function' && window.Lusift.onClose();
   }
 
   private closeCurrentStep(): void {

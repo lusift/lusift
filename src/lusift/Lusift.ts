@@ -204,10 +204,6 @@ class Lusift {
         doNotResetTrackerOnContentChange=false
       } = content[key].data;
 
-      // TODO: Also how should this function factor in already active guide? close it?
-      // -- imagine if the active guide changed or was removed entirely?
-
-      // remove bodyContent from steps
       // TODO: Do we want doNotResetTrackerOnContentChange variable to be saved to localState?
       this.content[key].data = {
         id,
@@ -226,23 +222,15 @@ class Lusift {
     this.reconcileContentWithLocalState();
     //content has been set to local
 
-    if (this.guideInstance) {
-
-    }
+    // TODO: Also how should this function factor in already active guide?
+    // -- imagine if the active guide's data changed or was removed entirely?
+    // -- depends on all the times setContent will be called
   }
 
   public clearContent(): void {
     saveState({});
     this.content = {};
     this.contentSet = false;
-  }
-
-  private closeActiveGuide(): void {
-
-    // TODO: Set Lusift.activeGuideID and Lusift.guideInstance to null
-    this.activeGuideID=null;
-    this.guideInstance=null;
-    typeof window.Lusift.onClose === 'function' && window.Lusift.onClose();
   }
 
   public refresh(): void {
@@ -266,9 +254,10 @@ class Lusift {
     if(!this.content[contentID]) {
       return console.warn(`Content with id of ${contentID} doesn't exist`);
     }
-    // TODO: If the contentID is guideInstance.guideID, then don't do anything
-    if(window['Lusift'].activeGuideID === contentID) return console.log(`${contentID} already active`);
-    // TODO: Maybe re-render the disaplayed steps
+    if(this.activeGuideID === contentID){
+      this.guideInstance.reRenderStepElements();
+      return console.log(`${contentID} already active`);
+    }
     if(this.guideInstance){
       this.guideInstance.close();
       // make sure the trackingState of the contentID is emptied
