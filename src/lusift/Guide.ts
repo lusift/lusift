@@ -4,7 +4,7 @@ import { changeAsyncStepStatus, startStepInstance, doesStepMatchDisplayCriteria 
 
 import { GuideType, TrackingState } from '../common/types';
 
-// TODO types for stepInstance, activeStepInstances. Possibly create an intermediary class Step
+// TODO: types for stepInstance, activeStepInstances. Possibly create an intermediary class Step
 
 export default class Guide {
   readonly guideData: GuideType;
@@ -215,6 +215,8 @@ export default class Guide {
     }
     this.setTrackingState(newTrackingState);
     this.removeAllActiveSteps();
+    window.Lusift.activeGuideID = null;
+    window.Lusift.guideInstance = null;
     console.log('guide closed');
     typeof window.Lusift.onClose === 'function' && window.Lusift.onClose();
   }

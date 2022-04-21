@@ -16,13 +16,14 @@ import addDefaultCSS from './addDefaultCSS';
 // TODO: decide on making configuring easier, with inheritence, global levels, etc.
 // TODO: add support for angul*r
 // TODO: add support for vue version 2 and 3
-// TODO: Make development easier.
+// TODO: Map out the lifecycle/flow of the entire library
 // --- when host site is in dev watch mode, lusift rendering gets all messed up. why?
 // -- can we detect dev server refresh and do Lusift.refresh()?
 // TODO: Test in csr/ssr react, angular, vue, vanilla
 // TODO: Test in different browsers and OS'
 // TODO: Clean up the messy implementation of Tooltip and Backdrop
 // TODO: In case of customizing hotspot's beacon, we can just have a beaconElement property
+// TODO: Check everywhere in the codebase we are using Object.assign and spread syntax
 // BUG: Why is it that the element is hidden beneath the overlay sometimes
 // --- what are the condition for these cases and how to solve them?
 // TODO: Reference react-modal package
@@ -127,7 +128,6 @@ class Lusift {
     // --conserve otherwise
     let stateToSave = {};
     let contentWithoutBodyContent = JSON.parse(JSON.stringify(this.content));
-    // TODO: aside: Check where in the codebase we may be using Object.assign and spread syntax
 
     Object.keys(this.content).forEach((key) => {
 
@@ -184,7 +184,6 @@ class Lusift {
   public setContent(content: Content): void {
     // filter and validate this.content
     if(!isOfTypeContent(content)) {
-      // TODO: Make sure there's a check for empty string as guide id
       return console.warn('Content data type is invalid');
     }
 
@@ -204,7 +203,6 @@ class Lusift {
         doNotResetTrackerOnContentChange=false
       } = content[key].data;
 
-      // TODO: Do we want doNotResetTrackerOnContentChange variable to be saved to localState?
       this.content[key].data = {
         id,
         name,
@@ -217,14 +215,29 @@ class Lusift {
       };
     });
 
+    let dataOfActiveGuideChanged: boolean;
+    let contentIDExists: boolean;
+
+    if (this.activeGuideID){
+      dataOfActiveGuideChanged = this.hasGuideDataChanged(this.content[this.activeGuideID].data);
+      contentIDExists = Object.keys(this.content).includes(this.activeGuideID);
+    }
+
     // iterate through each content item to note changes and conditionally preserve trackingState
     // and then save to localStorage
     this.reconcileContentWithLocalState();
     //content has been set to local
 
-    // TODO: Also how should this function factor in already active guide?
-    // -- imagine if the active guide's data changed or was removed entirely?
-    // -- depends on all the times setContent will be called
+    if(this.activeGuideID){
+      // if the contentID doesn't exist at all in the new content received, or
+      // if contentID exists but data has changed
+      if(!contentIDExists || (contentIDExists && dataOfActiveGuideChanged)) {
+        this.guideInstance.removeAllActiveSteps();
+        this.activeGuideID=null;
+        this.guideInstance=null;
+      // TODO: should the Guide class instance be deleted?
+      }
+    }
   }
 
   public clearContent(): void {
@@ -259,6 +272,7 @@ class Lusift {
       return console.log(`${contentID} already active`);
     }
     if(this.guideInstance){
+      // NOTE: Do we really want to clear trackingState too here though?
       this.guideInstance.close();
       // make sure the trackingState of the contentID is emptied
       this.guideInstance.clearTrackingState();
