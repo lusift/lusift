@@ -1,6 +1,9 @@
 import { window, document } from 'global';
 import Lusift from '../../lusift';
-import Vue, { createApp } from 'vue';
+import { createApp, markRaw, isReactive } from '../../../../vue-crash-2021/node_modules/vue/dist/vue.esm-bundler.js';
+// import Vue, { createApp, markRaw, isReactive } from 'vue/dist/vue.esm-bundler.js';
+// import Vue, { createApp, markRaw, isReactive } from 'vue';
+
 import { Content } from '../../common/types';
 import { vanillaRender } from '../../common/utils';
 
@@ -10,7 +13,9 @@ const isVueComponent = (component: any): boolean => {
 
 const vueRender = (BodyComponent: any, targetPath: string, callback?: Function) => {
   console.log('vue render');
-  const bodyApp = createApp(BodyComponent);
+  const bodyApp = createApp(markRaw(BodyComponent));
+  // const bodyApp = createApp(BodyComponent);
+  console.log(`is reactive: ${isReactive(markRaw(BodyComponent))}`)
   bodyApp.mount(targetPath);
   if (callback) callback();
 }
@@ -32,7 +37,6 @@ if (typeof window !== "undefined") {
   );
   Lusift.render = renderBodyContent;
   window['Lusift'] = Lusift;
-  window['Vue'] = Vue;
 }
 
 export { Lusift as default, Content as LusiftContent };

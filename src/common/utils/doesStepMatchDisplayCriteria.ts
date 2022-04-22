@@ -4,18 +4,20 @@ import { doesStringMatchRegex } from '../utils';
 const doesStepPathMatch = (targetPath): boolean => {
   // is, endsWith, startsWith, contains, regex
   const { value, comparator } = targetPath;
-  const { pathname } = window.location;
+  const { pathname, hash } = window.location;
+  const currentPath = pathname + hash;
+
   switch(comparator) {
     case 'is':
-      return pathname===value;
+      return currentPath===value;
     case 'contains':
-      return pathname.includes(value);
+      return currentPath.includes(value);
     case 'endsWith':
-      return pathname.endsWith(value);
+      return currentPath.endsWith(value);
     case 'startWith':
-      return pathname.startsWith(value);
+      return currentPath.startsWith(value);
     case 'regex':
-      return doesStringMatchRegex(pathname, value);
+      return doesStringMatchRegex(currentPath, value);
   }
 }
 
