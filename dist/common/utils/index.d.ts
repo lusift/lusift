@@ -11,4 +11,5 @@ import doesStepMatchDisplayCriteria from './doesStepMatchDisplayCriteria';
 import startStepInstance from './startStepInstance';
 import addFocusTrap from './addFocusTrap';
 import vanillaRender from './vanillaRender';
-export { htmlStringToElement, mergeObjects, styleObjectToString, getStepUID, onElementResize, getElementPosition, doesStringMatchRegex, changeAsyncStepStatus, doesStepMatchDisplayCriteria, startStepInstance, roundNum, addFocusTrap, vanillaRender, };
+import getScrollBarWidth from './getScrollBarWidth';
+export { htmlStringToElement, mergeObjects, styleObjectToString, getStepUID, onElementResize, getElementPosition, doesStringMatchRegex, changeAsyncStepStatus, doesStepMatchDisplayCriteria, startStepInstance, roundNum, addFocusTrap, vanillaRender, getScrollBarWidth };

@@ -17,8 +17,6 @@ import addDefaultCSS from './addDefaultCSS';
 // TODO: add support for angul*r
 // TODO: add support for vue version 2 and 3
 // TODO: Map out the lifecycle/flow of the entire library
-// --- when host site is in dev watch mode, lusift rendering gets all messed up. why?
-// -- can we detect dev server refresh and do Lusift.refresh()?
 // TODO: Test in csr/ssr react, angular, vue, vanilla
 // TODO: Test in different browsers and OS'
 // TODO: Clean up the messy implementation of Tooltip and Backdrop
@@ -28,6 +26,7 @@ import addDefaultCSS from './addDefaultCSS';
 // --- what are the condition for these cases and how to solve them?
 // TODO: Reference react-modal package
 // NOTE: Handling versioning
+// TODO: What if instead of jsx in lusift-react, I wanted to supply chakra-ui components?
 
 class Lusift {
   private content: Content;
@@ -235,7 +234,6 @@ class Lusift {
         this.guideInstance.removeAllActiveSteps();
         this.activeGuideID=null;
         this.guideInstance=null;
-      // TODO: should the Guide class instance be deleted?
       }
     }
   }

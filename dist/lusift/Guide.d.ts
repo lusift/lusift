@@ -6,6 +6,8 @@ export default class Guide {
     constructor(guideID: string);
     private generateNewTrackingState;
     start(): void;
+    private removeAllActiveSteps;
+    reRenderStepElements(): void;
     private attemptToShowActiveStep;
     private isStepAlreadyActive;
     private attemptToStartAsyncSteps;
