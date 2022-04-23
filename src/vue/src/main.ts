@@ -1,11 +1,12 @@
 import { window, document } from 'global';
 import Lusift from '../../lusift';
-import { createApp, markRaw, isReactive } from '../../../../vue-crash-2021/node_modules/vue/dist/vue.esm-bundler.js';
-// import Vue, { createApp, markRaw, isReactive } from 'vue/dist/vue.esm-bundler.js';
-// import Vue, { createApp, markRaw, isReactive } from 'vue';
+import { Vue2, isVue2, isVue3, install, createApp, markRaw, isReactive } from 'vue-demi';
 
 import { Content } from '../../common/types';
 import { vanillaRender } from '../../common/utils';
+
+install();
+// TODO: Add type declarations for vue-demi imports
 
 const isVueComponent = (component: any): boolean => {
   return typeof component === 'object';
@@ -13,10 +14,16 @@ const isVueComponent = (component: any): boolean => {
 
 const vueRender = (BodyComponent: any, targetPath: string, callback?: Function) => {
   console.log('vue render');
-  const bodyApp = createApp(markRaw(BodyComponent));
-  // const bodyApp = createApp(BodyComponent);
-  console.log(`is reactive: ${isReactive(markRaw(BodyComponent))}`)
-  bodyApp.mount(targetPath);
+  if(isVue3){
+    const bodyApp = createApp(markRaw(BodyComponent));
+    // const bodyApp = createApp(BodyComponent);
+    console.log(`is reactive: ${isReactive(markRaw(BodyComponent))}`)
+    bodyApp.mount(targetPath);
+
+  } else {
+    const VueComponent = Vue2.extend(BodyComponent);
+    const bodyApp = new VueComponent().$mount(targetPath);
+  }
   if (callback) callback();
 }
 
@@ -36,6 +43,7 @@ if (typeof window !== "undefined") {
     true
   );
   Lusift.render = renderBodyContent;
+  console.log(`vue version: ${isVue2 ? '2' : isVue3 ? '3' : 'unknown'}`);
   window['Lusift'] = Lusift;
 }
 

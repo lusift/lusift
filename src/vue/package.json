@@ -10,6 +10,14 @@
     "core-js": "^3.6.5",
     "vue": "^2.0.0 || ^3.0.0"
   },
+  "peerDependenciesMeta": {
+    "@vue/composition-api": {
+      "optional": true
+    }
+  },
+  "dependencies": {
+    "vue-demi": "^0.12.1"
+  },
   "devDependencies": {
     "@babel/core": "^7.16.5",
     "@typescript-eslint/eslint-plugin": "^4.18.0",

@@ -16,6 +16,8 @@ const path = require('path');
 
 const mode = process.env.NODE_ENV === 'development' ? 'development' : 'production';
 
+// NOTE: Disabled ts check for lusift-vue because of vue-demi
+
 const configOptions = [
     {
         input: 'src/index.ts',
@@ -37,7 +39,7 @@ const configOptions = [
         name: 'Lusift-vue',
         tsconfig: 'tsconfig.vue.json',
         packageJsonPath: 'src/vue/package.json',
-    }
+    },
 ];
 
 function getConfig({ input, name, outputFile, tsconfig, packageJsonPath }) {
@@ -49,7 +51,9 @@ function getConfig({ input, name, outputFile, tsconfig, packageJsonPath }) {
             'react-dom',
             'tslib',
             'vue',
-            'core-js'
+            'core-js',
+            // '@vue/composition-api',
+            'vue-demi'
         ],
         output: {
             file: outputFile,
@@ -61,7 +65,9 @@ function getConfig({ input, name, outputFile, tsconfig, packageJsonPath }) {
                 'react-dom': 'ReactDOM',
                 'tslib': 'tslib',
                 'vue': 'Vue',
-                'core-js': 'coreJs'
+                'core-js': 'coreJs',
+                // '@vue/composition-api': 'VueCompositionAPI',
+                'vue-demi': 'vueDemi'
             }
         },
         plugins: [
@@ -98,8 +104,8 @@ function getConfig({ input, name, outputFile, tsconfig, packageJsonPath }) {
             typescript({
                 tsconfig,
                 // HACK: Can't build dist/lusift-react with check true
-                check: !(name === 'Lusift-react' &&
-                    mode === 'production'),
+                check: !((name === 'Lusift-react' &&
+                    mode === 'production') || (name === 'Lusift-vue')),
                 tsconfigOverride: {
                     compilerOptions: {
                         sourceMap: mode === 'development',

@@ -15,7 +15,6 @@ import addDefaultCSS from './addDefaultCSS';
 //
 // TODO: decide on making configuring easier, with inheritence, global levels, etc.
 // TODO: add support for angul*r
-// TODO: add support for vue version 2 and 3
 // TODO: Map out the lifecycle/flow of the entire library
 // TODO: Test in csr/ssr react, angular, vue, vanilla
 // TODO: Test in different browsers and OS'
