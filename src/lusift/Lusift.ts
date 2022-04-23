@@ -31,7 +31,6 @@ class Lusift {
   private content: Content;
   private guideInstance: any;
   public render: Function;
-  private contentSet: boolean;
   public activeGuideID: string;
   public progress: number = 0;
 
@@ -65,8 +64,8 @@ class Lusift {
     customStyle.textContent = styleText;
   }
 
-  public getTrackingState(): TrackingState {
-    if(this.contentSet && this.activeGuideID) {
+  public getTrackingState(): TrackingState | null {
+    if(this.activeGuideID) {
       return loadState()[this.activeGuideID].trackingState;
     } else {
       console.warn('No active guide');
@@ -92,7 +91,7 @@ class Lusift {
     if (typeof this.activeGuideID ==='string') {
       return console.warn('Can\'t enable dev mode because a guide is active using showContent()');
     }
-    if(!this.content || !this.contentSet) {
+    if(!this.content) {
       return console.warn(`Content not set, pass valid content object to setContent() before running devShowStep()`);
     }
     this.next = this.prev = this.close = this.showContent = function() {
@@ -185,7 +184,6 @@ class Lusift {
       return console.warn('Content data type is invalid');
     }
 
-    this.contentSet = true;
     this.content = content;
     // console.log('filtering')
     Object.keys(content).forEach((key) => {
@@ -240,7 +238,6 @@ class Lusift {
   public clearContent(): void {
     saveState({});
     this.content = {};
-    this.contentSet = false;
   }
 
   public refresh(): void {
@@ -257,7 +254,7 @@ class Lusift {
 
   public showContent(contentID: string): void {
     // Forces specific Lusift content to appear for the current user by passing in the ID.
-    if(!this.content || !this.contentSet) {
+    if(!this.content) {
       return console.warn(`Content not set, pass valid content object to setContent()`);
     }
     // see if content exists for contentID
