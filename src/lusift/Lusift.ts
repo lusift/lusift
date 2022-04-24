@@ -210,18 +210,14 @@ class Lusift {
     if(!this.content[contentID]) {
       return console.error(`Content with id of ${contentID} doesn't exist`);
     }
-    // TODO: Ok, the following 2 conditionals - what???
     if(this.activeGuide){
-      if(this.activeGuide.id === contentID){
+      const { instance, id } = this.activeGuide;
+
+      if(id === contentID){
         this.activeGuide.instance.reRenderStepElements();
         return console.error(`${contentID} is already active`);
-      }
-      const { instance } = this.activeGuide;
-      if(instance){
-        // NOTE: Do we really want to clear trackingState too here though?
+      } else {
         instance.close();
-        // make sure the trackingState of the contentID is emptied
-        instance.clearTrackingState();
       }
     }
 
