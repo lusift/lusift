@@ -71,7 +71,7 @@ class Hotspot {
     }
 
     // do not allow async step to close in dev mode
-    const isDevMode = !Boolean(window.Lusift.activeGuideID);
+    const isDevMode = !Boolean(window.Lusift.activeGuide);
     let removeMethod = isDevMode? window.Lusift.close : this.removeAndCloseAsync.bind(this);
 
     if(!this.tippyInstance){

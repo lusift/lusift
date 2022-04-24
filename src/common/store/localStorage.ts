@@ -4,7 +4,6 @@ if(!window) {
     console.log('window is undefined')
 }
 
-
 /**
  * This function checks if the lusift_state is saved in localStorage
  */

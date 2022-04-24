@@ -9,7 +9,7 @@ import {
 
 const renderProgressBar = () => {
 
-  const currentGuide = loadState()[window.Lusift.activeGuideID];
+  const currentGuide = loadState()[window.Lusift.activeGuide.id];
 
   if(!currentGuide) return '';
   if (!currentGuide) {

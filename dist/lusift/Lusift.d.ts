@@ -1,10 +1,11 @@
 import { Content, TrackingState } from '../common/types';
 declare class Lusift {
     private content;
-    private guideInstance;
     render: Function;
-    private contentSet;
-    activeGuideID: string;
+    activeGuide: {
+        instance: any;
+        id: string;
+    } | null;
     progress: number;
     private next;
     private prev;
@@ -14,16 +15,16 @@ declare class Lusift {
     private onPrev;
     private onClose;
     constructor();
-    setGlobalStyle(styleText: string): void;
-    getTrackingState(): TrackingState;
     private hasGuideDataChanged;
-    devShowStep(guideID: string, stepNumber: number): void;
     private reconcileContentWithLocalState;
     setContent(content: Content): void;
     clearContent(): void;
     refresh(): void;
     showContent(contentID: string): void;
     private prepareHooks;
+    setGlobalStyle(styleText: string): void;
+    getTrackingState(): TrackingState | null;
+    devShowStep(guideID: string, stepNumber: number): void;
 }
 declare const _default: Lusift;
 export default _default;

@@ -81,7 +81,7 @@ const renderTooltip = ({ data, target, styleProps, actions, uid, index }) => {
 
   const Lusift = window['Lusift'];
 
-  const bodyContent = Lusift.content[Lusift.activeGuideID]
+  const bodyContent = Lusift.content[Lusift.activeGuide.id]
     .data.steps[index].data.bodyContent || defaultBodyContent;
   Lusift.render(
     bodyContent,
