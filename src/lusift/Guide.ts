@@ -4,12 +4,12 @@ import { changeAsyncStepStatus, startStepInstance, doesStepMatchDisplayCriteria 
 
 import { GuideType, TrackingState } from '../common/types';
 
-// TODO: types for stepInstance, activeStepInstances. Possibly create an intermediary class Step
+// TODO: types for stepInstance, activeSteps. Possibly create an intermediary class Step
 
 export default class Guide {
   readonly guideData: GuideType;
   // TODO: add type for below prop
-  private activeStepInstances: any[] = [];
+  private activeSteps: any[] = [];
   // ^For limited use only, doesn't update after a step is closed
 
   constructor(guideID: string) {
@@ -61,7 +61,7 @@ export default class Guide {
   }
 
   private removeAllActiveSteps(): void {
-    this.activeStepInstances.forEach(stepInstance => {
+    this.activeSteps.forEach(stepInstance => {
       // instance.reRenderPageElements();
       const { type, target, instance, async } = stepInstance;
       if(async && type === 'hotspot') {
@@ -69,7 +69,7 @@ export default class Guide {
       }
       instance.remove();
     });
-    this.activeStepInstances=[];
+    this.activeSteps=[];
   }
 
   public reRenderStepElements(): void {
@@ -102,7 +102,7 @@ export default class Guide {
         changeAsyncStepStatus(stepIndex, true);
       }
       if(displayCriteriaMatches && !this.isStepAlreadyActive(stepIndex)) {
-        this.activeStepInstances.push({
+        this.activeSteps.push({
           index: stepIndex,
           instance: startStepInstance(
             steps[stepIndex],
@@ -122,7 +122,7 @@ export default class Guide {
   }
 
   private isStepAlreadyActive(stepIndex: number): boolean {
-    return this.activeStepInstances.some(({ index }) => index === stepIndex);
+    return this.activeSteps.some(({ index }) => index === stepIndex);
   }
 
   private attemptToStartAsyncSteps(): void {
@@ -136,7 +136,7 @@ export default class Guide {
           if(this.isStepAlreadyActive(index)) {
             return console.warn(`Step ${index} is already active`);
           }
-          this.activeStepInstances.push({
+          this.activeSteps.push({
             index,
             instance: startStepInstance(
               steps[index],
@@ -152,8 +152,8 @@ export default class Guide {
   }
 
   private removeIllegalSteps(): void {
-    this.activeStepInstances = this.activeStepInstances.filter(stepInstance => {
-      // if step display criteria doesn't match, then run remove() and remove from this.activeStepInstances
+    this.activeSteps = this.activeSteps.filter(stepInstance => {
+      // if step display criteria doesn't match, then run remove() and remove from this.activeSteps
       const { type, target, instance, async } = stepInstance;
       if(!doesStepMatchDisplayCriteria({ target, type })) {
         if(async && type === 'hotspot') {
@@ -219,16 +219,14 @@ export default class Guide {
     typeof window.Lusift.onClose === 'function' && window.Lusift.onClose();
   }
 
-  // TODO:
-  // -- rename this.activeStepInstances to this.activeSteps
   private closeCurrentStep(): void {
-    // if this.trackingState.activeStep is equal to any index of item from this.activeStepInstances, then console.log('hello')
+    // if this.trackingState.activeStep is equal to any index of item from this.activeSteps, then console.log('hello')
     const { currentStepIndex } = this.getTrackingState();
-    const currentStep = this.activeStepInstances.find(({ index }) => index === currentStepIndex);
+    const currentStep = this.activeSteps.find(({ index }) => index === currentStepIndex);
 
     if(currentStep) {
       currentStep.instance.remove();
-      this.activeStepInstances = this.activeStepInstances
+      this.activeSteps = this.activeSteps
         .filter(instance => instance.index !== currentStepIndex);
 
     } else {
