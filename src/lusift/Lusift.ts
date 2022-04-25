@@ -210,6 +210,7 @@ class Lusift {
     if(!this.content[contentID]) {
       return console.error(`Content with id of ${contentID} doesn't exist`);
     }
+    // when there's an active guide
     if(this.activeGuide){
       const { instance, id } = this.activeGuide;
 

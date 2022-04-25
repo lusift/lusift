@@ -8,7 +8,7 @@ import { GuideType, TrackingState } from '../common/types';
 
 export default class Guide {
   readonly guideData: GuideType;
-  private activeStepInstance: any;
+  // TODO: add type for below prop
   private activeStepInstances: any[] = [];
   // ^For limited use only, doesn't update after a step is closed
 
@@ -54,7 +54,7 @@ export default class Guide {
     this.attemptToStartAsyncSteps();
 
     if(finished || prematurelyClosed) {
-      console.warn('Guide is already finished or closed');
+      console.error('Guide is already finished or closed');
     } else {
       this.attemptToShowActiveStep();
     }
@@ -70,8 +70,6 @@ export default class Guide {
       instance.remove();
     });
     this.activeStepInstances=[];
-    this.activeStepInstance=null;
-
   }
 
   public reRenderStepElements(): void {
@@ -83,30 +81,33 @@ export default class Guide {
   private attemptToShowActiveStep(): void {
     // we start with some activeStep from this.trackingState
     // if the step is async, set toOpen to true
-    // if display criteria matches and step isn't already displayed, then startStep
+    //-- if display criteria matches and step isn't already displayed, then startStep
     // if the step is async, loop back with stepIndex++
     const { activeStep } = this.getTrackingState();
-    let stepIndex=activeStep-1;
+    let stepIndex=activeStep;
     const steps = this.guideData.steps;
     let isAsyncStep: boolean;
 
+    stepIndex--;
     do {
       stepIndex++;
       const { target, type, async } = steps[stepIndex];
-      const displayCriteriaMatches = doesStepMatchDisplayCriteria({ target, type });
+      const displayCriteriaMatches = doesStepMatchDisplayCriteria({
+        target,
+        type
+      });
       isAsyncStep = async && type === 'hotspot';
 
       if (isAsyncStep){
         changeAsyncStepStatus(stepIndex, true);
       }
       if(displayCriteriaMatches && !this.isStepAlreadyActive(stepIndex)) {
-        this.activeStepInstance = startStepInstance(
-          steps[stepIndex],
-          this.guideData.id
-        );
         this.activeStepInstances.push({
-          instance: this.activeStepInstance,
           index: stepIndex,
+          instance: startStepInstance(
+            steps[stepIndex],
+            this.guideData.id
+          ),
           target,
           type,
           async
@@ -121,7 +122,7 @@ export default class Guide {
   }
 
   private isStepAlreadyActive(stepIndex: number): boolean {
-    return this.activeStepInstances.some(stepInstance => stepInstance.index === stepIndex);
+    return this.activeStepInstances.some(({ index }) => index === stepIndex);
   }
 
   private attemptToStartAsyncSteps(): void {
@@ -135,18 +136,16 @@ export default class Guide {
           if(this.isStepAlreadyActive(index)) {
             return console.warn(`Step ${index} is already active`);
           }
-          this.activeStepInstance = startStepInstance(
-            steps[index],
-            this.guideData.id
-          );
           this.activeStepInstances.push({
             index,
-            instance: this.activeStepInstance,
+            instance: startStepInstance(
+              steps[index],
+              this.guideData.id
+            ),
             target,
             type,
             async
           });
-          this.activeStepInstance = null;
         }
       }
     });
@@ -220,13 +219,19 @@ export default class Guide {
     typeof window.Lusift.onClose === 'function' && window.Lusift.onClose();
   }
 
+  // TODO:
+  // -- rename activeStep in trackingState to currentStepIndex
+  // -- rename this.activeStepInstances
   private closeCurrentStep(): void {
-    if(this.activeStepInstance) {
-      this.activeStepInstance.remove();
-      this.activeStepInstances = this.activeStepInstances
-        .filter(instance => instance.index !==this.getTrackingState().activeStep);
+    // if this.trackingState.activeStep is equal to any index of item from this.activeStepInstances, then console.log('hello')
+    const { activeStep } = this.getTrackingState();
+    const currentStep = this.activeStepInstances.find(({ index }) => index === activeStep);
 
-      this.activeStepInstance = null;
+    if(currentStep) {
+      currentStep.instance.remove();
+      this.activeStepInstances = this.activeStepInstances
+        .filter(instance => instance.index !== activeStep);
+
     } else {
       console.warn('There\'s no active step to close');
     }
@@ -241,7 +246,7 @@ export default class Guide {
     this.setStep(newStep);
     typeof window.Lusift.onNext === 'function' && window.Lusift.onNext();
   }
-  // TODO even when setStep console warns closeCurrentStep still runs, fix this
+  // TODO: even when setStep console warns closeCurrentStep still runs, fix this
 
   private prevStep(): void {
     // make newStep the index of the closest previus step with !step.async
