@@ -4,12 +4,16 @@ import { changeAsyncStepStatus, startStepInstance, doesStepMatchDisplayCriteria 
 
 import { GuideType, TrackingState } from '../common/types';
 
-// TODO: types for stepInstance, activeSteps. Possibly create an intermediary class Step
 
 export default class Guide {
   readonly guideData: GuideType;
-  // TODO: add type for below prop
-  private activeSteps: any[] = [];
+  private activeSteps: {
+    index: number,
+    instance: any,
+    target: string,
+    type: string,
+    async: boolean
+  }[] = [];
   // ^For limited use only, doesn't update after a step is closed
 
   constructor(guideID: string) {
