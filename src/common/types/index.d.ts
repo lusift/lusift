@@ -106,7 +106,7 @@ export interface GuideType {
 
 
 export interface TrackingState {
-  activeStep: number;
+  currentStepIndex: number;
   finished: boolean;
   prematurelyClosed: boolean;
   asyncSteps: {

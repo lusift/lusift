@@ -31,7 +31,7 @@ export default class Guide {
 
   private generateNewTrackingState(): TrackingState {
     let newTrackingState = {
-      activeStep: 0,
+      currentStepIndex: 0,
       finished: undefined,
       prematurelyClosed: undefined,
       asyncSteps: {}
@@ -79,12 +79,12 @@ export default class Guide {
   }
 
   private attemptToShowActiveStep(): void {
-    // we start with some activeStep from this.trackingState
+    // we start with some currentStep from this.trackingState
     // if the step is async, set toOpen to true
     //-- if display criteria matches and step isn't already displayed, then startStep
     // if the step is async, loop back with stepIndex++
-    const { activeStep } = this.getTrackingState();
-    let stepIndex=activeStep;
+    const { currentStepIndex } = this.getTrackingState();
+    let stepIndex=currentStepIndex;
     const steps = this.guideData.steps;
     let isAsyncStep: boolean;
 
@@ -117,7 +117,7 @@ export default class Guide {
     while (isAsyncStep)
 
     let newTrackingState = this.getTrackingState();
-    newTrackingState.activeStep=stepIndex;
+    newTrackingState.currentStepIndex=stepIndex;
     this.setTrackingState(newTrackingState);
   }
 
@@ -197,7 +197,7 @@ export default class Guide {
       console.log('guide finished');
 
     } else {
-      newTrackingState.activeStep=newStepNum;
+      newTrackingState.currentStepIndex=newStepNum;
       this.setTrackingState(newTrackingState);
       this.start();
     }
@@ -207,7 +207,7 @@ export default class Guide {
     // close guide
     // if current step is last step then finished=true, else prematurelyClosed=true
     let newTrackingState = this.getTrackingState();
-    if(newTrackingState.activeStep+1 === this.guideData.steps.length) {
+    if(newTrackingState.currentStepIndex+1 === this.guideData.steps.length) {
       newTrackingState.finished = true;
     } else {
       newTrackingState.prematurelyClosed=true;
@@ -220,17 +220,16 @@ export default class Guide {
   }
 
   // TODO:
-  // -- rename activeStep in trackingState to currentStepIndex
-  // -- rename this.activeStepInstances
+  // -- rename this.activeStepInstances to this.activeSteps
   private closeCurrentStep(): void {
     // if this.trackingState.activeStep is equal to any index of item from this.activeStepInstances, then console.log('hello')
-    const { activeStep } = this.getTrackingState();
-    const currentStep = this.activeStepInstances.find(({ index }) => index === activeStep);
+    const { currentStepIndex } = this.getTrackingState();
+    const currentStep = this.activeStepInstances.find(({ index }) => index === currentStepIndex);
 
     if(currentStep) {
       currentStep.instance.remove();
       this.activeStepInstances = this.activeStepInstances
-        .filter(instance => instance.index !== activeStep);
+        .filter(instance => instance.index !== currentStepIndex);
 
     } else {
       console.warn('There\'s no active step to close');
@@ -238,7 +237,7 @@ export default class Guide {
   }
 
   private nextStep(): void {
-    const newStep = this.getTrackingState().activeStep+1;
+    const newStep = this.getTrackingState().currentStepIndex+1;
     if (newStep+1>this.guideData.steps.length) {
       return console.warn('No new steps');
     }
@@ -250,7 +249,7 @@ export default class Guide {
 
   private prevStep(): void {
     // make newStep the index of the closest previus step with !step.async
-    let newStep = this.getTrackingState().activeStep;
+    let newStep = this.getTrackingState().currentStepIndex;
 
     while(newStep>-2) {
       newStep--;
