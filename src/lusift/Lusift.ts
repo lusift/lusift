@@ -9,7 +9,6 @@ import { GuideType, Content, TrackingState } from '../common/types';
 import { isOfTypeContent, isObject } from '../common/utils/isOfType';
 import addDefaultCSS from './addDefaultCSS';
 
-// TODO: Create this.activeGuide: Object that will have `instance` and `id` of the active guide
 // TODO: Write documentation
 // TODO: attach License
 // TODO: try globalThis instead of global package

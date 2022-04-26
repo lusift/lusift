@@ -4,7 +4,6 @@ import { changeAsyncStepStatus, startStepInstance, doesStepMatchDisplayCriteria 
 
 import { GuideType, TrackingState } from '../common/types';
 
-
 export default class Guide {
   readonly guideData: GuideType;
   private activeSteps: {
@@ -15,6 +14,7 @@ export default class Guide {
     async: boolean
   }[] = [];
   // ^For limited use only, doesn't update after a step is closed
+  // TODO: make this update after a step is closed
 
   constructor(guideID: string) {
     // localGuideState consists of trackingState and guideData
@@ -241,13 +241,12 @@ export default class Guide {
   private nextStep(): void {
     const newStep = this.getTrackingState().currentStepIndex+1;
     if (newStep+1>this.guideData.steps.length) {
-      return console.warn('No new steps');
+      return console.error('No new steps');
     }
     this.closeCurrentStep();
     this.setStep(newStep);
     typeof window.Lusift.onNext === 'function' && window.Lusift.onNext();
   }
-  // TODO: even when setStep console warns closeCurrentStep still runs, fix this
 
   private prevStep(): void {
     // make newStep the index of the closest previus step with !step.async
@@ -265,6 +264,7 @@ export default class Guide {
         break;
       }
     }
+    if(newStep < 0) return console.error('No previous steps');
     this.closeCurrentStep();
     this.setStep(newStep);
     typeof window.Lusift.onPrev === 'function' && window.Lusift.onPrev();

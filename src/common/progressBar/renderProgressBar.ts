@@ -24,7 +24,7 @@ const renderProgressBar = () => {
   }
 
 
-  const currentStep = currentGuide.steps[currentGuide.trackingState.activeStep];
+  const currentStep = currentGuide.steps[currentGuide.trackingState.currentStepIndex];
   const progressBarData = currentGuide.progressBar || {};
 
   // find out borderRadius based on step type (their default border radii), or via styleProps
