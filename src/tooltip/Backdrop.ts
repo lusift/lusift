@@ -41,6 +41,10 @@ const defaultBackdropData = {
 class Backdrop {
 
   private targetSelector: string;
+  private timers: {
+    id: number;
+    object: any;
+  }[] = [];
   readonly stagedTargetClass: string;
   public overlaySelectorClass: string = 'lusift-overlay';
   private data: any;
@@ -64,11 +68,8 @@ class Backdrop {
       ...data
     }
     this.targetSelector = targetSelector;
-    /* document.body.style.height='1000px'
-    document.body.style.width='1000px' */
-    this.addBackdop();
 
-    this.resetBackdrop = this.resetBackdrop.bind(this);
+    this.createOverlay();
 
     // trap focus inside tooltip
     this.focusTrap = addFocusTrap({
@@ -77,6 +78,7 @@ class Backdrop {
       clickOutsideToClose: false
     });
 
+    this.resetBackdrop = this.resetBackdrop.bind(this);
     this.resizeObservers.push(onElementResize(
       document.querySelector(`.${this.overlaySelectorClass}`),
       this.resetBackdrop
@@ -88,12 +90,19 @@ class Backdrop {
   }
 
   private resetBackdrop(): void {
-    window.setTimeout(() => {
-      // hack to intervene in the event backdrop has already been closed
-      if(this.toStopOverlay) return console.log('This overlay instance should be removed');
+    const timeoutID = this.timers.length;
+
+    const timeout = window.setTimeout(() => {
+      // HACK: hack to intervene in the event backdrop has already been closed and there's a rogue timeout: rare
+      if(this.toStopOverlay) return console.error('Lusift: This overlay instance should be removed');
       this.removeOverlay();
-      this.addBackdop();
-    }, 500);
+      this.createOverlay();
+      this.timers = this.timers.filter(({ id }) => id !== timeoutID);
+    }, 300);
+    this.timers.push({
+      id: timeoutID,
+      object: timeout
+    });
   }
 
   private getDocumentDimensions(): { documentWidth: number; documentHeight: number } {
@@ -124,7 +133,7 @@ class Backdrop {
     }
   }
 
-  private addBackdop(): void {
+  private createOverlay(): void {
    /* document.documentElement.style.overflow = 'hidden';
    document.body.scroll = "no"; */
     const targetElement = document.querySelector(this.targetSelector);
@@ -211,7 +220,6 @@ class Backdrop {
   }
 
   private removeOverlay(): void {
-    // NOTE: Do we really need to be checking if element exists before removing?
     document.querySelectorAll(`.${this.overlaySelectorClass}`)
     .forEach((el: document.HTMLElement) => {
       if(el) el.remove();
@@ -224,15 +232,15 @@ class Backdrop {
   }
 
   public remove(): void {
-    console.log('removing overlay');
-    this.removeOverlay();
+    // console.log('removing Backdrop');
+    // remove event listeners and timers
+    this.timers = this.timers.filter(({ object }) => window.clearTimeout(object));
     this.toStopOverlay=true;
-    // remove event listeners
-    this.resizeObservers.forEach(ro => ro.disconnect());
+    this.resizeObservers = this.resizeObservers.filter(ro => ro.disconnect());
     if (this.focusTrap){
       this.focusTrap.deactivate();
     }
-    // console.log('overlay and stage removed')
+    this.removeOverlay();
   }
 }
 

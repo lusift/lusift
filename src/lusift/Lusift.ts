@@ -11,21 +11,18 @@ import addDefaultCSS from './addDefaultCSS';
 
 // TODO: Write documentation
 // TODO: attach License
-// TODO: try globalThis instead of global package
-//
+// TODO: Add overlay and backdrop style rules in lusift.css
+
 // TODO: decide on making configuring easier, with inheritence, global levels, etc.
-// TODO: add support for angul*r
+// TODO_: add support for angul*r
 // TODO: Map out the lifecycle/flow of the entire library
-// TODO: Test in different browsers and OS'
 // TODO: Clean up the messy implementation of Tooltip and Backdrop
-// TODO: In case of customizing hotspot's beacon, we can just have a beaconElement property
-// TODO: Check everywhere in the codebase we are using Object.assign and spread syntax
-// BUG: Why is it that the element is hidden beneath the overlay sometimes
-// --- what are the condition for these cases and how to solve them?
+// BUG: When the target is sidebar link
+// TODO_: In case of customizing hotspot's beacon, we can just have a beaconElement property
 // TODO: Reference react-modal package
 // NOTE: Handling versioning
-// TODO: What if instead of jsx in lusift-react, I wanted to supply chakra-ui components?
-
+// NOTE: resize observer doesn't work with svg elements
+// NOTE - Can we just export element classes (Tooltip, Modal, Hotspot) and have them be optionally loadable by the client?
 
 class Lusift {
   private content: Content;
