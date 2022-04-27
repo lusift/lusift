@@ -38,7 +38,7 @@ class Backdrop {
     object: ReturnType<typeof window.setTimeout>;
   }[] = [];
   readonly stagedTargetClass: string;
-  readonly overlaySelectorClass: string = 'lusift-overlay';
+  readonly overlaySelectorClass: string = 'lusift-backdrop-overlay';
   private data: BackdropData = {
     stageGap: 5,
     opacity: '0.5',

@@ -5,13 +5,13 @@ export default class Tooltip {
     readonly target: Target;
     private tippyInstance;
     readonly uid: string;
-    readonly backdropID: string;
     readonly data: TooltipData;
     private actions;
     readonly styleProps: Object;
     private targetsAndEventListeners;
-    private backdrop;
+    private backdropInstance;
     private index;
+    private guideID;
     private intersectionObserver;
     private isTooltipShown;
     constructor({ target, guideID, index, data, actions, styleProps }: {

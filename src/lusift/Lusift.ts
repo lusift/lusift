@@ -11,12 +11,9 @@ import addDefaultCSS from './addDefaultCSS';
 
 // TODO: Write documentation
 // TODO: attach License
-// TODO: Add overlay and backdrop style rules in lusift.css
 
 // TODO: decide on making configuring easier, with inheritence, global levels, etc.
 // TODO_: add support for angul*r
-// TODO: Map out the lifecycle/flow of the entire library
-// TODO: Clean up the messy implementation of Tooltip and Backdrop
 // BUG: When the target is sidebar link
 // TODO_: In case of customizing hotspot's beacon, we can just have a beaconElement property
 // TODO: Reference react-modal package

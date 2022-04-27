@@ -1,8 +1,7 @@
 import { GuideType, TrackingState } from '../common/types';
 export default class Guide {
     readonly guideData: GuideType;
-    private activeStepInstance;
-    private activeStepInstances;
+    private activeSteps;
     constructor(guideID: string);
     private generateNewTrackingState;
     start(): void;
