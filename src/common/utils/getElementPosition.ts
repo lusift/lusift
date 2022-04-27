@@ -2,7 +2,7 @@ import { window, document } from 'global';
 import { ElementPosition } from '../types';
 
 const getElementPosition = (element: document.HTMLElement): ElementPosition => {
-    // NOTE: Is documentElement assignment right?
+    // TODO: Is documentElement assignment right?
     const documentElement = document;
     const body = document.body;
 

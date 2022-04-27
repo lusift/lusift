@@ -1,21 +1,41 @@
 import Guide from './Guide';
 import { saveState, loadState } from '../common/store';
 import isEqual from 'lodash.isequal';
-import { doesStepMatchDisplayCriteria, startStepInstance } from '../common/utils';
+import {
+  doesStepMatchDisplayCriteria,
+  startStepInstance
+} from '../common/utils';
 
 import { window, document } from 'global';
 
-import { GuideType, Content, TrackingState } from '../common/types';
-import { isOfTypeContent, isObject } from '../common/utils/isOfType';
+import {
+  GuideType,
+  Content,
+  TrackingState
+} from '../common/types';
+
+import {
+  isOfTypeContent,
+  isObject
+} from '../common/utils/isOfType';
+
 import addDefaultCSS from './addDefaultCSS';
 
 // TODO: Write documentation
 
 // TODO: decide on making configuring easier, with inheritence, global levels, etc.
+// -- Maybe don't have setContent take everything, seperate concerns, makes documenting easier too
+// TODO: minor stuff:
+// -- what is popperjs preventOverflow
+// -- go to addFocusTrap.ts
+// -- go to getElementPosition.ts
 // TODO_: add support for angul*r
 // BUG: When the target is sidebar link
-// TODO_: In case of customizing hotspot's beacon, we can just have a beaconElement property
 // TODO: Reference react-modal package
+// TODO: ts, eslint
+// -- look into no console, make console.log only work in development
+// -- linting for whitespace stuff
+// -- linting/formatting on save
 // NOTE: Handling versioning
 // NOTE: resize observer doesn't work with svg elements
 // NOTE - Can we just export element classes (Tooltip, Modal, Hotspot) and have them be optionally loadable by the client?
@@ -155,8 +175,11 @@ class Lusift {
     let contentIDExists: boolean;
 
     if (this.activeGuide){
-      dataOfActiveGuideChanged = this.hasGuideDataChanged(this.content[this.activeGuide.id].data);
-      contentIDExists = Object.keys(this.content).includes(this.activeGuide.id);
+      dataOfActiveGuideChanged = this.hasGuideDataChanged(
+        this.content[this.activeGuide.id].data
+      );
+      contentIDExists = Object.keys(this.content)
+      .includes(this.activeGuide.id);
     }
 
     // iterate through each content item to note changes and conditionally preserve trackingState
@@ -196,11 +219,15 @@ class Lusift {
   public showContent(contentID: string): void {
     // Forces specific Lusift content to appear for the current user by passing in the ID.
     if(!this.content) {
-      return console.error(`Content not set, pass valid content data to setContent()`);
+      return console.error(
+        `Content not set, pass valid content data to setContent()`
+      );
     }
     // see if content exists for contentID
     if(!this.content[contentID]) {
-      return console.error(`Content with id of ${contentID} doesn't exist`);
+      return console.error(
+        `Content with id of ${contentID} doesn't exist`
+      );
     }
     // when there's an active guide
     if(this.activeGuide){
@@ -252,11 +279,17 @@ class Lusift {
 
   public setGlobalStyle(styleText: string): void {
     if(typeof styleText !== 'string') {
-      return console.error('Invalid style passed to setGlobalStyle()');
+      return console.error(
+        'Invalid style passed to setGlobalStyle()'
+      );
     }
-    let customStyle = document.querySelector('style[lusift-custom-css]');
+    let customStyle = document.querySelector(
+      'style[lusift-custom-css]'
+    );
     if(!customStyle) {
-      return console.error('Style tag for custom-css not found. Report to Lusift\'s github.');
+      return console.error(
+        `Style tag for custom-css not found. Report to Lusift\'s github.`
+      );
     }
     customStyle.textContent = styleText;
   }
@@ -274,10 +307,16 @@ class Lusift {
     // dev mode: to be used to develop/style step elements
     // if there is some other content active already, refuse to show dev mode
     if (typeof this.activeGuide) {
-      return console.warn('Can\'t enable dev mode because a guide is active using showContent()');
+      return console.warn(
+        `Can\'t enable dev mode because a `+
+          `guide is active using showContent()`
+      );
     }
     if(!this.content) {
-      return console.warn(`Content not set, pass valid content object to setContent() before running devShowStep()`);
+      return console.warn(
+        `Content not set, pass valid content object `+
+          `to setContent() before running devShowStep()`
+      );
     }
     this.next = this.prev = this.close = this.showContent = function() {
       console.error(`Can't run this method in dev mode`);
@@ -288,16 +327,22 @@ class Lusift {
       const { target, type } = steps[stepNumber];
 
       if(!doesStepMatchDisplayCriteria({ target, type })) {
-        return console.warn('Display criteria for step do not match. Navigate to\
-                            the right target page and make sure that the target element\
-                            is in the visible screen, then reload page.');
+        return console.warn(
+          `Display criteria for step do not match. Navigate to `+
+              `the right target page and make sure that the target `+
+                `element is in the visible screen, then reload page.`
+        );
       }
 
       if (steps[stepNumber]) {
         startStepInstance(steps[stepNumber], guideID);
-        console.log(`%c Showing step ${stepNumber} of ${guideID} in dev mode`, 'background: #222; color: #bada55');
+        console.log(
+          `%c Showing step ${stepNumber} of ${guideID} in dev mode`, 'background: #222; color: #bada55'
+        );
       } else {
-        console.error(`Guide '${guideID}' doesn't have a step ${stepNumber}`);
+        console.error(
+          `Guide '${guideID}' doesn't have a step ${stepNumber}`
+        );
       }
     } else {
       console.error(`Guide with id '${guideID}' doesn't exist`);

@@ -1,7 +1,7 @@
 import { window, document } from 'global';
 
 if(!window) {
-    console.log('window is undefined')
+    console.error('window is undefined')
 }
 
 /**

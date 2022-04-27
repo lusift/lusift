@@ -1,6 +1,14 @@
 import { window, document } from 'global';
 import Lusift from '../../lusift';
-import { Vue2, isVue2, isVue3, install, createApp, markRaw, isReactive } from 'vue-demi';
+import {
+  Vue2,
+  isVue2,
+  isVue3,
+  install,
+  createApp,
+  markRaw,
+  isReactive
+} from 'vue-demi';
 
 import { Content } from '../../common/types';
 import { vanillaRender } from '../../common/utils';
@@ -12,7 +20,11 @@ const isVueComponent = (component: any): boolean => {
   return typeof component === 'object';
 }
 
-const vueRender = (BodyComponent: any, targetPath: string, callback?: Function) => {
+const vueRender = (
+  BodyComponent: any,
+  targetPath: string,
+  callback?: Function
+) => {
   console.log('vue render');
   if(isVue3){
     const bodyApp = createApp(markRaw(BodyComponent));
@@ -27,7 +39,11 @@ const vueRender = (BodyComponent: any, targetPath: string, callback?: Function) 
   if (callback) callback();
 }
 
-const renderBodyContent = (body: any, targetPath: string, callback?: Function): void => {
+const renderBodyContent = (
+  body: any,
+  targetPath: string,
+  callback?: Function
+): void => {
   if (isVueComponent(body)) {
     vueRender(body, targetPath, callback);
   } else {
@@ -43,7 +59,9 @@ if (typeof window !== "undefined") {
     true
   );
   Lusift.render = renderBodyContent;
-  console.log(`vue version: ${isVue2 ? '2' : isVue3 ? '3' : 'unknown'}`);
+  console.log(
+    `vue version: ${isVue2 ? '2' : isVue3 ? '3' : 'unknown'}`
+  );
   window['Lusift'] = Lusift;
 }
 

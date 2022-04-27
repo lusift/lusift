@@ -1,6 +1,10 @@
 import { window } from 'global';
 import { saveState, loadState } from '../common/store';
-import { changeAsyncStepStatus, startStepInstance, doesStepMatchDisplayCriteria } from '../common/utils';
+import {
+  changeAsyncStepStatus,
+  startStepInstance,
+  doesStepMatchDisplayCriteria
+} from '../common/utils';
 
 import { GuideType, TrackingState } from '../common/types';
 
@@ -25,7 +29,10 @@ export default class Guide {
     delete guideData.trackingState;
 
     this.guideData = guideData;
-    console.log(`%c Welcome to guide: ${this.guideData.name || this.guideData.id}`, 'background: #222; color: #bada55');
+    console.log(
+      `%c Welcome to guide: ${this.guideData.name || this.guideData.id}`,
+      'background: #222; color: #bada55'
+    );
 
     if(!localGuideState.trackingState){
       const newTrackingState = this.generateNewTrackingState();
@@ -53,12 +60,17 @@ export default class Guide {
   }
 
   public start(): void {
-    const { finished, prematurelyClosed } = this.getTrackingState();
+    const {
+      finished,
+      prematurelyClosed
+    } = this.getTrackingState();
     this.removeIllegalSteps();
     this.attemptToStartAsyncSteps();
 
     if(finished || prematurelyClosed) {
-      console.error('Guide is already finished or closed');
+      console.error(
+        'Guide is already finished or closed'
+      );
     } else {
       this.attemptToShowActiveStep();
     }
@@ -267,6 +279,7 @@ export default class Guide {
     if(newStep < 0) return console.error('No previous steps');
     this.closeCurrentStep();
     this.setStep(newStep);
-    typeof window.Lusift.onPrev === 'function' && window.Lusift.onPrev();
+    const Lusift = window['Lusift'];
+    typeof Lusift.onPrev === 'function' && Lusift.onPrev();
   }
 }

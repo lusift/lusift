@@ -31,7 +31,11 @@ class Modal {
     }
     if(clickOutsideToClose) {
       const overlayElement = document.querySelector(`.${MODAL_OVERLAY_CLASS}`)
-      overlayElement.addEventListener('click', this.overlayClickEventListener, true);
+      overlayElement.addEventListener(
+        'click',
+        this.overlayClickEventListener,
+        true
+      );
     }
   }
 
@@ -64,10 +68,18 @@ class Modal {
 
     // remove event listeners
     if(this.data.escToClose) {
-      window.removeEventListener('keydown', this.escEventListener, true);
+      window.removeEventListener(
+        'keydown',
+        this.escEventListener,
+        true
+      );
     }
     if(this.data.clickOutsideToClose) {
-      overlayElement.removeEventListener('click', this.overlayClickEventListener, true);
+      overlayElement.removeEventListener(
+        'click',
+        this.overlayClickEventListener,
+        true
+      );
     }
     overlayElement.remove();
   }

@@ -54,6 +54,7 @@ export default class Tooltip {
             console.log('%c Tooltip constructor! ', 'background: #222; color: #bada55');
 
             this.target = target;
+            const { elementSelector } = target;
             this.styleProps = styleProps || {};
             this.data = data;
             this.index = index;
@@ -61,7 +62,7 @@ export default class Tooltip {
             const progressOn = data.progressOn || {};
             this.data.progressOn = {
                 eventType: 'click',
-                elementSelector: target.elementSelector,
+                elementSelector,
                 ...progressOn
             }
 
@@ -72,13 +73,14 @@ export default class Tooltip {
             }
             this.data.offset = this.data.offset || [0, 10];
             if(!this.data.backdrop.disabled) {
-                this.data.offset[1] = this.data.offset[1] + this.data.backdrop.stageGap;
+                this.data.offset[1] = this.data.offset[1] +
+                    this.data.backdrop.stageGap;
             }
 
             this.consolidateActions(actions);
             this.uid=getStepUID({ guideID, index, type: 'tooltip' });
             this.guideID = guideID;
-            this.targetElement = document.querySelector(this.target.elementSelector);
+            this.targetElement = document.querySelector(elementSelector);
             this.attachIntersectionObserver();
             console.log('tooltip started')
         }
@@ -95,7 +97,9 @@ export default class Tooltip {
                 entries.forEach(entry => {
                     const { isIntersecting, target } = entry;
                     if(!target.isSameNode(this.targetElement)){
-                        return console.log('Observer target doesn\'t match tooltip target');
+                        return console.log(
+                            'Observer target doesn\'t match tooltip target'
+                        );
                     }
                     if(isIntersecting){
                         this.show();
@@ -126,6 +130,7 @@ export default class Tooltip {
             this.tippyInstance.hide();
             this.removeAllEventListeners();
             this.backdropInstance && this.backdropInstance.remove();
+            this.backdropInstance = null;
             this.isTooltipShown = false;
         }
 
@@ -148,7 +153,9 @@ export default class Tooltip {
                 data
             });
             if (this.data.backdrop.nextOnOverlayClick){
-                Array.from(document.getElementsByClassName(this.backdropInstance.overlaySelectorClass))
+                Array.from(document.getElementsByClassName(
+                    this.backdropInstance.overlaySelectorClass
+                ))
                 .forEach(target => {
                     this.addEventListenerToTarget(target, 'next');
                 });
@@ -156,13 +163,21 @@ export default class Tooltip {
         }
 
         public show(): void {
-            if (!this.targetElement) return console.error('Error: target element not found');
-            if (this.isTooltipShown) return console.error('Tooltip is already displayed');
+            if (!this.targetElement) return console.error(
+                'Error: target element not found'
+            );
+            if (this.isTooltipShown) return console.error(
+                'Tooltip is already displayed'
+            );
 
             const { progressOn, backdrop } = this.data;
 
             const { eventType, disabled } = progressOn;
-            disabled || this.addEventListenerToTarget(this.targetElement, 'next', eventType);
+            disabled || this.addEventListenerToTarget(
+                this.targetElement,
+                'next',
+                eventType
+            );
 
             if(!this.tippyInstance) {
                 // tippy was never initiated
@@ -184,13 +199,16 @@ export default class Tooltip {
         }
 
         public remove(): void {
-            if (!this.isTooltipShown) return console.error('Attempted to remove but tooltip is not shown');
+            if (!this.isTooltipShown) return console.error(
+                `Attempted to remove but tooltip is not shown`
+            );
             console.log(`removing tooltip ${this.uid}`);
             this.removeAllEventListeners();
             this.intersectionObserver.disconnect();
             this.backdropInstance && this.backdropInstance.remove();
             this.tippyInstance.unmount();
             this.tippyInstance.destroy();
+            this.tippyInstance = null;
             this.isTooltipShown = false;
         }
 
@@ -205,18 +223,36 @@ export default class Tooltip {
             }
         }
 
-        private addEventListenerToTarget(target: document.HTMLElement, method='next', eventType='click'): void {
+        private addEventListenerToTarget(
+            target: document.HTMLElement,
+            method='next',
+            eventType='click'
+        ): void {
             // add this event listener at the creation of each tooltip step and
             // remove it at removal of it
-            target.addEventListener(eventType, this.getListenerFromMethod(method));
-            this.targetsAndEventListeners.push({ method, target, eventType });
+            target.addEventListener(
+                eventType,
+                this.getListenerFromMethod(method)
+            );
+            this.targetsAndEventListeners.push({
+                method,
+                target,
+                eventType
+            });
         }
 
         private removeAllEventListeners(): void {
-            this.targetsAndEventListeners.forEach(({ method, target, eventType }) => {
-                target.removeEventListener(eventType, this.getListenerFromMethod(method));
-                // console.log(`remove event listener of type ${eventType} and method ${method}`);
-            });
+            this.targetsAndEventListeners.forEach(
+                ({ method, target, eventType }) => {
+                    target.removeEventListener(
+                        eventType,
+                        this.getListenerFromMethod(method)
+                    );
+                    console.log(
+                        `remove event listener of type ${eventType} `+
+                            `and method ${method}`
+                    );
+                });
             this.targetsAndEventListeners = [];
         }
 }

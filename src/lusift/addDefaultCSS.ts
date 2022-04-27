@@ -1,13 +1,19 @@
 import { window, document } from 'global';
 import lusiftDefaultCSS from './style/lusift.css';
 import lusiftTippyCSS from './style/tippy.lusift.css';
-import { PRIMARY_COLOR, DEFAULT_MODAL_BORDER_RADIUS, DEFAULT_TOOLTIP_BORDER_RADIUS, DEFAULT_PROGRESS_BAR_HEIGHT } from '../common/constants';
+import {
+  PRIMARY_COLOR,
+  DEFAULT_MODAL_BORDER_RADIUS,
+  DEFAULT_TOOLTIP_BORDER_RADIUS,
+  DEFAULT_PROGRESS_BAR_HEIGHT
+} from '../common/constants';
 
 // Inject default lusift global styles
-// TODO what's that thick layer thing beneath tippy tooltip content? zoom in with ctrl+
+// TODO: what's that thick layer thing beneath tippy tooltip content? zoom in with ctrl+
 
 const getDynamicDefaultCSS = () => {
 
+  // TODO: Have these properties be in lusift.css too
   return `\n
     /* from dynamic javascript variables*/
 

@@ -1,6 +1,9 @@
 import { document } from 'global';
 import { styleObjectToString } from '../common/utils';
-import { MODAL_OVERLAY_CLASS, DEFAULT_MODAL_BORDER_RADIUS } from '../common/constants';
+import {
+  MODAL_OVERLAY_CLASS,
+  DEFAULT_MODAL_BORDER_RADIUS
+} from '../common/constants';
 import renderProgressBar from '../common/progressBar';
 import renderCloseXButton from '../common/closeXButton';
 

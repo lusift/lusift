@@ -1,7 +1,12 @@
 import * as focusTrap from 'focus-trap';
 import { window } from 'global';
 
-const addFocusTrap = ({ target, escToClose, clickOutsideToClose }): any => {
+const addFocusTrap = ({
+  target,
+  escToClose,
+  clickOutsideToClose
+}): any => {
+
   // TODO: fix this, what is window.activeGuideID?
   const isDevMode = !window.activeGuideID;
 

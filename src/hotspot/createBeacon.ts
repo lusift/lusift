@@ -2,8 +2,19 @@ import { document, window } from 'global';
 import { styleObjectToString, getElementPosition } from '../common/utils';
 import { BEACON_CONTAINER_CLASS } from '../common/constants';
 
-const createBeacon = ({ targetPosition, beaconData, beaconID, toggleTooltip }) => {
-  const { targetTop, targetLeft, targetHeight, targetWidth } = targetPosition;
+const createBeacon = ({
+  targetPosition,
+  beaconData,
+  beaconID,
+  toggleTooltip
+}) => {
+
+  const {
+    targetTop,
+    targetLeft,
+    targetHeight,
+    targetWidth
+  } = targetPosition;
 
   const beaconContainer = document.createElement('div');
   beaconContainer.style.cssText = styleObjectToString({

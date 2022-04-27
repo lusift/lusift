@@ -1,9 +1,15 @@
 import { document, window } from 'global';
 import createHotspotTooltip from './createHotspotTooltip';
 import createBeacon from './createBeacon';
-import { getElementPosition, getStepUID, changeAsyncStepStatus, onElementResize } from '../common/utils';
+import {
+  getElementPosition,
+  getStepUID,
+  changeAsyncStepStatus,
+  onElementResize
+} from '../common/utils';
 import { Hotspot as HotspotData } from '../common/types';
 
+// TODO_: In case of customizing hotspot's beacon, we can just have a beaconElement property
 class Hotspot {
   private tipID: string;
   private tippyInstance: any;
@@ -16,9 +22,15 @@ class Hotspot {
     console.log(data);
     this.data = data;
     const { index, type, target } = data;
-    this.tipID = getStepUID({guideID, type, index});
-    this.beaconID = getStepUID({guideID, type:'beacon', index});
-    this.targetElement = document.querySelector(target.elementSelector);
+    this.tipID = getStepUID({ guideID, type, index });
+    this.beaconID = getStepUID({
+      guideID,
+      type:'beacon',
+      index
+    });
+    this.targetElement = document.querySelector(
+      target.elementSelector
+    );
     this.addBeacon();
 
     // reposition beacon on body and targetElement resize
@@ -47,7 +59,12 @@ class Hotspot {
       width: targetWidth,
       height: targetHeight
     } = getElementPosition(this.targetElement);
-    const targetPosition = { targetTop, targetLeft, targetWidth, targetHeight };
+    const targetPosition = {
+      targetTop,
+      targetLeft,
+      targetWidth,
+      targetHeight
+    };
 
     const beaconData = this.data.beacon;
 
@@ -65,14 +82,16 @@ class Hotspot {
     const target = document.getElementById(this.beaconID);
     const { data, styleProps } = this.data.tip;
     const activeHotspot = window.Lusift.activeHotspot;
+    const Lusift = window['Lusift'];
 
     if(activeHotspot && (this.data.index !== activeHotspot.data.index)){
-      window.Lusift.activeHotspot.hideTooltip();
+      Lusift.activeHotspot.hideTooltip();
     }
 
     // do not allow async step to close in dev mode
-    const isDevMode = !Boolean(window.Lusift.activeGuide);
-    let removeMethod = isDevMode? window.Lusift.close : this.removeAndCloseAsync.bind(this);
+    const isDevMode = !Boolean(Lusift.activeGuide);
+    let removeMethod = isDevMode?
+    Lusift.close : this.removeAndCloseAsync.bind(this);
 
     if(!this.tippyInstance){
       // if it was never initiated
@@ -84,9 +103,11 @@ class Hotspot {
         styleProps,
         data,
       });
-      window.Lusift.activeHotspot = this;
+      Lusift.activeHotspot = this;
     }  else if(this.tippyInstance.state.isDestroyed) {
-      console.error('Uh... but it doesn\'t exist. unexpected');
+      console.error(
+        'Uh... but it doesn\'t exist. unexpected'
+      );
       // if it's removed
 
     } else if(this.tippyInstance.state.isShown) {
@@ -94,7 +115,7 @@ class Hotspot {
     } else if(this.tippyInstance) {
       // if it's hidden
       this.tippyInstance.show();
-      window.Lusift.activeHotspot = this;
+      Lusift.activeHotspot = this;
     }
   }
 
@@ -109,15 +130,21 @@ class Hotspot {
   }
 
   private remove(): void {
-    console.log(`Removing id: ${this.data.index} hotspot`);
+    console.log(
+      `Removing id: ${this.data.index} hotspot`
+    );
     if(this.tippyInstance) {
       if(this.tippyInstance.state.isDestroyed) {
-        console.log('Hotspot\'s tooltip is already destroyed');
+        console.log(
+          'Hotspot\'s tooltip is already destroyed'
+        );
       }
       this.tippyInstance.unmount();
       this.tippyInstance.destroy();
     } else {
-      console.log('Hotspot closed without ever opening');
+      console.log(
+        'Hotspot closed without ever opening'
+      );
     }
     const beaconElement = document.getElementById(this.beaconID);
     if (beaconElement) {

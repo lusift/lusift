@@ -1,7 +1,18 @@
-import tippy, { inlinePositioning, Instance as TippyInstance } from 'tippy.js';
+import tippy, {
+  inlinePositioning,
+  Instance as TippyInstance
+} from 'tippy.js';
 import popperOptions from './popperOptions';
 
-const createTippy = ({ target, remove, content, arrow, offset, placement }): any => {
+const createTippy = ({
+  target,
+  remove,
+  content,
+  arrow,
+  offset,
+  placement
+}): any => {
+
   if(!remove){
     remove = () => {};
   }

@@ -11,7 +11,11 @@ const defaultBodyContent = `
 
 
 const renderNavButtons = (navSection: any): string => {
-  const { nextButton, prevButton, dismissLink } = navSection;
+  const {
+    nextButton,
+    prevButton,
+    dismissLink
+  } = navSection;
 
   return `
     <style>
@@ -39,7 +43,14 @@ const renderNavButtons = (navSection: any): string => {
 }
 
 
-const renderTooltip = ({ data, target, styleProps, actions, uid, index }) => {
+const renderTooltip = ({
+  data,
+  target,
+  styleProps,
+  actions,
+  uid,
+  index
+}) => {
 
   const { closeButton, navSection } = actions;
   const {

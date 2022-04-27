@@ -93,7 +93,9 @@ class Backdrop {
 
     const timeout = window.setTimeout(() => {
       // HACK: intervene in the event backdrop has already been closed and there's a rogue timeout: rare
-      if(this.toStopOverlay) return console.error('Lusift: This overlay instance should be removed');
+      if(this.toStopOverlay) return console.error(
+        `Lusift: This overlay instance should be removed`
+      );
       this.removeOverlay();
       this.createOverlay();
       this.timers = this.timers.filter(({ id }) => id !== timeoutID);
@@ -138,7 +140,10 @@ class Backdrop {
     const targetElement = document.querySelector(this.targetSelector);
     const padding = this.data.stageGap;
 
-    const { documentHeight, documentWidth } = this.getDocumentDimensions();
+    const {
+      documentHeight,
+      documentWidth
+    } = this.getDocumentDimensions();
 
     const targetPosition = getElementPosition(targetElement);
 
@@ -203,7 +208,7 @@ class Backdrop {
 
     // See that the overlay isn't glitchy, reset if it is
     const { height: hTopHeight, width: hTopWidth } = getElementPosition(hTop);
-    const { height: hBottomHeight, width: hBottomWidth } = getElementPosition(hBottom);
+    const { height: hBottomHeight } = getElementPosition(hBottom);
     const vLeftWidth = getElementPosition(vLeft).width;
     const vRightWidth = getElementPosition(vRight).width;
 
@@ -213,7 +218,8 @@ class Backdrop {
     /* console.log(screenWidth, overlaySumWidth);
     console.log(screenHeight, overlaySumHeight); */
 
-    if(!areNumbersEqual(documentWidth, overlaySumWidth) || !areNumbersEqual(documentHeight, overlaySumHeight)){
+    if(!areNumbersEqual(documentWidth, overlaySumWidth) ||
+       !areNumbersEqual(documentHeight, overlaySumHeight)){
       this.resetBackdrop();
     }
   }
