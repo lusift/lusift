@@ -19,7 +19,6 @@ export default class Tooltip {
     readonly target: Target;
     private tippyInstance: any;
     readonly uid: string;
-    readonly backdropID: string;
     readonly data: TooltipData;
     private actions: StepActions = defaultToolipActions;
     readonly styleProps: Object = {};
@@ -28,7 +27,7 @@ export default class Tooltip {
         target: document.HTMLElement;
         eventType: string;
     }[] = [];
-    private backdrop: any;
+    private backdropInstance: any;
     private index: number;
     private guideID: string;
     private intersectionObserver: any;
@@ -126,7 +125,7 @@ export default class Tooltip {
             // console.log('tooltip hide');
             this.tippyInstance.hide();
             this.removeAllEventListeners();
-            this.backdrop && this.backdrop.remove();
+            this.backdropInstance && this.backdropInstance.remove();
             this.isTooltipShown = false;
         }
 
@@ -142,14 +141,14 @@ export default class Tooltip {
                 opacity,
                 color
             }
-            this.backdrop = new Backdrop({
+            this.backdropInstance = new Backdrop({
                 targetSelector: this.target.elementSelector,
                 guideID: this.guideID,
                 index: this.index,
                 data
             });
             if (this.data.backdrop.nextOnOverlayClick){
-                Array.from(document.getElementsByClassName(this.backdrop.overlaySelectorClass))
+                Array.from(document.getElementsByClassName(this.backdropInstance.overlaySelectorClass))
                 .forEach(target => {
                     this.addEventListenerToTarget(target, 'next');
                 });
@@ -189,7 +188,7 @@ export default class Tooltip {
             console.log(`removing tooltip ${this.uid}`);
             this.removeAllEventListeners();
             this.intersectionObserver.disconnect();
-            this.backdrop && this.backdrop.remove();
+            this.backdropInstance && this.backdropInstance.remove();
             this.tippyInstance.unmount();
             this.tippyInstance.destroy();
             this.isTooltipShown = false;
