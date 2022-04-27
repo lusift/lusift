@@ -8,7 +8,7 @@ import {
   addFocusTrap,
   getScrollBarWidth
 } from '../common/utils/';
-import { BackdropData, BackdropParameters } from '../common/types';
+import { BackdropData } from '../common/types';
 
 
 const areNumbersEqual = (num1: number, num2: number): boolean => {
@@ -30,41 +30,40 @@ const areNumbersEqual = (num1: number, num2: number): boolean => {
   return roundNum(num1, decimalPlaces) === roundNum(num2, decimalPlaces);
 }
 
-const defaultBackdropData = {
-  stageGap: 5,
-  opacity: '0.5',
-  color: '#444',
-}
-
-// TODO: Make this a cleaner class
-
 class Backdrop {
 
   private targetSelector: string;
   private timers: {
     id: number;
-    object: any;
+    object: ReturnType<typeof window.setTimeout>;
   }[] = [];
   readonly stagedTargetClass: string;
-  public overlaySelectorClass: string = 'lusift-overlay';
-  private data: any;
+  readonly overlaySelectorClass: string = 'lusift-overlay';
+  private data: BackdropData = {
+    stageGap: 5,
+    opacity: '0.5',
+    color: '#444'
+  };
   private toStopOverlay: boolean;
   private resizeObservers: any[] = [];
   private focusTrap: any;
 
-  // TODO: types here
   constructor({
     targetSelector,
-    uid,
     guideID,
     index,
     data
-  }: any) { //BackdropParameters
-    uid = uid || getStepUID({ guideID, index, type: 'backdrop' });
+  }: {
+    targetSelector: string;
+    index: number;
+    guideID: string;
+    data: BackdropData
+  }) {
+    const uid = getStepUID({ guideID, index, type: 'backdrop' });
     this.stagedTargetClass = `${uid}__target`;
 
     this.data = {
-      ...defaultBackdropData,
+      ...this.data,
       ...data
     }
     this.targetSelector = targetSelector;
@@ -93,12 +92,13 @@ class Backdrop {
     const timeoutID = this.timers.length;
 
     const timeout = window.setTimeout(() => {
-      // HACK: hack to intervene in the event backdrop has already been closed and there's a rogue timeout: rare
+      // HACK: intervene in the event backdrop has already been closed and there's a rogue timeout: rare
       if(this.toStopOverlay) return console.error('Lusift: This overlay instance should be removed');
       this.removeOverlay();
       this.createOverlay();
       this.timers = this.timers.filter(({ id }) => id !== timeoutID);
     }, 300);
+
     this.timers.push({
       id: timeoutID,
       object: timeout
@@ -110,7 +110,6 @@ class Backdrop {
       height: clientHeight,
       width: clientWidth
     } = getElementPosition(document.documentElement);
-    // utils/dimensions.ts
 
     const documentWidth = Math.max(
       clientWidth,
@@ -227,8 +226,6 @@ class Backdrop {
 
     const targetElement = document.querySelector(this.targetSelector);
     if(targetElement) targetElement.classList.remove(this.stagedTargetClass);
-    /* document.documentElement.style.overflow = 'scroll';
-    document.body.scroll = "yes"; */
   }
 
   public remove(): void {

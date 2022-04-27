@@ -31,21 +31,6 @@ interface BackdropData {
   nextOnOverlayClick?: boolean;
 }
 
-interface BackdropForTooltipParameters{
-  targetSelector: string;
-  uid: string;
-  data: BackdropData;
-}
-
-interface BackdropAsStepParameters{
-  targetSelector: string;
-  index: number;
-  guideID: string;
-  data: BackdropData;
-}
-
-export type BackdropParameters = BackdropForTooltipParameters & BackdropAsStepParameters;
-
 export interface TooltipData {
   bodyContent: string;
   placement: any; // Placement type from popper or manually

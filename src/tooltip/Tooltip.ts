@@ -3,7 +3,7 @@ import createTooltip from './createTooltip';
 import { mergeObjects, getStepUID } from '../common/utils';
 import { TooltipData, HotspotAndTooltipTarget as Target, StepActions } from '../common/types';
 import defaultToolipActions from './defaultTooltipActions';
-import Backdrop from './Backdrop';
+import Backdrop from '../backdrop';
 import 'intersection-observer';
 
 const defaultBackdropData = {
@@ -30,6 +30,7 @@ export default class Tooltip {
     }[] = [];
     private backdrop: any;
     private index: number;
+    private guideID: string;
     private intersectionObserver: any;
     private isTooltipShown: boolean;
 
@@ -77,7 +78,7 @@ export default class Tooltip {
 
             this.consolidateActions(actions);
             this.uid=getStepUID({ guideID, index, type: 'tooltip' });
-            this.backdropID=getStepUID({ guideID, index, type: 'backdrop' });
+            this.guideID = guideID;
             this.targetElement = document.querySelector(this.target.elementSelector);
             this.attachIntersectionObserver();
             console.log('tooltip started')
@@ -122,7 +123,7 @@ export default class Tooltip {
         }
 
         private hide(): void {
-            console.log('tooltip hide');
+            // console.log('tooltip hide');
             this.tippyInstance.hide();
             this.removeAllEventListeners();
             this.backdrop && this.backdrop.remove();
@@ -135,10 +136,17 @@ export default class Tooltip {
         }
 
         private addBackdrop(): void {
+            const { stageGap, opacity, color } = this.data.backdrop;
+            const data = {
+                stageGap,
+                opacity,
+                color
+            }
             this.backdrop = new Backdrop({
                 targetSelector: this.target.elementSelector,
-                uid: this.backdropID,
-                data: this.data.backdrop
+                guideID: this.guideID,
+                index: this.index,
+                data
             });
             if (this.data.backdrop.nextOnOverlayClick){
                 Array.from(document.getElementsByClassName(this.backdrop.overlaySelectorClass))
@@ -149,8 +157,8 @@ export default class Tooltip {
         }
 
         public show(): void {
-            if (!this.targetElement) return console.warn('Error: target element not found');
-            if (this.isTooltipShown) return console.warn('Tooltip is already displayed');
+            if (!this.targetElement) return console.error('Error: target element not found');
+            if (this.isTooltipShown) return console.error('Tooltip is already displayed');
 
             const { progressOn, backdrop } = this.data;
 
@@ -208,7 +216,7 @@ export default class Tooltip {
         private removeAllEventListeners(): void {
             this.targetsAndEventListeners.forEach(({ method, target, eventType }) => {
                 target.removeEventListener(eventType, this.getListenerFromMethod(method));
-                console.log(`remove event listener of type ${eventType} and method ${method}`);
+                // console.log(`remove event listener of type ${eventType} and method ${method}`);
             });
             this.targetsAndEventListeners = [];
         }
