@@ -10,7 +10,6 @@ import { isOfTypeContent, isObject } from '../common/utils/isOfType';
 import addDefaultCSS from './addDefaultCSS';
 
 // TODO: Write documentation
-// TODO: attach License
 
 // TODO: decide on making configuring easier, with inheritence, global levels, etc.
 // TODO_: add support for angul*r
