@@ -7,8 +7,7 @@ const addFocusTrap = ({
   clickOutsideToClose
 }): any => {
 
-  // TODO: fix this, what is window.activeGuideID?
-  const isDevMode = !window.activeGuideID;
+  const isDevMode = !window.Lusift.activeGuideID;
 
   const ft = focusTrap.createFocusTrap(target, {
     initialFocus: false,
