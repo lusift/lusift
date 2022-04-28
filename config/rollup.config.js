@@ -106,6 +106,7 @@ function getConfig({ input, name, outputFile, tsconfig, packageJsonPath }) {
                 // HACK: Can't build dist/lusift-react with check true
                 check: !((name === 'Lusift-react' &&
                     mode === 'production') || (name === 'Lusift-vue')),
+                // check: name !== 'Lusift-vue',
                 tsconfigOverride: {
                     compilerOptions: {
                         sourceMap: mode === 'development',

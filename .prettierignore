@@ -1,0 +1,5 @@
+/dist
+.devnotes
+node_modules/
+/dev
+.rollup-build-stats/

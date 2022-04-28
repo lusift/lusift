@@ -1,4 +1,4 @@
-import { Content, TrackingState } from '../common/types';
+import { Content, TrackingState } from "../common/types";
 declare class Lusift {
     private content;
     render: Function;
