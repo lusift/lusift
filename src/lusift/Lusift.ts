@@ -17,7 +17,6 @@ import addDefaultCSS from "./addDefaultCSS";
 // -- Maybe don't have setContent take everything, seperate concerns, makes documenting easier too
 // TODO: minor stuff:
 // -- what is popperjs preventOverflow
-// -- go to addFocusTrap.ts
 // -- go to getElementPosition.ts
 // TODO_: add support for angul*r
 // TODO: Buggy when the target for tooltip is sidebar link

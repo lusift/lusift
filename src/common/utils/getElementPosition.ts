@@ -2,9 +2,7 @@ import { window, document } from 'global';
 import { ElementPosition } from '../types';
 
 const getElementPosition = (element: document.HTMLElement): ElementPosition => {
-    // TODO: Is documentElement assignment right?
-    const documentElement = document;
-    const body = document.body;
+    const { documentElement, body } = document;
 
     const scrollTop = window.pageYOffset || documentElement.scrollTop || body.scrollTop;
     const scrollLeft = window.pageXOffset || documentElement.scrollLeft || body.scrollLeft;
