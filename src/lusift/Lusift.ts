@@ -12,7 +12,6 @@ import { isOfTypeContent, isObject } from "../common/utils/isOfType";
 import addDefaultCSS from "./addDefaultCSS";
 
 // TODO: Write documentation
-// TODO: cleanbuild? delete unused files in /dist on each build
 
 // TODO: decide on making configuring easier, with inheritence, global levels, etc.
 // -- Maybe don't have setContent take everything, seperate concerns, makes documenting easier too
@@ -29,21 +28,21 @@ import addDefaultCSS from "./addDefaultCSS";
 // NOTE: resize observer doesn't work with svg elements
 // NOTE: Can we just export element classes (Tooltip, Modal, Hotspot) and have them be optionally loadable by the client?
 
-const emptyFunction = () => {};
+const noOp = () => {}; // no-op function
 
 class Lusift {
     private content: Content | undefined;
-    public render: Function = emptyFunction;
+    public render: Function = noOp;
     public activeGuide: {
         instance: any;
         id: string;
     } | null = null;
     public progress: number = 0;
 
-    private next: Function = emptyFunction;
-    private prev: Function = emptyFunction;
-    private close: Function = emptyFunction;
-    private goto: Function = emptyFunction;
+    private next: Function = noOp;
+    private prev: Function = noOp;
+    private close: Function = noOp;
+    private goto: Function = noOp;
     private onNext: Function | undefined;
     private onPrev: Function | undefined;
     private onClose: Function | undefined;
