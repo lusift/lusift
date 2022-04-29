@@ -24,8 +24,8 @@ const doesStepPathMatch = (targetPath): boolean => {
 }
 
 const isStepElementFound = (elementSelector: string): boolean => {
-  /* console.log(this.guideData);
-     console.log('checking if element exists') */
+  /* log(this.guideData);
+     log('checking if element exists') */
   return Boolean(document.querySelector(elementSelector));
 }
 

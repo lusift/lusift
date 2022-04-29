@@ -8,6 +8,7 @@ import {
   addFocusTrap,
   getScrollBarWidth
 } from '../common/utils/';
+import { log, warn, error } from '../common/logger';
 import { BackdropData } from '../common/types';
 
 
@@ -22,10 +23,10 @@ const areNumbersEqual = (num1: number, num2: number): boolean => {
   if(decimalPlaces>2) {
     decimalPlaces = 1; //most reliable precision
   }
-  /* console.log(num1, num2)
-  console.log(num1Precision, num2Precision, decimalPlaces);
+  /* log(num1, num2)
+  log(num1Precision, num2Precision, decimalPlaces);
 
-  console.log(roundNum(num1, decimalPlaces), roundNum(num2, decimalPlaces)); */
+  log(roundNum(num1, decimalPlaces), roundNum(num2, decimalPlaces)); */
 
   return roundNum(num1, decimalPlaces) === roundNum(num2, decimalPlaces);
 }
@@ -96,7 +97,7 @@ class Backdrop {
 
     const timeout = window.setTimeout(() => {
       // HACK: intervene in the event backdrop has already been closed and there's a rogue timeout: rare
-      if(this.toStopOverlay) return console.error(
+      if(this.toStopOverlay) return error(
         `Lusift: This overlay instance should be removed`
       );
       this.removeOverlay();
@@ -218,8 +219,8 @@ class Backdrop {
     const overlaySumWidth = hTopWidth+vLeftWidth+vRightWidth;
     const overlaySumHeight = hTopHeight+hBottomHeight+targetPosition.height+2*padding;
 
-    /* console.log(screenWidth, overlaySumWidth);
-    console.log(screenHeight, overlaySumHeight); */
+    /* log(screenWidth, overlaySumWidth);
+    log(screenHeight, overlaySumHeight); */
 
     if(!areNumbersEqual(documentWidth, overlaySumWidth) ||
        !areNumbersEqual(documentHeight, overlaySumHeight)){
@@ -238,7 +239,7 @@ class Backdrop {
   }
 
   public remove(): void {
-    // console.log('removing Backdrop');
+    // log('removing Backdrop');
     // remove event listeners and timers
     this.timers = this.timers.filter(({ object }) => window.clearTimeout(object));
     this.toStopOverlay=true;

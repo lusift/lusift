@@ -8,6 +8,7 @@ import {
   onElementResize
 } from '../common/utils';
 import { Hotspot as HotspotData } from '../common/types';
+import { log, warn, error } from '../common/logger';
 
 // TODO_: In case of customizing hotspot's beacon, we can just have a beaconElement property
 class Hotspot {
@@ -19,7 +20,7 @@ class Hotspot {
   private resizeObservers: any[] = [];
 
   constructor({ data, guideID }) {
-    console.log(data);
+    log(data);
     this.data = data;
     const { index, type, target } = data;
     this.tipID = getStepUID({ guideID, type, index });
@@ -48,11 +49,11 @@ class Hotspot {
     this.remove();
     this.tippyInstance = null;
     this.addBeacon();
-    console.log('reset beacon position');
+    log('reset beacon position');
   }
 
   private addBeacon(): void {
-    console.log('adding beacon');
+    log('adding beacon');
     let {
       top: targetTop,
       left: targetLeft,
@@ -77,7 +78,7 @@ class Hotspot {
   }
 
   private toggleTooltip(): any {
-    // console.log('toggle tooltip');
+    // log('toggle tooltip');
 
     const target = document.getElementById(this.beaconID);
     const { data, styleProps } = this.data.tip;
@@ -105,7 +106,7 @@ class Hotspot {
       });
       Lusift.activeHotspot = this;
     }  else if(this.tippyInstance.state.isDestroyed) {
-      console.error(
+      error(
         'Uh... but it doesn\'t exist. unexpected'
       );
       // if it's removed
@@ -130,19 +131,19 @@ class Hotspot {
   }
 
   private remove(): void {
-    console.log(
+    log(
       `Removing id: ${this.data.index} hotspot`
     );
     if(this.tippyInstance) {
       if(this.tippyInstance.state.isDestroyed) {
-        console.log(
+        log(
           'Hotspot\'s tooltip is already destroyed'
         );
       }
       this.tippyInstance.unmount();
       this.tippyInstance.destroy();
     } else {
-      console.log(
+      log(
         'Hotspot closed without ever opening'
       );
     }

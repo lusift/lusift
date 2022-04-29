@@ -1,6 +1,7 @@
 import { document, window } from 'global';
 import createTooltip from './createTooltip';
 import { mergeObjects, getStepUID } from '../common/utils';
+import { log, warn, error } from '../common/logger';
 import { TooltipData, HotspotAndTooltipTarget as Target, StepActions } from '../common/types';
 import defaultToolipActions from './defaultTooltipActions';
 import Backdrop from '../backdrop';
@@ -51,7 +52,7 @@ export default class Tooltip {
             styleProps: Object
         }) {
 
-            console.log('%c Tooltip constructor! ', 'background: #222; color: #bada55');
+            log('%c Tooltip constructor! ', 'background: #222; color: #bada55');
 
             this.target = target;
             const { elementSelector } = target;
@@ -82,7 +83,7 @@ export default class Tooltip {
             this.guideID = guideID;
             this.targetElement = document.querySelector(elementSelector);
             this.attachIntersectionObserver();
-            console.log('tooltip started')
+            log('tooltip started')
         }
 
         private attachIntersectionObserver(): void {
@@ -97,7 +98,7 @@ export default class Tooltip {
                 entries.forEach(entry => {
                     const { isIntersecting, target } = entry;
                     if(!target.isSameNode(this.targetElement)){
-                        return console.log(
+                        return log(
                             'Observer target doesn\'t match tooltip target'
                         );
                     }
@@ -126,7 +127,7 @@ export default class Tooltip {
         }
 
         private hide(): void {
-            // console.log('tooltip hide');
+            // log('tooltip hide');
             this.tippyInstance.hide();
             this.removeAllEventListeners();
             this.backdropInstance && this.backdropInstance.remove();
@@ -163,10 +164,10 @@ export default class Tooltip {
         }
 
         public show(): void {
-            if (!this.targetElement) return console.error(
+            if (!this.targetElement) return error(
                 'Error: target element not found'
             );
-            if (this.isTooltipShown) return console.error(
+            if (this.isTooltipShown) return error(
                 'Tooltip is already displayed'
             );
 
@@ -199,10 +200,10 @@ export default class Tooltip {
         }
 
         public remove(): void {
-            if (!this.isTooltipShown) return console.error(
+            if (!this.isTooltipShown) return error(
                 `Attempted to remove but tooltip is not shown`
             );
-            console.log(`removing tooltip ${this.uid}`);
+            log(`removing tooltip ${this.uid}`);
             this.removeAllEventListeners();
             this.intersectionObserver.disconnect();
             this.backdropInstance && this.backdropInstance.remove();
@@ -250,7 +251,7 @@ export default class Tooltip {
                         eventType,
                         this.getListenerFromMethod(method)
                     );
-                    console.log(
+                    log(
                         `remove event listener of type ${eventType} `+
                             `and method ${method}`
                     );

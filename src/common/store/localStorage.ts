@@ -1,7 +1,8 @@
 import { window, document } from 'global';
+import { error } from '../logger';
 
 if(!window) {
-    console.error('window is undefined')
+    error('window is undefined')
 }
 
 /**

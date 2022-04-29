@@ -1,4 +1,5 @@
 import { GuideType, Content } from '../../types';
+import { log } from '../../logger';
 
 export function isObject(item: any): boolean {
   return (item instanceof Object && item.constructor === Object);
@@ -100,7 +101,7 @@ export function isOfTypeContent(object: Content): boolean {
 
 
 export function isOfTypeHtmlElement(element): boolean {
-  console.log('bodyContent')
+  log('bodyContent')
   if(typeof element !=='object') return false;
   return (
     element.constructor.name.startsWith('HTML') &&

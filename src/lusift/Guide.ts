@@ -1,5 +1,6 @@
 import { window } from 'global';
 import { saveState, loadState } from '../common/store';
+import { log, warn, error } from '../common/logger';
 import {
   changeAsyncStepStatus,
   startStepInstance,
@@ -22,14 +23,14 @@ export default class Guide {
 
   constructor(guideID: string) {
     // localGuideState consists of trackingState and guideData
-    console.log('guide constructor');
-    console.log(loadState())
+    log('guide constructor');
+    log(loadState())
     const localGuideState = loadState()[guideID];
     const guideData = Object.assign({}, localGuideState);
     delete guideData.trackingState;
 
     this.guideData = guideData;
-    console.log(
+    log(
       `%c Welcome to guide: ${this.guideData.name || this.guideData.id}`,
       'background: #222; color: #bada55'
     );
@@ -68,7 +69,7 @@ export default class Guide {
     this.attemptToStartAsyncSteps();
 
     if(finished || prematurelyClosed) {
-      console.error(
+      error(
         'Guide is already finished or closed'
       );
     } else {
@@ -89,7 +90,7 @@ export default class Guide {
   }
 
   public reRenderStepElements(): void {
-    console.log('re-render step elements');
+    log('re-render step elements');
     this.removeAllActiveSteps();
     this.start();
   }
@@ -147,10 +148,10 @@ export default class Guide {
     steps.forEach(({ async, type, index, target }) => {
       if(async && (type==='hotspot')) {
         if(doesStepMatchDisplayCriteria({ target, type }) && this.getTrackingState().asyncSteps[index].toOpen) {
-          console.log(`Step ${index}: target path and element matched. toOpen is true`);
-          // if step is already active console.warn that the step is already active
+          log(`Step ${index}: target path and element matched. toOpen is true`);
+          // if step is already active warn that the step is already active
           if(this.isStepAlreadyActive(index)) {
-            return console.warn(`Step ${index} is already active`);
+            return warn(`Step ${index} is already active`);
           }
           this.activeSteps.push({
             index,
@@ -206,11 +207,11 @@ export default class Guide {
     // change step and see which steps need to be unmounted or mounted
     let newTrackingState = this.getTrackingState();
     if (newStepNum < 0) {
-      return console.warn('Step index can\'t be less than 0');
+      return warn('Step index can\'t be less than 0');
     } else if (newStepNum+1>this.guideData.steps.length) {
       newTrackingState.finished = true;
       this.setTrackingState(newTrackingState);
-      console.log('guide finished');
+      log('guide finished');
 
     } else {
       newTrackingState.currentStepIndex=newStepNum;
@@ -231,12 +232,12 @@ export default class Guide {
     this.setTrackingState(newTrackingState);
     this.removeAllActiveSteps();
     window.Lusift.activeGuide = null;
-    console.log('guide closed');
+    log('guide closed');
     typeof window.Lusift.onClose === 'function' && window.Lusift.onClose();
   }
 
   private closeCurrentStep(): void {
-    // if this.trackingState.activeStep is equal to any index of item from this.activeSteps, then console.log('hello')
+    // if this.trackingState.activeStep is equal to any index of item from this.activeSteps, then log('hello')
     const { currentStepIndex } = this.getTrackingState();
     const currentStep = this.activeSteps.find(({ index }) => index === currentStepIndex);
 
@@ -246,14 +247,14 @@ export default class Guide {
         .filter(instance => instance.index !== currentStepIndex);
 
     } else {
-      console.warn('There\'s no active step to close');
+      warn('There\'s no active step to close');
     }
   }
 
   private nextStep(): void {
     const newStep = this.getTrackingState().currentStepIndex+1;
     if (newStep+1>this.guideData.steps.length) {
-      return console.error('No new steps');
+      return error('No new steps');
     }
     this.closeCurrentStep();
     this.setStep(newStep);
@@ -276,7 +277,7 @@ export default class Guide {
         break;
       }
     }
-    if(newStep < 0) return console.error('No previous steps');
+    if(newStep < 0) return error('No previous steps');
     this.closeCurrentStep();
     this.setStep(newStep);
     const Lusift = window['Lusift'];

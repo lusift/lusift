@@ -1,5 +1,6 @@
 import Guide from "./Guide";
 import { saveState, loadState } from "../common/store";
+import { log, error, warn } from "../common/logger";
 import isEqual from "lodash.isequal";
 import { doesStepMatchDisplayCriteria, startStepInstance } from "../common/utils";
 
@@ -22,7 +23,6 @@ import addDefaultCSS from "./addDefaultCSS";
 // TODO: Reference react-modal package
 // TODO: Improve /types
 // TODO: ts, eslint
-// -- look into no console, make console.log only work in development
 // -- should we apppend `Lusift:` ahead of console messages?
 // NOTE: Handling versioning
 // NOTE: resize observer doesn't work with svg elements
@@ -48,7 +48,7 @@ class Lusift {
     private onClose: Function | undefined;
 
     constructor() {
-        console.log("%c Lusift constructor! ", "background: #222; color: #bada55");
+        log("%c Lusift constructor! ", "background: #222; color: #bada55");
 
         const localData = loadState();
         // if loadState() type is not object,
@@ -118,7 +118,7 @@ class Lusift {
                     this.hasGuideDataChanged(guideData) &&
                     !guideData.doNotResetTrackerOnContentChange
                 ) {
-                    console.log(`guide with id '${key}' changed, tracking state reset.`);
+                    log(`guide with id '${key}' changed, tracking state reset.`);
                     // clear tracking data
                     stateToSave[guideData.id] = guideData;
                 } else {
@@ -133,7 +133,7 @@ class Lusift {
     public setContent(content: Content): void {
         // filter and validate content
         if (!isOfTypeContent(content)) {
-            return console.error("Content data type is invalid");
+            return error("Content data type is invalid");
         }
 
         // retrieve approriate properties from received content
@@ -198,22 +198,22 @@ class Lusift {
         if (this.activeGuide) {
             window.setTimeout(() => {
                 this.activeGuide!.instance.start();
-                console.log("Lusift refreshed");
-                // console.log('%c page refresh ', 'background: #222; color: #bada55');
+                log("Lusift refreshed");
+                // log('%c page refresh ', 'background: #222; color: #bada55');
             }, 0);
         } else {
-            console.warn("No active guide instance to refresh");
+            warn("No active guide instance to refresh");
         }
     }
 
     public showContent(contentID: string): void {
         // Forces specific Lusift content to appear for the current user by passing in the ID.
         if (!this.content) {
-            return console.error(`Content not set, pass valid content data to setContent()`);
+            return error(`Content not set, pass valid content data to setContent()`);
         }
         // see if content exists for contentID
         if (!this.content[contentID]) {
-            return console.error(`Content with id of ${contentID} doesn't exist`);
+            return error(`Content with id of ${contentID} doesn't exist`);
         }
         // when there's an active guide
         if (this.activeGuide) {
@@ -221,7 +221,7 @@ class Lusift {
 
             if (id === contentID) {
                 this.activeGuide.instance.reRenderStepElements();
-                return console.error(`${contentID} is already active`);
+                return error(`${contentID} is already active`);
             } else {
                 instance.close();
             }
@@ -257,11 +257,11 @@ class Lusift {
 
     public setGlobalStyle(styleText: string): void {
         if (typeof styleText !== "string") {
-            return console.error("Invalid style passed to setGlobalStyle()");
+            return error("Invalid style passed to setGlobalStyle()");
         }
         let customStyle = document.querySelector("style[lusift-custom-css]");
         if (!customStyle) {
-            return console.error(`Style tag for custom-css not found. Report to Lusift\'s github.`);
+            return error(`Style tag for custom-css not found. Report to Lusift\'s github.`);
         }
         customStyle.textContent = styleText;
     }
@@ -270,7 +270,7 @@ class Lusift {
         if (this.activeGuide) {
             return loadState()[this.activeGuide.id].trackingState;
         } else {
-            console.warn("No active guide");
+            warn("No active guide");
             return null;
         }
     }
@@ -279,12 +279,12 @@ class Lusift {
         // dev mode: to be used to develop/style step elements
         // if there is some other content active already, refuse to show dev mode
         if (typeof this.activeGuide) {
-            return console.warn(
+            return warn(
                 `Can\'t enable dev mode because a ` + `guide is active using showContent()`,
             );
         }
         if (!this.content) {
-            return console.warn(
+            return warn(
                 `Content not set, pass valid content object ` +
                     `to setContent() before running devShowStep()`,
             );
@@ -294,7 +294,7 @@ class Lusift {
             this.close =
             this.showContent =
                 function () {
-                    console.error(`Can't run this method in dev mode`);
+                    error(`Can't run this method in dev mode`);
                 };
 
         if (this.content[guideID]) {
@@ -302,7 +302,7 @@ class Lusift {
             const { target, type } = steps[stepNumber];
 
             if (!doesStepMatchDisplayCriteria({ target, type })) {
-                return console.warn(
+                return warn(
                     `Display criteria for step do not match. Navigate to ` +
                         `the right target page and make sure that the target ` +
                         `element is in the visible screen, then reload page.`,
@@ -311,15 +311,15 @@ class Lusift {
 
             if (steps[stepNumber]) {
                 startStepInstance(steps[stepNumber], guideID);
-                console.log(
+                log(
                     `%c Showing step ${stepNumber} of ${guideID} in dev mode`,
                     "background: #222; color: #bada55",
                 );
             } else {
-                console.error(`Guide '${guideID}' doesn't have a step ${stepNumber}`);
+                error(`Guide '${guideID}' doesn't have a step ${stepNumber}`);
             }
         } else {
-            console.error(`Guide with id '${guideID}' doesn't exist`);
+            error(`Guide with id '${guideID}' doesn't exist`);
         }
     }
 }
