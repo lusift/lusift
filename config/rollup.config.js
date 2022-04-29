@@ -11,10 +11,13 @@ import alias from '@rollup/plugin-alias';
 import vuePlugin from 'rollup-plugin-vue'
 import peerDepsExternal from "rollup-plugin-peer-deps-external";
 import { visualizer } from 'rollup-plugin-visualizer';
+import strip from '@rollup/plugin-strip';
 
 const path = require('path');
 
 const mode = process.env.NODE_ENV === 'development' ? 'development' : 'production';
+
+const functionsToRemove = mode === 'production' ? ['console.log', 'assert.*', 'debug', 'alert'] : [];
 
 // NOTE: Disabled ts check for lusift-vue because of vue-demi
 
@@ -139,8 +142,13 @@ function getConfig({ input, name, outputFile, tsconfig, packageJsonPath }) {
                 filename: `.rollup-build-stats/${name.toLowerCase()}-${mode.toLowerCase()}.html`,
                 title: 'Lusift Rollup Visualizer',
             }),
+            strip({
+                functions: functionsToRemove,
+                include: ['**/*.(js|jsx|ts|tsx)'],
+                exclude: ['node_modules/**'],
+            }),
             ...mode === 'production' ? [
-                terser()
+                terser(),
             ] : [],
         ]
     };
