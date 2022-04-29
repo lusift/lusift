@@ -4,7 +4,7 @@ const vanillaRender = (
   callback?: Function
 ) => {
   const target = document.querySelector(targetPath);
-  target.innerHTML = elementToRender;
+  target!.innerHTML = elementToRender;
   if (callback) callback();
 }
 

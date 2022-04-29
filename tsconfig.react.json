@@ -14,6 +14,8 @@
       "./types"
     ],
     "baseUrl": "./src",
+    "strict": true,
+    "noImplicitAny": false,
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,

@@ -43,8 +43,8 @@ export default class Guide {
   private generateNewTrackingState(): TrackingState {
     let newTrackingState = {
       currentStepIndex: 0,
-      finished: undefined,
-      prematurelyClosed: undefined,
+      finished: false,
+      prematurelyClosed: false,
       asyncSteps: {}
     };
 
@@ -183,7 +183,7 @@ export default class Guide {
     });
   }
 
-  private setTrackingState(trackingState: TrackingState): void {
+  private setTrackingState(trackingState: TrackingState | undefined): void {
     const existingState = loadState();
     saveState({
       ...existingState,

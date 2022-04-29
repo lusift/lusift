@@ -1,3 +1,3 @@
 import { ElementPosition } from '../types';
-declare const getElementPosition: (element: any) => ElementPosition;
+declare const getElementPosition: (element: HTMLElement) => ElementPosition;
 export default getElementPosition;

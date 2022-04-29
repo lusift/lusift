@@ -15,7 +15,7 @@ const defaultBackdropData = {
 }
 
 export default class Tooltip {
-    private targetElement: document.HTMLElement;
+    private targetElement: HTMLElement;
     readonly target: Target;
     private tippyInstance: any;
     readonly uid: string;
@@ -24,14 +24,14 @@ export default class Tooltip {
     readonly styleProps: Object = {};
     private targetsAndEventListeners: {
         method: string;
-        target: document.HTMLElement;
+        target: HTMLElement;
         eventType: string;
     }[] = [];
     private backdropInstance: any;
     private index: number;
     private guideID: string;
     private intersectionObserver: any;
-    private isTooltipShown: boolean;
+    private isTooltipShown: boolean = false;
 
     constructor(
         {
@@ -74,7 +74,7 @@ export default class Tooltip {
             this.data.offset = this.data.offset || [0, 10];
             if(!this.data.backdrop.disabled) {
                 this.data.offset[1] = this.data.offset[1] +
-                    this.data.backdrop.stageGap;
+                    this.data.backdrop.stageGap!;
             }
 
             this.consolidateActions(actions);
@@ -140,7 +140,7 @@ export default class Tooltip {
         }
 
         private addBackdrop(): void {
-            const { stageGap, opacity, color } = this.data.backdrop;
+            const { stageGap, opacity, color } = this.data.backdrop!;
             const data = {
                 stageGap,
                 opacity,
@@ -152,11 +152,11 @@ export default class Tooltip {
                 index: this.index,
                 data
             });
-            if (this.data.backdrop.nextOnOverlayClick){
-                Array.from(document.getElementsByClassName(
+            if (this.data.backdrop!.nextOnOverlayClick){
+                Array.from<HTMLElement>(document.getElementsByClassName(
                     this.backdropInstance.overlaySelectorClass
                 ))
-                .forEach(target => {
+                .forEach((target: HTMLElement) => {
                     this.addEventListenerToTarget(target, 'next');
                 });
             }
@@ -172,7 +172,7 @@ export default class Tooltip {
 
             const { progressOn, backdrop } = this.data;
 
-            const { eventType, disabled } = progressOn;
+            const { eventType, disabled } = progressOn!;
             disabled || this.addEventListenerToTarget(
                 this.targetElement,
                 'next',
@@ -195,7 +195,7 @@ export default class Tooltip {
                 this.tippyInstance.show();
             }
             this.isTooltipShown = true;
-            backdrop.disabled || this.addBackdrop();
+            backdrop!.disabled || this.addBackdrop();
         }
 
         public remove(): void {
@@ -212,7 +212,7 @@ export default class Tooltip {
             this.isTooltipShown = false;
         }
 
-        private getListenerFromMethod(method: string): Function {
+        private getListenerFromMethod(method: string): EventListenerOrEventListenerObject {
             switch(method) {
                 case 'next':
                     return window.Lusift.next;
@@ -220,11 +220,13 @@ export default class Tooltip {
                     return window.Lusift.prev;
                 case 'close':
                     return this.remove;
+                default:
+                    return () => {};
             }
         }
 
         private addEventListenerToTarget(
-            target: document.HTMLElement,
+            target: HTMLElement,
             method='next',
             eventType='click'
         ): void {

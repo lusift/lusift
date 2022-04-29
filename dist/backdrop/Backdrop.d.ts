@@ -1,4 +1,3 @@
-import { BackdropData } from '../common/types';
 declare class Backdrop {
     private targetSelector;
     private timers;
@@ -12,7 +11,7 @@ declare class Backdrop {
         targetSelector: string;
         index: number;
         guideID: string;
-        data: BackdropData;
+        data: any;
     });
     private resetBackdrop;
     private getDocumentDimensions;

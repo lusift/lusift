@@ -18,6 +18,8 @@ const doesStepPathMatch = (targetPath): boolean => {
       return currentPath.startsWith(value);
     case 'regex':
       return doesStringMatchRegex(currentPath, value);
+    default:
+      return false;
   }
 }
 

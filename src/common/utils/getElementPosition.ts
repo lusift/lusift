@@ -1,7 +1,7 @@
 import { window, document } from 'global';
 import { ElementPosition } from '../types';
 
-const getElementPosition = (element: document.HTMLElement): ElementPosition => {
+const getElementPosition = (element: HTMLElement): ElementPosition => {
     const { documentElement, body } = document;
 
     const scrollTop = window.pageYOffset || documentElement.scrollTop || body.scrollTop;

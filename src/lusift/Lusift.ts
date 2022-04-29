@@ -12,41 +12,41 @@ import { isOfTypeContent, isObject } from "../common/utils/isOfType";
 import addDefaultCSS from "./addDefaultCSS";
 
 // TODO: Write documentation
+// TODO: cleanbuild? delete unused files in /dist on each build
 
 // TODO: decide on making configuring easier, with inheritence, global levels, etc.
 // -- Maybe don't have setContent take everything, seperate concerns, makes documenting easier too
 // TODO: minor stuff:
 // -- what is popperjs preventOverflow
-// -- go to getElementPosition.ts
 // TODO_: add support for angul*r
 // TODO: Buggy when the target for tooltip is sidebar link
 // TODO: Reference react-modal package
+// TODO: Improve /types
 // TODO: ts, eslint
 // -- look into no console, make console.log only work in development
-// -- add editorconfig
 // -- should we apppend `Lusift:` ahead of console messages?
-// -- linting for whitespace stuff
-// -- linting/formatting on save
 // NOTE: Handling versioning
 // NOTE: resize observer doesn't work with svg elements
 // NOTE: Can we just export element classes (Tooltip, Modal, Hotspot) and have them be optionally loadable by the client?
 
+const emptyFunction = () => {};
+
 class Lusift {
-    private content: Content;
-    public render: Function;
+    private content: Content | undefined;
+    public render: Function = emptyFunction;
     public activeGuide: {
         instance: any;
         id: string;
     } | null = null;
     public progress: number = 0;
 
-    private next: Function;
-    private prev: Function;
-    private close: Function;
-    private goto: Function;
-    private onNext: Function;
-    private onPrev: Function;
-    private onClose: Function;
+    private next: Function = emptyFunction;
+    private prev: Function = emptyFunction;
+    private close: Function = emptyFunction;
+    private goto: Function = emptyFunction;
+    private onNext: Function | undefined;
+    private onPrev: Function | undefined;
+    private onClose: Function | undefined;
 
     constructor() {
         console.log("%c Lusift constructor! ", "background: #222; color: #bada55");
@@ -78,7 +78,7 @@ class Lusift {
         let stateToSave = {};
         let contentWithoutBodyContent = JSON.parse(JSON.stringify(this.content));
 
-        Object.keys(this.content).forEach(key => {
+        Object.keys(this.content!).forEach(key => {
             const {
                 id,
                 name = "",
@@ -151,7 +151,7 @@ class Lusift {
                 doNotResetTrackerOnContentChange = false,
             } = content[key].data;
 
-            this.content[key].data = {
+            this.content![key].data = {
                 id,
                 name,
                 description,
@@ -182,7 +182,7 @@ class Lusift {
         if (this.activeGuide) {
             // if the contentID doesn't exist at all in the new content received, or
             // if contentID exists but data has changed
-            if (!contentIDExists || (contentIDExists && dataOfActiveGuideChanged)) {
+            if (!contentIDExists! || (contentIDExists && dataOfActiveGuideChanged!)) {
                 this.activeGuide.instance.removeAllActiveSteps();
                 this.activeGuide = null;
             }
@@ -198,7 +198,7 @@ class Lusift {
         // run page elements through step display conditionals again
         if (this.activeGuide) {
             window.setTimeout(() => {
-                this.activeGuide.instance.start();
+                this.activeGuide!.instance.start();
                 console.log("Lusift refreshed");
                 // console.log('%c page refresh ', 'background: #222; color: #bada55');
             }, 0);
@@ -244,13 +244,13 @@ class Lusift {
 
     private prepareHooks(): void {
         // attach active content's navigation methods to Lusift instance
-        const { instance: activeGuideInstance, id: activeGuideID } = this.activeGuide;
+        const { instance: activeGuideInstance, id: activeGuideID } = this.activeGuide!;
         this.next = activeGuideInstance.nextStep.bind(activeGuideInstance);
         this.prev = activeGuideInstance.prevStep.bind(activeGuideInstance);
         this.close = activeGuideInstance.close.bind(activeGuideInstance);
         this.goto = activeGuideInstance.setStep.bind(activeGuideInstance);
 
-        const { onNext, onPrev, onClose } = this.content[activeGuideID].data;
+        const { onNext, onPrev, onClose } = this.content![activeGuideID].data;
         this.onNext = onNext;
         this.onPrev = onPrev;
         this.onClose = onClose;

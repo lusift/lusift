@@ -30,7 +30,11 @@
         "./src/tooltip/*"
       ]
     },
+    "strict": true,
+    "noImplicitAny": false,
     "allowSyntheticDefaultImports": true,
+    "strictPropertyInitialization": true,
+    "noFallthroughCasesInSwitch": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "forceConsistentCasingInFileNames": true,

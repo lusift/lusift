@@ -13,7 +13,7 @@ import { Hotspot as HotspotData } from '../common/types';
 class Hotspot {
   private tipID: string;
   private tippyInstance: any;
-  private targetElement: document.HTMLElement;
+  private targetElement: HTMLElement;
   readonly data: HotspotData;
   private beaconID: string;
   private resizeObservers: any[] = [];

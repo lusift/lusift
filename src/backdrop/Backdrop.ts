@@ -30,6 +30,12 @@ const areNumbersEqual = (num1: number, num2: number): boolean => {
   return roundNum(num1, decimalPlaces) === roundNum(num2, decimalPlaces);
 }
 
+
+Object['fromEntries'] = arr => Object.assign({}, ...arr.map( ([k, v]) => ({[k]: v}) ));
+const getDefinedProps = obj => Object['fromEntries'](
+    Object.entries(obj).filter(([k, v]) => v !== undefined)
+);
+
 class Backdrop {
 
   private targetSelector: string;
@@ -44,7 +50,7 @@ class Backdrop {
     opacity: '0.5',
     color: '#444'
   };
-  private toStopOverlay: boolean;
+  private toStopOverlay: boolean = false;
   private resizeObservers: any[] = [];
   private focusTrap: any;
 
@@ -57,15 +63,12 @@ class Backdrop {
     targetSelector: string;
     index: number;
     guideID: string;
-    data: BackdropData
+    data: any
   }) {
     const uid = getStepUID({ guideID, index, type: 'backdrop' });
     this.stagedTargetClass = `${uid}__target`;
 
-    this.data = {
-      ...this.data,
-      ...data
-    }
+    this.data = Object.assign({}, this.data, getDefinedProps(data));
     this.targetSelector = targetSelector;
 
     this.createOverlay();
@@ -226,7 +229,7 @@ class Backdrop {
 
   private removeOverlay(): void {
     document.querySelectorAll(`.${this.overlaySelectorClass}`)
-    .forEach((el: document.HTMLElement) => {
+    .forEach((el: HTMLElement) => {
       if(el) el.remove();
     });
 
