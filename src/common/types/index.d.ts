@@ -84,7 +84,6 @@ export interface Tooltip {
   styleProps: Object;
 }
 
-export type StepType = Tooltip | HotspotData;
 
 export interface GuideType {
   id: string;
@@ -142,7 +141,7 @@ export interface Hotspot{
   },
   tip: {
     data: {
-      placement: string;
+      placement: typeof possiblePlacements[number];
       arrow: boolean;
       bodyContent: string;
     },
@@ -164,6 +163,8 @@ export interface Modal {
     clickOutsideToClose: boolean;
   }
 }
+
+export type StepType = Tooltip | Hotspot | Modal;
 
 export interface ElementPosition {
   top: number;
