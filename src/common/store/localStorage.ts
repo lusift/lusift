@@ -1,8 +1,8 @@
-import { window, document } from 'global';
-import { error } from '../logger';
+import { window, document } from "global";
+import { error } from "../logger";
 
-if(!window) {
-    error('window is undefined')
+if (!window) {
+    error("window is undefined");
 }
 
 /**
@@ -11,7 +11,7 @@ if(!window) {
 export const loadState = () => {
     try {
         // Load the data saved in localStorage, against the key 'lusift_state'
-        const serialisedState = window.localStorage.getItem('lusift_state');
+        const serialisedState = window.localStorage.getItem("lusift_state");
 
         // Passing undefined to createStore will result in our app getting the default state
         // If no data is saved, return undefined
@@ -27,19 +27,18 @@ export const loadState = () => {
     }
 };
 
-
 /**
  * This function accepts the app state, and saves it to localStorage
  * @param state
  */
 
-export const saveState = (state) => {
+export const saveState = state => {
     try {
         // Convert the state to a JSON string
         const serialisedState = JSON.stringify(state);
 
         // Save the serialised state to localStorage against the key 'lusift_state'
-        window.localStorage.setItem('lusift_state', serialisedState);
+        window.localStorage.setItem("lusift_state", serialisedState);
     } catch (err) {
         // Log errors here, or ignore
     }

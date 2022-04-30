@@ -1,21 +1,16 @@
-import * as focusTrap from 'focus-trap';
-import { window } from 'global';
+import * as focusTrap from "focus-trap";
+import { window } from "global";
 
-const addFocusTrap = ({
-  target,
-  escToClose,
-  clickOutsideToClose
-}): any => {
+const addFocusTrap = ({ target, escToClose, clickOutsideToClose }): any => {
+    const isDevMode = !window.Lusift.activeGuideID;
 
-  const isDevMode = !window.Lusift.activeGuideID;
-
-  const ft = focusTrap.createFocusTrap(target, {
-    initialFocus: false,
-    escapeDeactivates: !isDevMode && escToClose,
-    clickOutsideDeactivates: !isDevMode && clickOutsideToClose,
-  });
-  ft.activate();
-  return ft;
-}
+    const ft = focusTrap.createFocusTrap(target, {
+        initialFocus: false,
+        escapeDeactivates: !isDevMode && escToClose,
+        clickOutsideDeactivates: !isDevMode && clickOutsideToClose,
+    });
+    ft.activate();
+    return ft;
+};
 
 export default addFocusTrap;

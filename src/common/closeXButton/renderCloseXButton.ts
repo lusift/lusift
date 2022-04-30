@@ -1,8 +1,8 @@
-import { styleObjectToString } from '../utils';
+import { styleObjectToString } from "../utils";
 
 const renderCloseXButton = (closeButton: any, stepType: string): string => {
-  if (closeButton.disabled) return `<div style="margin-top: 0.7rem"></div>`;
-  return `
+    if (closeButton.disabled) return `<div style="margin-top: 0.7rem"></div>`;
+    return `
     <style>
       .lusift .${stepType.toLowerCase()} .closeX{
         ${styleObjectToString(closeButton.styleProps)}
@@ -13,6 +13,6 @@ const renderCloseXButton = (closeButton: any, stepType: string): string => {
       <button onclick="Lusift.close()" class="closeX close">&times;</button>
     </section>
   `;
-}
+};
 
 export default renderCloseXButton;

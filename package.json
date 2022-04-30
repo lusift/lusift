@@ -29,6 +29,7 @@
     "lint:eslint": "eslint --ignore-path .gitignore --ext .ts",
     "lint:js": "npm run lint:eslint src/",
     "lint:fix": "npm run lint:js -- --fix",
+    "format": "prettier --write 'src/**/*.(ts|js)'",
     "vue-build": "NODE_ENV=production rollup -c config/rollup.config.vue.js",
     "vue-dev": "NODE_ENV=development rollup -c config/rollup.config.vue.js -w"
   },

@@ -1,2 +1,2 @@
-import renderProgressBar from './renderProgressBar';
+import renderProgressBar from "./renderProgressBar";
 export default renderProgressBar;

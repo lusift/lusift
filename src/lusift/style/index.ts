@@ -1,1 +1,1 @@
-export const somevar = 'hiyaaa!';
+export const somevar = "hiyaaa!";

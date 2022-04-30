@@ -1,7 +1,7 @@
-import styleObjectToString from '../common/utils/styleObjectToString';
-import createTippy from '../common/tippy/createTippy';
-import renderProgressBar from '../common/progressBar';
-import { DEFAULT_TOOLTIP_BORDER_RADIUS } from '../common/constants';
+import styleObjectToString from "../common/utils/styleObjectToString";
+import createTippy from "../common/tippy/createTippy";
+import renderProgressBar from "../common/progressBar";
+import { DEFAULT_TOOLTIP_BORDER_RADIUS } from "../common/constants";
 
 const defaultBodyContent = `
   <h3 style="font-weight: bold;">Default title</h3>
@@ -9,15 +9,14 @@ const defaultBodyContent = `
 `;
 
 const renderTooltip = ({ remove, data, target, styleProps, uid, index }) => {
+    const {
+        arrow,
+        placement,
+        offset,
+        // bodyContent = defaultBodyContent,
+    } = data;
 
-  const {
-    arrow,
-    placement,
-    offset,
-    // bodyContent = defaultBodyContent,
-  } = data;
-
-  const content = `
+    const content = `
     <style>
       .tippy-box{
         z-index: 999999;
@@ -35,30 +34,27 @@ const renderTooltip = ({ remove, data, target, styleProps, uid, index }) => {
     </div>
   `;
 
-  const tippyInstance = createTippy({
-    target,
-    content,
-    arrow,
-    offset,
-    placement,
-    remove
-  });
-  tippyInstance.show();
+    const tippyInstance = createTippy({
+        target,
+        content,
+        arrow,
+        offset,
+        placement,
+        remove,
+    });
+    tippyInstance.show();
 
-  const Lusift = window['Lusift'];
+    const Lusift = window["Lusift"];
 
-  const bodyContent = Lusift.content[Lusift.activeGuideID]
-    .data.steps[index].tip.data.bodyContent || defaultBodyContent;
+    const bodyContent =
+        Lusift.content[Lusift.activeGuideID].data.steps[index].tip.data.bodyContent ||
+        defaultBodyContent;
 
-  Lusift.render(
-    bodyContent,
-    '.lusift > .hotspot-tooltip > .body-content',
-    () => {
-      tippyInstance.popperInstance.update();
-    }
-  );
+    Lusift.render(bodyContent, ".lusift > .hotspot-tooltip > .body-content", () => {
+        tippyInstance.popperInstance.update();
+    });
 
-  return tippyInstance;
-}
+    return tippyInstance;
+};
 
 export default renderTooltip;

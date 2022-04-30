@@ -1,2 +1,2 @@
-import Hotspot from './Hotspot';
+import Hotspot from "./Hotspot";
 export default Hotspot;

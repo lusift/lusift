@@ -1,9 +1,8 @@
 export default {
-  modifiers: [
-    {
-      name: 'preventOverflow',
-      enabled: false
-    },
-  ],
-}
-
+    modifiers: [
+        {
+            name: "preventOverflow",
+            enabled: false,
+        },
+    ],
+};
