@@ -37,6 +37,8 @@ possiblePlacements.forEach(placement => {
   possiblePlacements.push(placement + '-end');
 });
 
+const targetPathComparator = <const>['is', 'contains', 'startsWith', 'endsWith', 'regex'];
+
 export interface TooltipData {
   bodyContent: string;
   placement: typeof possiblePlacements[number];
@@ -61,14 +63,14 @@ export interface TooltipData {
 export interface ModalTarget {
   path: {
     value: string;
-    comparator: string;
+    comparator: typeof targetPathComparator[number];
   }
 }
 
 export interface HotspotAndTooltipTarget {
   path: {
     value: string;
-    comparator: string;
+    comparator: typeof targetPathComparator[number];
   }
   elementSelector: string;
 }
