@@ -31,9 +31,15 @@ interface BackdropData {
   nextOnOverlayClick?: boolean;
 }
 
+let possiblePlacements = <let>['top', 'right', 'bottom', 'left', 'auto'];
+possiblePlacements.forEach(placement => {
+  possiblePlacements.push(placement + '-start');
+  possiblePlacements.push(placement + '-end');
+});
+
 export interface TooltipData {
   bodyContent: string;
-  placement: any; // Placement type from popper or manually
+  placement: typeof possiblePlacements[number];
   offset: number[];
   arrow: boolean;
   scrollIntoView: boolean;

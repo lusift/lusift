@@ -5,6 +5,7 @@
   "private": true,
   "description": "",
   "types": "dist/index.d.ts",
+  "types": "dist/index.d.ts",
   "browser": "dist/lusift.js",
   "main": "index.js",
   "module": "dist/lusift.js",

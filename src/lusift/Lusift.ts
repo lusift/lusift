@@ -21,12 +21,12 @@ import addDefaultCSS from "./addDefaultCSS";
 // TODO_: add support for angul*r
 // TODO: Buggy when the target for tooltip is sidebar link
 // TODO: Reference react-modal package
+// TODO: Decide what sourcemapping we want
 // TODO: Improve /types
-// TODO: ts, eslint
-// -- should we apppend `Lusift:` ahead of console messages?
 // NOTE: Handling versioning
 // NOTE: resize observer doesn't work with svg elements
 // NOTE: Can we just export element classes (Tooltip, Modal, Hotspot) and have them be optionally loadable by the client?
+// NOTE: How are peerDependencies handled when the script is loaded on HTML page?
 
 const noOp = () => {}; // no-op function
 

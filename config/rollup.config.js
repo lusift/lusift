@@ -106,10 +106,8 @@ function getConfig({ input, name, outputFile, tsconfig, packageJsonPath }) {
             }),
             typescript({
                 tsconfig,
-                // HACK: Can't build dist/lusift-react with check true
-                check: !((name === 'Lusift-react' &&
-                    mode === 'production') || (name === 'Lusift-vue')),
-                // check: name !== 'Lusift-vue',
+                // TODO: declaration should be true for both dev and prod right?
+                check: name !== 'Lusift-vue',
                 tsconfigOverride: {
                     compilerOptions: {
                         sourceMap: mode === 'development',
