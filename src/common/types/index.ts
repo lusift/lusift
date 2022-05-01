@@ -24,14 +24,15 @@ export interface StepActions {
     };
 }
 
-interface BackdropData {
+export interface BackdropData {
     color: string;
     opacity: string;
     stageGap: number;
     nextOnOverlayClick?: boolean;
 }
 
-let possiblePlacements = <let>["top", "right", "bottom", "left", "auto"];
+// let possiblePlacements = <let>["top", "right", "bottom", "left", "auto"];
+let possiblePlacements = ["top", "right", "bottom", "left", "auto"];
 possiblePlacements.forEach(placement => {
     possiblePlacements.push(placement + "-start");
     possiblePlacements.push(placement + "-end");
@@ -74,6 +75,7 @@ export interface HotspotAndTooltipTarget {
     elementSelector: string;
 }
 
+// TODO: index has to be a positive integer, and type can be either of tooltip, modal, hotspot
 export interface Tooltip {
     index: number;
     type: string;

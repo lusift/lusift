@@ -22,10 +22,16 @@ import addDefaultCSS from "./addDefaultCSS";
 // TODO: Buggy when the target for tooltip is sidebar link
 // TODO: Reference react-modal package
 // TODO: Decide what sourcemapping we want
-// TODO: Improve /types
+// TODO: Add aliasing for importing sub-modules (like `import Lusift from "lusift/react"`)
+// -- we can generate some files on build that will import from deep dir structure and export them
+// TODO: Tooltip positioning for different screen sizes
+// -- how do the comercial saas handle it? automatically or end-user config?
+// TODO: Use different state for devShowStep (lusift_dev_state)
 // NOTE: Handling versioning
 // NOTE: resize observer doesn't work with svg elements
-// NOTE: Can we just export element classes (Tooltip, Modal, Hotspot) and have them be optionally loadable by the client?
+// NOTE: Can we just export element classes (Tooltip, Modal, Hotspot, Backdrop) and have them be optionally loadable by the client?
+// TODO: Look into more lightweight solutions for tippyjs/popperjs
+// -- nanopop
 // NOTE: How are peerDependencies handled when the script is loaded on HTML page?
 
 const noOp = () => {}; // no-op function

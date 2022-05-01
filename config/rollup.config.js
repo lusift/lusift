@@ -21,24 +21,25 @@ const functionsToRemove = mode === 'production' ? ['console.log', 'assert.*', 'd
 
 // NOTE: Disabled ts check for lusift-vue because of vue-demi
 
+const bundleOutputDirName = `${mode === 'development' ? 'dev' : 'dist'}`;
 const configOptions = [
     {
         input: 'src/index.ts',
-        outputFile: `${mode === 'development' ? 'dev/index.js' : 'dist/lusift.js'}`,
+        outputFile: `${bundleOutputDirName}/index.js`,
         name: 'Lusift',
         tsconfig: 'tsconfig.json',
         packageJsonPath: 'package.json',
     },
     {
         input: 'src/react/src/index.tsx',
-        outputFile: `${mode === 'development' ? 'dev/lusift-react.js' : 'dist/lusift-react.js'}`,
+        outputFile: `${bundleOutputDirName}/react/src/index.js`,
         name: 'Lusift-react',
         tsconfig: 'tsconfig.react.json',
         packageJsonPath: 'src/react/package.json',
     },
     {
-        input: 'src/vue/src/main.ts',
-        outputFile: `${mode === 'development' ? 'dev/lusift-vue.js' : 'dist/lusift-vue.js'}`,
+        input: 'src/vue/src/index.ts',
+        outputFile: `${bundleOutputDirName}/vue/src/index.js`,
         name: 'Lusift-vue',
         tsconfig: 'tsconfig.vue.json',
         packageJsonPath: 'src/vue/package.json',
@@ -106,13 +107,11 @@ function getConfig({ input, name, outputFile, tsconfig, packageJsonPath }) {
             }),
             typescript({
                 tsconfig,
-                // TODO: declaration should be true for both dev and prod right?
                 check: name !== 'Lusift-vue',
                 tsconfigOverride: {
                     compilerOptions: {
                         sourceMap: mode === 'development',
                         inlineSourceMap: false,
-                        declaration: mode === 'production',
                     }
                 }
             }),

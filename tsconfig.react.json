@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
-    "target": "es6",
+    "target": "es5",
     "jsx": "react",
-    "declaration": true,
+    "declaration": false,
     "skipLibCheck": true,
     "lib": [
       "dom",
@@ -17,13 +17,14 @@
     "strict": true,
     "noImplicitAny": false,
     "allowSyntheticDefaultImports": true,
+    "strictPropertyInitialization": true,
+    "noFallthroughCasesInSwitch": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "forceConsistentCasingInFileNames": true,
     "moduleResolution": "node",
     "pretty": true,
     "sourceMap": true,
-    "declarationDir": "./types-react",
     "outDir": "./dist",
     "allowJs": true,
     "noEmit": false,

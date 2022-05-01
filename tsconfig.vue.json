@@ -1,41 +1,39 @@
 {
   "compilerOptions": {
-    "target": "es6",
+    "target": "es5",
     "jsx": "preserve",
-    "importHelpers": true,
+    "declaration": false,
+    "skipLibCheck": true,
+    "lib": [
+      "dom",
+      "es2017",
+      "esnext.asynciterable"
+    ],
+    "baseUrl": "./src",
     "moduleResolution": "node",
-    "pretty": true,
     "strict": true,
     "noImplicitAny": false,
-    "experimentalDecorators": true,
-    "skipLibCheck": true,
-    "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
+    "strictPropertyInitialization": true,
+    "noFallthroughCasesInSwitch": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "node",
+    "pretty": true,
     "sourceMap": true,
     "outDir": "./dist",
     "allowJs": true,
     "noEmit": false,
-    "baseUrl": "./src",
-    "paths": {
-      "@/*": [
-        "src/*"
-      ]
-    },
-    "lib": [
-      "esnext",
-      "dom",
-      "dom.iterable",
-      "scripthost"
-    ]
+    "esModuleInterop": true
   },
   "include": [
-    "src/**/*.ts",
-    "src/**/*.tsx",
-    "src/**/*.vue",
-    "tests/**/*.ts",
-    "tests/**/*.tsx"
+    "./src/**/*"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "tests",
+    "dev",
+    "dist"
   ]
 }
