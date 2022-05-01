@@ -1,4 +1,4 @@
-import { Content } from '../../types';
+import { Content } from "../../types";
 export declare function isObject(item: any): boolean;
 export declare function isObjectOrUndefined(object: any): boolean;
 export declare function isOfTypeTooltipData(object: any): boolean;

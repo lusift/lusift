@@ -7,14 +7,14 @@ import {
     doesStepMatchDisplayCriteria,
 } from "../common/utils";
 
-import { GuideType, TrackingState } from "../common/types";
+import { GuideType, TrackingState, StepTargetType } from "../common/types";
 
 export default class Guide {
     readonly guideData: GuideType;
     private activeSteps: {
         index: number;
         instance: any;
-        target: string;
+        target: StepTargetType;
         type: string;
         async: boolean;
     }[] = [];
@@ -51,10 +51,12 @@ export default class Guide {
 
         //for async steps
         this.guideData.steps.forEach(step => {
-            if (step.async && step.type === "hotspot") {
-                newTrackingState.asyncSteps[step.index] = {
-                    toOpen: false,
-                };
+            if('async' in step) {
+                if (step.async && step.type === "hotspot") {
+                    newTrackingState.asyncSteps[step.index] = {
+                        toOpen: false,
+                    };
+                }
             }
         });
         return newTrackingState;
@@ -103,7 +105,12 @@ export default class Guide {
         stepIndex--;
         do {
             stepIndex++;
-            const { target, type, async } = steps[stepIndex];
+            const step = steps[stepIndex];
+            const { target, type } = steps[stepIndex];
+            let async = false;
+            if ('async' in step) {
+                async = step.async;
+            }
             const displayCriteriaMatches = doesStepMatchDisplayCriteria({
                 target,
                 type,
@@ -136,7 +143,12 @@ export default class Guide {
     private attemptToStartAsyncSteps(): void {
         // start all the async hotpots with toOpen true
         const steps = this.guideData.steps;
-        steps.forEach(({ async, type, index, target }) => {
+        steps.forEach((step) => {
+            const { type, index, target } = step;
+            let async = false;
+            if('async' in step) {
+                async = step.async;
+            }
             if (async && type === "hotspot") {
                 if (
                     doesStepMatchDisplayCriteria({ target, type }) &&
@@ -261,8 +273,11 @@ export default class Guide {
             if (!step) {
                 break;
             }
-            const { type, async } = step;
-            let stepIsAsync = type === "hotspot" && async;
+            let async = false;
+            if ('async' in step) {
+                async = step.async;
+            }
+            let stepIsAsync = step.type === "hotspot" && async;
             if (!stepIsAsync) {
                 break;
             }

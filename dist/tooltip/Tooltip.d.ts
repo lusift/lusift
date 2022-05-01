@@ -1,5 +1,5 @@
-import { TooltipData, HotspotAndTooltipTarget as Target, StepActions } from '../common/types';
-import 'intersection-observer';
+import { TooltipData, HotspotAndTooltipTarget as Target, StepActions } from "../common/types";
+import "intersection-observer";
 export default class Tooltip {
     private targetElement;
     readonly target: Target;
@@ -14,7 +14,7 @@ export default class Tooltip {
     private guideID;
     private intersectionObserver;
     private isTooltipShown;
-    constructor({ target, guideID, index, data, actions, styleProps }: {
+    constructor({ target, guideID, index, data, actions, styleProps, }: {
         target: Target;
         guideID: string;
         data: TooltipData;

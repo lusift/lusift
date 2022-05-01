@@ -83,17 +83,6 @@ export interface Tooltip {
     styleProps: Object;
 }
 
-export interface GuideType {
-    id: string;
-    name: string;
-    description?: string;
-    steps: StepType[];
-    doNotResetTrackerOnContentChange: boolean;
-    onNext?: Function;
-    onPrev?: Function;
-    onClose?: Function;
-}
-
 export interface TrackingState {
     currentStepIndex: number;
     finished: boolean;
@@ -158,7 +147,18 @@ export interface Modal {
     };
 }
 
-export type StepType = Tooltip | Hotspot | Modal;
+export type StepTargetType = ModalTarget | HotspotAndTooltipTarget;
+
+export interface GuideType {
+    id: string;
+    name: string;
+    description?: string;
+    steps: Array<Tooltip | Modal | Hotspot>;
+    doNotResetTrackerOnContentChange?: boolean;
+    onNext?: Function;
+    onPrev?: Function;
+    onClose?: Function;
+}
 
 export interface ElementPosition {
     top: number;

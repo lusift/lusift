@@ -7,7 +7,7 @@ declare class Backdrop {
     private toStopOverlay;
     private resizeObservers;
     private focusTrap;
-    constructor({ targetSelector, guideID, index, data }: {
+    constructor({ targetSelector, guideID, index, data, }: {
         targetSelector: string;
         index: number;
         guideID: string;

@@ -1,2 +1,2 @@
-import lusift from './Lusift';
+import lusift from "./Lusift";
 export default lusift;

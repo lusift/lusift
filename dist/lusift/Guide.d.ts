@@ -1,4 +1,4 @@
-import { GuideType, TrackingState } from '../common/types';
+import { GuideType, TrackingState } from "../common/types";
 export default class Guide {
     readonly guideData: GuideType;
     private activeSteps;

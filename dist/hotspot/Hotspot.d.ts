@@ -1,4 +1,4 @@
-import { Hotspot as HotspotData } from '../common/types';
+import { Hotspot as HotspotData } from "../common/types";
 declare class Hotspot {
     private tipID;
     private tippyInstance;

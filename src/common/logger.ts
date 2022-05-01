@@ -1,8 +1,9 @@
 const messagePrefix = "Lusift:";
 
-export function log(message: string, ...args: any[]) {
+/* export function log(message: string, ...args: any[]) {
     console.log(`${messagePrefix} ${message}`, ...args);
-}
+} */
+export const log = console.log;
 
 export function warn(message: string, ...args: any[]) {
     console.warn(`${messagePrefix} ${message}`, ...args);

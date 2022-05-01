@@ -1,2 +1,2 @@
-import { saveState, loadState } from './localStorage';
-export { loadState, saveState, };
+import { saveState, loadState } from "./localStorage";
+export { loadState, saveState };

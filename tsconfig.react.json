@@ -23,6 +23,7 @@
     "moduleResolution": "node",
     "pretty": true,
     "sourceMap": true,
+    "declarationDir": "./types-react",
     "outDir": "./dist",
     "allowJs": true,
     "noEmit": false,
