@@ -213,7 +213,7 @@ class Lusift {
         }
     }
 
-    public showContent(contentID: string): void {
+    public showContent<T extends string>(contentID: T extends '' ? never : T): void {
         // Forces specific Lusift content to appear for the current user by passing in the ID.
         if (!this.content) {
             return error(`Content not set, pass valid content data to setContent()`);

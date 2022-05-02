@@ -20,7 +20,7 @@ declare class Lusift {
     setContent(content: Content): void;
     clearContent(): void;
     refresh(): void;
-    showContent(contentID: string): void;
+    showContent<T extends string>(contentID: T extends '' ? never : T): void;
     private prepareHooks;
     setGlobalStyle(styleText: string): void;
     getTrackingState(): TrackingState | null;
