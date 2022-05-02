@@ -111,7 +111,6 @@ function getConfig({ input, name, outputFile, tsconfig, packageJsonPath }) {
                 tsconfigOverride: {
                     compilerOptions: {
                         sourceMap: mode === 'development',
-                        inlineSourceMap: false,
                     }
                 }
             }),

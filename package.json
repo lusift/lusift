@@ -4,9 +4,41 @@
   "sideEffects": false,
   "private": true,
   "description": "",
-  "browser": "dist/lusift.js",
+  "browser": "dist/index.js",
   "main": "index.js",
-  "module": "dist/lusift.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./react": {
+      "require": "./dist/react/src/index.js",
+      "types": "./dist/react/src/index.d.ts",
+      "default": "./dist/react/src/index.js"
+    },
+    "./vue": {
+      "require": "./dist/vue/src/index.js",
+      "types": "./dist/vue/src/index.d.ts",
+      "default": "./dist/vue/src/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "typesVersions": {
+    "*": {
+      "react": [
+        "dist/react/src/index.d.ts"
+      ],
+      "vue": [
+        "dist/vue/src/index.d.ts"
+      ]
+    }
+  },
+  "files": [
+    "dist"
+  ],
   "author": "",
   "license": "ISC",
   "bugs": "https://github.com/nareshbhusal/lusift/issues",

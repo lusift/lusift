@@ -1,5 +1,5 @@
 import { window, document } from "global";
-import Lusift from "lusift";
+import Lusift from "./lusift";
 import { Content } from "../src/common/types";
 import { vanillaRender } from "../src/common/utils";
 

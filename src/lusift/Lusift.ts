@@ -15,24 +15,25 @@ import addDefaultCSS from "./addDefaultCSS";
 // TODO: Write documentation
 
 // TODO: decide on making configuring easier, with inheritence, global levels, etc.
-// -- Maybe don't have setContent take everything, seperate concerns, makes documenting easier too
+// -- Maybe don't have setContent take everything, seperate concerns. makes documenting easier too
 // TODO: minor stuff:
 // -- what is popperjs preventOverflow
 // TODO_: add support for angul*r
 // TODO: Buggy when the target for tooltip is sidebar link
 // TODO: Reference react-modal package
-// TODO: Decide what sourcemapping we want
-// TODO: Add aliasing for importing sub-modules (like `import Lusift from "lusift/react"`)
-// -- we can generate some files on build that will import from deep dir structure and export them
 // TODO: Tooltip positioning for different screen sizes
+// TODO: Add type declarations for vue-demi imports
+// TODO: Add prepare and clean npm scripts
 // -- how do the comercial saas handle it? automatically or end-user config?
+// TODO: Only allow non-empty string in showContent
+// TODO: Why do libraries have cjs, esm, and umd bundles?
 // TODO: Use different state for devShowStep (lusift_dev_state)
 // NOTE: Handling versioning
 // NOTE: resize observer doesn't work with svg elements
-// NOTE: Can we just export element classes (Tooltip, Modal, Hotspot, Backdrop) and have them be optionally loadable by the client?
+// TODO: Can we just export element classes (Tooltip, Modal, Hotspot, Backdrop) and have them be optionally loadable by the client?
 // TODO: Look into more lightweight solutions for tippyjs/popperjs
 // -- nanopop
-// NOTE: How are peerDependencies handled when the script is loaded on HTML page?
+// NOTE: How are peerDependencies handled when the script is loaded from cdn or something?
 
 const noOp = () => {}; // no-op function
 
