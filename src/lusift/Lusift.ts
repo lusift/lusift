@@ -284,7 +284,7 @@ class Lusift {
     public devShowStep(guideID: string, stepNumber: number): void {
         // dev mode: to be used to develop/style step elements
         // if there is some other content active already, refuse to show dev mode
-        if (typeof this.activeGuide) {
+        if (this.activeGuide) {
             return warn(
                 `Can\'t enable dev mode because a ` + `guide is active using showContent()`,
             );
