@@ -19,7 +19,6 @@ const mode = process.env.NODE_ENV === 'development' ? 'development' : 'productio
 
 const functionsToRemove = mode === 'production' ? ['console.log', 'assert.*', 'debug', 'alert'] : [];
 
-// NOTE: Disabled ts check for lusift-vue because of vue-demi
 
 const bundleOutputDirName = `${mode === 'development' ? 'dev' : 'dist'}`;
 const configOptions = [
@@ -107,7 +106,7 @@ function getConfig({ input, name, outputFile, tsconfig, packageJsonPath }) {
             }),
             typescript({
                 tsconfig,
-                check: name !== 'Lusift-vue',
+                check: true,
                 tsconfigOverride: {
                     compilerOptions: {
                         sourceMap: mode === 'development',

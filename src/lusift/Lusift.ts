@@ -22,10 +22,8 @@ import addDefaultCSS from "./addDefaultCSS";
 // TODO: Buggy when the target for tooltip is sidebar link
 // TODO: Reference react-modal package
 // TODO: Tooltip positioning for different screen sizes
-// TODO: Add type declarations for vue-demi imports
 // -- how do the comercial saas handle it? automatically or end-user config?
 // TODO: Why do libraries have cjs, esm, and umd bundles?
-// TODO: Use different state for devShowStep (lusift_dev_state)
 // NOTE: Handling versioning
 // NOTE: resize observer doesn't work with svg elements
 // TODO: Can we just export element classes (Tooltip, Modal, Hotspot, Backdrop) and have them be optionally loadable by the client?

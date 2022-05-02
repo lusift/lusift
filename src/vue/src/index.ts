@@ -6,7 +6,6 @@ import { Content } from "../../common/types";
 import { vanillaRender } from "../../common/utils";
 
 install();
-// TODO: Add type declarations for vue-demi imports
 
 const isVueComponent = (component: any): boolean => {
     return typeof component === "object";
@@ -20,8 +19,8 @@ const vueRender = (BodyComponent: any, targetPath: string, callback?: Function) 
         console.log(`is reactive: ${isReactive(markRaw(BodyComponent))}`);
         bodyApp.mount(targetPath);
     } else {
-        const VueComponent = Vue2.extend(BodyComponent);
-        const bodyApp = new VueComponent().$mount(targetPath);
+        const VueComponent = (Vue2 as any).extend!(BodyComponent);
+        new VueComponent().$mount(targetPath);
     }
     if (callback) callback();
 };
