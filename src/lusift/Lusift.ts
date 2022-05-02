@@ -23,15 +23,14 @@ import addDefaultCSS from "./addDefaultCSS";
 // TODO: Reference react-modal package
 // TODO: Tooltip positioning for different screen sizes
 // TODO: Add type declarations for vue-demi imports
-// TODO: Add prepare and clean npm scripts
 // -- how do the comercial saas handle it? automatically or end-user config?
-// TODO: Only allow non-empty string in showContent
 // TODO: Why do libraries have cjs, esm, and umd bundles?
 // TODO: Use different state for devShowStep (lusift_dev_state)
 // NOTE: Handling versioning
 // NOTE: resize observer doesn't work with svg elements
 // TODO: Can we just export element classes (Tooltip, Modal, Hotspot, Backdrop) and have them be optionally loadable by the client?
 // TODO: Look into more lightweight solutions for tippyjs/popperjs
+// TODO: Fix all the type bugs
 // -- nanopop
 // NOTE: How are peerDependencies handled when the script is loaded from cdn or something?
 
@@ -213,7 +212,7 @@ class Lusift {
         }
     }
 
-    public showContent<T extends string>(contentID: T extends '' ? never : T): void {
+    public showContent<T extends string>(contentID: T extends "" ? never : T): void {
         // Forces specific Lusift content to appear for the current user by passing in the ID.
         if (!this.content) {
             return error(`Content not set, pass valid content data to setContent()`);

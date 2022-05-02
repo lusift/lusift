@@ -8,11 +8,11 @@
     font-weight: bold;
 }
 
-.lusift button:focus{
+.lusift button:focus {
     outline: 1px solid #333;
 }
 
-.lusift .tooltip button{
+.lusift .tooltip button {
     color: #fff;
     background-color: rgb(17, 153, 158);
     padding: 0.2rem 0.35rem;
@@ -28,10 +28,9 @@
 
 .lusift h1,
 .lusift h2,
-.lusift h3{
+.lusift h3 {
     text-align: center;
 }
-
 
 .lusift .closeX {
     background-color: transparent;
@@ -42,25 +41,23 @@
 .lusift .modal h1,
 .lusift .modal h2,
 .lusift .modal h3,
-.lusift .modal p{
+.lusift .modal p {
     margin: 0 0 0.85rem 0;
 }
 
-
 .lusift .modal h1,
 .lusift .modal h2,
-.lusift .modal h3{
+.lusift .modal h3 {
     line-height: 1.2;
 }
 
-
 /*tooltip closeX*/
-.lusift .tooltip section.close-btn{
+.lusift .tooltip section.close-btn {
     display: flex;
     justify-content: flex-end;
     margin: -4px !important;
 }
-.lusift .tooltip .closeX{
+.lusift .tooltip .closeX {
     margin: -4px -5px !important;
     margin-bottom: 0 !important;
     font-weight: normal;
@@ -71,21 +68,21 @@
     border-radius: 2px;
 }
 
-
 /*tooltip nav-buttons*/
-.lusift .tooltip section.nav-buttons{
+.lusift .tooltip section.nav-buttons {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
     margin-top: 4px !important;
 }
-.lusift .tooltip .nav-buttons .dismiss-link{
+.lusift .tooltip .nav-buttons .dismiss-link {
     color: #777;
     font-style: italic;
     font-size: 0.8rem;
     margin-right: 0.4rem;
 }
-.lusift .tooltip .nav-buttons .next, .nav-buttons .prev{
+.lusift .tooltip .nav-buttons .next,
+.nav-buttons .prev {
     color: #fff;
     background-color: rgb(17, 153, 158);
     padding: 0.2rem 0.35rem;
@@ -93,13 +90,13 @@
     font-weight: bold;
     border-radius: 8px;
 }
-.lusift .tooltip .nav-buttons .prev{
+.lusift .tooltip .nav-buttons .prev {
     margin-right: 0.3rem;
 }
 
 /*tooltip main content*/
 
-.tippy-box{
+.tippy-box {
     z-index: 999999;
 }
 .lusift .tooltip {
@@ -112,21 +109,19 @@
 .lusift .tooltip > * {
     margin: 3px 6px;
 }
-.lusift .tooltip .body-content{
+.lusift .tooltip .body-content {
     margin-top: 0 !important;
     min-width: 80px;
     white-space: nowrap;
 }
 
 .lusift-backdrop-overlay {
-
 }
 
 /*modal*/
 
 /*modal overlay*/
 .lusift-modal-overlay {
-
 }
 
 .lusift .modal {
@@ -143,11 +138,11 @@
 
 /*modal closeX*/
 
-.lusift .modal section.close-btn{
+.lusift .modal section.close-btn {
     display: flex;
     justify-content: flex-end;
 }
-.lusift .modal .closeX{
+.lusift .modal .closeX {
     /* border: 1px solid blue; */
     margin-bottom: 0 !important;
     font-weight: normal;
@@ -161,7 +156,7 @@
 
 /*modal body-content*/
 
-.lusift .modal .body-content{
+.lusift .modal .body-content {
     padding: 3px 15px;
     padding-bottom: 8px;
     color: #111;
@@ -175,7 +170,6 @@
     max-height: 500px;
     max-width: 600px;
 }
-
 
 /*tooltip-progress*/
 
@@ -226,7 +220,7 @@
 .lusift .hotspot-tooltip > * {
     margin: 3px 6px;
 }
-.lusift .hotspot-tooltip .body-content{
+.lusift .hotspot-tooltip .body-content {
     margin-top: 0 !important;
     min-width: 80px;
 }
