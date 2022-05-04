@@ -19,7 +19,8 @@
     "vue-demi": "^0.12.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.16.5",
+    "@babel/core": "^7.17.2",
+    "@babel/preset-env": "^7.16.11",
     "@typescript-eslint/eslint-plugin": "^4.18.0",
     "@typescript-eslint/parser": "^4.18.0",
     "@vue/babel-preset-app": "^4.5.15",

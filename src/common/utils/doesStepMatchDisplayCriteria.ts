@@ -1,5 +1,5 @@
 import { window, document } from "global";
-import { doesStringMatchRegex } from "../utils";
+import doesStringMatchRegex from "./doesStringMatchRegex";
 
 const doesStepPathMatch = (targetPath): boolean => {
     // is, endsWith, startsWith, contains, regex

@@ -1,6 +1,16 @@
 import { window, document } from "global";
 import Lusift from "../../lusift";
-import { Vue2, isVue2, isVue3, install, createApp, markRaw, isReactive } from "vue-demi";
+import * as demiImports from 'vue-demi';
+
+const {
+    Vue2,
+    createApp,
+    markRaw,
+    isReactive,
+    isVue2,
+    isVue3,
+    install
+} = demiImports as any;
 
 import { Content } from "../../common/types";
 import { vanillaRender } from "../../common/utils";
