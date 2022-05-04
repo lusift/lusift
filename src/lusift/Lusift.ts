@@ -30,6 +30,7 @@ import addDefaultCSS from "./addDefaultCSS";
 // -- nanopop
 // TODO: Remove core-js from vue bundle
 // -- npm install @vue/cli-plugin-babel/preset --save-dev
+// TODO: Include browserslist
 // TODO: Fix all the type bugs
 
 const noOp = () => {}; // no-op function

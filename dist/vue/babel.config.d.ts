@@ -1,1 +1,7 @@
-export const presets: string[];
+export const presets: (string | {
+    useBuiltIns: string;
+    corejs: {
+        version: number;
+        proposals: boolean;
+    };
+})[];
