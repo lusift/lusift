@@ -1,24 +1,24 @@
 export interface StepActions {
-    styleProps: Object;
+    styleProps: object;
     closeButton: {
-        styleProps: Object;
+        styleProps: object;
         disabled: boolean;
     };
     navSection: {
-        styleProps: Object;
+        styleProps: object;
         nextButton: {
             text: string;
-            styleProps: Object;
+            styleProps: object;
             disabled: boolean;
         };
         prevButton: {
             text: string;
-            styleProps: Object;
+            styleProps: object;
             disabled: boolean;
         };
         dismissLink: {
             text: string;
-            styleProps: Object;
+            styleProps: object;
             disabled: boolean;
         };
     };
@@ -29,47 +29,47 @@ export interface BackdropData {
     stageGap: number;
     nextOnOverlayClick?: boolean;
 }
+export interface Step {
+    index: number;
+    type: string;
+}
 declare let possiblePlacements: string[];
-declare const targetPathComparator: readonly ["is", "contains", "startsWith", "endsWith", "regex"];
+export interface TooltipBackdrop extends Partial<BackdropData> {
+    disabled: boolean;
+}
 export interface TooltipData {
     bodyContent: string;
     placement: typeof possiblePlacements[number];
     offset: number[];
     arrow: boolean;
     scrollIntoView: boolean;
-    backdrop?: {
-        disabled?: boolean;
-        color?: string;
-        opacity?: string;
-        stageGap?: number;
-        nextOnOverlayClick?: boolean;
-    };
-    progressOn?: {
+    backdrop: Partial<TooltipBackdrop>;
+    progressOn: Partial<{
         eventType: string;
         elementSelector: string;
-        disabled?: boolean;
-    };
+        disabled: boolean;
+    }>;
 }
 export interface ModalTarget {
     path: {
         value: string;
-        comparator: typeof targetPathComparator[number];
+        comparator: string;
     };
 }
 export interface HotspotAndTooltipTarget {
     path: {
         value: string;
-        comparator: typeof targetPathComparator[number];
+        comparator: string;
     };
     elementSelector: string;
 }
 export interface Tooltip {
     index: number;
     type: string;
-    data: TooltipData;
+    data?: Partial<TooltipData>;
     target: HotspotAndTooltipTarget;
-    actions: StepActions;
-    styleProps: Object;
+    actions?: Partial<StepActions>;
+    styleProps?: object;
 }
 export interface TrackingState {
     currentStepIndex: number;
@@ -81,14 +81,8 @@ export interface TrackingState {
         };
     };
 }
-export interface Content {
-    [guideID: string]: {
-        type: string;
-        data: GuideType;
-    };
-}
 export interface PopperInstanceType {
-    state: Object;
+    state: object;
     destroy: () => void;
     forceUpdate: () => void;
     update: () => Promise<Object>;
@@ -103,9 +97,9 @@ export interface Hotspot {
             top: number;
             left: number;
         };
-        size: number;
-        color: string;
-        type: string;
+        size?: number;
+        color?: string;
+        type?: string;
     };
     tip: {
         data: {
@@ -113,22 +107,24 @@ export interface Hotspot {
             arrow: boolean;
             bodyContent: string;
         };
-        styleProps: object;
+        styleProps?: object;
     };
-    async: boolean;
+    async?: boolean;
+}
+export interface ModalData {
+    bodyContent?: string;
+    escToClose?: boolean;
+    clickOutsideToClose?: boolean;
 }
 export interface Modal {
     index: number;
     type: string;
     target: ModalTarget;
-    data: {
-        bodyContent: string;
-    };
-    closeButton: {
+    data?: Partial<ModalData>;
+    closeButton?: Partial<{
+        styleProps: object;
         disabled: boolean;
-        escToClose: boolean;
-        clickOutsideToClose: boolean;
-    };
+    }>;
 }
 export declare type StepTargetType = ModalTarget | HotspotAndTooltipTarget;
 export interface GuideType {
@@ -148,5 +144,11 @@ export interface ElementPosition {
     bottom: number;
     height: number;
     width: number;
+}
+export interface Content {
+    [guideID: string]: {
+        type?: 'guide';
+        data: GuideType;
+    };
 }
 export {};

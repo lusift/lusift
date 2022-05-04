@@ -103,6 +103,7 @@ function getConfig({ input, name, outputFile, tsconfig, packageJsonPath }) {
             commonjs(),
             nodeResolve({
                 browser: true,
+                exportConditions: [mode]
             }),
             typescript({
                 tsconfig,

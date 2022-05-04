@@ -5,7 +5,7 @@ export default class Tooltip {
     readonly target: Target;
     private tippyInstance;
     readonly uid: string;
-    readonly data: TooltipData;
+    readonly data: Partial<TooltipData>;
     private actions;
     readonly styleProps: Object;
     private targetsAndEventListeners;
@@ -17,7 +17,7 @@ export default class Tooltip {
     constructor({ target, guideID, index, data, actions, styleProps, }: {
         target: Target;
         guideID: string;
-        data: TooltipData;
+        data: Partial<TooltipData>;
         index: number;
         actions: StepActions;
         styleProps: Object;

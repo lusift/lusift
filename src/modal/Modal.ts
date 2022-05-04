@@ -1,19 +1,19 @@
 import createModal from "./createModal";
 import { document, window } from "global";
 import { getStepUID, addFocusTrap } from "../common/utils";
-import { Modal as ModalData } from "../common/types";
+import { ModalData } from "../common/types";
 import { MODAL_OVERLAY_CLASS } from "../common/constants";
 
 class Modal {
     private uid: string;
-    private data: any;
+    private data: ModalData = {};
     private closeButton: any;
     private focusTrap: any;
     private index: number;
 
     constructor({ index, guideID, data, closeButton }) {
         this.uid = getStepUID({ guideID, type: "modal", index });
-        this.data = data;
+        this.data = data || {};
         this.index = index;
         this.closeButton = closeButton;
         this.addModal();

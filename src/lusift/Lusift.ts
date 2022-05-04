@@ -16,19 +16,21 @@ import addDefaultCSS from "./addDefaultCSS";
 
 // TODO: decide on making configuring easier, with inheritence, global levels, etc.
 // -- Maybe don't have setContent take everything, seperate concerns. makes documenting easier too
-// TODO: minor stuff:
-// -- what is popperjs preventOverflow
+// NOTE_: Support for different typescript versions
 // TODO_: add support for angul*r
 // TODO: Buggy when the target for tooltip is sidebar link
-// TODO: Reference react-modal package
+// TODO: Add option to be able to set where the progress bar should be relative to the 2 axis or the arrow
 // TODO: Tooltip positioning for different screen sizes
 // -- how do the comercial saas handle it? automatically or end-user config?
+// -- have the options for orientation be `auto` and `fixed` with positions being the different axis relative to
+// the target. With auto, the position is only picked when there is space for the tooltip, else it moves to different position
 // NOTE: Handling versioning
 // NOTE: resize observer doesn't work with svg elements
 // TODO: Can we just export element classes (Tooltip, Modal, Hotspot, Backdrop) and have them be optionally loadable by the client?
 // TODO: Look into more lightweight solutions for tippyjs/popperjs
+// TODO: Instead of showContent(guideID) method, have method enable(guideID), so any page reloads don't have to hit showContent
+// for a guide to show. enable() just sets some property to true for the guide
 // -- nanopop
-// TODO: Fix all the type bugs
 
 const noOp = () => {}; // no-op function
 

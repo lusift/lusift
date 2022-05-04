@@ -109,7 +109,7 @@ export default class Guide {
             const { target, type } = steps[stepIndex];
             let async = false;
             if ("async" in step) {
-                async = step.async;
+                async = step.async!;
             }
             const displayCriteriaMatches = doesStepMatchDisplayCriteria({
                 target,
@@ -147,7 +147,7 @@ export default class Guide {
             const { type, index, target } = step;
             let async = false;
             if ("async" in step) {
-                async = step.async;
+                async = step.async!;
             }
             if (async && type === "hotspot") {
                 if (
@@ -275,7 +275,7 @@ export default class Guide {
             }
             let async = false;
             if ("async" in step) {
-                async = step.async;
+                async = step.async!;
             }
             let stepIsAsync = step.type === "hotspot" && async;
             if (!stepIsAsync) {
