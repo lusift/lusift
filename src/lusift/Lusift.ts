@@ -28,9 +28,6 @@ import addDefaultCSS from "./addDefaultCSS";
 // TODO: Can we just export element classes (Tooltip, Modal, Hotspot, Backdrop) and have them be optionally loadable by the client?
 // TODO: Look into more lightweight solutions for tippyjs/popperjs
 // -- nanopop
-// TODO: Remove core-js from vue bundle
-// -- npm install @vue/cli-plugin-babel/preset --save-dev
-// TODO: Include browserslist
 // TODO: Fix all the type bugs
 
 const noOp = () => {}; // no-op function
