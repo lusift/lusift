@@ -10,8 +10,9 @@ import { babel } from '@rollup/plugin-babel';
 import alias from '@rollup/plugin-alias';
 import vuePlugin from 'rollup-plugin-vue'
 import peerDepsExternal from "rollup-plugin-peer-deps-external";
-import { visualizer } from 'rollup-plugin-visualizer';
+// import { visualizer } from 'rollup-plugin-visualizer';
 import strip from '@rollup/plugin-strip';
+import visualizeSource from 'rollup-plugin-source-map-explorer';
 
 const path = require('path');
 
@@ -144,12 +145,17 @@ function getConfig({ input, name, outputFile, tsconfig, packageJsonPath }) {
             ...mode === 'production' ? [
                 terser(),
             ] : [],
-            visualizer({
+            visualizeSource({
+                filename: `.rollup-build-stats/${name.toLowerCase()}-${mode.toLowerCase()}.html`,
+                format: 'html',
+                gzip: false
+            }),
+            /* visualizer({
                 filename: `.rollup-build-stats/${name.toLowerCase()}-${mode.toLowerCase()}.html`,
                 title: 'Lusift Rollup Visualizer',
                 sourcemap: true,
                 gzipSize: true,
-            }),
+            }), */
         ]
     };
     return config;
