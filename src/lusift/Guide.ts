@@ -47,6 +47,7 @@ export default class Guide {
             finished: false,
             prematurelyClosed: false,
             asyncSteps: {},
+            enabled: false,
         };
 
         //for async steps
@@ -236,6 +237,7 @@ export default class Guide {
         window.Lusift.activeGuide = null;
         log("guide closed");
         typeof window.Lusift.onClose === "function" && window.Lusift.onClose();
+        window.Lusift.disable(this.guideData.id);
     }
 
     private closeCurrentStep(): void {

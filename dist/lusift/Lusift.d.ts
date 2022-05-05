@@ -15,6 +15,9 @@ declare class Lusift {
     private onPrev;
     private onClose;
     constructor();
+    private showEnabledContent;
+    enable(guideID: string): void;
+    disable(guideID: string): void;
     private hasGuideDataChanged;
     private reconcileContentWithLocalState;
     setContent(content: Content): void;

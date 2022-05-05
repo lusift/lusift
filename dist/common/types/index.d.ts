@@ -80,6 +80,7 @@ export interface TrackingState {
             toOpen: boolean;
         };
     };
+    enabled: boolean;
 }
 export interface PopperInstanceType {
     state: object;

@@ -28,9 +28,6 @@ import addDefaultCSS from "./addDefaultCSS";
 // NOTE: resize observer doesn't work with svg elements
 // TODO: Can we just export element classes (Tooltip, Modal, Hotspot, Backdrop) and have them be optionally loadable by the client?
 // TODO: Look into more lightweight solutions for tippyjs/popperjs
-// TODO: Instead of showContent(guideID) method, have method enable(guideID), so any page reloads don't have to hit showContent
-// TODO: Fix some sourcemaping stuff with rollup visualiser
-// for a guide to show. enable() just sets some property to true for the guide
 // -- nanopop
 
 const noOp = () => {}; // no-op function
@@ -61,6 +58,45 @@ class Lusift {
             saveState({});
         }
         addDefaultCSS();
+    }
+
+    private showEnabledContent(): void {
+        const localData = loadState();
+        const enabledGuideID = Object.keys(localData).find(key => {
+            const { trackingState } = localData[key];
+            if(trackingState){
+                return trackingState.enabled
+            }
+            return false;
+        });
+        if (enabledGuideID) {
+            this.showContent(enabledGuideID);
+        }
+    }
+
+    public enable(guideID: string): void {
+        let localData = loadState();
+        if(!Object.keys(localData).some(key => key === guideID)) {
+            return error(`Content of id '${guideID}' doesn't exist`);
+        }
+
+        Object.keys(localData).forEach(key => {
+            const { trackingState } = localData[key];
+            if(trackingState){
+                localData[key].trackingState.enabled = key === guideID;
+            }
+        });
+        saveState(localData);
+        this.showContent(guideID);
+    }
+
+    public disable(guideID: string): void {
+        let localData = loadState();
+        if(!Object.keys(localData).some(key => key === guideID)) {
+            return error(`Content of id '${guideID}' doesn't exist`);
+        }
+        localData[guideID].trackingState.enabled = false;
+        saveState(localData);
     }
 
     private hasGuideDataChanged(guideData: GuideType): boolean {
@@ -208,6 +244,9 @@ class Lusift {
             }, 0);
         } else {
             warn("No active guide instance to refresh");
+            // Assuming this method is called every time on page load.
+            // Better than running in constructor which runs on import of Lusift
+            this.showEnabledContent();
         }
     }
 
