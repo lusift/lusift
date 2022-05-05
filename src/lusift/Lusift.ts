@@ -29,6 +29,7 @@ import addDefaultCSS from "./addDefaultCSS";
 // TODO: Can we just export element classes (Tooltip, Modal, Hotspot, Backdrop) and have them be optionally loadable by the client?
 // TODO: Look into more lightweight solutions for tippyjs/popperjs
 // TODO: Instead of showContent(guideID) method, have method enable(guideID), so any page reloads don't have to hit showContent
+// TODO: Fix some sourcemaping stuff with rollup visualiser
 // for a guide to show. enable() just sets some property to true for the guide
 // -- nanopop
 

@@ -62,7 +62,8 @@ function getConfig({ input, name, outputFile, tsconfig, packageJsonPath }) {
             file: outputFile,
             name,
             format: 'umd',
-            sourcemap: mode === 'development',
+            // sourcemap: mode === 'development',
+            sourcemap: true,
             globals: {
                 'react': 'React',
                 'react-dom': 'ReactDOM',
@@ -110,7 +111,8 @@ function getConfig({ input, name, outputFile, tsconfig, packageJsonPath }) {
                 check: true,
                 tsconfigOverride: {
                     compilerOptions: {
-                        sourceMap: mode === 'development',
+                        // sourceMap: mode === 'development',
+                        sourceMap: true
                     }
                 }
             }),
@@ -134,10 +136,6 @@ function getConfig({ input, name, outputFile, tsconfig, packageJsonPath }) {
                 sourceMap: (mode === 'production' ? false : 'inline'),
                 minimize: mode === 'production',
             }),
-            visualizer({
-                filename: `.rollup-build-stats/${name.toLowerCase()}-${mode.toLowerCase()}.html`,
-                title: 'Lusift Rollup Visualizer',
-            }),
             strip({
                 functions: functionsToRemove,
                 include: ['**/*.(js|jsx|ts|tsx)'],
@@ -146,6 +144,12 @@ function getConfig({ input, name, outputFile, tsconfig, packageJsonPath }) {
             ...mode === 'production' ? [
                 terser(),
             ] : [],
+            visualizer({
+                filename: `.rollup-build-stats/${name.toLowerCase()}-${mode.toLowerCase()}.html`,
+                title: 'Lusift Rollup Visualizer',
+                sourcemap: true,
+                gzipSize: true,
+            }),
         ]
     };
     return config;
