@@ -1,6 +1,5 @@
 import { window, document } from "global";
 import lusiftDefaultCSS from "./style/lusift.css";
-import lusiftTippyCSS from "./style/tippy.lusift.css";
 import {
     PRIMARY_COLOR,
     DEFAULT_MODAL_BORDER_RADIUS,
@@ -9,7 +8,6 @@ import {
 } from "../common/constants";
 
 // Inject default lusift global styles
-// TODO: what's that thick layer thing beneath tippy tooltip content? zoom in with ctrl+
 
 const getDynamicDefaultCSS = () => {
     // TODO: Have these properties be in lusift.css too
@@ -33,16 +31,12 @@ const getDynamicDefaultCSS = () => {
 
 export default () => {
     if (typeof document === "undefined") return;
+
     const lusiftDefault = document.createElement("style");
     lusiftDefault.type = "text/css";
     lusiftDefault.setAttribute("lusift-default", "");
     lusiftDefault.textContent = lusiftDefaultCSS;
     lusiftDefault.textContent += getDynamicDefaultCSS();
-
-    const tippyStyle = document.createElement("style");
-    tippyStyle.type = "text/css";
-    tippyStyle.setAttribute("lusift-tippy", "");
-    tippyStyle.textContent = lusiftTippyCSS;
 
     const lusiftCustom = document.createElement("style");
     lusiftCustom.type = "text/css";
@@ -55,7 +49,6 @@ export default () => {
     const docFrag = document.createDocumentFragment();
     // append all style elements to the document fragment
     docFrag.appendChild(lusiftDefault);
-    docFrag.appendChild(tippyStyle);
     docFrag.appendChild(lusiftCustom);
     docFrag.appendChild(customStyle);
     // append the document fragment to the document

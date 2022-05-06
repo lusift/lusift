@@ -1,9 +1,11 @@
-declare const renderTooltip: ({ data, target, styleProps, actions, uid, index }: {
+declare const renderTooltip: ({ data, target, styleProps, actions, uid, index, onShow, onHide }: {
     data: any;
     target: any;
     styleProps: any;
     actions: any;
     uid: any;
     index: any;
-}) => any;
+    onShow: any;
+    onHide: any;
+}) => Promise<import("floating-ui-tooltip/dev/types").Instance>;
 export default renderTooltip;

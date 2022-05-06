@@ -5,7 +5,6 @@ import { log, warn, error } from "../common/logger";
 import { TooltipData, HotspotAndTooltipTarget as Target, StepActions } from "../common/types";
 import defaultToolipActions from "./defaultTooltipActions";
 import Backdrop from "../backdrop";
-import "intersection-observer";
 
 const defaultBackdropData = {
     disabled: false,
@@ -15,10 +14,36 @@ const defaultBackdropData = {
     nextOnOverlayClick: false,
 };
 
+const defaultOffset = [0, 10];
+
+// TODO: focus-trap not detecting tabbable elements
+// TODO: offset value is weird
+// TODO: offset, should it factor in arrow size on top?
+// TODO: tooltip is below backdrop
+// TODO: should we have transition effects for backdrop? it's kind of jerky
+// -- refactor to have zIndex for tooltip and backdrop as constants
+// TODO: Fix style.css margins for progress-bar and close button
+// TODO: Make the progress bar overflow because of border-radius not show
+// TODO: Add debounce function in Backdrop
+// TODO: Replace resize-observer with some native implementation
+// TODO: Transfer focus to tooltip if there's backdrop, addFocusTrap.ts
+
+/*
+ * TODO: Add this scroll behaviour
+   if (this.data.scrollIntoView) {
+       this.targetElement.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+        inline: "center",
+        });
+    }
+    --
+https://stackoverflow.com/questions/123999/how-can-i-tell-if-a-dom-element-is-visible-in-the-current-viewport
+ */
 export default class Tooltip {
     private targetElement: HTMLElement;
     readonly target: Target;
-    private tippyInstance: any;
+    private fuitInstance: any;
     readonly uid: string;
     readonly data: Partial<TooltipData>;
     private actions: StepActions = defaultToolipActions;
@@ -31,7 +56,6 @@ export default class Tooltip {
     private backdropInstance: any;
     private index: number;
     private guideID: string;
-    private intersectionObserver: any;
     private isTooltipShown: boolean = false;
 
     constructor({
@@ -69,7 +93,7 @@ export default class Tooltip {
             ...defaultBackdropData,
             ...backdrop,
         };
-        this.data.offset = this.data.offset || [0, 10];
+        this.data.offset = this.data.offset || defaultOffset;
         if (!this.data.backdrop.disabled) {
             this.data.offset[1] = this.data.offset[1] + this.data.backdrop.stageGap!;
         }
@@ -78,54 +102,13 @@ export default class Tooltip {
         this.uid = getStepUID({ guideID, index, type: "tooltip" });
         this.guideID = guideID;
         this.targetElement = document.querySelector(elementSelector);
-        this.attachIntersectionObserver();
+        this.show();
         log("tooltip started");
-    }
-
-    private attachIntersectionObserver(): void {
-        // show tooltip when it comes into view, remove it when it goes out of it
-        this.show = this.show.bind(this);
-        this.remove = this.remove.bind(this);
-        this.hide = this.hide.bind(this);
-
-        const { IntersectionObserver } = window;
-
-        this.intersectionObserver = new IntersectionObserver(
-            (entries, observer) => {
-                entries.forEach(entry => {
-                    const { isIntersecting, target } = entry;
-                    if (!target.isSameNode(this.targetElement)) {
-                        return log("Observer target doesn't match tooltip target");
-                    }
-                    if (isIntersecting) {
-                        this.show();
-                    } else {
-                        if (this.tippyInstance) {
-                            // if it has been created yet at all
-                            this.hide();
-                        } else {
-                            if (this.data.scrollIntoView) {
-                                this.targetElement.scrollIntoView({
-                                    behavior: "smooth",
-                                    block: "center",
-                                    inline: "center",
-                                });
-                            }
-                        }
-                    }
-                });
-            },
-            {
-                root: null,
-                threshold: 0.95,
-            },
-        );
-        this.intersectionObserver.observe(this.targetElement);
     }
 
     private hide(): void {
         // log('tooltip hide');
-        this.tippyInstance.hide();
+        this.fuitInstance.hide();
         this.removeAllEventListeners();
         this.backdropInstance && this.backdropInstance.remove();
         this.backdropInstance = null;
@@ -159,7 +142,7 @@ export default class Tooltip {
         }
     }
 
-    public show(): void {
+    public async show() {
         if (!this.targetElement) return error("Error: target element not found");
         if (this.isTooltipShown) return error("Tooltip is already displayed");
 
@@ -168,34 +151,41 @@ export default class Tooltip {
         const { eventType, disabled } = progressOn!;
         disabled || this.addEventListenerToTarget(this.targetElement, "next", eventType);
 
-        if (!this.tippyInstance) {
-            // tippy was never initiated
+        if (!this.fuitInstance) {
+            // fuit was never initiated
             const { uid, actions, styleProps, data, index } = this;
-            this.tippyInstance = createTooltip({
+            this.fuitInstance = await createTooltip({
                 uid,
                 target: this.targetElement,
                 actions,
                 styleProps,
                 data,
                 index,
+                onShow: (instance) => {
+                    backdrop!.disabled || this.addBackdrop.bind(this)();
+                    this.isTooltipShown = true;
+                },
+                onHide: (instance) => {
+                    if(!backdrop!.disabled) {
+                        this.backdropInstance && this.backdropInstance.remove();
+                        this.backdropInstance = null;
+                        this.isTooltipShown = false;
+                    }
+                },
             });
         } else {
-            // tippy was hidden
-            this.tippyInstance.show();
+            // fuit was hidden
+            this.fuitInstance.show();
         }
-        this.isTooltipShown = true;
-        backdrop!.disabled || this.addBackdrop();
     }
 
     public remove(): void {
         if (!this.isTooltipShown) return error(`Attempted to remove but tooltip is not shown`);
         log(`removing tooltip ${this.uid}`);
         this.removeAllEventListeners();
-        this.intersectionObserver.disconnect();
         this.backdropInstance && this.backdropInstance.remove();
-        this.tippyInstance.unmount();
-        this.tippyInstance.destroy();
-        this.tippyInstance = null;
+        this.fuitInstance.remove();
+        this.fuitInstance = null;
         this.isTooltipShown = false;
     }
 

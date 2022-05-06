@@ -1,9 +1,8 @@
 import { TooltipData, HotspotAndTooltipTarget as Target, StepActions } from "../common/types";
-import "intersection-observer";
 export default class Tooltip {
     private targetElement;
     readonly target: Target;
-    private tippyInstance;
+    private fuitInstance;
     readonly uid: string;
     readonly data: Partial<TooltipData>;
     private actions;
@@ -12,7 +11,6 @@ export default class Tooltip {
     private backdropInstance;
     private index;
     private guideID;
-    private intersectionObserver;
     private isTooltipShown;
     constructor({ target, guideID, index, data, actions, styleProps, }: {
         target: Target;
@@ -22,11 +20,10 @@ export default class Tooltip {
         actions: StepActions;
         styleProps: Object;
     });
-    private attachIntersectionObserver;
     private hide;
     private consolidateActions;
     private addBackdrop;
-    show(): void;
+    show(): Promise<void>;
     remove(): void;
     private getListenerFromMethod;
     private addEventListenerToTarget;

@@ -29,6 +29,28 @@ const areNumbersEqual = (num1: number, num2: number): boolean => {
     return roundNum(num1, decimalPlaces) === roundNum(num2, decimalPlaces);
 };
 
+function getFocusableElements(root) {
+    var FOCUS_SENTINEL_CLASS = 'mdc-dom-focus-sentinel';
+    var focusableEls = [].slice.call(root.querySelectorAll('[autofocus], [tabindex], a, input, textarea, select, button'));
+    log(focusableEls)
+    return focusableEls.filter(function (el: HTMLElement) {
+        var isDisabledOrHidden = el.getAttribute('aria-disabled') === 'true' ||
+            el.getAttribute('disabled') != null ||
+            el.getAttribute('hidden') != null ||
+            el.getAttribute('aria-hidden') === 'true';
+        var isTabbableAndVisible = el.tabIndex >= 0 &&
+            el.getBoundingClientRect().width > 0 &&
+            !el.classList.contains(FOCUS_SENTINEL_CLASS) && !isDisabledOrHidden;
+        var isProgrammaticallyHidden = false;
+        if (isTabbableAndVisible) {
+            var style = getComputedStyle(el);
+            isProgrammaticallyHidden =
+                style.display === 'none' || style.visibility === 'hidden';
+        }
+        return isTabbableAndVisible && !isProgrammaticallyHidden;
+    });
+};
+
 Object["fromEntries"] = arr => Object.assign({}, ...arr.map(([k, v]) => ({ [k]: v })));
 const getDefinedProps = obj =>
     Object["fromEntries"](Object.entries(obj).filter(([k, v]) => v !== undefined));
@@ -157,7 +179,7 @@ class Backdrop {
             bottom: "0",
             left: "0",
             right: "0",
-            zIndex: 99998,
+            zIndex: 998,
             border: "1px solid transparent",
         };
 

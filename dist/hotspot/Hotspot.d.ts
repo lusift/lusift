@@ -1,7 +1,7 @@
 import { Hotspot as HotspotData } from "../common/types";
 declare class Hotspot {
     private tipID;
-    private tippyInstance;
+    private fuitInstance;
     private targetElement;
     readonly data: HotspotData;
     private beaconID;
@@ -13,7 +13,7 @@ declare class Hotspot {
     private repositionBeacon;
     private addBeacon;
     private toggleTooltip;
-    hideTooltip(): void;
+    hideTooltip(): Promise<void>;
     private changeAsyncStepStatus;
     private remove;
     private removeResizeObservers;

@@ -11,9 +11,10 @@ import { Hotspot as HotspotData } from "../common/types";
 import { log, warn, error } from "../common/logger";
 
 // TODO_: In case of customizing hotspot's beacon, we can just have a beaconElement property
+// TODO: Should the beacon animation stop when tip is open?
 class Hotspot {
     private tipID: string;
-    private tippyInstance: any;
+    private fuitInstance: any;
     private targetElement: HTMLElement;
     readonly data: HotspotData;
     private beaconID: string;
@@ -41,7 +42,7 @@ class Hotspot {
 
     private repositionBeacon(): void {
         this.remove();
-        this.tippyInstance = null;
+        this.fuitInstance = null;
         this.addBeacon();
         log("reset beacon position");
     }
@@ -71,7 +72,7 @@ class Hotspot {
         });
     }
 
-    private toggleTooltip(): any {
+    private async toggleTooltip() {
         // log('toggle tooltip');
 
         const target = document.getElementById(this.beaconID);
@@ -87,31 +88,35 @@ class Hotspot {
         const isDevMode = !Boolean(Lusift.activeGuide);
         let removeMethod = isDevMode ? Lusift.close : this.removeAndCloseAsync.bind(this);
 
-        if (!this.tippyInstance) {
+        if (!this.fuitInstance) {
             // if it was never initiated
-            this.tippyInstance = createHotspotTooltip({
+            this.fuitInstance = await createHotspotTooltip({
                 remove: removeMethod,
                 uid: this.tipID,
                 index: this.data.index,
                 target,
                 styleProps,
                 data,
+                onClickOutside: (instance, event) => {
+                    removeMethod();
+                }
             });
             Lusift.activeHotspot = this;
-        } else if (this.tippyInstance.state.isDestroyed) {
+        } else if (this.fuitInstance.getState().isRemoved) {
             error("Uh... but it doesn't exist. unexpected");
             // if it's removed
-        } else if (this.tippyInstance.state.isShown) {
-            this.hideTooltip();
-        } else if (this.tippyInstance) {
+        } else if (this.fuitInstance.getState().isShown) {
+            await this.hideTooltip();
+        } else if (this.fuitInstance) {
             // if it's hidden
-            this.tippyInstance.show();
+            await this.fuitInstance.show();
             Lusift.activeHotspot = this;
         }
     }
 
-    public hideTooltip() {
-        this.tippyInstance.hide();
+    // TODO: refactor names, here it could be hideTip()
+    public async hideTooltip() {
+        await this.fuitInstance.hide();
         window.Lusift.activeHotspot = null;
     }
 
@@ -122,12 +127,11 @@ class Hotspot {
 
     private remove(): void {
         log(`Removing id: ${this.data.index} hotspot`);
-        if (this.tippyInstance) {
-            if (this.tippyInstance.state.isDestroyed) {
+        if (this.fuitInstance) {
+            if (this.fuitInstance.getState().isRemoved) {
                 log("Hotspot's tooltip is already destroyed");
             }
-            this.tippyInstance.unmount();
-            this.tippyInstance.destroy();
+            this.fuitInstance.remove();
         } else {
             log("Hotspot closed without ever opening");
         }

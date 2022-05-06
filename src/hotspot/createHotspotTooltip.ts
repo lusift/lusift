@@ -1,5 +1,5 @@
 import styleObjectToString from "../common/utils/styleObjectToString";
-import createTippy from "../common/tippy/createTippy";
+import createTooltip from "../common/createTooltip";
 import renderProgressBar from "../common/progressBar";
 import { DEFAULT_TOOLTIP_BORDER_RADIUS } from "../common/constants";
 
@@ -8,7 +8,7 @@ const defaultBodyContent = `
   <p style="font-weight: normal;">Default tooltip content</p>
 `;
 
-const renderTooltip = ({ remove, data, target, styleProps, uid, index }) => {
+const renderTooltip = async ({ remove, data, target, styleProps, uid, index, onClickOutside }) => {
     const {
         arrow,
         placement,
@@ -34,27 +34,27 @@ const renderTooltip = ({ remove, data, target, styleProps, uid, index }) => {
     </div>
   `;
 
-    const tippyInstance = createTippy({
+    const tooltipInstance = await createTooltip({
         target,
         content,
         arrow,
         offset,
         placement,
-        remove,
+        onClickOutside,
+        remove: () => {},
     });
-    tippyInstance.show();
 
     const Lusift = window["Lusift"];
 
     const bodyContent =
-        Lusift.content[Lusift.activeGuideID].data.steps[index].tip.data.bodyContent ||
+        Lusift.content[Lusift.activeGuide.id].data.steps[index].tip.data.bodyContent ||
         defaultBodyContent;
 
     Lusift.render(bodyContent, ".lusift > .hotspot-tooltip > .body-content", () => {
-        tippyInstance.popperInstance.update();
+        tooltipInstance.update();
     });
 
-    return tippyInstance;
+    return tooltipInstance;
 };
 
 export default renderTooltip;

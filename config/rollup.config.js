@@ -10,7 +10,7 @@ import { babel } from '@rollup/plugin-babel';
 import alias from '@rollup/plugin-alias';
 import vuePlugin from 'rollup-plugin-vue'
 import peerDepsExternal from "rollup-plugin-peer-deps-external";
-// import { visualizer } from 'rollup-plugin-visualizer';
+import { visualizer } from 'rollup-plugin-visualizer';
 import strip from '@rollup/plugin-strip';
 import visualizeSource from 'rollup-plugin-source-map-explorer';
 
@@ -19,7 +19,6 @@ const path = require('path');
 const mode = process.env.NODE_ENV === 'development' ? 'development' : 'production';
 
 const functionsToRemove = mode === 'production' ? ['console.log', 'assert.*', 'debug', 'alert'] : [];
-
 
 const bundleOutputDirName = `${mode === 'development' ? 'dev' : 'dist'}`;
 const configOptions = [
@@ -105,7 +104,7 @@ function getConfig({ input, name, outputFile, tsconfig, packageJsonPath }) {
             commonjs(),
             nodeResolve({
                 browser: true,
-                exportConditions: [mode]
+                // exportConditions: [mode]
             }),
             typescript({
                 tsconfig,
@@ -144,18 +143,22 @@ function getConfig({ input, name, outputFile, tsconfig, packageJsonPath }) {
             }),
             ...mode === 'production' ? [
                 terser(),
+                // These visualizer plugins require some build files to be in those directories already
+                // or the rollup scripts errors out
+                visualizeSource({
+                    filename: `.rollup-build-stats/${name.toLowerCase()}-${mode.toLowerCase()}.html`,
+                    format: 'html',
+                    gzip: false
+                }),
             ] : [],
-            visualizeSource({
-                filename: `.rollup-build-stats/${name.toLowerCase()}-${mode.toLowerCase()}.html`,
-                format: 'html',
-                gzip: false
-            }),
-            /* visualizer({
-                filename: `.rollup-build-stats/${name.toLowerCase()}-${mode.toLowerCase()}.html`,
-                title: 'Lusift Rollup Visualizer',
-                sourcemap: true,
-                gzipSize: true,
-            }), */
+            /* ...mode === 'development' ? [
+                visualizer({
+                    filename: `.rollup-build-stats/${name.toLowerCase()}-${mode.toLowerCase()}.html`,
+                    title: 'Lusift Rollup Visualizer',
+                    sourcemap: true,
+                    gzipSize: true,
+                }),
+            ] : [], */
         ]
     };
     return config;

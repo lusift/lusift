@@ -24,7 +24,12 @@
       "types": "./dist/vue/src/index.d.ts",
       "default": "./dist/vue/src/index.js"
     },
-    "./package.json": "./package.json"
+    "./package.json": "./package.json",
+    "./dev/react": {
+      "require": "./dev/react/src/index.js",
+      "types": "./dev/react/src/index.d.ts",
+      "default": "./dev/react/src/index.js"
+    }
   },
   "typesVersions": {
     "*": {
@@ -37,7 +42,8 @@
     }
   },
   "files": [
-    "dist"
+    "dist",
+    "dev"
   ],
   "author": "",
   "license": "ISC",
@@ -115,11 +121,10 @@
   },
   "dependencies": {
     "@vue/composition-api": "file:../vue-crash-2021/node_modules/@vue/composition-api",
+    "floating-ui-tooltip": "file:../floating-ui-tooltip",
     "focus-trap": "6.7.1",
     "global": "4.4.0",
-    "intersection-observer": "0.12.0",
     "lodash.isequal": "4.5.0",
-    "tippy.js": "6.2.5",
     "vue": "file:../vue-crash-2021/node_modules/vue"
   }
 }
