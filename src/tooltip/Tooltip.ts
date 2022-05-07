@@ -14,10 +14,10 @@ const defaultBackdropData = {
     nextOnOverlayClick: false,
 };
 
-const defaultOffset = [0, 10];
+const tooltipArrowDefaultSize = 12;
+const tooltipArrowSizeScale = 1;
+const defaultOffset = [tooltipArrowSizeScale*tooltipArrowDefaultSize, 0]; // x needs to be size of arrow + backdrop gap
 
-// TODO: offset value is weird
-// TODO: offset, should it factor in arrow size on top?
 // TODO: tooltip is below backdrop
 // TODO: should we have transition effects for backdrop? it's kind of jerky
 // -- refactor to have zIndex for tooltip and backdrop as constants
@@ -94,7 +94,8 @@ export default class Tooltip {
         };
         this.data.offset = this.data.offset || defaultOffset;
         if (!this.data.backdrop.disabled) {
-            this.data.offset[1] = this.data.offset[1] + this.data.backdrop.stageGap!;
+            // factor in backdrop stage gap in tooltip offset
+            this.data.offset[0] = this.data.offset[0] + this.data.backdrop.stageGap!;
         }
 
         this.consolidateActions(actions);
