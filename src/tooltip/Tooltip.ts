@@ -1,10 +1,11 @@
 import { document, window } from "global";
 import createTooltip from "./createTooltip";
-import { mergeObjects, getStepUID } from "../common/utils";
+import { mergeObjects, getStepUID, debounce } from "../common/utils";
 import { log, warn, error } from "../common/logger";
 import { TooltipData, HotspotAndTooltipTarget as Target, StepActions } from "../common/types";
 import defaultToolipActions from "./defaultTooltipActions";
 import Backdrop from "../backdrop";
+import { autoUpdate } from '@floating-ui/dom';
 
 const defaultBackdropData = {
     disabled: false,
@@ -21,8 +22,6 @@ const defaultOffset = [tooltipArrowSizeScale*tooltipArrowDefaultSize, 0]; // x n
 // TODO: should we have transition effects for backdrop? it's kind of jerky
 // -- refactor to have zIndex for tooltip and backdrop as constants
 // TODO: Fix style.css margins for progress-bar and close button
-// TODO: Add debounce function in Backdrop
-// TODO: Replace resize-observer with some native implementation
 
 export default class Tooltip {
     private targetElement: HTMLElement;
@@ -41,6 +40,7 @@ export default class Tooltip {
     private index: number;
     private guideID: string;
     private isTooltipShown: boolean = false;
+    private backdropAutoUpdateCleanup!: Function;
 
     constructor({
         target,
@@ -159,6 +159,26 @@ export default class Tooltip {
                     }
                 },
             });
+            if (!backdrop!.disabled) {
+
+                const debouncedBackdropReset = debounce((_x?) => {
+                    if (this.backdropInstance) {
+                        this.backdropInstance.resetBackdrop();
+                    }
+                }, 100);
+
+                this.backdropAutoUpdateCleanup = autoUpdate(
+                    this.targetElement,
+                    this.fuitInstance.tooltipElement,
+                    () => {
+                        debouncedBackdropReset(undefined);
+                    },
+                    {
+                        ancestorScroll: false,
+                        ancestorResize: true,
+                        elementResize: true
+                    });
+            }
         } else {
             // fuit was hidden
             this.fuitInstance.show();
@@ -204,6 +224,7 @@ export default class Tooltip {
     }
 
     private removeAllEventListeners(): void {
+        this.backdropAutoUpdateCleanup && this.backdropAutoUpdateCleanup();
         this.targetsAndEventListeners.forEach(({ method, target, eventType }) => {
             target.removeEventListener(eventType, this.getListenerFromMethod(method));
             log(`remove event listener of type ${eventType} ` + `and method ${method}`);

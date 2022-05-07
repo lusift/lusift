@@ -12,6 +12,8 @@ import startStepInstance from "./startStepInstance";
 import addFocusTrap from "./addFocusTrap";
 import vanillaRender from "./vanillaRender";
 import getScrollBarWidth from "./getScrollBarWidth";
+import getDocumentDimensions from './dimensions';
+import debounce from './debounce';
 
 export {
     htmlStringToElement,
@@ -28,4 +30,6 @@ export {
     addFocusTrap,
     vanillaRender,
     getScrollBarWidth,
+    getDocumentDimensions,
+    debounce
 };

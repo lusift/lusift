@@ -2,11 +2,11 @@ import { document, window } from "global";
 import {
     styleObjectToString,
     getStepUID,
-    onElementResize,
     getElementPosition,
     roundNum,
     addFocusTrap,
     getScrollBarWidth,
+    getDocumentDimensions,
 } from "../common/utils/";
 import { log, warn, error } from "../common/logger";
 import { BackdropData } from "../common/types";
@@ -29,38 +29,12 @@ const areNumbersEqual = (num1: number, num2: number): boolean => {
     return roundNum(num1, decimalPlaces) === roundNum(num2, decimalPlaces);
 };
 
-function getFocusableElements(root) {
-    var FOCUS_SENTINEL_CLASS = 'mdc-dom-focus-sentinel';
-    var focusableEls = [].slice.call(root.querySelectorAll('[autofocus], [tabindex], a, input, textarea, select, button'));
-    log(focusableEls)
-    return focusableEls.filter(function (el: HTMLElement) {
-        var isDisabledOrHidden = el.getAttribute('aria-disabled') === 'true' ||
-            el.getAttribute('disabled') != null ||
-            el.getAttribute('hidden') != null ||
-            el.getAttribute('aria-hidden') === 'true';
-        var isTabbableAndVisible = el.tabIndex >= 0 &&
-            el.getBoundingClientRect().width > 0 &&
-            !el.classList.contains(FOCUS_SENTINEL_CLASS) && !isDisabledOrHidden;
-        var isProgrammaticallyHidden = false;
-        if (isTabbableAndVisible) {
-            var style = getComputedStyle(el);
-            isProgrammaticallyHidden =
-                style.display === 'none' || style.visibility === 'hidden';
-        }
-        return isTabbableAndVisible && !isProgrammaticallyHidden;
-    });
-};
-
 Object["fromEntries"] = arr => Object.assign({}, ...arr.map(([k, v]) => ({ [k]: v })));
 const getDefinedProps = obj =>
     Object["fromEntries"](Object.entries(obj).filter(([k, v]) => v !== undefined));
 
 class Backdrop {
     private targetSelector: string;
-    private timers: {
-        id: number;
-        object: ReturnType<typeof window.setTimeout>;
-    }[] = [];
     readonly stagedTargetClass: string;
     readonly overlaySelectorClass: string = "lusift-backdrop-overlay";
     private data: BackdropData = {
@@ -69,7 +43,6 @@ class Backdrop {
         color: "#444",
     };
     private toStopOverlay: boolean = false;
-    private resizeObservers: any[] = [];
     private focusTrap: any;
 
     constructor({
@@ -97,59 +70,18 @@ class Backdrop {
             escToClose: false,
             clickOutsideToClose: false,
         });
-
-        this.resetBackdrop = this.resetBackdrop.bind(this);
-        this.resizeObservers.push(
-            onElementResize(
-                document.querySelector(`.${this.overlaySelectorClass}`),
-                this.resetBackdrop,
-            ),
-        );
-        this.resizeObservers.push(onElementResize(document.body, this.resetBackdrop));
+        // TODO: Deligate this to floating-ui-tooltip, with an onUpdate hook
     }
 
-    private resetBackdrop(): void {
-        const timeoutID = this.timers.length;
-
-        const timeout = window.setTimeout(() => {
-            // HACK: intervene in the event backdrop has already been closed and there's a rogue timeout: rare
-            if (this.toStopOverlay) return error(`Lusift: This overlay instance should be removed`);
-            this.removeOverlay();
-            this.createOverlay();
-            this.timers = this.timers.filter(({ id }) => id !== timeoutID);
-        }, 300);
-
-        this.timers.push({
-            id: timeoutID,
-            object: timeout,
-        });
+    public resetBackdrop(): void {
+        // HACK: intervene in the event backdrop has already been closed and there's a rogue timeout: rare
+        if (this.toStopOverlay) return error(`Lusift: This overlay instance should be removed`);
+        this.removeOverlay();
+        this.createOverlay();
     }
 
-    private getDocumentDimensions(): { documentWidth: number; documentHeight: number } {
-        const { height: clientHeight, width: clientWidth } = getElementPosition(
-            document.documentElement,
-        );
-
-        const documentWidth = Math.max(
-            clientWidth,
-            document.body["scrollWidth"],
-            document.documentElement["scrollWidth"],
-            document.body["offsetWidth"],
-            document.documentElement["offsetWidth"],
-        );
-        const documentHeight = Math.max(
-            clientHeight,
-            document.body.scrollHeight,
-            document.documentElement.scrollHeight,
-            document.body.offsetHeight,
-            document.documentElement.offsetHeight,
-        );
-
-        return {
-            documentWidth,
-            documentHeight,
-        };
-    }
+    // TODO: Should we really be destroying and recreating the overlay every time? or to just change visibility?
+    // -- we could remove from dom, but preserve them in variables, between hide() and show()'s
 
     private createOverlay(): void {
         /* document.documentElement.style.overflow = 'hidden';
@@ -157,7 +89,7 @@ class Backdrop {
         const targetElement = document.querySelector(this.targetSelector);
         const padding = this.data.stageGap;
 
-        const { documentHeight, documentWidth } = this.getDocumentDimensions();
+        const { documentHeight, documentWidth } = getDocumentDimensions();
 
         const targetPosition = getElementPosition(targetElement);
 
@@ -174,6 +106,7 @@ class Backdrop {
         const overlayStyle = {
             opacity: "0.5",
             background: "#444",
+            transition: "visibility 0.3s ease-in-out",
             position: "absolute",
             top: "0",
             bottom: "0",
@@ -229,7 +162,7 @@ class Backdrop {
         const overlaySumHeight = hTopHeight + hBottomHeight + targetPosition.height + 2 * padding;
 
         /* log(screenWidth, overlaySumWidth);
-    log(screenHeight, overlaySumHeight); */
+           log(screenHeight, overlaySumHeight); */
 
         if (
             !areNumbersEqual(documentWidth, overlaySumWidth) ||
@@ -250,10 +183,8 @@ class Backdrop {
 
     public remove(): void {
         // log('removing Backdrop');
-        // remove event listeners and timers
-        this.timers = this.timers.filter(({ object }) => window.clearTimeout(object));
+        // remove event listeners
         this.toStopOverlay = true;
-        this.resizeObservers = this.resizeObservers.filter(ro => ro.disconnect());
         if (this.focusTrap) {
             this.focusTrap.deactivate();
         }

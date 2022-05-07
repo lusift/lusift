@@ -54,5 +54,8 @@
   },
   "files": [
     "dist"
-  ]
+  ],
+  "dependencies": {
+    "floating-ui-tooltip": "file:../../../floating-ui-tooltip"
+  }
 }

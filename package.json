@@ -120,6 +120,7 @@
     "react-dom": "^0.14.9 || ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0"
   },
   "dependencies": {
+    "@floating-ui/dom": "file:../floating-ui-tooltip/node_modules/@floating-ui/dom",
     "@vue/composition-api": "file:../vue-crash-2021/node_modules/@vue/composition-api",
     "floating-ui-tooltip": "file:../floating-ui-tooltip",
     "focus-trap": "6.7.1",
