@@ -18,27 +18,12 @@ const tooltipArrowDefaultSize = 12;
 const tooltipArrowSizeScale = 1;
 const defaultOffset = [tooltipArrowSizeScale*tooltipArrowDefaultSize, 0]; // x needs to be size of arrow + backdrop gap
 
-// TODO: tooltip is below backdrop
 // TODO: should we have transition effects for backdrop? it's kind of jerky
 // -- refactor to have zIndex for tooltip and backdrop as constants
 // TODO: Fix style.css margins for progress-bar and close button
-// TODO: Make the progress bar overflow because of border-radius not show
 // TODO: Add debounce function in Backdrop
 // TODO: Replace resize-observer with some native implementation
-// TODO: Transfer focus to tooltip if there's backdrop, addFocusTrap.ts
 
-/*
- * TODO: Add this scroll behaviour
-   if (this.data.scrollIntoView) {
-       this.targetElement.scrollIntoView({
-        behavior: "smooth",
-        block: "center",
-        inline: "center",
-        });
-    }
-    --
-https://stackoverflow.com/questions/123999/how-can-i-tell-if-a-dom-element-is-visible-in-the-current-viewport
- */
 export default class Tooltip {
     private targetElement: HTMLElement;
     readonly target: Target;
@@ -160,6 +145,7 @@ export default class Tooltip {
                 actions,
                 styleProps,
                 data,
+                scrollIntoView: true,
                 index,
                 onShow: (instance) => {
                     backdrop!.disabled || this.addBackdrop.bind(this)();

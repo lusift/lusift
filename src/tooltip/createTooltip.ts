@@ -50,7 +50,7 @@ const renderNavButtons = (navSection: any): string => {
   `;
 };
 
-const renderTooltip = async ({ data, target, styleProps, actions, uid, index, onShow, onHide }) => {
+const renderTooltip = async ({ data, target, styleProps, actions, uid, index, onShow, onHide, scrollIntoView }) => {
     const { closeButton, navSection } = actions;
     const {
         arrow,
@@ -87,6 +87,7 @@ const renderTooltip = async ({ data, target, styleProps, actions, uid, index, on
         remove: () => {},
         onShow,
         onHide,
+        scrollIntoView
     });
 
     // tooltipInstance.show();

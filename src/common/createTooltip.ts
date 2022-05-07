@@ -14,7 +14,8 @@ const createTooltip = async (props): Promise<Instance> => {
         placement,
         onShow,
         onHide,
-        onClickOutside
+        onClickOutside,
+        scrollIntoView
     } = props;
 
     if (!remove) {
@@ -33,6 +34,7 @@ const createTooltip = async (props): Promise<Instance> => {
         offset,
         placement,
         showOnCreate: true,
+        scrollIntoView
     });
 };
 
