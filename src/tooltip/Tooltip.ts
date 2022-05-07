@@ -16,7 +16,6 @@ const defaultBackdropData = {
 
 const defaultOffset = [0, 10];
 
-// TODO: focus-trap not detecting tabbable elements
 // TODO: offset value is weird
 // TODO: offset, should it factor in arrow size on top?
 // TODO: tooltip is below backdrop

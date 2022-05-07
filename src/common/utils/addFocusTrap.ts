@@ -5,7 +5,7 @@ const addFocusTrap = ({ target, escToClose, clickOutsideToClose }): any => {
     const isDevMode = !window.Lusift.activeGuideID;
 
     const ft = focusTrap.createFocusTrap(target, {
-        initialFocus: false,
+        // initialFocus: false,
         escapeDeactivates: !isDevMode && escToClose,
         clickOutsideDeactivates: !isDevMode && clickOutsideToClose,
     });
