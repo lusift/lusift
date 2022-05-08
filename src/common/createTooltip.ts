@@ -14,7 +14,10 @@ const createTooltip = async (props): Promise<Instance> => {
         placement,
         onShow,
         onHide,
+        showOnCreate,
         onClickOutside,
+        hideOnReferenceHidden,
+        hideOnTooltipEscape,
         scrollIntoView
     } = props;
 
@@ -30,10 +33,12 @@ const createTooltip = async (props): Promise<Instance> => {
         onShow,
         onHide,
         content,
+        hideOnReferenceHidden,
+        hideOnTooltipEscape,
         arrow,
         offset,
         placement,
-        showOnCreate: true,
+        showOnCreate,
         scrollIntoView
     });
 };

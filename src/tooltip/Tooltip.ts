@@ -22,6 +22,8 @@ const defaultOffset = [tooltipArrowSizeScale*tooltipArrowDefaultSize, 0]; // x n
 // TODO: should we have transition effects for backdrop? it's kind of jerky
 // -- refactor to have zIndex for tooltip and backdrop as constants
 // TODO: Fix style.css margins for progress-bar and close button
+// TODO: Remove resize-observer use in Hotspot
+// TODO: Bug - focus-trap erroring out with `no tabbable node` when you scroll in and out of view the target sometimes
 
 export default class Tooltip {
     private targetElement: HTMLElement;

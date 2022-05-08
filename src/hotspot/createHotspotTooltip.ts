@@ -8,7 +8,7 @@ const defaultBodyContent = `
   <p style="font-weight: normal;">Default tooltip content</p>
 `;
 
-const renderTooltip = async ({ remove, data, target, styleProps, uid, index, onClickOutside }) => {
+const renderTooltip = async ({ remove, data, target, styleProps, uid, index, onClickOutside, showOnCreate }) => {
     const {
         arrow,
         placement,
@@ -41,6 +41,9 @@ const renderTooltip = async ({ remove, data, target, styleProps, uid, index, onC
         offset,
         placement,
         onClickOutside,
+        hideOnReferenceHidden: false,
+        hideOnTooltipEscape: false,
+        showOnCreate,
         remove: () => {},
     });
 

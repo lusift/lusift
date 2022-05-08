@@ -1,6 +1,6 @@
 import { document, window } from "global";
 import createHotspotTooltip from "./createHotspotTooltip";
-import createBeacon from "./createBeacon";
+import { createBeaconElement, positionBeacon } from "./beacon-element";
 import {
     getElementPosition,
     getStepUID,
@@ -34,10 +34,10 @@ class Hotspot {
         this.addBeacon();
 
         // reposition beacon on body and targetElement resize
-        this.resizeObservers.push(onElementResize(document.body, this.repositionBeacon.bind(this)));
+        /* this.resizeObservers.push(onElementResize(document.body, this.repositionBeacon.bind(this)));
         this.resizeObservers.push(
             onElementResize(this.targetElement, this.repositionBeacon.bind(this)),
-        );
+        ); */
     }
 
     private repositionBeacon(): void {
@@ -47,8 +47,7 @@ class Hotspot {
         log("reset beacon position");
     }
 
-    private addBeacon(): void {
-        log("adding beacon");
+    private updateBeaconPosition() : void {
         let {
             top: targetTop,
             left: targetLeft,
@@ -61,15 +60,25 @@ class Hotspot {
             targetWidth,
             targetHeight,
         };
+        const beaconData = this.data.beacon;
+
+        const beaconElement = document.getElementById(this.beaconID);
+        positionBeacon(beaconElement, targetPosition, beaconData.placement);
+        log('updated beacon position');
+    }
+
+    private addBeacon(): void {
+        log("adding beacon");
 
         const beaconData = this.data.beacon;
 
-        createBeacon({
-            targetPosition,
+        createBeaconElement({
             beaconData,
             beaconID: this.beaconID,
             toggleTooltip: this.toggleTooltip.bind(this),
         });
+        this.updateBeaconPosition();
+        window.ub = this.updateBeaconPosition.bind(this);
     }
 
     private async toggleTooltip() {
@@ -94,11 +103,15 @@ class Hotspot {
                 remove: removeMethod,
                 uid: this.tipID,
                 index: this.data.index,
-                target,
+                target: target,
                 styleProps,
+                showOnCreate: false,
                 data,
                 onClickOutside: (instance, event) => {
-                    removeMethod();
+                    log('clicked outside');
+                    // TODO: only when it's not hidden
+                    console.log(event);
+                    // removeMethod();
                 }
             });
             Lusift.activeHotspot = this;
