@@ -146,11 +146,13 @@ class Hotspot {
         changeAsyncStepStatus(this.data.index, toOpen);
     }
 
-    private remove(): void {
+    private async remove() {
         log(`Removing id: ${this.data.index} hotspot`);
 
         if (this.fuitInstance) {
-            // TODO: Ensure tooltip was hidden with this.hideTooltip() before removing
+            if (this.fuitInstance.getState().isShown) {
+                await this.hideTooltip();
+            }
             if (this.fuitInstance.getState().isRemoved) {
                 log("Hotspot's tooltip is already destroyed");
             } else {
