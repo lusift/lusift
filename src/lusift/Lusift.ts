@@ -238,12 +238,9 @@ class Lusift {
     public refresh(): void {
         // run page elements through step display conditionals again
         if (this.activeGuide) {
-            // TODO: can we remove this setTimeout
-            // window.setTimeout(() => {
-                this.activeGuide!.instance.start();
-                log("Lusift refreshed");
-                // log('%c page refresh ', 'background: #222; color: #bada55');
-            // }, 0);
+            this.activeGuide!.instance.start();
+            log("Lusift refreshed");
+            // log('%c page refresh ', 'background: #222; color: #bada55');
         } else {
             warn("No active guide instance to refresh");
             // Assuming this method is called every time on page load.
@@ -274,9 +271,9 @@ class Lusift {
         }
 
         window.setTimeout(() => {
-            // TODO: Remove this "hack" delay
+            // TODO: Fix this "hack" delay
             // HACK:
-            // There's a noticeable delay in react component appearing as bodyContent properties
+            // There's a noticeable delay in react component appearing for bodyContent properties
             // on page load, so we arbitrarily wait 500ms before running this section
             const newGuideInstance = new Guide(contentID);
             this.activeGuide = {

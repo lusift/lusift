@@ -1,7 +1,14 @@
 /*default*/
 
+.lusift {
+    --primary-color: #17a3a8;
+    --modal-border-radius: 4px;
+    --tooltip-border-radius: 4px;
+    --progress-bar-height: 3px;
+}
+
 .lusift button {
-    background: rgb(17, 153, 158);
+    background-color: var(--primary-color);
     border-radius: 6px;
     padding: 0.3rem 0.45rem;
     color: #fff;
@@ -14,7 +21,6 @@
 
 .lusift .tooltip button {
     color: #fff;
-    background-color: rgb(17, 153, 158);
     padding: 0.2rem 0.35rem;
     font-size: 0.75rem;
     font-weight: bold;
@@ -86,7 +92,6 @@
 .lusift .tooltip .nav-buttons .next,
 .nav-buttons .prev {
     color: #fff;
-    background-color: rgb(17, 153, 158);
     padding: 0.2rem 0.35rem;
     font-size: 0.75rem;
     font-weight: bold;
@@ -180,20 +185,24 @@
     padding: 0;
     display: block;
     width: 100%;
+    height: var(--progress-bar-height);
     -webkit-appearance: none;
 }
-.lusift-progress {
-    margin-top: 0;
-}
 .modal .lusift-progress {
-    margin-top: 0;
+}
+.tooltip .lusift-progress {
 }
 .lusift-progress::-webkit-progress-bar {
     initial: none;
     background-color: transparent; /*background-color of tooltip*/
+    border-radius: var(--tooltip-border-radius);
+}
+.modal .lusift-progress::-webkit-progress-bar {
+    border-radius: var(--modal-border-radius);
 }
 .lusift-progress::-webkit-progress-value {
     initial: none;
+    background-color: var(--primary-color);
 }
 .lusift-progress::-moz-progress-bar {
 }

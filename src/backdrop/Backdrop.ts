@@ -70,7 +70,6 @@ class Backdrop {
             escToClose: false,
             clickOutsideToClose: false,
         });
-        // TODO: Deligate this to floating-ui-tooltip, with an onUpdate hook
     }
 
     public resetBackdrop(): void {
@@ -80,12 +79,9 @@ class Backdrop {
         this.createOverlay();
     }
 
-    // TODO: Should we really be destroying and recreating the overlay every time? or to just change visibility?
-    // -- we could remove from dom, but preserve them in variables, between hide() and show()'s
-
     private createOverlay(): void {
         /* document.documentElement.style.overflow = 'hidden';
-   document.body.scroll = "no"; */
+           document.body.scroll = "no"; */
         const targetElement = document.querySelector(this.targetSelector);
         const padding = this.data.stageGap;
 

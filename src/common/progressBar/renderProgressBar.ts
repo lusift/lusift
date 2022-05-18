@@ -62,23 +62,22 @@ const renderProgressBar = () => {
 
     const max = 100;
 
-    // TODO: put this with right defaults in global default css file
     return `
-    <style>
-      .lusift-progress {
-        height: ${height};
-      }
-      .lusift-progress::-webkit-progress-bar {
-        border-radius: ${borderRadius}; /*border-radius of tooltip*/
-      }
-      .lusift-progress::-webkit-progress-value {
-        background-color: ${color}; /*color of progress bar*/
-      }
-    </style>
+        <style>
+          .lusift-progress {
+            height: ${height};
+          }
+          .lusift-progress::-webkit-progress-bar {
+            border-radius: ${borderRadius}; /*border-radius of tooltip*/
+          }
+          .lusift-progress::-webkit-progress-value {
+            background-color: ${color}; /*color of progress bar*/
+          }
+        </style>
 
-    <progress class="lusift-progress" aria-label="progressbar" max="${max}" value="${progress}">
-      ${progress}%
-    </progress>
+        <progress class="lusift-progress" aria-label="progressbar" max="${max}" value="${progress}">
+          ${progress}%
+        </progress>
     `;
 };
 
