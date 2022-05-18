@@ -20,7 +20,6 @@ const tooltipArrowSizeScale = 1;
 const defaultOffset = [tooltipArrowSizeScale*tooltipArrowDefaultSize, 0]; // x needs to be size of arrow + backdrop gap
 
 // TODO: should we have transition effects for backdrop? it's kind of jerky
-// -- refactor to have zIndex for tooltip and backdrop as constants
 
 export default class Tooltip {
     private targetElement: HTMLElement;

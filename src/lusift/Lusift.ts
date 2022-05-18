@@ -21,24 +21,16 @@ import addDefaultCSS from "./addDefaultCSS";
 // TODO: Buggy when the target for tooltip is sidebar link
 // TODO: Add option to be able to set where the progress bar should be relative to the 2 axis or the arrow
 // TODO: Tooltip positioning for different screen sizes
-// TODO: what's that thick layer thing beneath tippy tooltip content? zoom in with ctrl+
 // -- how do the comercial saas handle it? automatically or end-user config?
 // -- have the options for orientation be `auto` and `fixed` with positions being the different axis relative to
 // the target. With auto, the position is only picked when there is space for the tooltip, else it moves to different position
 // NOTE: Handling versioning
-// NOTE: resize observer doesn't work with svg elements
 // TODO: rename filenames
+// TODO: lodash.isequal is 9.4kb! Replace it with something lighter
 // TODO: Performance concerns of the host app in rendering all this stuff?
 // -- https://web.archive.org/web/20210827084020/https://atfzl.com/don-t-attach-tooltips-to-document-body
 // TODO: Can we just export element classes (Tooltip, Modal, Hotspot, Backdrop) and have them be optionally loadable by the client?
 // -- something like how modifiers work in popperjs
-// TODO: Look into more lightweight solutions for tippyjs/popperjs (nanopop)
-// -- offset
-// -- animations
-// -- auto placement
-// -- prevent overflow from containing area, set margin from the boundaries too
-// -- arrow that can move relative to the tooltip, i.e., not necessarily at the center (& padding from the corners of the edges)
-// -- hold dom element
 
 const noOp = () => {}; // no-op function
 
