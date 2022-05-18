@@ -60,7 +60,8 @@
 }
 .lusift .tooltip .closeX {
     margin: -4px -5px !important;
-    margin-bottom: 0 !important;
+    margin-top: -3px !important;
+    margin-bottom: 2px !important;
     font-weight: normal;
     font-size: 1rem;
     padding: 0 2px;
@@ -182,7 +183,7 @@
     -webkit-appearance: none;
 }
 .lusift-progress {
-    margin-top: -1px;
+    margin-top: 0;
 }
 .modal .lusift-progress {
     margin-top: 0;
