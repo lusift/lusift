@@ -270,19 +270,13 @@ class Lusift {
             }
         }
 
-        window.setTimeout(() => {
-            // TODO: Fix this "hack" delay
-            // HACK:
-            // There's a noticeable delay in react component appearing for bodyContent properties
-            // on page load, so we arbitrarily wait 500ms before running this section
-            const newGuideInstance = new Guide(contentID);
-            this.activeGuide = {
-                id: contentID,
-                instance: newGuideInstance,
-            };
-            newGuideInstance.start();
-            this.prepareHooks();
-        }, 500);
+        const newGuideInstance = new Guide(contentID);
+        this.activeGuide = {
+            id: contentID,
+            instance: newGuideInstance,
+        };
+        newGuideInstance.start();
+        this.prepareHooks();
     }
 
     private prepareHooks(): void {
