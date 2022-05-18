@@ -1,7 +1,6 @@
 import Guide from "./Guide";
 import { saveState, loadState, setDefaultState } from "../common/store";
 import { log, error, warn } from "../common/logger";
-import isEqual from "lodash.isequal";
 import { doesStepMatchDisplayCriteria, startStepInstance } from "../common/utils";
 
 import { window, document } from "global";
@@ -14,20 +13,20 @@ import addDefaultCSS from "./addDefaultCSS";
 
 // TODO: Write documentation
 
+// TODO: refactor Guide and Lusift
+// TODO: Accessing Lusift with window.Lusift, is there a better way?
 // TODO: decide on making configuring easier, with inheritence, global levels, etc.
 // -- Maybe don't have setContent take everything, seperate concerns. makes documenting easier too
 // NOTE_: Support for different typescript versions
 // TODO_: add support for angul*r
 // TODO: Buggy when the target for tooltip is sidebar link
-// TODO: Add option to be able to set where the progress bar should be relative to the 2 axis or the arrow
 // TODO: Tooltip positioning for different screen sizes
 // -- how do the comercial saas handle it? automatically or end-user config?
 // -- have the options for orientation be `auto` and `fixed` with positions being the different axis relative to
 // the target. With auto, the position is only picked when there is space for the tooltip, else it moves to different position
 // NOTE: Handling versioning
 // TODO: lodash.isequal is 9.4kb! Replace it with something lighter
-// TODO: Performance concerns of the host app in rendering all this stuff?
-// -- https://web.archive.org/web/20210827084020/https://atfzl.com/don-t-attach-tooltips-to-document-body
+// -- https://www.google.com/search?q=check+if+2+objects+are+equal+javascript
 // TODO: Can we just export element classes (Tooltip, Modal, Hotspot, Backdrop) and have them be optionally loadable by the client?
 // -- something like how modifiers work in popperjs
 
@@ -72,15 +71,24 @@ class Lusift {
         });
         if (enabledGuideID) {
             this.showContent(enabledGuideID);
+        } else {
+            return warn(`No content enabled.`)
         }
+    }
+
+    private doesGuideExist(guideID: string): boolean {
+        let localData = this.content!;
+        return Object.keys(localData)
+            .some(key => key === guideID);
     }
 
     public enable(guideID: string): void {
         let localData = loadState();
-        if(!Object.keys(localData).some(key => key === guideID)) {
+        if(!this.doesGuideExist(guideID)) {
             return error(`Content of id '${guideID}' doesn't exist`);
         }
 
+        // enable content of id $guideID, disable all else
         Object.keys(localData).forEach(key => {
             const { trackingState } = localData[key];
             if(trackingState){
@@ -93,83 +101,11 @@ class Lusift {
 
     public disable(guideID: string): void {
         let localData = loadState();
-        if(!Object.keys(localData).some(key => key === guideID)) {
+        if(!this.doesGuideExist(guideID)) {
             return error(`Content of id '${guideID}' doesn't exist`);
         }
         localData[guideID].trackingState.enabled = false;
         saveState(localData);
-    }
-
-    private hasGuideDataChanged(guideData: GuideType): boolean {
-        const localData = loadState();
-        if (!localData[guideData.id]) return true;
-        const localGuideData = localData[guideData.id];
-        delete localGuideData.trackingState;
-        const guideDataWithoutHooks = { ...guideData };
-        delete guideDataWithoutHooks.onNext;
-        delete guideDataWithoutHooks.onClose;
-        delete guideDataWithoutHooks.onPrev;
-        return !isEqual(localGuideData, guideDataWithoutHooks);
-    }
-
-    private reconcileContentWithLocalState(): void {
-        // Look through each content item,
-        // --clear tracking data if item data has changed, and if doNotResetTrackerOnContentChange is false
-        // --conserve otherwise
-        let stateToSave = {};
-        let contentWithoutBodyContent = JSON.parse(JSON.stringify(this.content));
-
-        Object.keys(this.content!).forEach(key => {
-            const {
-                id,
-                name = "",
-                description = "",
-                steps,
-                onNext,
-                onPrev,
-                onClose,
-                doNotResetTrackerOnContentChange = false,
-            } = contentWithoutBodyContent[key].data;
-
-            // remove bodyContent from steps
-            let stepsWithoutBodyContent = steps.map(step => {
-                if (step.type === "tooltip" || step.type === "modal") {
-                    delete step.data.bodyContent;
-                } else if (step.type === "hotspot") {
-                    delete step.tip.data.bodyContent;
-                }
-                return step;
-            });
-
-            contentWithoutBodyContent[key].data = {
-                id,
-                name,
-                description,
-                steps: stepsWithoutBodyContent,
-                onNext,
-                onPrev,
-                onClose,
-                doNotResetTrackerOnContentChange,
-            };
-        });
-
-        Object.keys(contentWithoutBodyContent).forEach(key => {
-            if (contentWithoutBodyContent[key].type === "guide") {
-                const guideData = contentWithoutBodyContent[key].data; //prolly a guide
-                if (
-                    this.hasGuideDataChanged(guideData) &&
-                    !guideData.doNotResetTrackerOnContentChange
-                ) {
-                    log(`guide with id '${key}' changed, tracking state reset.`);
-                    // clear tracking data
-                    stateToSave[guideData.id] = guideData;
-                } else {
-                    const localGuideData = loadState()[guideData.id];
-                    stateToSave[guideData.id] = localGuideData;
-                }
-            }
-        });
-        saveState(stateToSave);
     }
 
     public setContent(content: Content): void {
@@ -204,26 +140,16 @@ class Lusift {
             };
         });
 
-        let dataOfActiveGuideChanged: boolean;
         let contentIDExists: boolean;
 
         if (this.activeGuide) {
-            dataOfActiveGuideChanged = this.hasGuideDataChanged(
-                this.content[this.activeGuide.id].data,
-            );
             contentIDExists = Object.keys(this.content).includes(this.activeGuide.id);
         }
 
-        // iterate through each content item to note changes and conditionally preserve trackingState
-        // and then save to localStorage
-        this.reconcileContentWithLocalState();
-        //content has been set to local
-
         // for any already active guide
         if (this.activeGuide) {
-            // if the contentID doesn't exist at all in the new content received, or
-            // if contentID exists but data has changed
-            if (!contentIDExists! || (contentIDExists && dataOfActiveGuideChanged!)) {
+            // if the contentID doesn't exist at all in the new content received
+            if (!contentIDExists!) {
                 this.activeGuide.instance.removeAllActiveSteps();
                 this.activeGuide = null;
             }
@@ -240,7 +166,6 @@ class Lusift {
         if (this.activeGuide) {
             this.activeGuide!.instance.start();
             log("Lusift refreshed");
-            // log('%c page refresh ', 'background: #222; color: #bada55');
         } else {
             warn("No active guide instance to refresh");
             // Assuming this method is called every time on page load.
@@ -280,7 +205,7 @@ class Lusift {
     }
 
     private prepareHooks(): void {
-        // attach active content's navigation methods to Lusift instance
+        // attach active content's navigation methods, and hooks to Lusift instance
         const { instance: activeGuideInstance, id: activeGuideID } = this.activeGuide!;
         this.next = activeGuideInstance.nextStep.bind(activeGuideInstance);
         this.prev = activeGuideInstance.prevStep.bind(activeGuideInstance);

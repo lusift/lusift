@@ -22,7 +22,9 @@ const renderProgressBar = () => {
     `;
     }
 
-    const currentStep = currentGuide.steps[currentGuide.trackingState.currentStepIndex];
+    const Lusift = window['Lusift'];
+    const guideData = Lusift.content[Lusift.activeGuide.id].data;
+    const currentStep = guideData.steps[currentGuide.trackingState.currentStepIndex];
     const progressBarData = currentGuide.progressBar || {};
 
     // find out borderRadius based on step type (their default border radii), or via styleProps
@@ -48,7 +50,7 @@ const renderProgressBar = () => {
         }
     }
     // filter out steps that are not of type hotspot with async property of true
-    const syncSteps = currentGuide.steps.filter(step => {
+    const syncSteps = guideData.steps.filter(step => {
         return !(step.type === "hotspot" && step.async);
     });
 

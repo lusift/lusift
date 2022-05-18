@@ -25,17 +25,17 @@ export default class Guide {
         // localGuideState consists of trackingState and guideData
         log("guide constructor");
         log(loadState());
-        const localGuideState = loadState()[guideID];
+        const localGuideState = window['Lusift'].content[guideID].data;
         const guideData = Object.assign({}, localGuideState);
-        delete guideData.trackingState;
 
         this.guideData = guideData;
         log(
             `%c Welcome to guide: ${this.guideData.name || this.guideData.id}`,
             "background: #222; color: #bada55",
         );
+        const trackingState = loadState()[guideID].trackingState;
 
-        if (!localGuideState.trackingState) {
+        if (!trackingState) {
             const newTrackingState = this.generateNewTrackingState();
             this.setTrackingState(newTrackingState);
         }
@@ -121,7 +121,7 @@ export default class Guide {
             if (isAsyncStep) {
                 changeAsyncStepStatus(stepIndex, true);
             }
-            if (displayCriteriaMatches && !this.isStepAlreadyActive(stepIndex)) {
+            if (displayCriteriaMatches && !this.isStepActive(stepIndex)) {
                 this.activeSteps.push({
                     index: stepIndex,
                     instance: startStepInstance(steps[stepIndex], this.guideData.id),
@@ -137,7 +137,7 @@ export default class Guide {
         this.setTrackingState(newTrackingState);
     }
 
-    private isStepAlreadyActive(stepIndex: number): boolean {
+    private isStepActive(stepIndex: number): boolean {
         return this.activeSteps.some(({ index }) => index === stepIndex);
     }
 
@@ -157,7 +157,7 @@ export default class Guide {
                 ) {
                     log(`Step ${index}: target path and element matched. toOpen is true`);
                     // if step is already active warn that the step is already active
-                    if (this.isStepAlreadyActive(index)) {
+                    if (this.isStepActive(index)) {
                         return warn(`Step ${index} is already active`);
                     }
                     this.activeSteps.push({
@@ -211,11 +211,13 @@ export default class Guide {
         // change step and see which steps need to be unmounted or mounted
         let newTrackingState = this.getTrackingState();
         if (newStepNum < 0) {
-            return warn("Step index can't be less than 0");
+            return error("Step index can't be less than 0");
         } else if (newStepNum + 1 > this.guideData.steps.length) {
-            newTrackingState.finished = true;
-            this.setTrackingState(newTrackingState);
-            log("guide finished");
+            if (!newTrackingState.finished) {
+                newTrackingState.finished = true;
+                this.setTrackingState(newTrackingState);
+            }
+            log("Guide finished");
         } else {
             newTrackingState.currentStepIndex = newStepNum;
             this.setTrackingState(newTrackingState);

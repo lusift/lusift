@@ -124,7 +124,6 @@
     "floating-ui-tooltip": "file:../floating-ui-tooltip",
     "focus-trap": "6.7.1",
     "global": "4.4.0",
-    "lodash.isequal": "4.5.0",
     "vue": "file:../vue-crash-2021/node_modules/vue"
   }
 }
