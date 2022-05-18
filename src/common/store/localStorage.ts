@@ -27,6 +27,7 @@ export const loadState = () => {
     }
 };
 
+
 /**
  * This function accepts the app state, and saves it to localStorage
  * @param state
@@ -43,3 +44,8 @@ export const saveState = state => {
         // Log errors here, or ignore
     }
 };
+
+
+export const setDefaultState = (): void => {
+    saveState({});
+}

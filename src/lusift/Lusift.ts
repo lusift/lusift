@@ -1,5 +1,5 @@
 import Guide from "./Guide";
-import { saveState, loadState } from "../common/store";
+import { saveState, loadState, setDefaultState } from "../common/store";
 import { log, error, warn } from "../common/logger";
 import isEqual from "lodash.isequal";
 import { doesStepMatchDisplayCriteria, startStepInstance } from "../common/utils";
@@ -25,7 +25,6 @@ import addDefaultCSS from "./addDefaultCSS";
 // -- have the options for orientation be `auto` and `fixed` with positions being the different axis relative to
 // the target. With auto, the position is only picked when there is space for the tooltip, else it moves to different position
 // NOTE: Handling versioning
-// TODO: rename filenames
 // TODO: lodash.isequal is 9.4kb! Replace it with something lighter
 // TODO: Performance concerns of the host app in rendering all this stuff?
 // -- https://web.archive.org/web/20210827084020/https://atfzl.com/don-t-attach-tooltips-to-document-body
@@ -55,15 +54,11 @@ class Lusift {
         log("%c Lusift constructor! ", "background: #222; color: #bada55");
 
         const localData = loadState();
-        // if loadState() type is not object,
+        // set default state
         if (!isObject(localData)) {
-            saveState({});
+            setDefaultState();
         }
         addDefaultCSS();
-        /* if (typeof document !== "undefined") {
-            window['updateTooltip'] = updateTooltip;
-            createTooltip();
-        } */
     }
 
     private showEnabledContent(): void {
@@ -236,18 +231,19 @@ class Lusift {
     }
 
     public clearContent(): void {
-        saveState({});
-        this.content = {};
+        setDefaultState();
+        this.content = loadState();
     }
 
     public refresh(): void {
         // run page elements through step display conditionals again
         if (this.activeGuide) {
-            window.setTimeout(() => {
+            // TODO: can we remove this setTimeout
+            // window.setTimeout(() => {
                 this.activeGuide!.instance.start();
                 log("Lusift refreshed");
                 // log('%c page refresh ', 'background: #222; color: #bada55');
-            }, 0);
+            // }, 0);
         } else {
             warn("No active guide instance to refresh");
             // Assuming this method is called every time on page load.
@@ -278,6 +274,7 @@ class Lusift {
         }
 
         window.setTimeout(() => {
+            // TODO: Remove this "hack" delay
             // HACK:
             // There's a noticeable delay in react component appearing as bodyContent properties
             // on page load, so we arbitrarily wait 500ms before running this section
