@@ -5,7 +5,7 @@ import { doesStepMatchDisplayCriteria, startStepInstance } from "../common/utils
 
 import { window, document } from "global";
 
-import { GuideType, Content, TrackingState } from "../common/types";
+import { Content, LocalState } from "../common/types";
 
 import { isOfTypeContent, isObject } from "../common/utils/isOfType";
 
@@ -234,14 +234,8 @@ class Lusift {
         customStyle.textContent = styleText;
     }
 
-    // TODO: Should we make this method return all of trackingState, and
-    // not this selective picking?
-    public getTrackingState(): TrackingState | null {
-        if (!this.activeGuide) {
-            warn("There's no active guide");
-            return null;
-        }
-        return loadState()[this.activeGuide.id].trackingState;
+    public getTrackingState(): LocalState {
+        return loadState();
     }
 
     public devShowStep(guideID: string, stepNumber: number): void {

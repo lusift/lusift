@@ -166,6 +166,12 @@ export interface GuideType {
     onClose?: Function;
 }
 
+export interface LocalState {
+    [guideID: string]: {
+        trackingState: TrackingState
+    }
+}
+
 export interface ElementPosition {
     top: number;
     left: number;
