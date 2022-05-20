@@ -161,7 +161,6 @@ export interface GuideType {
     name: string;
     description?: string;
     steps: Array<Tooltip | Modal | Hotspot>;
-    doNotResetTrackerOnContentChange?: boolean;
     onNext?: Function;
     onPrev?: Function;
     onClose?: Function;

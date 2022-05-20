@@ -25,16 +25,15 @@ import addDefaultCSS from "./addDefaultCSS";
 // -- have the options for orientation be `auto` and `fixed` with positions being the different axis relative to
 // the target. With auto, the position is only picked when there is space for the tooltip, else it moves to different position
 // NOTE: Handling versioning
-// TODO: lodash.isequal is 9.4kb! Replace it with something lighter
-// -- https://www.google.com/search?q=check+if+2+objects+are+equal+javascript
 // TODO: Can we just export element classes (Tooltip, Modal, Hotspot, Backdrop) and have them be optionally loadable by the client?
 // -- something like how modifiers work in popperjs
 
 const noOp = () => {}; // no-op function
 
 class Lusift {
-    private content: Content | undefined;
+    private content: Content = {};
     public render: Function = noOp;
+    // TODO: make activeGuide private property
     public activeGuide: {
         instance: any;
         id: string;
@@ -77,8 +76,7 @@ class Lusift {
     }
 
     private doesGuideExist(guideID: string): boolean {
-        let localData = this.content!;
-        return Object.keys(localData)
+        return Object.keys(this.getContent()!)
             .some(key => key === guideID);
     }
 
@@ -115,7 +113,7 @@ class Lusift {
         }
 
         // retrieve approriate properties from received content
-        this.content = content;
+        this.content = content!;
         Object.keys(content).forEach(key => {
             const {
                 id,
@@ -125,10 +123,9 @@ class Lusift {
                 onNext,
                 onPrev,
                 onClose,
-                doNotResetTrackerOnContentChange = false,
             } = content[key].data;
 
-            this.content![key].data = {
+            this.content[key].data = {
                 id,
                 name,
                 description,
@@ -136,18 +133,12 @@ class Lusift {
                 onNext,
                 onPrev,
                 onClose,
-                doNotResetTrackerOnContentChange,
             };
         });
 
-        let contentIDExists: boolean;
-
-        if (this.activeGuide) {
-            contentIDExists = Object.keys(this.content).includes(this.activeGuide.id);
-        }
-
         // for any already active guide
         if (this.activeGuide) {
+            const contentIDExists = this.doesGuideExist(this.activeGuide.id);
             // if the contentID doesn't exist at all in the new content received
             if (!contentIDExists!) {
                 this.activeGuide.instance.removeAllActiveSteps();
@@ -156,9 +147,8 @@ class Lusift {
         }
     }
 
-    public clearContent(): void {
-        setDefaultState();
-        this.content = loadState();
+    public getContent(): Content {
+        return this.content;
     }
 
     public refresh(): void {
@@ -176,14 +166,15 @@ class Lusift {
 
     public showContent<T extends string>(contentID: T extends "" ? never : T): void {
         // Forces specific Lusift content to appear for the current user by passing in the ID.
-        if (!this.content) {
+        const content = this.getContent();
+        if (Object.keys(content).length === 0) {
             return error(`Content not set, pass valid content data to setContent()`);
         }
         // see if content exists for contentID
-        if (!this.content[contentID]) {
+        if (!this.doesGuideExist(contentID)) {
             return error(`Content with id of ${contentID} doesn't exist`);
         }
-        // when there's an active guide
+        // when there's an active guide already
         if (this.activeGuide) {
             const { instance, id } = this.activeGuide;
 
@@ -193,18 +184,15 @@ class Lusift {
             } else {
                 instance.close();
             }
+        } else {
+            const newGuideInstance = new Guide(contentID);
+            this.activeGuide = {
+                id: contentID,
+                instance: newGuideInstance,
+            };
+            newGuideInstance.start();
         }
 
-        const newGuideInstance = new Guide(contentID);
-        this.activeGuide = {
-            id: contentID,
-            instance: newGuideInstance,
-        };
-        newGuideInstance.start();
-        this.prepareHooks();
-    }
-
-    private prepareHooks(): void {
         // attach active content's navigation methods, and hooks to Lusift instance
         const { instance: activeGuideInstance, id: activeGuideID } = this.activeGuide!;
         this.next = activeGuideInstance.nextStep.bind(activeGuideInstance);
@@ -212,30 +200,23 @@ class Lusift {
         this.close = activeGuideInstance.close.bind(activeGuideInstance);
         this.goto = activeGuideInstance.setStep.bind(activeGuideInstance);
 
-        const { onNext, onPrev, onClose } = this.content![activeGuideID].data;
+        const { onNext, onPrev, onClose } = this.content[activeGuideID].data;
         this.onNext = onNext;
         this.onPrev = onPrev;
         this.onClose = onClose;
     }
 
     public setGlobalStyle(styleText: string): void {
-        if (typeof styleText !== "string") {
-            return error("Invalid style passed to setGlobalStyle()");
-        }
         let customStyle = document.querySelector("style[lusift-custom-css]");
-        if (!customStyle) {
-            return error(`Style tag for custom-css not found. Report to Lusift\'s github.`);
-        }
         customStyle.textContent = styleText;
     }
 
     public getTrackingState(): TrackingState | null {
-        if (this.activeGuide) {
-            return loadState()[this.activeGuide.id].trackingState;
-        } else {
+        if (!this.activeGuide) {
             warn("No active guide");
             return null;
         }
+        return loadState()[this.activeGuide.id].trackingState;
     }
 
     public devShowStep(guideID: string, stepNumber: number): void {

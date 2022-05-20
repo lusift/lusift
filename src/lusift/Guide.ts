@@ -25,7 +25,7 @@ export default class Guide {
         // localGuideState consists of trackingState and guideData
         log("guide constructor");
         log(loadState());
-        const localGuideState = window['Lusift'].content[guideID].data;
+        const localGuideState = window['Lusift'].getContent()[guideID].data;
         const guideData = Object.assign({}, localGuideState);
 
         this.guideData = guideData;
