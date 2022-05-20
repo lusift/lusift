@@ -30,14 +30,16 @@ import addDefaultCSS from "./addDefaultCSS";
 
 const noOp = () => {}; // no-op function
 
+export interface ActiveGuide {
+    instance: any;
+    id: string;
+}
+
 class Lusift {
     private content: Content = {};
     public render: Function = noOp;
     // TODO: make activeGuide private property
-    public activeGuide: {
-        instance: any;
-        id: string;
-    } | null = null;
+    public activeGuide: ActiveGuide | null = null;
     public progress: number = 0;
 
     private next: Function = noOp;
@@ -73,6 +75,10 @@ class Lusift {
         } else {
             return warn(`No content enabled.`)
         }
+    }
+
+    public getActiveGuide(): ActiveGuide | null {
+        return this.activeGuide;
     }
 
     private doesGuideExist(guideID: string): boolean {
@@ -213,7 +219,7 @@ class Lusift {
 
     public getTrackingState(): TrackingState | null {
         if (!this.activeGuide) {
-            warn("No active guide");
+            warn("There's no active guide");
             return null;
         }
         return loadState()[this.activeGuide.id].trackingState;

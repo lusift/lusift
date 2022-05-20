@@ -9,15 +9,22 @@ import {
 
 import { GuideType, TrackingState, StepTargetType } from "../common/types";
 
+interface GuideInstance {
+    getTrackingState: () => TrackingState;
+    getActiveSteps: () => ActiveStep[];
+}
+
+interface ActiveStep {
+    index: number;
+    instance: any;
+    target: StepTargetType;
+    type: string;
+    async: boolean;
+}
+
 export default class Guide {
     readonly guideData: GuideType;
-    private activeSteps: {
-        index: number;
-        instance: any;
-        target: StepTargetType;
-        type: string;
-        async: boolean;
-    }[] = [];
+    private activeSteps: ActiveStep[] = [];
     // ^For limited use only, doesn't update after a step is closed
     // TODO: make this update after a step is closed
 
@@ -36,8 +43,7 @@ export default class Guide {
         const trackingState = loadState()[guideID].trackingState;
 
         if (!trackingState) {
-            const newTrackingState = this.generateNewTrackingState();
-            this.setTrackingState(newTrackingState);
+            this.resetTrackingState();
         }
     }
 
@@ -96,11 +102,11 @@ export default class Guide {
     private attemptToShowActiveStep(): void {
         // we start with some currentStep from this.trackingState
         // if the step is async, set toOpen to true
-        //-- if display criteria matches and step isn't already displayed, then startStep
+        // -- if display criteria matches and step isn't already displayed, then startStep
         // if the step is async, loop back with stepIndex++
         const { currentStepIndex } = this.getTrackingState();
         let stepIndex = currentStepIndex;
-        const steps = this.guideData.steps;
+        const { steps } = this.guideData;
         let isAsyncStep: boolean;
 
         stepIndex--;
@@ -188,7 +194,7 @@ export default class Guide {
         });
     }
 
-    private setTrackingState(trackingState: TrackingState | undefined): void {
+    private setTrackingState(trackingState: TrackingState): void {
         const existingState = loadState();
         saveState({
             ...existingState,
@@ -203,8 +209,9 @@ export default class Guide {
         return loadState()[this.guideData.id].trackingState;
     }
 
-    private clearTrackingState(): void {
-        this.setTrackingState(undefined);
+    private resetTrackingState(): void {
+        const newTrackingState = this.generateNewTrackingState();
+        this.setTrackingState(newTrackingState);
     }
 
     public setStep(newStepNum: number): void {
