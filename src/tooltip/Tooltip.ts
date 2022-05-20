@@ -39,6 +39,7 @@ export default class Tooltip {
     private guideID: string;
     private isTooltipShown: boolean = false;
     private backdropAutoUpdateCleanup!: Function;
+    private onRemove: Function;
 
     constructor({
         target,
@@ -47,6 +48,7 @@ export default class Tooltip {
         data,
         actions,
         styleProps,
+        onRemove
     }: {
         target: Target;
         guideID: string;
@@ -54,6 +56,7 @@ export default class Tooltip {
         index: number;
         actions: StepActions;
         styleProps: Object;
+        onRemove: Function
     }) {
         log("%c Tooltip constructor! ", "background: #222; color: #bada55");
 
@@ -62,6 +65,7 @@ export default class Tooltip {
         this.styleProps = styleProps || {};
         this.data = data;
         this.index = index;
+        this.onRemove = onRemove;
 
 
         const progressOn = data.progressOn || {};
@@ -196,6 +200,7 @@ export default class Tooltip {
         this.fuitInstance.remove();
         this.fuitInstance = null;
         this.isTooltipShown = false;
+        this.onRemove();
     }
 
     private getListenerFromMethod(method: string): EventListenerOrEventListenerObject {

@@ -21,10 +21,12 @@ class Hotspot {
     readonly data: HotspotData;
     private beaconID: string;
     private beaconAutoUpdateCleanup!: Function;
+    private onRemove: Function;
 
-    constructor({ data, guideID }) {
+    constructor({ data, guideID, onRemove }) {
         log(data);
         this.data = data;
+        this.onRemove = onRemove;
         const { index, type, target } = data;
         this.tipID = getStepUID({ guideID, type, index });
         this.beaconID = getStepUID({
@@ -175,6 +177,7 @@ class Hotspot {
         this.remove();
         this.changeAsyncStepStatus(false);
         this.removeResizeObservers();
+        this.onRemove();
     }
 }
 

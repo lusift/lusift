@@ -260,7 +260,11 @@ class Lusift {
             }
 
             if (steps[stepNumber]) {
-                startStepInstance(steps[stepNumber], guideID);
+                startStepInstance(
+                    steps[stepNumber],
+                    guideID,
+                    () => {}
+                );
                 log(
                     `%c Showing step ${stepNumber} of ${guideID} in dev mode`,
                     "background: #222; color: #bada55",

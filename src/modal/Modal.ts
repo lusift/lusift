@@ -10,8 +10,9 @@ class Modal {
     private closeButton: any;
     private focusTrap: any;
     private index: number;
+    private onRemove: Function;
 
-    constructor({ index, guideID, data, closeButton }) {
+    constructor({ index, guideID, data, closeButton, onRemove }) {
         this.uid = getStepUID({ guideID, type: "modal", index });
         this.data = data || {};
         this.index = index;
@@ -25,6 +26,8 @@ class Modal {
             escToClose,
             clickOutsideToClose,
         });
+
+        this.onRemove = onRemove;
 
         if (escToClose) {
             window.addEventListener("keydown", this.escEventListener, true);
@@ -72,6 +75,7 @@ class Modal {
             overlayElement.removeEventListener("click", this.overlayClickEventListener, true);
         }
         overlayElement.remove();
+        this.onRemove();
     }
 }
 

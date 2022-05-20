@@ -25,8 +25,6 @@ interface ActiveStep {
 export default class Guide {
     readonly guideData: GuideType;
     private activeSteps: ActiveStep[] = [];
-    // ^For limited use only, doesn't update after a step is closed
-    // TODO: make this update after a step is closed
 
     constructor(guideID: string) {
         // localGuideState consists of trackingState and guideData
@@ -45,6 +43,10 @@ export default class Guide {
         if (!trackingState) {
             this.resetTrackingState();
         }
+    }
+
+    public getActiveSteps(): ActiveStep[] {
+        return this.activeSteps;
     }
 
     private generateNewTrackingState(): TrackingState {
@@ -130,7 +132,15 @@ export default class Guide {
             if (displayCriteriaMatches && !this.isStepActive(stepIndex)) {
                 this.activeSteps.push({
                     index: stepIndex,
-                    instance: startStepInstance(steps[stepIndex], this.guideData.id),
+                    instance: startStepInstance(
+                        steps[stepIndex],
+                        this.guideData.id,
+                        () => {
+                            this.activeSteps = this.activeSteps.filter(step => {
+                                return step.index !== stepIndex;
+                            });
+                        }
+                    ),
                     target,
                     type,
                     async,
@@ -168,7 +178,15 @@ export default class Guide {
                     }
                     this.activeSteps.push({
                         index,
-                        instance: startStepInstance(steps[index], this.guideData.id),
+                        instance: startStepInstance(
+                            steps[index],
+                            this.guideData.id,
+                            () => {
+                                this.activeSteps = this.activeSteps.filter(step => {
+                                    return step.index !== index;
+                                });
+                            }
+                        ),
                         target,
                         type,
                         async,
