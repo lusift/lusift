@@ -33,12 +33,13 @@ export default class Guide {
         const localGuideState = window['Lusift'].getContent()[guideID].data;
         const guideData = Object.assign({}, localGuideState);
 
+        console.log(guideID);
         this.guideData = guideData;
         log(
             `%c Welcome to guide: ${this.guideData.name || this.guideData.id}`,
             "background: #222; color: #bada55",
         );
-        const trackingState = loadState()[guideID].trackingState;
+        const trackingState = loadState()[guideID]?.trackingState;
 
         if (!trackingState) {
             this.resetTrackingState();
@@ -250,8 +251,8 @@ export default class Guide {
         }
     }
 
-    private close(): void {
-        // close guide
+    private remove(): void {
+        // remove guide
         // if current step is last step then finished=true, else prematurelyClosed=true
         let newTrackingState = this.getTrackingState();
         if (newTrackingState.currentStepIndex + 1 === this.guideData.steps.length) {
@@ -261,10 +262,7 @@ export default class Guide {
         }
         this.setTrackingState(newTrackingState);
         this.removeAllActiveSteps();
-        window.Lusift.activeGuide = null;
         log("guide closed");
-        typeof window.Lusift.onClose === "function" && window.Lusift.onClose();
-        window.Lusift.disable(this.guideData.id);
     }
 
     private closeCurrentStep(): void {

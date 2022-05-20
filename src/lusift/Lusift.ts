@@ -38,8 +38,7 @@ export interface ActiveGuide {
 class Lusift {
     private content: Content = {};
     public render: Function = noOp;
-    // TODO: make activeGuide private property
-    public activeGuide: ActiveGuide | null = null;
+    private activeGuide: ActiveGuide | null = null;
     public progress: number = 0;
 
     private next: Function = noOp;
@@ -180,6 +179,8 @@ class Lusift {
         if (!this.doesGuideExist(contentID)) {
             return error(`Content with id of ${contentID} doesn't exist`);
         }
+        console.log('content data:')
+        console.log(this.content);
         // when there's an active guide already
         if (this.activeGuide) {
             const { instance, id } = this.activeGuide;
@@ -188,9 +189,15 @@ class Lusift {
                 this.activeGuide.instance.reRenderStepElements();
                 return error(`${contentID} is already active`);
             } else {
-                instance.close();
+                this.close();
             }
         } else {
+            // See if contentID, if in trackingState, isn't closed
+            // if it is, don't instantiate it
+            const guideTrackingState = loadState()[contentID]?.trackingState;
+            if(guideTrackingState?.finished || guideTrackingState?.prematurelyClosed) {
+                return warn(`Guide '${contentID}' is closed.`);
+            }
             const newGuideInstance = new Guide(contentID);
             this.activeGuide = {
                 id: contentID,
@@ -203,7 +210,17 @@ class Lusift {
         const { instance: activeGuideInstance, id: activeGuideID } = this.activeGuide!;
         this.next = activeGuideInstance.nextStep.bind(activeGuideInstance);
         this.prev = activeGuideInstance.prevStep.bind(activeGuideInstance);
-        this.close = activeGuideInstance.close.bind(activeGuideInstance);
+        this.close = () => {
+            if (this.activeGuide) {
+                activeGuideInstance.remove.bind(activeGuideInstance)();
+                this.disable(this.activeGuide!.id);
+                this.activeGuide = null;
+                typeof this.onClose === "function" && this.onClose();
+                log(`Closed ${activeGuideID}`);
+            } else {
+                return error(`No active guide to close`);
+            }
+        }
         this.goto = activeGuideInstance.setStep.bind(activeGuideInstance);
 
         const { onNext, onPrev, onClose } = this.content[activeGuideID].data;
@@ -217,6 +234,8 @@ class Lusift {
         customStyle.textContent = styleText;
     }
 
+    // TODO: Should we make this method return all of trackingState, and
+    // not this selective picking?
     public getTrackingState(): TrackingState | null {
         if (!this.activeGuide) {
             warn("There's no active guide");
