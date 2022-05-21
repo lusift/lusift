@@ -75,7 +75,7 @@ class Hotspot {
         const Lusift = window["Lusift"];
         const target = document.getElementById(`${this.beaconID}`);
         const { data, styleProps } = this.data.tip;
-        const isDevMode = !Boolean(Lusift.activeGuide);
+        const isDevMode = !Boolean(Lusift.getActiveGuide());
 
         // do not allow async step to close in dev mode
         const removeMethod = isDevMode ? Lusift.close : this.removeAndCloseAsync.bind(this);

@@ -3,24 +3,14 @@ import { saveState, loadState } from "../common/store";
 import { log, warn, error } from "../common/logger";
 import {
     changeAsyncStepStatus,
-    startStepInstance,
     doesStepMatchDisplayCriteria,
 } from "../common/utils";
 
-import { GuideType, TrackingState, StepTargetType } from "../common/types";
+import startStepInstance from './startStepInstance';
 
-interface GuideInstance {
-    getTrackingState: () => TrackingState;
-    getActiveSteps: () => ActiveStep[];
-}
+import { GuideType, ActiveStep, TrackingState, StepTargetType } from "../common/types";
 
-interface ActiveStep {
-    index: number;
-    instance: any;
-    target: StepTargetType;
-    type: string;
-    async: boolean;
-}
+// TODO: this.closeCurrentStep(); in setStep
 
 export default class Guide {
     readonly guideData: GuideType;
@@ -33,7 +23,6 @@ export default class Guide {
         const localGuideState = window['Lusift'].getContent()[guideID].data;
         const guideData = Object.assign({}, localGuideState);
 
-        console.log(guideID);
         this.guideData = guideData;
         log(
             `%c Welcome to guide: ${this.guideData.name || this.guideData.id}`,
@@ -84,7 +73,7 @@ export default class Guide {
         }
     }
 
-    private removeAllActiveSteps(): void {
+    public removeAllActiveSteps(): void {
         this.activeSteps.forEach(stepInstance => {
             // instance.reRenderPageElements();
             const { type, target, instance, async } = stepInstance;
@@ -251,7 +240,7 @@ export default class Guide {
         }
     }
 
-    private remove(): void {
+    public remove(): void {
         // remove guide
         // if current step is last step then finished=true, else prematurelyClosed=true
         let newTrackingState = this.getTrackingState();
@@ -280,7 +269,7 @@ export default class Guide {
         }
     }
 
-    private nextStep(): void {
+    public nextStep(): void {
         const newStep = this.getTrackingState().currentStepIndex + 1;
         if (newStep + 1 > this.guideData.steps.length) {
             return error("No new steps");
@@ -290,7 +279,7 @@ export default class Guide {
         typeof window.Lusift.onNext === "function" && window.Lusift.onNext();
     }
 
-    private prevStep(): void {
+    public prevStep(): void {
         // make newStep the index of the closest previus step with !step.async
         let newStep = this.getTrackingState().currentStepIndex;
 

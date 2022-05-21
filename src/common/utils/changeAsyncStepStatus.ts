@@ -3,7 +3,7 @@ import { loadState, saveState } from "../store";
 
 const changeAsyncStepStatus = (stepIndex: number, toOpen: boolean): void => {
     const exisitingState = loadState();
-    const { id: activeGuideID } = window.Lusift.activeGuide;
+    const { id: activeGuideID } = window.Lusift.getActiveGuide();
     saveState({
         ...exisitingState,
         [activeGuideID]: {

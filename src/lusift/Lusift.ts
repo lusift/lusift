@@ -1,11 +1,12 @@
 import Guide from "./Guide";
 import { saveState, loadState, setDefaultState } from "../common/store";
 import { log, error, warn } from "../common/logger";
-import { doesStepMatchDisplayCriteria, startStepInstance } from "../common/utils";
+import { doesStepMatchDisplayCriteria } from "../common/utils";
+import startStepInstance from './startStepInstance';
 
 import { window, document } from "global";
 
-import { Content, LocalState } from "../common/types";
+import { Content, LocalState, ActiveGuide, GuideInstance } from "../common/types";
 
 import { isOfTypeContent, isObject } from "../common/utils/isOfType";
 
@@ -14,8 +15,14 @@ import addDefaultCSS from "./addDefaultCSS";
 // TODO: Write documentation
 
 // TODO: refactor Guide and Lusift
+// --
+// TODO: Add Lusift.getProgress()
+// TODO: Fix Lusift.devShowStep()
+// TODO: Manage z-indices better and make them really high
+// TODO: Modal is rendering on the middle center of the /document/, not screen. Fix that
 // TODO: Accessing Lusift with window.Lusift, is there a better way?
-// TODO: decide on making configuring easier, with inheritence, global levels, etc.
+// TODO: decide on making configuring easier, with inheritence, global levels etc.
+// TODO: Add merging with defaults
 // -- Maybe don't have setContent take everything, seperate concerns. makes documenting easier too
 // NOTE_: Support for different typescript versions
 // TODO_: add support for angul*r
@@ -30,24 +37,21 @@ import addDefaultCSS from "./addDefaultCSS";
 
 const noOp = () => {}; // no-op function
 
-export interface ActiveGuide {
-    instance: any;
-    id: string;
+const devNavMethod = () => {
+    error(`Can't run this method in dev mode`);
 }
 
 class Lusift {
     private content: Content = {};
-    public render: Function = noOp;
+    public render: (body: any, targetPath: string, callback?: Function) => void = noOp;
     private activeGuide: ActiveGuide | null = null;
-    public progress: number = 0;
-
-    private next: Function = noOp;
-    private prev: Function = noOp;
-    private close: Function = noOp;
-    private goto: Function = noOp;
-    private onNext: Function | undefined;
-    private onPrev: Function | undefined;
-    private onClose: Function | undefined;
+    private isDevMode: boolean = false;
+    private navigationMethods = {
+        next: noOp,
+        prev: noOp,
+        close: noOp,
+        goto: (x) => {},
+    }
 
     constructor() {
         log("%c Lusift constructor! ", "background: #222; color: #bada55");
@@ -58,6 +62,22 @@ class Lusift {
             setDefaultState();
         }
         addDefaultCSS();
+    }
+
+    public next(): void {
+        return this.navigationMethods.next();
+    }
+
+    public prev(): void {
+        return this.navigationMethods.prev();
+    }
+
+    public goto(newStepNum: number): void {
+        return this.navigationMethods.goto(newStepNum);
+    }
+
+    public close(): void {
+        this.navigationMethods.close();
     }
 
     private showEnabledContent(): void {
@@ -77,7 +97,24 @@ class Lusift {
     }
 
     public getActiveGuide(): ActiveGuide | null {
-        return this.activeGuide;
+        if (!this.activeGuide) return null;
+        let { instance, id } = this.activeGuide;
+        const {
+            guideData,
+            getTrackingState,
+            getActiveSteps,
+            reRenderStepElements,
+        } = instance;
+
+        return {
+            id,
+            instance: {
+                guideData,
+                getTrackingState,
+                getActiveSteps,
+                reRenderStepElements,
+            }
+        }
     }
 
     private doesGuideExist(guideID: string): boolean {
@@ -86,7 +123,7 @@ class Lusift {
     }
 
     public enable(guideID: string): void {
-        let localData = loadState();
+        let localData = this.getTrackingState();
         if(!this.doesGuideExist(guideID)) {
             return error(`Content of id '${guideID}' doesn't exist`);
         }
@@ -146,7 +183,7 @@ class Lusift {
             const contentIDExists = this.doesGuideExist(this.activeGuide.id);
             // if the contentID doesn't exist at all in the new content received
             if (!contentIDExists!) {
-                this.activeGuide.instance.removeAllActiveSteps();
+                this.activeGuide.instance.removeAllActiveSteps!();
                 this.activeGuide = null;
             }
         }
@@ -156,10 +193,14 @@ class Lusift {
         return this.content;
     }
 
+    public getProgress(): number {
+        return 0;
+    }
+
     public refresh(): void {
         // run page elements through step display conditionals again
         if (this.activeGuide) {
-            this.activeGuide!.instance.start();
+            this.activeGuide!.instance.start!();
             log("Lusift refreshed");
         } else {
             warn("No active guide instance to refresh");
@@ -171,6 +212,11 @@ class Lusift {
 
     public showContent<T extends string>(contentID: T extends "" ? never : T): void {
         // Forces specific Lusift content to appear for the current user by passing in the ID.
+
+        if (this.isDevMode){
+            return devNavMethod();
+        }
+        this.isDevMode = false;
         const content = this.getContent();
         if (Object.keys(content).length === 0) {
             return error(`Content not set, pass valid content data to setContent()`);
@@ -179,8 +225,6 @@ class Lusift {
         if (!this.doesGuideExist(contentID)) {
             return error(`Content with id of ${contentID} doesn't exist`);
         }
-        console.log('content data:')
-        console.log(this.content);
         // when there's an active guide already
         if (this.activeGuide) {
             const { instance, id } = this.activeGuide;
@@ -189,44 +233,85 @@ class Lusift {
                 this.activeGuide.instance.reRenderStepElements();
                 return error(`${contentID} is already active`);
             } else {
-                this.close();
+                return this.close();
             }
-        } else {
-            // See if contentID, if in trackingState, isn't closed
-            // if it is, don't instantiate it
-            const guideTrackingState = loadState()[contentID]?.trackingState;
-            if(guideTrackingState?.finished || guideTrackingState?.prematurelyClosed) {
-                return warn(`Guide '${contentID}' is closed.`);
-            }
-            const newGuideInstance = new Guide(contentID);
-            this.activeGuide = {
-                id: contentID,
-                instance: newGuideInstance,
-            };
-            newGuideInstance.start();
         }
 
+        // See if contentID, if in trackingState, isn't closed
+        // if it is, don't instantiate it
+        const guideTrackingState = loadState()[contentID]?.trackingState;
+        if(guideTrackingState?.finished || guideTrackingState?.prematurelyClosed) {
+            return warn(`Guide '${contentID}' is closed.`);
+        }
+        const newGuideInstance = new Guide(contentID);
+
+        const {
+            nextStep,
+            prevStep,
+            setStep,
+            remove,
+            getTrackingState,
+            reRenderStepElements,
+            start,
+            getActiveSteps,
+            removeAllActiveSteps,
+            guideData
+        } = newGuideInstance;
+
+        this.activeGuide = {
+            id: contentID,
+            instance: {
+                guideData,
+                getTrackingState: getTrackingState.bind(newGuideInstance),
+                getActiveSteps: getActiveSteps.bind(newGuideInstance),
+                reRenderStepElements: reRenderStepElements.bind(newGuideInstance),
+                removeAllActiveSteps: removeAllActiveSteps.bind(newGuideInstance),
+                start: start.bind(newGuideInstance)
+            }
+        };
+        newGuideInstance.start();
+
         // attach active content's navigation methods, and hooks to Lusift instance
-        const { instance: activeGuideInstance, id: activeGuideID } = this.activeGuide!;
-        this.next = activeGuideInstance.nextStep.bind(activeGuideInstance);
-        this.prev = activeGuideInstance.prevStep.bind(activeGuideInstance);
-        this.close = () => {
+        const activeGuideID = this.activeGuide!.id;
+
+        const close = () => {
             if (this.activeGuide) {
-                activeGuideInstance.remove.bind(activeGuideInstance)();
-                this.disable(this.activeGuide!.id);
-                this.activeGuide = null;
+                remove.bind(newGuideInstance)();
+                this.disable(activeGuideID);
                 typeof this.onClose === "function" && this.onClose();
+                this.activeGuide = null;
                 log(`Closed ${activeGuideID}`);
             } else {
                 return error(`No active guide to close`);
             }
         }
-        this.goto = activeGuideInstance.setStep.bind(activeGuideInstance);
 
-        const { onNext, onPrev, onClose } = this.content[activeGuideID].data;
-        this.onNext = onNext;
-        this.onPrev = onPrev;
-        this.onClose = onClose;
+        this.navigationMethods = {
+            next: nextStep.bind(newGuideInstance),
+            prev: prevStep.bind(newGuideInstance),
+            goto: setStep.bind(newGuideInstance),
+            close,
+        }
+    }
+    public onNext(): void {
+        const activeGuideID = this.activeGuide!.id;
+        if (activeGuideID){
+            return this.content[activeGuideID].data.onNext!();
+        }
+    }
+
+    public onPrev(): void {
+        const activeGuideID = this.activeGuide!.id;
+        if (activeGuideID){
+            return this.content[activeGuideID].data.onPrev!();
+        }
+    }
+
+    public onClose(): void {
+        const activeGuideID = this.activeGuide!.id;
+        if (activeGuideID){
+            return this.content[activeGuideID].data.onClose!();
+        }
     }
 
     public setGlobalStyle(styleText: string): void {
@@ -252,13 +337,13 @@ class Lusift {
                     `to setContent() before running devShowStep()`,
             );
         }
-        this.next =
-            this.prev =
-            this.close =
-            this.showContent =
-                function () {
-                    error(`Can't run this method in dev mode`);
-                };
+        this.navigationMethods = {
+            next: devNavMethod,
+            prev: devNavMethod,
+            goto: devNavMethod,
+            close: devNavMethod,
+        };
+        this.isDevMode = true;
 
         if (this.content[guideID]) {
             const { steps } = this.content[guideID].data;
@@ -291,4 +376,4 @@ class Lusift {
     }
 }
 
-export default new Lusift();
+export default Lusift;

@@ -50,7 +50,7 @@ const renderTooltip = async ({ remove, data, target, styleProps, uid, index, onC
     const Lusift = window["Lusift"];
 
     const bodyContent =
-        Lusift.content[Lusift.activeGuide.id].data.steps[index].tip.data.bodyContent ||
+        Lusift.getContent()[Lusift.getActiveGuide().id].data.steps[index].tip.data.bodyContent ||
         defaultBodyContent;
 
     Lusift.render(bodyContent, ".lusift > .hotspot-tooltip > .body-content", () => {

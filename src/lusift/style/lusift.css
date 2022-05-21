@@ -151,11 +151,12 @@
 }
 .lusift .modal .closeX {
     /* border: 1px solid blue; */
-    margin-bottom: 0 !important;
+    margin-bottom: 1px !important;
+    margin-top: -2px;
     font-weight: normal;
     font-size: 1.45rem;
     padding: 0 2px;
-    margin-right: 0.2rem;
+    margin-right: 0px;
     color: #666;
     background: transparent;
     border-radius: 2px;

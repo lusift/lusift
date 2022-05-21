@@ -8,7 +8,7 @@ import {
 } from "../constants";
 
 const renderProgressBar = () => {
-    const currentGuide = loadState()[window.Lusift.activeGuide.id];
+    const currentGuide = loadState()[window.Lusift.getActiveGuide().id];
 
     if (!currentGuide) return "";
     if (!currentGuide) {
@@ -23,7 +23,7 @@ const renderProgressBar = () => {
     }
 
     const Lusift = window['Lusift'];
-    const guideData = Lusift.content[Lusift.activeGuide.id].data;
+    const guideData = Lusift.getContent()[Lusift.getActiveGuide().id].data;
     const currentStep = guideData.steps[currentGuide.trackingState.currentStepIndex];
     const progressBarData = currentGuide.progressBar || {};
 

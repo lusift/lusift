@@ -75,7 +75,7 @@ const createModal = ({ uid, index, closeButton = {} }): void => {
     const Lusift = window["Lusift"];
 
     const bodyContent =
-        Lusift.content[Lusift.activeGuide.id].data.steps[index].data.bodyContent ||
+        Lusift.getContent()[Lusift.getActiveGuide().id].data.steps[index].data.bodyContent ||
         defaultBodyContent;
 
     Lusift.render(bodyContent, ".lusift > .modal > .body-content");

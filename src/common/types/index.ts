@@ -161,15 +161,33 @@ export interface GuideType {
     name: string;
     description?: string;
     steps: Array<Tooltip | Modal | Hotspot>;
-    onNext?: Function;
-    onPrev?: Function;
-    onClose?: Function;
+    onNext?: () => void;
+    onPrev?: () => void;
+    onClose?: () => void;
 }
 
 export interface LocalState {
     [guideID: string]: {
         trackingState: TrackingState
     }
+}
+
+export interface ActiveStep {
+    index: number;
+    instance: any;
+    target: StepTargetType;
+    type: string;
+    async: boolean;
+}
+
+
+export interface GuideInstance {
+    guideData: GuideType;
+    getTrackingState: () => TrackingState;
+    getActiveSteps: () => ActiveStep[];
+    reRenderStepElements: () => void;
+    removeAllActiveSteps?: () => void;
+    start?: () => void;
 }
 
 export interface ElementPosition {
@@ -187,3 +205,30 @@ export interface Content {
         data: GuideType;
     };
 }
+
+export interface ActiveGuide {
+    instance: GuideInstance;
+    id: string;
+}
+
+export interface LusiftInstance {
+    setContent: (content: Content) => void;
+    showContent<T extends string>(contentID: T extends "" ? never : T): void;
+    getContent: () => Content;
+    refresh: () => void;
+    getActiveGuide: () => ActiveGuide | null;
+    enable: (guideID: string) => void;
+    disable: (guideID: string) => void;
+    setGlobalStyle: (style: string) => void;
+    getTrackingState: () => LocalState;
+    devShowStep: (guideID: string, stepNumber: number) => void;
+    close: () => void;
+    next: () => void;
+    prev: () => void;
+    goto: (newStepNum: number) => void;
+    onClose: () => void;
+    onNext: () => void;
+    onPrev: () => void;
+    render: (body: any, targetPath: string, callback?: Function) => void;
+}
+

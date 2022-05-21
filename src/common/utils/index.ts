@@ -7,7 +7,6 @@ import doesStringMatchRegex from "./doesStringMatchRegex";
 import changeAsyncStepStatus from "./changeAsyncStepStatus";
 import roundNum from "./roundNum";
 import doesStepMatchDisplayCriteria from "./doesStepMatchDisplayCriteria";
-import startStepInstance from "./startStepInstance";
 import addFocusTrap from "./addFocusTrap";
 import vanillaRender from "./vanillaRender";
 import getScrollBarWidth from "./getScrollBarWidth";
@@ -23,7 +22,6 @@ export {
     doesStringMatchRegex,
     changeAsyncStepStatus,
     doesStepMatchDisplayCriteria,
-    startStepInstance,
     roundNum,
     addFocusTrap,
     vanillaRender,
