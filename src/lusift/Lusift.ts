@@ -6,7 +6,7 @@ import startStepInstance from './startStepInstance';
 
 import { window, document } from "global";
 
-import { Content, LocalState, ActiveGuide, GuideInstance } from "../common/types";
+import { Content, LocalState, ActiveGuide } from "../common/types";
 
 import { isOfTypeContent, isObject } from "../common/utils/isOfType";
 
@@ -16,7 +16,6 @@ import addDefaultCSS from "./addDefaultCSS";
 
 // TODO: refactor Guide and Lusift
 // --
-// TODO: Add Lusift.getProgress()
 // TODO: Fix Lusift.devShowStep()
 // TODO: Manage z-indices better and make them really high
 // TODO: Modal is rendering on the middle center of the /document/, not screen. Fix that
@@ -103,6 +102,7 @@ class Lusift {
             guideData,
             getTrackingState,
             getActiveSteps,
+            getProgress,
             reRenderStepElements,
         } = instance;
 
@@ -111,6 +111,7 @@ class Lusift {
             instance: {
                 guideData,
                 getTrackingState,
+                getProgress,
                 getActiveSteps,
                 reRenderStepElements,
             }
@@ -193,10 +194,6 @@ class Lusift {
         return this.content;
     }
 
-    public getProgress(): number {
-        return 0;
-    }
-
     public refresh(): void {
         // run page elements through step display conditionals again
         if (this.activeGuide) {
@@ -254,6 +251,7 @@ class Lusift {
             reRenderStepElements,
             start,
             getActiveSteps,
+            getProgress,
             removeAllActiveSteps,
             guideData
         } = newGuideInstance;
@@ -263,6 +261,7 @@ class Lusift {
             instance: {
                 guideData,
                 getTrackingState: getTrackingState.bind(newGuideInstance),
+                getProgress: getProgress.bind(newGuideInstance),
                 getActiveSteps: getActiveSteps.bind(newGuideInstance),
                 reRenderStepElements: reRenderStepElements.bind(newGuideInstance),
                 removeAllActiveSteps: removeAllActiveSteps.bind(newGuideInstance),

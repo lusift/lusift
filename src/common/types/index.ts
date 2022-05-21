@@ -185,6 +185,7 @@ export interface GuideInstance {
     guideData: GuideType;
     getTrackingState: () => TrackingState;
     getActiveSteps: () => ActiveStep[];
+    getProgress: () => number;
     reRenderStepElements: () => void;
     removeAllActiveSteps?: () => void;
     start?: () => void;

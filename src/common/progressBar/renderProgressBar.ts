@@ -49,18 +49,8 @@ const renderProgressBar = () => {
             }
         }
     }
-    // filter out steps that are not of type hotspot with async property of true
-    const syncSteps = guideData.steps.filter(step => {
-        return !(step.type === "hotspot" && step.async);
-    });
 
-    const progress =
-        ((syncSteps.findIndex(step => {
-            return step.index === currentStep.index;
-        }) +
-            1) /
-            (syncSteps.length + 1)) *
-        100;
+    const progress = Lusift.getActiveGuide().instance.getProgress();
 
     const max = 100;
 

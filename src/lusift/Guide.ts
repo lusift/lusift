@@ -147,6 +147,23 @@ export default class Guide {
         return this.activeSteps.some(({ index }) => index === stepIndex);
     }
 
+    public getProgress(): number {
+        // filter out steps that are not of type hotspot with async property of true
+        const syncSteps = this.guideData.steps.filter(step => {
+            return !(step.type === "hotspot" && step['async']);
+        });
+        const currentStep = this.guideData.steps[this.getTrackingState().currentStepIndex];
+
+        const progress =
+            ((syncSteps.findIndex(step => {
+                return step.index === currentStep.index;
+            }) +
+                1) /
+                (syncSteps.length + 1)) *
+            100;
+        return progress;
+    }
+
     private attemptToStartAsyncSteps(): void {
         // start all the async hotpots with toOpen true
         const steps = this.guideData.steps;
