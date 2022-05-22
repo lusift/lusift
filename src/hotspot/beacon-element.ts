@@ -1,6 +1,6 @@
 import { document, window } from "global";
 import { styleObjectToString, getElementPosition } from "../common/utils";
-import { BEACON_CONTAINER_CLASS } from "../common/constants";
+import { BEACON_CONTAINER_CLASS, BEACON_Z_INDEX } from "../common/constants";
 
 const appendTo = () => document.body;
 
@@ -106,7 +106,7 @@ export const createBeaconElement = ({ beaconData, beaconID, toggleTooltip }) => 
     Object.assign(beaconEventReceiver.style, {
         ...beaconElement!.style,
         background: "transparent",
-        zIndex: "394490",
+        zIndex: BEACON_Z_INDEX,
     });
 
     beaconElement.appendChild(beaconEventReceiver);

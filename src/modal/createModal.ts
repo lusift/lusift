@@ -1,6 +1,6 @@
 import { document } from "global";
 import { styleObjectToString } from "../common/utils";
-import { MODAL_OVERLAY_CLASS, DEFAULT_MODAL_BORDER_RADIUS } from "../common/constants";
+import { MODAL_OVERLAY_CLASS, DEFAULT_MODAL_BORDER_RADIUS, MODAL_OVERLAY_Z_INDEX } from "../common/constants";
 import renderProgressBar from "../common/progressBar";
 import renderCloseXButton from "../common/closeXButton";
 
@@ -49,7 +49,7 @@ const createModal = ({ uid, index, closeButton = {} }): void => {
         left: "0",
         bottom: "0",
         right: "0",
-        zIndex: "99998",
+        zIndex: MODAL_OVERLAY_Z_INDEX,
         ...modalOverlayStyleProps,
     });
 

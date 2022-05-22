@@ -10,6 +10,7 @@ import {
 } from "../common/utils/";
 import { log, warn, error } from "../common/logger";
 import { BackdropData } from "../common/types";
+import { BACKDROP_Z_INDEX } from '../common/constants';
 
 const areNumbersEqual = (num1: number, num2: number): boolean => {
     let num1Precision = num1.toString().substring(num1.toString().indexOf(".")).length - 1;
@@ -108,7 +109,7 @@ class Backdrop {
             bottom: "0",
             left: "0",
             right: "0",
-            zIndex: 998,
+            zIndex: BACKDROP_Z_INDEX,
             border: "1px solid transparent",
         };
 
