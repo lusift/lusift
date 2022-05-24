@@ -1,5 +1,5 @@
 import { document } from "global";
-import { MODAL_OVERLAY_CLASS, DEFAULT_MODAL_BORDER_RADIUS, MODAL_OVERLAY_Z_INDEX } from "../common/constants";
+import { MODAL_OVERLAY_CLASS, MODAL_CLASS, DEFAULT_MODAL_BORDER_RADIUS, MODAL_OVERLAY_Z_INDEX } from "../common/constants";
 import renderProgressBar from "../common/progressBar";
 import renderCloseXButton from "../common/closeXButton";
 
@@ -41,7 +41,7 @@ const createModal = ({ uid, index, closeButton = {} }): void => {
   const lusiftWrapper = div();
   modalOverlay.classList.add(MODAL_OVERLAY_CLASS);
   modal.id = uid;
-  modal.classList.add("modal");
+  modal.classList.add(MODAL_CLASS);
   lusiftWrapper.classList.add("lusift");
   modal.innerHTML = `
     ${renderProgressBar()}
