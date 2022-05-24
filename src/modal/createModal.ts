@@ -1,84 +1,86 @@
 import { document } from "global";
-import { styleObjectToString } from "../common/utils";
 import { MODAL_OVERLAY_CLASS, DEFAULT_MODAL_BORDER_RADIUS, MODAL_OVERLAY_Z_INDEX } from "../common/constants";
 import renderProgressBar from "../common/progressBar";
 import renderCloseXButton from "../common/closeXButton";
 
+const defaultBodyContent = `
+  <style>
+  .body-content h2{
+    font-weight: bold;
+    font-size: 1.5rem;
+  }
+  .body-content .button-area{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 2rem 0;
+  }
+  </style>
+  <h2>Default Modal Content</h2>
+  <p>some text</p>
+  <div class="button-area">
+  <button class="button" onclick="Lusift.next()">
+  Next
+  </button>
+  </div>`;
+
+const div = () => document.createElement("div");
+
+export const noScrollBody = () => {
+  document.body.classList.add("lusift-no-scroll");
+};
+
+export const restoreScrollBody = () => {
+  document.body.classList.remove("lusift-no-scroll");
+};
+
 const createModal = ({ uid, index, closeButton = {} }): void => {
-    const modalOverlay = document.createElement("div");
-    const modal = document.createElement("div");
-    modal.id = uid;
-    modalOverlay.classList.add(MODAL_OVERLAY_CLASS);
 
-    const modalStyleProps = {};
-    const modalOverlayStyleProps = {};
-    const defaultBodyContent = `
-    <style>
-    .modal .body-content {
-      max-height: 500px;
-      width: 600px;
-      display: flex;
-      flex-direction: column;
-    }
-    h2{
-      font-weight: bold;
-      font-size: 1.5rem;
-    }
-    .button-area{
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 2rem 0;
-    }
-    </style>
-    <h2>Default Modal Content</h2>
-    <div class="button-area">
-      <button class="button" onclick="Lusift.next()">
-        Next
-      </button>
-    </div>`;
-
-    modalOverlay.style.cssText = styleObjectToString({
-        position: "absolute",
-        background: "#444",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        opacity: "0.5",
-        top: "0",
-        left: "0",
-        bottom: "0",
-        right: "0",
-        zIndex: MODAL_OVERLAY_Z_INDEX,
-        ...modalOverlayStyleProps,
-    });
-
-    modal.style.cssText = styleObjectToString({
-        borderRadius: DEFAULT_MODAL_BORDER_RADIUS,
-        ...modalStyleProps,
-    });
-    modal.classList.add("modal");
-
-    modal.innerHTML = `
+  const modalOverlay = div();
+  const modal = div();
+  const lusiftWrapper = div();
+  modalOverlay.classList.add(MODAL_OVERLAY_CLASS);
+  modal.id = uid;
+  modal.classList.add("modal");
+  lusiftWrapper.classList.add("lusift");
+  modal.innerHTML = `
     ${renderProgressBar()}
     ${renderCloseXButton(closeButton, "modal")}
     <section class="body-content">
     </section>
   `;
-    const lusiftWrapper = document.createElement("div");
-    lusiftWrapper.classList.add("lusift");
-    lusiftWrapper.appendChild(modal);
 
-    document.body.appendChild(modalOverlay);
-    document.body.appendChild(lusiftWrapper);
+  Object.assign(modalOverlay.style, {
+    position:  'fixed',
+    overflowY: "scroll",
+    background: "rgba(40,40,40, .55)",
+    top: "0",
+    left: "0",
+    bottom: "0",
+    right: "0",
+    zIndex: MODAL_OVERLAY_Z_INDEX,
+  });
 
-    const Lusift = window["Lusift"];
+  Object.assign(modal.style, {
+    margin: '15vh auto',
+    width: '80%',
+    maxWidth: '650px',
+    background: 'rgba(255,255,255, 1)',
+    position: 'relative',
+    borderRadius: DEFAULT_MODAL_BORDER_RADIUS,
+  });
 
-    const bodyContent =
-        Lusift.getContent()[Lusift.getActiveGuide().id].data.steps[index].data.bodyContent ||
-        defaultBodyContent;
+  lusiftWrapper.appendChild(modal);
+  modalOverlay.appendChild(lusiftWrapper);
+  document.body.appendChild(modalOverlay);
 
-    Lusift.render(bodyContent, ".lusift > .modal > .body-content");
+  const Lusift = window["Lusift"];
+
+  const bodyContent =
+    Lusift.getContent()[Lusift.getActiveGuide().id].data.steps[index].data.bodyContent ||
+    defaultBodyContent;
+
+  Lusift.render(bodyContent, ".lusift > .modal > .body-content");
 };
 
 export default createModal;

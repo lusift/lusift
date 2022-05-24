@@ -17,7 +17,6 @@ import addDefaultCSS from "./addDefaultCSS";
 // TODO: refactor Guide and Lusift
 // --
 // TODO: Fix Lusift.devShowStep()
-// TODO: Modal is rendering on the middle center of the /document/, not screen. Fix that
 // TODO: decide on making configuring easier, with inheritence, global levels etc.
 // TODO: Add merging with defaults
 // -- Maybe don't have setContent take everything, seperate concerns. makes documenting easier too

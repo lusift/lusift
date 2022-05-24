@@ -1,4 +1,4 @@
-import createModal from "./createModal";
+import createModal, { noScrollBody, restoreScrollBody } from "./createModal";
 import { document, window } from "global";
 import { getStepUID, addFocusTrap } from "../common/utils";
 import { ModalData } from "../common/types";
@@ -21,6 +21,8 @@ class Modal {
 
         const { escToClose, clickOutsideToClose } = this.data;
 
+        // clickOutsideToClose not working, use option clickOutsideDeactives() hook
+        // -- also factor in how tooltip uses addFocusTrap
         this.focusTrap = addFocusTrap({
             target: ".modal",
             escToClose,
@@ -28,17 +30,25 @@ class Modal {
         });
 
         this.onRemove = onRemove;
+        console.log(escToClose, clickOutsideToClose);
 
         if (escToClose) {
             window.addEventListener("keydown", this.escEventListener, true);
         }
         if (clickOutsideToClose) {
             const overlayElement = document.querySelector(`.${MODAL_OVERLAY_CLASS}`);
+            // TODO: only on click on overlay, not modal
+            // if the target isn't of class modal, close the modal
             overlayElement.addEventListener("click", this.overlayClickEventListener, true);
         }
     }
+    // TODO: add animation for modal
 
     private escEventListener(e): void {
+        console.log('keydown')
+        console.log(e.key, e.keyCode, e.target.nodeName)
+        // TODO: Fix this not working
+        // -- plus it's supposed to next not close right?
         if (
             (e.key == "Escape" || e.key == "Esc" || e.keyCode == 27) &&
             e.target.nodeName == "BODY"
@@ -47,8 +57,9 @@ class Modal {
         }
     }
     private overlayClickEventListener(e): void {
+        console.log(e.target);
         if (!e.target.classList.contains("modal")) {
-            window.Lusift.close();
+            // window.Lusift.close();
         }
     }
 
@@ -60,6 +71,7 @@ class Modal {
             index: this.index,
             closeButton: this.closeButton,
         });
+        noScrollBody();
     }
 
     private remove(): void {
@@ -75,6 +87,7 @@ class Modal {
             overlayElement.removeEventListener("click", this.overlayClickEventListener, true);
         }
         overlayElement.remove();
+        restoreScrollBody();
         this.onRemove();
     }
 }
