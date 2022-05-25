@@ -94,9 +94,12 @@ const renderTooltip = async ({ data, target, styleProps, actions, uid, index, on
 
     const Lusift = window["Lusift"];
 
-    const bodyContent =
-        Lusift.getContent()[Lusift.getActiveGuide().id].data.steps[index].data.bodyContent ||
-        defaultBodyContent;
+    let bodyContent = defaultBodyContent;
+    const activeGuide = Lusift.getActiveGuide();
+
+    if (activeGuide) {
+      bodyContent = Lusift.getContent()[activeGuide.id].data.steps[index].data.bodyContent;
+    }
 
     Lusift.render(bodyContent, ".lusift > .tooltip > .body-content", () => {
         tooltipInstance.update();

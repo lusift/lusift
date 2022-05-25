@@ -27,7 +27,6 @@ class Modal {
         this.focusTrap = addFocusTrap({
             target: ".modal",
             escapeDeactivates: (e): boolean => {
-                console.log('escape pressed')
                 if (escToClose) {
                     window['Lusift'].next();
                     return true;
@@ -38,10 +37,9 @@ class Modal {
                 if (
                     clickOutsideToClose &&
                     !e.target.classList.contains(MODAL_CLASS) &&
-                    e.target.classList.contains(MODAL_OVERLAY_CLASS) &&
-                    !e.target.closest(`.${MODAL_CLASS}`)
+                e.target.classList.contains(MODAL_OVERLAY_CLASS) &&
+            !e.target.closest(`.${MODAL_CLASS}`)
                 ) {
-                    console.log('clicked outside')
                     window['Lusift'].next();
                     return true;
                 }
@@ -51,7 +49,6 @@ class Modal {
 
         this.onRemove = onRemove;
     }
-    // TODO: add animation for modal
 
     private remove(): void {
         this.focusTrap.deactivate();

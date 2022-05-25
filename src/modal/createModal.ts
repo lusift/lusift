@@ -76,9 +76,12 @@ const createModal = ({ uid, index, closeButton = {} }): () => void => {
 
   const Lusift = window["Lusift"];
 
-  const bodyContent =
-    Lusift.getContent()[Lusift.getActiveGuide().id].data.steps[index].data.bodyContent ||
-    defaultBodyContent;
+  let bodyContent = defaultBodyContent;
+  const activeGuide = Lusift.getActiveGuide();
+
+  if (activeGuide) {
+    bodyContent = Lusift.getContent()[activeGuide.id].data.steps[index].data.bodyContent;
+  }
 
   Lusift.render(bodyContent, ".lusift > .modal > .body-content");
   noScrollBody();

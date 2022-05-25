@@ -14,11 +14,10 @@ import addDefaultCSS from "./addDefaultCSS";
 
 // TODO: Write documentation
 
-// TODO: refactor Guide and Lusift
-// --
-// TODO: Fix Lusift.devShowStep()
+// TODO: fix closeX's button margin from top (it's different depending on progress bar height)
 // TODO: decide on making configuring easier, with inheritence, global levels etc.
 // TODO: Add merging with defaults
+// -- write a content object with defaults
 // -- Maybe don't have setContent take everything, seperate concerns. makes documenting easier too
 // NOTE_: Support for different typescript versions
 // TODO_: add support for angul*r
