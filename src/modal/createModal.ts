@@ -34,7 +34,7 @@ export const restoreScrollBody = () => {
   document.body.classList.remove("lusift-no-scroll");
 };
 
-const createModal = ({ uid, index, closeButton = {} }): void => {
+const createModal = ({ uid, index, closeButton = {} }): () => void => {
 
   const modalOverlay = div();
   const modal = div();
@@ -81,6 +81,12 @@ const createModal = ({ uid, index, closeButton = {} }): void => {
     defaultBodyContent;
 
   Lusift.render(bodyContent, ".lusift > .modal > .body-content");
+  noScrollBody();
+
+  return function destroyModal() {
+    document.body.removeChild(modalOverlay);
+    restoreScrollBody();
+  };
 };
 
 export default createModal;

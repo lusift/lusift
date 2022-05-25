@@ -5,19 +5,22 @@ import { ModalData } from "../common/types";
 import { MODAL_OVERLAY_CLASS, MODAL_CLASS } from "../common/constants";
 
 class Modal {
-    private uid: string;
     private data: ModalData = {};
-    private closeButton: any;
     private focusTrap: any;
-    private index: number;
     private onRemove: Function;
+    private removeModal: Function;
 
     constructor({ index, guideID, data, closeButton, onRemove }) {
-        this.uid = getStepUID({ guideID, type: "modal", index });
+        const uid = getStepUID({ guideID, type: "modal", index });
         this.data = data || {};
-        this.index = index;
-        this.closeButton = closeButton;
-        this.addModal();
+        index = index;
+        closeButton = closeButton;
+
+        this.removeModal = createModal({
+            uid,
+            index,
+            closeButton
+        });
 
         const { escToClose, clickOutsideToClose } = this.data;
 
@@ -50,25 +53,9 @@ class Modal {
     }
     // TODO: add animation for modal
 
-    private addModal(): void {
-        const { bodyContent } = this.data;
-
-        // TODO: refactor to make createModal send a callback to remove the modal
-        createModal({
-            uid: this.uid,
-            index: this.index,
-            closeButton: this.closeButton,
-        });
-        noScrollBody();
-    }
-
     private remove(): void {
-        const overlayElement = document.querySelector(`.${MODAL_OVERLAY_CLASS}`);
-        document.getElementById(this.uid).remove();
         this.focusTrap.deactivate();
-
-        overlayElement.remove();
-        restoreScrollBody();
+        this.removeModal();
         this.onRemove();
     }
 }
