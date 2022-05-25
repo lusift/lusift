@@ -10,8 +10,6 @@ import startStepInstance from './startStepInstance';
 
 import { GuideType, ActiveStep, TrackingState, StepTargetType } from "../common/types";
 
-// TODO: this.closeCurrentStep(); in setStep
-
 export default class Guide {
     readonly guideData: GuideType;
     private activeSteps: ActiveStep[] = [];
@@ -246,11 +244,13 @@ export default class Guide {
             return error("Step index can't be less than 0");
         } else if (newStepNum + 1 > this.guideData.steps.length) {
             if (!newTrackingState.finished) {
+                this.closeCurrentStep();
                 newTrackingState.finished = true;
                 this.setTrackingState(newTrackingState);
             }
             log("Guide finished");
         } else {
+            this.closeCurrentStep();
             newTrackingState.currentStepIndex = newStepNum;
             this.setTrackingState(newTrackingState);
             this.start();

@@ -20,11 +20,14 @@ import addDefaultCSS from "./addDefaultCSS";
 // -- Maybe don't have setContent take everything, seperate concerns. makes documenting easier too
 // NOTE_: Support for different typescript versions
 // TODO_: add support for angul*r
-// TODO: Buggy when the target for tooltip is sidebar link
 // TODO: Tooltip positioning for different screen sizes
 // -- how do the comercial saas handle it? automatically or end-user config?
 // -- have the options for orientation be `auto` and `fixed` with positions being the different axis relative to
 // the target. With auto, the position is only picked when there is space for the tooltip, else it moves to different position
+const positioning = {
+    position: '', // top, bottom, left, right
+    orientation: '' // auto, fixed
+}
 // NOTE: Handling versioning
 // TODO: Can we just export element classes (Tooltip, Modal, Hotspot, Backdrop) and have them be optionally loadable by the client?
 // -- something like how modifiers work in popperjs
