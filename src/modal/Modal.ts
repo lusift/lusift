@@ -24,6 +24,7 @@ class Modal {
 
         const { escToClose, clickOutsideToClose } = this.data;
 
+        // TODO: Also check if devMode is enabled
         this.focusTrap = addFocusTrap({
             target: ".modal",
             escapeDeactivates: (e): boolean => {
