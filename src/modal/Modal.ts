@@ -24,11 +24,12 @@ class Modal {
 
         const { escToClose, clickOutsideToClose } = this.data;
 
-        // TODO: Also check if devMode is enabled
+        const isDevMode = !window.Lusift.getActiveGuide();
+
         this.focusTrap = addFocusTrap({
             target: ".modal",
             escapeDeactivates: (e): boolean => {
-                if (escToClose) {
+                if (!isDevMode && escToClose) {
                     window['Lusift'].next();
                     return true;
                 }
@@ -36,10 +37,11 @@ class Modal {
             },
             clickOutsideDeactivates: (e): boolean => {
                 if (
+                    !isDevMode &&
                     clickOutsideToClose &&
                     !e.target.classList.contains(MODAL_CLASS) &&
-                e.target.classList.contains(MODAL_OVERLAY_CLASS) &&
-            !e.target.closest(`.${MODAL_CLASS}`)
+                    e.target.classList.contains(MODAL_OVERLAY_CLASS) &&
+                    !e.target.closest(`.${MODAL_CLASS}`)
                 ) {
                     window['Lusift'].next();
                     return true;
