@@ -15,6 +15,7 @@ import addDefaultCSS from "./addDefaultCSS";
 
 // TODO: Write documentation
 
+// TODO: Add box-shadow to modal
 // TODO: Add merging with defaults
 // -- some sort of object/(schema?) merge and validation library?
 // NOTE_: Support for different typescript versions

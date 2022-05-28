@@ -5,7 +5,7 @@ import { DEFAULT_TOOLTIP_BORDER_RADIUS } from "../common/constants";
 
 const defaultBodyContent = `
   <h3 style="font-weight: bold;">Default title</h3>
-  <p style="font-weight: normal;">Default tooltip content</p>
+  <p style="font-weight: normal;">Default hotspot tip content</p>
 `;
 
 const renderTooltip = async ({ remove, data, target, styleProps, uid, index, onClickOutside, showOnCreate }) => {
@@ -51,10 +51,11 @@ const renderTooltip = async ({ remove, data, target, styleProps, uid, index, onC
 
     let bodyContent = defaultBodyContent;
     const activeGuide = Lusift.getActiveGuide();
-    // TODO: default body content
+    // TODO: When 2 hotspots are on a page, second one isn't rendering content
 
     if (activeGuide) {
-      bodyContent = Lusift.getContent()[activeGuide.id].data.steps[index].tip.data.bodyContent;
+      // TODO: Why did we decide to pull from Lusift.getContent() and not from this function's parameter again?
+      bodyContent = Lusift.getContent()[activeGuide.id].data.steps[index].tip.data.bodyContent || bodyContent;
     }
 
     Lusift.render(bodyContent, ".lusift > .hotspot-tooltip > .body-content", () => {

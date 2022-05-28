@@ -39,12 +39,12 @@ const renderNavButtons = (navSection: any): string => {
       ${
           prevButton.disabled
               ? ""
-              : `<button onclick="Lusift.prev()" class="prev lusift-button">${nextButton.text}</button>`
+              : `<button onclick="Lusift.prev()" class="prev lusift-button">${prevButton.text}</button>`
       }
       ${
           nextButton.disabled
               ? ""
-              : `<button onclick="Lusift.next()" class="next lusift-button">${prevButton.text}</button>`
+              : `<button onclick="Lusift.next()" class="next lusift-button">${nextButton.text}</button>`
       }
     </section>
   `;
