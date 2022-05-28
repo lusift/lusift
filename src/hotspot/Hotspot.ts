@@ -85,6 +85,7 @@ class Hotspot {
             uid: this.tipID,
             index: this.data.index,
             target: target,
+            // target: this.targetElement,
             styleProps,
             showOnCreate: false,
             data,
@@ -99,6 +100,7 @@ class Hotspot {
 
         const debouncedUpdateBeaconPosition = debounce((_x?) => {
             updateBeaconPosition();
+            this.fuitInstance.update();
         }, 100);
 
         this.beaconAutoUpdateCleanup = autoUpdate(
