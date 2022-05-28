@@ -51,9 +51,10 @@ const renderTooltip = async ({ remove, data, target, styleProps, uid, index, onC
 
     let bodyContent = defaultBodyContent;
     const activeGuide = Lusift.getActiveGuide();
+    // TODO: default body content
 
     if (activeGuide) {
-      bodyContent = Lusift.getContent()[activeGuide.id].data.steps[index].data.bodyContent;
+      bodyContent = Lusift.getContent()[activeGuide.id].data.steps[index].tip.data.bodyContent;
     }
 
     Lusift.render(bodyContent, ".lusift > .hotspot-tooltip > .body-content", () => {

@@ -17,9 +17,9 @@ import addDefaultCSS from "./addDefaultCSS";
 
 // TODO: Add merging with defaults
 // -- some sort of object/(schema?) merge and validation library?
-// -- Maybe don't have setContent take everything, seperate concerns. makes documenting easier too
 // NOTE_: Support for different typescript versions
 // TODO_: add support for angul*r
+// TODO: Fix content object
 // TODO: Tooltip positioning for different screen sizes
 // -- how do the comercial saas handle it? automatically or end-user config?
 // -- have the options for orientation be `auto` and `fixed` with positions being the different axis relative to
