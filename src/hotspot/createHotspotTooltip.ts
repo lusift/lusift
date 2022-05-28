@@ -51,14 +51,13 @@ const renderTooltip = async ({ remove, data, target, styleProps, uid, index, onC
 
     let bodyContent = defaultBodyContent;
     const activeGuide = Lusift.getActiveGuide();
-    // TODO: When 2 hotspots are on a page, second one isn't rendering content
 
     if (activeGuide) {
       // TODO: Why did we decide to pull from Lusift.getContent() and not from this function's parameter again?
       bodyContent = Lusift.getContent()[activeGuide.id].data.steps[index].tip.data.bodyContent || bodyContent;
     }
 
-    Lusift.render(bodyContent, ".lusift > .hotspot-tooltip > .body-content", () => {
+    Lusift.render(bodyContent, `.lusift > .hotspot-tooltip#tooltip-${uid} > .body-content`, () => {
         tooltipInstance.update();
     });
 

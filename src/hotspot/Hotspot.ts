@@ -85,7 +85,6 @@ class Hotspot {
             uid: this.tipID,
             index: this.data.index,
             target: target,
-            // target: this.targetElement,
             styleProps,
             showOnCreate: false,
             data,
