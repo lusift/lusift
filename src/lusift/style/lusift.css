@@ -93,10 +93,27 @@
 }
 .lusift .tooltip .nav-buttons .dismiss-link {
     color: #777;
+    background: transparent;
+    border: none;
+    padding: 2px;
     font-style: italic;
     font-size: 0.8rem;
     margin-right: 0.4rem;
 }
+.lusift .tooltip .nav-buttons .dismiss-link:active,
+.lusift .tooltip .nav-buttons .dismiss-link:focus,
+.lusift .tooltip .nav-buttons .dismiss-link:hover {
+    text-decoration: underline;
+    border: none;
+    color: #444;
+}
+
+.lusift .tooltip .nav-buttons .dismiss-link:active,
+.lusift .tooltip .nav-buttons .dismiss-link:focus{
+    text-decoration: none;
+    color: #444;
+}
+
 .lusift .tooltip .nav-buttons .next,
 .nav-buttons .prev {
     color: #fff;

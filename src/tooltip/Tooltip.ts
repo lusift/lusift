@@ -11,7 +11,6 @@ const tooltipArrowSizeScale = 1;
 const defaultOffset = [tooltipArrowSizeScale*tooltipArrowDefaultSize, 0]; // x needs to be size of arrow + backdrop gap
 
 // TODO: should we have transition effects for backdrop? it's kind of jerky
-// TODO: style nav-sections better
 
 export default class Tooltip {
     private targetElement: HTMLElement;
