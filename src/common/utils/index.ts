@@ -1,5 +1,5 @@
 import htmlStringToElement from "./htmlStringToElement";
-import mergeObjects from "./mergeObjects";
+import mergeDeep from "./mergeDeep";
 import styleObjectToString from "./styleObjectToString";
 import getStepUID from "./getStepUID";
 import getElementPosition from "./getElementPosition";
@@ -15,7 +15,7 @@ import debounce from './debounce';
 
 export {
     htmlStringToElement,
-    mergeObjects,
+    mergeDeep,
     styleObjectToString,
     getStepUID,
     getElementPosition,

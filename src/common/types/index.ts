@@ -1,6 +1,3 @@
-// TODO: write better types. This is a mess.
-// -- declare different types for internal classes and the end method setContent()
-//
 export interface StepActions {
     styleProps: object;
     closeButton: {

@@ -3,6 +3,7 @@ import { saveState, loadState, setDefaultState } from "../common/store";
 import { log, error, warn } from "../common/logger";
 import { doesStepMatchDisplayCriteria } from "../common/utils";
 import startStepInstance from './startStepInstance';
+import mergeContentWithDefaults from './defaults';
 
 import { window, document } from "global";
 
@@ -16,7 +17,7 @@ import addDefaultCSS from "./addDefaultCSS";
 
 // TODO: decide on making configuring easier, with inheritence, global levels etc.
 // TODO: Add merging with defaults
-// -- write a content object with defaults
+// -- some sort of object/(schema?) merge and validation library?
 // -- Maybe don't have setContent take everything, seperate concerns. makes documenting easier too
 // NOTE_: Support for different typescript versions
 // TODO_: add support for angul*r
@@ -24,7 +25,7 @@ import addDefaultCSS from "./addDefaultCSS";
 // -- how do the comercial saas handle it? automatically or end-user config?
 // -- have the options for orientation be `auto` and `fixed` with positions being the different axis relative to
 // the target. With auto, the position is only picked when there is space for the tooltip, else it moves to different position
-const positioning = {
+const placement = {
     position: '', // top, bottom, left, right
     orientation: '' // auto, fixed
 }
@@ -148,34 +149,13 @@ class Lusift {
     }
 
     public setContent(content: Content): void {
-        // filter and validate content
-        if (!isOfTypeContent(content)) {
+        const mergedWithDefaultsContent = mergeContentWithDefaults(content);
+
+        // validate content
+        if (!isOfTypeContent(mergedWithDefaultsContent)) {
             return error("Content data type is invalid");
         }
-
-        // retrieve approriate properties from received content
-        this.content = content!;
-        Object.keys(content).forEach(key => {
-            const {
-                id,
-                name = "",
-                description = "",
-                steps,
-                onNext,
-                onPrev,
-                onClose,
-            } = content[key].data;
-
-            this.content[key].data = {
-                id,
-                name,
-                description,
-                steps,
-                onNext,
-                onPrev,
-                onClose,
-            };
-        });
+        this.content = mergedWithDefaultsContent;
 
         // for any already active guide
         if (this.activeGuide) {

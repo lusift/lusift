@@ -1,19 +1,11 @@
 import { document, window } from "global";
 import createTooltip from "./createTooltip";
-import { mergeObjects, getStepUID, debounce } from "../common/utils";
+import { getStepUID, debounce } from "../common/utils";
 import { log, warn, error } from "../common/logger";
 import { TooltipData, HotspotAndTooltipTarget as Target, StepActions } from "../common/types";
 import defaultToolipActions from "./defaultTooltipActions";
 import Backdrop from "../backdrop";
 import { autoUpdate } from '@floating-ui/dom';
-
-const defaultBackdropData = {
-    disabled: false,
-    color: "#444",
-    opacity: "0.5",
-    stageGap: 5,
-    nextOnOverlayClick: false,
-};
 
 const tooltipArrowDefaultSize = 12;
 const tooltipArrowSizeScale = 1;
@@ -75,18 +67,12 @@ export default class Tooltip {
             ...progressOn,
         };
 
-        const backdrop = data.backdrop || {};
-        this.data.backdrop = {
-            ...defaultBackdropData,
-            ...backdrop,
-        };
         this.data.offset = this.data.offset || defaultOffset;
-        if (!this.data.backdrop.disabled) {
+        if (!this.data.backdrop!.disabled) {
             // factor in backdrop stage gap in tooltip offset
-            this.data.offset[0] = this.data.offset[0] + this.data.backdrop.stageGap!;
+            this.data.offset[0] = this.data.offset[0] + this.data.backdrop!.stageGap!;
         }
 
-        this.consolidateActions(actions);
         this.uid = getStepUID({ guideID, index, type: "tooltip" });
         this.guideID = guideID;
         this.targetElement = document.querySelector(elementSelector);
@@ -101,11 +87,6 @@ export default class Tooltip {
         this.backdropInstance && this.backdropInstance.remove();
         this.backdropInstance = null;
         this.isTooltipShown = false;
-    }
-
-    private consolidateActions(actions: StepActions) {
-        // merge default actions with incoming actions provided by the developer(user)
-        this.actions = mergeObjects(this.actions, actions);
     }
 
     private addBackdrop(): void {
