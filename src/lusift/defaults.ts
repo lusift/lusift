@@ -1,5 +1,6 @@
 import { Content } from '../common/types';
 import { mergeDeep } from '../common/utils';
+import { isObject } from '../common/utils/isOfType';
 
 const defaultTooltipActions = {
   styleProps: {},
@@ -101,8 +102,6 @@ const defaultGuideData = {
   onClose: () => {}
 }
 
-// TODO: Declare different types of content, one that's associated with incoming data, and other for the end result
-
 function removeUndefinedFields(obj) {
   for (var key in obj) {
     if (obj[key] === undefined) {
@@ -116,8 +115,134 @@ function removeUndefinedFields(obj) {
   return obj;
 }
 
-export default function combineContentWithDefaults(content): Content {
+let defaults = {
+  tooltip: defaultTooltip,
+  hotspot: defaultHotspot,
+  modal: defaultModal,
+}
+
+export interface DefaultTooltip {
+  target: {
+    path: {
+      comparator: string,
+      value: string
+    }
+  },
+  data: {
+    placement: string,
+    arrow: boolean,
+    backdrop: {
+      disabled: boolean,
+      color: string,
+      opacity: string,
+      stageGap: number,
+      nextOnOverlayClick: boolean
+    }
+  },
+  actions: {
+    styleProps: {},
+    closeButton: {
+      styleProps: {},
+      disabled: boolean,
+    },
+    navSection: {
+      styleProps: {},
+      nextButton: {
+        text: string,
+        styleProps: {},
+        disabled: boolean,
+      },
+      prevButton: {
+        text: string,
+        styleProps: {},
+        disabled: boolean,
+      },
+      dismissLink: {
+        text: string,
+        styleProps: {},
+        disabled: boolean,
+      }
+    }
+  }
+}
+
+export interface DefaultHotspot {
+  target: {
+    path: {
+      comparator: string,
+      value: string
+    }
+  },
+  beacon: {
+    placement: {
+      top: number,
+      left: number,
+    },
+    size: number,
+    color: string,
+    type: string
+  },
+  tip: {
+    data: {
+      placement: string,
+      arrow: boolean,
+    },
+    styleProps: {},
+  },
+  async: boolean
+}
+
+export interface DefaultModal {
+  target: {
+    path: {
+      comparator: string,
+      value: string
+    }
+  },
+  closeButton: {
+    styleProps: {},
+    disabled: boolean,
+  },
+  data: {
+  }
+}
+
+function overrideProps(target, source) {
+  let output = Object.assign({}, target);
+  if (isObject(target) && isObject(source)) {
+    Object.keys(source).forEach(key => {
+      if (isObject(source[key])) {
+        if (!(key in target))
+          console.log(`${key} is not in target`);
+        else
+          output[key] = mergeDeep(target[key], source[key]);
+      } else {
+        Object.assign(output, { [key]: source[key] });
+      }
+    });
+  }
+  return output;
+}
+
+
+export type DeepPartial<T> = {
+    [P in keyof T]?: DeepPartial<T[P]>;
+};
+
+export interface ContentDefaults {
+  tooltip: DefaultTooltip,
+  hotspot: DefaultHotspot,
+  modal: DefaultModal,
+}
+
+export default function combineContentWithDefaults(content, contentDefaults?: DeepPartial<ContentDefaults>): Content {
   content = removeUndefinedFields(content);
+
+  // TODO: combine inputDefaults with defaults, but only for properties that exist on defaults
+
+  if (contentDefaults) {
+    defaults = overrideProps(defaults, contentDefaults);
+  }
 
   Object.keys(content).forEach((guideID) => {
     const guideData = content[guideID].data;
@@ -127,11 +252,11 @@ export default function combineContentWithDefaults(content): Content {
     steps = steps.map((step, index) => {
       let completedStep = step;
       if (step.type === 'tooltip') {
-        completedStep = mergeDeep(defaultTooltip, step);
+        completedStep = mergeDeep(defaults.tooltip, step);
       } else if (step.type === 'hotspot') {
-        completedStep = mergeDeep(defaultHotspot, step);
+        completedStep = mergeDeep(defaults.hotspot, step);
       } else if (step.type === 'modal') {
-        completedStep = mergeDeep(defaultModal, step);
+        completedStep = mergeDeep(defaults.modal, step);
       }
       return completedStep;
     });

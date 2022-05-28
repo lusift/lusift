@@ -1,3 +1,5 @@
+// TODO: There's only one beacon type, remove the option for animation type
+
 export interface StepActions {
     styleProps: object;
     closeButton: {

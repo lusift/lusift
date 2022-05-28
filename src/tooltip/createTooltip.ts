@@ -12,6 +12,7 @@ const defaultBodyContent = `
 
 const renderNavButtons = (navSection: any): string => {
     const { nextButton, prevButton, dismissLink } = navSection;
+    console.log(dismissLink)
 
     return `
     <style>

@@ -3,7 +3,7 @@ import { saveState, loadState, setDefaultState } from "../common/store";
 import { log, error, warn } from "../common/logger";
 import { doesStepMatchDisplayCriteria } from "../common/utils";
 import startStepInstance from './startStepInstance';
-import mergeContentWithDefaults from './defaults';
+import mergeContentWithDefaults, { ContentDefaults, DeepPartial } from './defaults';
 
 import { window, document } from "global";
 
@@ -15,7 +15,6 @@ import addDefaultCSS from "./addDefaultCSS";
 
 // TODO: Write documentation
 
-// TODO: decide on making configuring easier, with inheritence, global levels etc.
 // TODO: Add merging with defaults
 // -- some sort of object/(schema?) merge and validation library?
 // -- Maybe don't have setContent take everything, seperate concerns. makes documenting easier too
@@ -148,8 +147,8 @@ class Lusift {
         saveState(localData);
     }
 
-    public setContent(content: Content): void {
-        const mergedWithDefaultsContent = mergeContentWithDefaults(content);
+    public setContent(content: Content, defaults?: DeepPartial<ContentDefaults>): void {
+        const mergedWithDefaultsContent = mergeContentWithDefaults(content, defaults);
 
         // validate content
         if (!isOfTypeContent(mergedWithDefaultsContent)) {

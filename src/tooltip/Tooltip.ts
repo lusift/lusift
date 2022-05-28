@@ -3,7 +3,6 @@ import createTooltip from "./createTooltip";
 import { getStepUID, debounce } from "../common/utils";
 import { log, warn, error } from "../common/logger";
 import { TooltipData, HotspotAndTooltipTarget as Target, StepActions } from "../common/types";
-import defaultToolipActions from "./defaultTooltipActions";
 import Backdrop from "../backdrop";
 import { autoUpdate } from '@floating-ui/dom';
 
@@ -12,6 +11,7 @@ const tooltipArrowSizeScale = 1;
 const defaultOffset = [tooltipArrowSizeScale*tooltipArrowDefaultSize, 0]; // x needs to be size of arrow + backdrop gap
 
 // TODO: should we have transition effects for backdrop? it's kind of jerky
+// TODO: style nav-sections better
 
 export default class Tooltip {
     private targetElement: HTMLElement;
@@ -19,7 +19,7 @@ export default class Tooltip {
     private fuitInstance: any;
     readonly uid: string;
     readonly data: Partial<TooltipData>;
-    private actions: StepActions = defaultToolipActions;
+    private actions: StepActions;
     readonly styleProps: Object = {};
     private targetsAndEventListeners: {
         method: string;
@@ -53,12 +53,12 @@ export default class Tooltip {
         log("%c Tooltip constructor! ", "background: #222; color: #bada55");
 
         this.target = target;
+        this.actions = actions;
         const { elementSelector } = target;
         this.styleProps = styleProps || {};
         this.data = data;
         this.index = index;
         this.onRemove = onRemove;
-
 
         const progressOn = data.progressOn || {};
         this.data.progressOn = {
@@ -123,6 +123,7 @@ export default class Tooltip {
         if (!this.fuitInstance) {
             // fuit was never initiated
             const { uid, actions, styleProps, data, index } = this;
+            console.log(actions)
             this.fuitInstance = await createTooltip({
                 uid,
                 target: this.targetElement,
