@@ -122,7 +122,6 @@ export default class Tooltip {
         if (!this.fuitInstance) {
             // fuit was never initiated
             const { uid, actions, styleProps, data, index } = this;
-            console.log(actions)
             this.fuitInstance = await createTooltip({
                 uid,
                 target: this.targetElement,
@@ -136,7 +135,7 @@ export default class Tooltip {
                         backdrop!.disabled || this.addBackdrop.bind(this)();
                         this.isTooltipShown = true;
                     } else {
-                        console.log('onShow: WOWWWW')
+                        console.log('onShow: onShow ran but it\'s hidden')
                     }
                 },
                 onHide: (instance) => {

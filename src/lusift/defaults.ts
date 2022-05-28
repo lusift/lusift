@@ -212,9 +212,7 @@ function overrideProps(target, source) {
   if (isObject(target) && isObject(source)) {
     Object.keys(source).forEach(key => {
       if (isObject(source[key])) {
-        if (!(key in target))
-          console.log(`${key} is not in target`);
-        else
+        if ((key in target))
           output[key] = mergeDeep(target[key], source[key]);
       } else {
         Object.assign(output, { [key]: source[key] });

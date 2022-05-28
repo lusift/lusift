@@ -12,7 +12,6 @@ const defaultBodyContent = `
 
 const renderNavButtons = (navSection: any): string => {
     const { nextButton, prevButton, dismissLink } = navSection;
-    console.log(dismissLink)
 
     return `
     <style>
@@ -33,19 +32,19 @@ const renderNavButtons = (navSection: any): string => {
               ? ""
               : `
         <button onclick="Lusift.close()" class="close dismiss-link">
-          skip this
+          ${dismissLink.text}
         </button>
         `
       }
       ${
           prevButton.disabled
               ? ""
-              : `<button onclick="Lusift.prev()" class="prev lusift-button">Prev</button>`
+              : `<button onclick="Lusift.prev()" class="prev lusift-button">${nextButton.text}</button>`
       }
       ${
           nextButton.disabled
               ? ""
-              : `<button onclick="Lusift.next()" class="next lusift-button">Next</button>`
+              : `<button onclick="Lusift.next()" class="next lusift-button">${prevButton.text}</button>`
       }
     </section>
   `;
