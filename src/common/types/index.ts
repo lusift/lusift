@@ -1,3 +1,4 @@
+import { Position, Placement } from 'floating-ui-tooltip/dist/types';
 // TODO: There's only one beacon type, remove the option for animation type
 
 export interface StepActions {
@@ -38,14 +39,6 @@ export interface Step {
     type: string;
 }
 
-
-// let possiblePlacements = <let>["top", "right", "bottom", "left", "auto"];
-let possiblePlacements = ["top", "right", "bottom", "left", "auto"];
-possiblePlacements.forEach(placement => {
-    possiblePlacements.push(placement + "-start");
-    possiblePlacements.push(placement + "-end");
-});
-
 const targetPathComparator = <const>["is", "contains", "startsWith", "endsWith", "regex"];
 
 export interface TooltipBackdrop extends Partial<BackdropData> {
@@ -54,7 +47,7 @@ export interface TooltipBackdrop extends Partial<BackdropData> {
 
 export interface TooltipData {
     bodyContent: string;
-    placement: typeof possiblePlacements[number];
+    placement: Placement;
     offset: number[];
     arrow: boolean;
     scrollIntoView: boolean;
@@ -127,7 +120,7 @@ export interface Hotspot {
     };
     tip: {
         data: {
-            placement: typeof possiblePlacements[number];
+            placement: Position;
             arrow: boolean;
             bodyContent: string;
         };

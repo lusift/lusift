@@ -9,19 +9,26 @@ export function isObjectOrUndefined(object: any): boolean {
     return isObject(object) || typeof object === "undefined";
 }
 
-export function isOfTypeTooltipData(object: any): boolean {
-    const placements = ["bottom", "top", "right", "left", "auto"];
-    placements.forEach(p => {
-        placements.push(`${p}-start`);
-        placements.push(`${p}-end`);
+function isOfTypeTooltipPlacement(item: any): boolean {
+    const positions = ["bottom", "top", "right", "left"];
+    positions.forEach(p => {
+        positions.push(`${p}-start`);
+        positions.push(`${p}-end`);
     });
+    positions.push('auto');
+
+    return isObject(item) && positions.includes(item.position) &&
+        item.orientation === 'auto' || item.orientation === 'fixed';
+}
+
+export function isOfTypeTooltipData(object: any): boolean {
 
     return (
         isObject(object) &&
         typeof object.arrow === "boolean" &&
         (!object.offset || (object.offset instanceof Object && object.offset.length === 2)) &&
         (!object.actions || isObject(object.actions)) &&
-        placements.includes(object.placement) &&
+        isOfTypeTooltipPlacement(object.placement) &&
         (typeof object.contentBody === "string" ||
             (!object.contentBody && typeof object.contentBody !== "boolean")) &&
         // (typeof object.contentBody === 'string' && !!object.contentBody) &&

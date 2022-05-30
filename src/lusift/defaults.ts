@@ -44,7 +44,10 @@ const defaultTooltip = {
     },
   },
   data: {
-    placement: 'bottom',
+    placement: {
+      position: 'bottom',
+      orientation: 'auto'
+    },
     arrow: true,
     backdrop: defaultTooltipBackdrop,
   },

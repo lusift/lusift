@@ -16,19 +16,12 @@ import addDefaultCSS from "./addDefaultCSS";
 // TODO: Write documentation
 
 // TODO: Add box-shadow to modal
-// TODO: Add merging with defaults
-// -- some sort of object/(schema?) merge and validation library?
+// TODO: Adding beacon to tooltip step type (it can toggle the tooltip visibility)
 // NOTE_: Support for different typescript versions
 // TODO_: add support for angul*r
 // TODO: Fix content object
-// TODO: Tooltip positioning for different screen sizes
-// -- how do the comercial saas handle it? automatically or end-user config?
-// -- have the options for orientation be `auto` and `fixed` with positions being the different axis relative to
-// the target. With auto, the position is only picked when there is space for the tooltip, else it moves to different position
-const placement = {
-    position: '', // top, bottom, left, right
-    orientation: '' // auto, fixed
-}
+// -- add progress bar to all element types
+// -- add maxWidth to tooltip
 // NOTE: Handling versioning
 // TODO: Can we just export element classes (Tooltip, Modal, Hotspot, Backdrop) and have them be optionally loadable by the client?
 // -- something like how modifiers work in popperjs
