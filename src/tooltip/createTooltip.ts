@@ -78,6 +78,16 @@ const renderTooltip = async ({ data, target, styleProps, actions, uid, index, on
     <div>
   `;
 
+    const Lusift = window["Lusift"];
+
+    let bodyContent = defaultBodyContent;
+    const activeGuide = Lusift.getActiveGuide();
+
+    if (activeGuide) {
+      bodyContent = Lusift.getContent()[activeGuide.id].data.steps[index].data.bodyContent;
+    }
+    window['bodyContent'] = bodyContent;
+
     const tooltipInstance = await createTooltip({
         target,
         content,
@@ -87,23 +97,14 @@ const renderTooltip = async ({ data, target, styleProps, actions, uid, index, on
         remove: () => {},
         onShow,
         onHide,
-        scrollIntoView
+        onBeforeFirstRender: () => {
+          Lusift.render(bodyContent, ".lusift > .tooltip > .body-content", () => {
+          });
+        },
+        scrollIntoView,
+        showOnCreate: true
     });
-
-    // tooltipInstance.show();
-
-    const Lusift = window["Lusift"];
-
-    let bodyContent = defaultBodyContent;
-    const activeGuide = Lusift.getActiveGuide();
-
-    if (activeGuide) {
-      bodyContent = Lusift.getContent()[activeGuide.id].data.steps[index].data.bodyContent;
-    }
-
-    Lusift.render(bodyContent, ".lusift > .tooltip > .body-content", () => {
-        tooltipInstance.update();
-    });
+    // tooltipInstance.show(true)
 
     return tooltipInstance;
 };

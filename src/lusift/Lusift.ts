@@ -16,7 +16,7 @@ import addDefaultCSS from "./addDefaultCSS";
 // TODO: Write documentation
 
 // TODO: Add box-shadow to modal
-// TODO: Adding beacon to tooltip step type (it can toggle the tooltip visibility)
+// TODO_: Adding beacon to tooltip step type (it can toggle the tooltip visibility)
 // NOTE_: Support for different typescript versions
 // TODO_: add support for angul*r
 // TODO: Fix content object

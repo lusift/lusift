@@ -6,11 +6,9 @@ import { TooltipData, HotspotAndTooltipTarget as Target, StepActions } from "../
 import Backdrop from "../backdrop";
 import { autoUpdate } from '@floating-ui/dom';
 
-const tooltipArrowDefaultSize = 12;
-const tooltipArrowSizeScale = 1;
-const defaultOffset = [tooltipArrowSizeScale*tooltipArrowDefaultSize, 0]; // x needs to be size of arrow + backdrop gap
-
 // TODO: should we have transition effects for backdrop? it's kind of jerky
+// TODO: On brave browser, on page /dashboard, at something around 925kb viewport width (devtool resizing), the tooltip keeps firing the update
+// -- ok, not just that width, but you'll find some points where it does
 
 export default class Tooltip {
     private targetElement: HTMLElement;
@@ -52,24 +50,22 @@ export default class Tooltip {
         log("%c Tooltip constructor! ", "background: #222; color: #bada55");
 
         this.target = target;
-        this.actions = actions;
+        this.actions = JSON.parse(JSON.stringify(actions));
         const { elementSelector } = target;
-        this.styleProps = styleProps || {};
-        this.data = data;
+        this.styleProps = JSON.parse(JSON.stringify(styleProps));
+        this.data = JSON.parse(JSON.stringify(data));
         this.index = index;
         this.onRemove = onRemove;
 
-        const progressOn = data.progressOn || {};
         this.data.progressOn = {
             eventType: "click",
             elementSelector,
-            ...progressOn,
+            ...data.progressOn,
         };
 
-        this.data.offset = this.data.offset || defaultOffset;
         if (!this.data.backdrop!.disabled) {
             // factor in backdrop stage gap in tooltip offset
-            this.data.offset[0] = this.data.offset[0] + this.data.backdrop!.stageGap!;
+            this.data.offset![0] = this.data.offset![0] + this.data.backdrop!.stageGap!;
         }
 
         this.uid = getStepUID({ guideID, index, type: "tooltip" });
@@ -153,6 +149,7 @@ export default class Tooltip {
                         this.backdropInstance.resetBackdrop();
                     }
                 }, 100);
+                this.backdropAutoUpdateCleanup = () => {};
 
                 this.backdropAutoUpdateCleanup = autoUpdate(
                     this.targetElement,

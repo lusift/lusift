@@ -25,9 +25,9 @@ class Hotspot {
 
     constructor({ data, guideID, onRemove }) {
         log(data);
-        this.data = data;
+        this.data = JSON.parse(JSON.stringify(data));
         this.onRemove = onRemove;
-        const { index, type, target } = data;
+        const { index, type, target } = this.data;
         this.tipID = getStepUID({ guideID, type, index });
         this.beaconID = getStepUID({
             guideID,

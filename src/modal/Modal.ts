@@ -12,9 +12,8 @@ class Modal {
 
     constructor({ index, guideID, data, closeButton, onRemove }) {
         const uid = getStepUID({ guideID, type: "modal", index });
-        this.data = data || {};
+        this.data = JSON.parse(JSON.stringify(data));
         index = index;
-        closeButton = closeButton;
 
         this.removeModal = createModal({
             uid,

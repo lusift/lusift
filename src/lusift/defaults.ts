@@ -37,6 +37,10 @@ const defaultTooltipBackdrop = {
   nextOnOverlayClick: false
 }
 
+const tooltipArrowDefaultSize = 12;
+const tooltipArrowSizeScale = 1;
+const defaultTooltipOffset = [tooltipArrowSizeScale*tooltipArrowDefaultSize, 0]; // x needs to be size of arrow + backdrop gap
+
 const defaultTooltip = {
   target: {
     path: {
@@ -50,6 +54,7 @@ const defaultTooltip = {
     },
     arrow: true,
     backdrop: defaultTooltipBackdrop,
+    offset: defaultTooltipOffset
   },
   actions: defaultTooltipActions,
   styleProps: {
