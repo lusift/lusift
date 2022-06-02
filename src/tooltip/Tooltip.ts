@@ -145,12 +145,14 @@ export default class Tooltip {
             if (!backdrop!.disabled) {
 
                 const debouncedBackdropReset = debounce((_x?) => {
+                    console.log('auto update triggered for backdrop. debounce method')
                     if (this.backdropInstance) {
                         this.backdropInstance.resetBackdrop();
                     }
                 }, 100);
-                this.backdropAutoUpdateCleanup = () => {};
 
+                // NOTE: Brave browser has a bug where the dev-tools dock
+                // at certain sizes will trigger resize on loop
                 this.backdropAutoUpdateCleanup = autoUpdate(
                     this.targetElement,
                     this.fuitInstance.tooltipElement,
