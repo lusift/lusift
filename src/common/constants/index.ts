@@ -11,3 +11,4 @@ export const MODAL_OVERLAY_Z_INDEX = 99999;
 export const BACKDROP_Z_INDEX = 99998;
 export const TOOLTIP_Z_INDEX = 99999;
 export const BEACON_Z_INDEX = 99999;
+export const OVERLAY_SELECTOR_CLASS = "lusift-backdrop-overlay";

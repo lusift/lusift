@@ -20,7 +20,6 @@ import addDefaultCSS from "./addDefaultCSS";
 // NOTE_: Support for different typescript versions
 // TODO_: add support for angul*r
 // TODO: Fix content object
-// -- add progress bar to all element types
 // -- add maxWidth to tooltip
 // NOTE: Handling versioning
 // TODO: Can we just export element classes (Tooltip, Modal, Hotspot, Backdrop) and have them be optionally loadable by the client?

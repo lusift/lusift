@@ -10,7 +10,7 @@ import {
 } from "../common/utils/";
 import { log, warn, error } from "../common/logger";
 import { BackdropData } from "../common/types";
-import { BACKDROP_Z_INDEX } from '../common/constants';
+import createOverlayElement from './createOverlayElement';
 
 const areNumbersEqual = (num1: number, num2: number): boolean => {
     let num1Precision = num1.toString().substring(num1.toString().indexOf(".")).length - 1;
@@ -37,7 +37,6 @@ const getDefinedProps = obj =>
 class Backdrop {
     private targetSelector: string;
     readonly stagedTargetClass: string;
-    readonly overlaySelectorClass: string = "lusift-backdrop-overlay";
     private data: BackdropData = {
         stageGap: 5,
         opacity: "0.5",
@@ -45,6 +44,7 @@ class Backdrop {
     };
     private toStopOverlay: boolean = false;
     private focusTrap: any;
+    private removeOverlay: () => void = () => {};
 
     constructor({
         targetSelector,
@@ -78,9 +78,9 @@ class Backdrop {
         this.createOverlay();
     }
 
+    // TODO: refactor this method
+    // -- backdrop content data isn't being applied here
     private createOverlay(): void {
-        /* document.documentElement.style.overflow = 'hidden';
-           document.body.scroll = "no"; */
         const targetElement = document.querySelector(this.targetSelector);
         const padding = this.data.stageGap;
 
@@ -88,64 +88,15 @@ class Backdrop {
 
         const targetPosition = getElementPosition(targetElement);
 
-        const hTop = document.createElement("div");
-        hTop.id = "hTop";
-        const hBottom = document.createElement("div");
-        hBottom.id = "hBottom";
-
-        const vLeft = document.createElement("div");
-        vLeft.id = "vLeft";
-        const vRight = document.createElement("div");
-        vRight.id = "vRight";
-
-        const overlayStyle = {
-            opacity: "0.5",
-            background: "#444",
-            transition: "visibility 0.3s ease-in-out",
-            position: "absolute",
-            top: "0",
-            bottom: "0",
-            left: "0",
-            right: "0",
-            zIndex: BACKDROP_Z_INDEX,
-            border: "1px solid transparent",
-        };
-
-        hTop.style.cssText = styleObjectToString({
-            ...overlayStyle,
-            height: `${targetPosition.bottom - targetPosition.height - padding}px`,
-            width: `${targetPosition.right - targetPosition.left + 2 * padding}px`,
-            left: `${targetPosition.left - padding}px`,
-            bottom: `${targetPosition.top - padding}px`,
+        const { nodes: overlayNodes, removeOverlay } = createOverlayElement({
+            targetPosition,
+            stageGap: this.data.stageGap,
+            documentHeight,
+            documentWidth
         });
-
-        hBottom.style.cssText = styleObjectToString({
-            ...overlayStyle,
-            height: `${documentHeight - (targetPosition.top + targetPosition.height + padding)}px`,
-            width: `${targetPosition.right - targetPosition.left + 2 * padding}px`,
-            left: `${targetPosition.left - padding}px`,
-            top: `${targetPosition.bottom + padding}px`,
-        });
-
-        vLeft.style.cssText = styleObjectToString({
-            ...overlayStyle,
-            width: `${targetPosition.left - padding}px`,
-            height: `${documentHeight}px`,
-            right: `${targetPosition.left - padding}px`,
-        });
-
-        vRight.style.cssText = styleObjectToString({
-            ...overlayStyle,
-            width: `${documentWidth - (targetPosition.left + targetPosition.width) - padding}px`,
-            height: `${documentHeight}px`,
-            left: `${targetPosition.right + padding}px`,
-        });
-
-        [hTop, hBottom, vLeft, vRight].forEach(el => {
-            el.classList.add(this.overlaySelectorClass);
-            document.body.appendChild(el);
-        });
-        targetElement.classList.add(this.stagedTargetClass);
+        overlayNodes.forEach(el => document.body.appendChild(el));
+        this.removeOverlay = removeOverlay;
+        const [hTop, hBottom, vLeft, vRight] = overlayNodes;
 
         // See that the overlay isn't glitchy, reset if it is
         const { height: hTopHeight, width: hTopWidth } = getElementPosition(hTop);
@@ -156,24 +107,16 @@ class Backdrop {
         const overlaySumWidth = hTopWidth + vLeftWidth + vRightWidth;
         const overlaySumHeight = hTopHeight + hBottomHeight + targetPosition.height + 2 * padding;
 
-        /* log(screenWidth, overlaySumWidth);
-           log(screenHeight, overlaySumHeight); */
+        log(documentWidth, overlaySumWidth);
+        log(documentHeight, overlaySumHeight);
 
         if (
             !areNumbersEqual(documentWidth, overlaySumWidth) ||
             !areNumbersEqual(documentHeight, overlaySumHeight)
         ) {
+            console.log('reset backdrop')
             this.resetBackdrop();
         }
-    }
-
-    private removeOverlay(): void {
-        document.querySelectorAll(`.${this.overlaySelectorClass}`).forEach((el: HTMLElement) => {
-            if (el) el.remove();
-        });
-
-        const targetElement = document.querySelector(this.targetSelector);
-        if (targetElement) targetElement.classList.remove(this.stagedTargetClass);
     }
 
     public remove(): void {
