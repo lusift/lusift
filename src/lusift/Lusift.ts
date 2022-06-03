@@ -113,7 +113,7 @@ class Lusift {
             .some(key => key === guideID);
     }
 
-    public enable(guideID: string): void {
+    public enable(guideID: string, toRefresh?: boolean): void {
         let localData = this.getTrackingState();
         if(!this.doesGuideExist(guideID)) {
             return error(`Content of id '${guideID}' doesn't exist`);
@@ -127,7 +127,9 @@ class Lusift {
             }
         });
         saveState(localData);
-        this.showContent(guideID);
+        if (toRefresh) {
+            this.refresh();
+        }
     }
 
     public disable(guideID: string): void {
@@ -210,6 +212,7 @@ class Lusift {
             return warn(`Guide '${contentID}' is closed.`);
         }
         const newGuideInstance = new Guide(contentID);
+        this.enable(contentID);
 
         const {
             nextStep,

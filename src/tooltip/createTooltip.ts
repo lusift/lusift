@@ -10,6 +10,8 @@ const defaultBodyContent = `
   <p style="font-weight: normal;">Default tooltip content</p>
 `;
 
+// TODO: Enable styleProps
+
 const renderNavButtons = (navSection: any): string => {
     const { nextButton, prevButton, dismissLink } = navSection;
 
