@@ -10,6 +10,8 @@ import startStepInstance from './startStepInstance';
 
 import { GuideType, ActiveStep, TrackingState, StepTargetType } from "../common/types";
 
+// TODO: refactor this
+
 export default class Guide {
     readonly guideData: GuideType;
     private activeSteps: ActiveStep[] = [];

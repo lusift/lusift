@@ -98,7 +98,13 @@ const defaultModal = {
     disabled: true,
   },
   data: {
-  }
+    escToClose: false,
+    clickOutsideToClose: true
+  },
+  overlay: {
+    styleProps: {},
+  },
+  styleProps: {}
 }
 
 const defaultGuideData = {

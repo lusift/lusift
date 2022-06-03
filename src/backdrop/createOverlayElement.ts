@@ -5,6 +5,7 @@ import {
     getDocumentDimensions
 } from "../common/utils/";
 
+// TODO: clean this
 const areNumbersEqual = (num1: number, num2: number): boolean => {
     let num1Precision = num1.toString().substring(num1.toString().indexOf(".")).length - 1;
     if (num1.toString().indexOf(".") == -1) num1Precision = 0;

@@ -3,7 +3,7 @@ import Modal from "../modal";
 import Hotspot from "../hotspot";
 
 const startStepInstance = (stepData: any, guideID: string, onRemove: Function): void => {
-    const { index, target, type, data, closeButton } = stepData;
+    const { index, target, type, data, closeButton, styleProps, overlay } = stepData;
     let activeStepInstance: any;
 
     if (type === "tooltip") {
@@ -24,7 +24,9 @@ const startStepInstance = (stepData: any, guideID: string, onRemove: Function): 
             guideID,
             data,
             closeButton,
-            onRemove
+            onRemove,
+            overlay,
+            styleProps
         });
     } else if (type === "hotspot") {
         activeStepInstance = new Hotspot({

@@ -34,7 +34,7 @@ export const restoreScrollBody = () => {
   document.body.classList.remove("lusift-no-scroll");
 };
 
-const createModal = ({ uid, index, closeButton = {} }): () => void => {
+const createModal = ({ uid, index, closeButton, styleProps, overlay }): () => void => {
 
   const modalOverlay = div();
   const modal = div();
@@ -53,12 +53,13 @@ const createModal = ({ uid, index, closeButton = {} }): () => void => {
   Object.assign(modalOverlay.style, {
     position:  'fixed',
     overflowY: "scroll",
-    background: "rgba(40,40,40, .55)",
+    background: "rgba(40,40,40, .5)",
     top: "0",
     left: "0",
     bottom: "0",
     right: "0",
     zIndex: MODAL_OVERLAY_Z_INDEX,
+    ...overlay.styleProps
   });
 
   Object.assign(modal.style, {
@@ -68,6 +69,7 @@ const createModal = ({ uid, index, closeButton = {} }): () => void => {
     background: 'rgba(255,255,255, 1)',
     position: 'relative',
     borderRadius: DEFAULT_MODAL_BORDER_RADIUS,
+    styleProps
   });
 
   lusiftWrapper.appendChild(modal);

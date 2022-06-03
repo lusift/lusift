@@ -10,7 +10,7 @@ class Modal {
     private onRemove: Function;
     private removeModal: Function;
 
-    constructor({ index, guideID, data, closeButton, onRemove }) {
+    constructor({ index, guideID, data, closeButton, onRemove, overlay, styleProps }) {
         const uid = getStepUID({ guideID, type: "modal", index });
         this.data = JSON.parse(JSON.stringify(data));
         index = index;
@@ -18,7 +18,9 @@ class Modal {
         this.removeModal = createModal({
             uid,
             index,
-            closeButton
+            closeButton,
+            styleProps,
+            overlay,
         });
 
         const { escToClose, clickOutsideToClose } = this.data;
