@@ -55,7 +55,8 @@ const defaultTooltip = {
     },
     arrow: true,
     backdrop: defaultTooltipBackdrop,
-    offset: defaultTooltipOffset
+    offset: defaultTooltipOffset,
+    maxWidth: 400
   },
   actions: defaultTooltipActions,
   styleProps: {
@@ -81,6 +82,7 @@ const defaultHotspot = {
     data: {
       placement: 'bottom',
       arrow: true,
+      maxWidth: 400
     },
     styleProps: {
     }

@@ -14,6 +14,7 @@ const renderTooltip = async ({ remove, data, target, styleProps, uid, index, onC
     arrow,
     placement,
     offset,
+    maxWidth,
     // bodyContent = defaultBodyContent,
   } = data;
 
@@ -37,6 +38,7 @@ const renderTooltip = async ({ remove, data, target, styleProps, uid, index, onC
     content,
     arrow,
     offset,
+    maxWidth,
     placement,
     onClickOutside,
     hideOnReferenceHidden: false,

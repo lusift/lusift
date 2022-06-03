@@ -50,6 +50,7 @@ const renderTooltip = async ({ data, target, styleProps, actions, uid, index, on
     // bodyContent = defaultBodyContent,
     placement,
     offset,
+    maxWidth
   } = data;
 
   const content = div();
@@ -83,6 +84,7 @@ const renderTooltip = async ({ data, target, styleProps, actions, uid, index, on
     content,
     arrow,
     offset,
+    maxWidth,
     placement,
     remove: () => {},
     onShow,
