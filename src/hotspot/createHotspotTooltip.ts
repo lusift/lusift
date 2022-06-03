@@ -1,4 +1,3 @@
-import styleObjectToString from "../common/utils/styleObjectToString";
 import createTooltip from "../common/createTooltip";
 import renderProgressBar from "../common/progressBar";
 import { DEFAULT_TOOLTIP_BORDER_RADIUS } from "../common/constants";
@@ -8,60 +7,59 @@ const defaultBodyContent = `
   <p style="font-weight: normal;">Default hotspot tip content</p>
 `;
 
+const div = () => document.createElement("div");
+
 const renderTooltip = async ({ remove, data, target, styleProps, uid, index, onClickOutside, showOnCreate }) => {
-    const {
-        arrow,
-        placement,
-        offset,
-        // bodyContent = defaultBodyContent,
-    } = data;
+  const {
+    arrow,
+    placement,
+    offset,
+    // bodyContent = defaultBodyContent,
+  } = data;
 
-    const content = `
-    <style>
-      .tippy-box{
-        z-index: 999999;
-        border-radius: ${DEFAULT_TOOLTIP_BORDER_RADIUS};
-        ${styleObjectToString(styleProps)}
-      }
-    </style>
+  const content = div();
+  content.className = 'lusift';
 
+  content.innerHTML = `
     ${renderProgressBar()}
-    <div class="lusift">
-      <div class="hotspot-tooltip" id="tooltip-${uid}">
-        <section class="body-content">
-        </section>
-      </div>
+    <div class="hotspot-tooltip" id="tooltip-${uid}">
+    <section class="body-content">
+    </section>
     </div>
   `;
+  Object.assign(content.style, {
+    borderRadius: DEFAULT_TOOLTIP_BORDER_RADIUS,
+    ...styleProps,
+  });
 
-    const tooltipInstance = await createTooltip({
-        target,
-        content,
-        arrow,
-        offset,
-        placement,
-        onClickOutside,
-        hideOnReferenceHidden: false,
-        hideOnTooltipEscape: false,
-        showOnCreate,
-        remove: () => {},
-    });
+  const tooltipInstance = await createTooltip({
+    target,
+    content,
+    arrow,
+    offset,
+    placement,
+    onClickOutside,
+    hideOnReferenceHidden: false,
+    hideOnTooltipEscape: false,
+    showOnCreate,
+    remove: () => {},
+  });
 
-    const Lusift = window["Lusift"];
+  const Lusift = window["Lusift"];
 
-    let bodyContent = defaultBodyContent;
-    const activeGuide = Lusift.getActiveGuide();
+  let bodyContent = defaultBodyContent;
+  const activeGuide = Lusift.getActiveGuide();
 
-    if (activeGuide) {
-      // TODO: Why did we decide to pull from Lusift.getContent() and not from this function's parameter again?
-      bodyContent = Lusift.getContent()[activeGuide.id].data.steps[index].tip.data.bodyContent || bodyContent;
-    }
+  if (activeGuide) {
+    // TODO: Why did we decide to pull from Lusift.getContent() and not from this function's parameter again?
+    bodyContent = Lusift.getContent()[activeGuide.id].data.steps[index].tip.data.bodyContent || bodyContent;
+  }
 
-    Lusift.render(bodyContent, `.lusift > .hotspot-tooltip#tooltip-${uid} > .body-content`, () => {
-        tooltipInstance.update();
-    });
+  Lusift.render(bodyContent, `.lusift > .hotspot-tooltip#tooltip-${uid} > .body-content`, () => {
+    tooltipInstance.update();
+  });
 
-    return tooltipInstance;
+  return tooltipInstance;
 };
 
 export default renderTooltip;

@@ -69,7 +69,7 @@ const createModal = ({ uid, index, closeButton, styleProps, overlay }): () => vo
     background: 'rgba(255,255,255, 1)',
     position: 'relative',
     borderRadius: DEFAULT_MODAL_BORDER_RADIUS,
-    styleProps
+    ...styleProps
   });
 
   lusiftWrapper.appendChild(modal);

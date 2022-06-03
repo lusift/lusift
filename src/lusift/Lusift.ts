@@ -18,6 +18,7 @@ import addDefaultCSS from "./addDefaultCSS";
 // TODO: Style step components better
 // - Modal
 // - Tooltip
+// - hotspot
 
 // TODO_: Adding beacon to tooltip step type (it can toggle the tooltip visibility)
 // NOTE_: Support for different typescript versions
