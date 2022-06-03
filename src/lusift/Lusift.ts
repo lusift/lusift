@@ -14,6 +14,10 @@ import { isOfTypeContent, isObject } from "../common/utils/isOfType";
 import addDefaultCSS from "./addDefaultCSS";
 
 // TODO: Write documentation
+// TODO: Give ability to pass html elements
+// TODO: Style step components better
+// - Modal
+// - Tooltip
 
 // TODO_: Adding beacon to tooltip step type (it can toggle the tooltip visibility)
 // NOTE_: Support for different typescript versions
@@ -132,7 +136,7 @@ class Lusift {
         }
     }
 
-    public disable(guideID: string): void {
+    public disable(guideID: string, toRemove?: boolean): void {
         let localData = loadState();
         if(!this.doesGuideExist(guideID)) {
             return error(`Content of id '${guideID}' doesn't exist`);

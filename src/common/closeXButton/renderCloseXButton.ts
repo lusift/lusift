@@ -1,6 +1,6 @@
 import { styleObjectToString } from "../utils";
 
-const renderCloseXButton = (closeButton: any, stepType: string): string => {
+const renderCloseXButton = (closeButton: any, stepType: 'modal' | 'tooltip'): string => {
     if (closeButton.disabled) return `<div style="margin-top: 0.7rem"></div>`;
     return `
     <style>

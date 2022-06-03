@@ -1,4 +1,3 @@
-import { styleObjectToString } from "../common/utils";
 import renderProgressBar from "../common/progressBar";
 import renderCloseXButton from "../common/closeXButton";
 import createTooltip from "../common/createTooltip";
@@ -10,105 +9,94 @@ const defaultBodyContent = `
   <p style="font-weight: normal;">Default tooltip content</p>
 `;
 
-// TODO: Enable styleProps
+const div = () => document.createElement("div");
+const section = () => document.createElement("section");
 
-const renderNavButtons = (navSection: any): string => {
-    const { nextButton, prevButton, dismissLink } = navSection;
+const renderNavButtons = (navSection: any): Element => {
+    const { nextButton, prevButton, dismissLink, disabled } = navSection;
+    if (disabled) return div();
 
-    return `
-    <style>
-    .lusift .tooltip section.nav-buttons{
-      ${styleObjectToString(navSection.styleProps)}
-    }
-    .lusift .tooltip .nav-buttons .next{
-      ${styleObjectToString(nextButton.styleProps)}
-    }
-    .lusift .tooltip .nav-buttons .prev{
-      ${styleObjectToString(prevButton.styleProps)}
-    }
-    </style>
+    const container = section();
+    container.className = 'nav-buttons';
+    const dismiss = document.createElement('button');
+    dismiss.className = 'close dismiss-link';
+    dismiss.innerText = dismissLink.text;
+    dismiss.setAttribute('onclick', 'window.Lusift.close()');
 
-    <section class="nav-buttons">
-      ${
-          dismissLink.disabled
-              ? ""
-              : `
-        <button onclick="Lusift.close()" class="close dismiss-link">
-          ${dismissLink.text}
-        </button>
-        `
-      }
-      ${
-          prevButton.disabled
-              ? ""
-              : `<button onclick="Lusift.prev()" class="prev lusift-button">${prevButton.text}</button>`
-      }
-      ${
-          nextButton.disabled
-              ? ""
-              : `<button onclick="Lusift.next()" class="next lusift-button">${nextButton.text}</button>`
-      }
-    </section>
-  `;
+    const prev = document.createElement('button');
+    prev.className = 'prev';
+    prev.innerText = prevButton.text;
+    prev.setAttribute('onclick', 'window.Lusift.prev()');
+    const next = document.createElement('button');
+    next.className = 'next lusift-button';
+    next.innerText = nextButton.text;
+    next.setAttribute('onclick', 'window.Lusift.next()');
+
+    Object.assign(dismiss.style, dismissLink.styleProps);
+    Object.assign(next.style, nextButton.styleProps);
+    Object.assign(prev.style, prevButton.styleProps);
+
+    dismissLink && container.appendChild(dismiss);
+    prevButton && container.appendChild(prev);
+    nextButton && container.appendChild(next);
+
+    return container;
 };
 
 const renderTooltip = async ({ data, target, styleProps, actions, uid, index, onShow, onHide, scrollIntoView }) => {
-    const { closeButton, navSection } = actions;
-    const {
-        arrow,
-        // bodyContent = defaultBodyContent,
-        placement,
-        offset,
-    } = data;
+  const { closeButton, navSection } = actions;
+  const {
+    arrow,
+    // bodyContent = defaultBodyContent,
+    placement,
+    offset,
+  } = data;
 
-    const content = `
-    <style>
-      .tippy-box{
-        border-radius: ${DEFAULT_TOOLTIP_BORDER_RADIUS};
-        ${styleObjectToString(styleProps)}
-      }
-    </style>
-
-    <div class="lusift">
-      ${renderProgressBar()}
-      <div class="tooltip" id="tooltip-${uid}">
-        ${renderCloseXButton(closeButton, "tooltip")}
-        <section class="body-content">
-        </section>
-        ${renderNavButtons(navSection)}
-      </div>
-    <div>
+  const content = div();
+  content.className = 'lusift';
+  content.innerHTML = `
+    ${renderProgressBar()}
+    <div class="tooltip" id="tooltip-${uid}">
+      ${renderCloseXButton(closeButton, "tooltip")}
+      <section class="body-content">
+      </section>
+    </div>
   `;
+  content.querySelector(`#tooltip-${uid}`)!.appendChild(renderNavButtons(navSection));
 
-    const Lusift = window["Lusift"];
+  Object.assign(content.style, {
+    borderRadius: DEFAULT_TOOLTIP_BORDER_RADIUS,
+    ...styleProps
+  })
 
-    let bodyContent = defaultBodyContent;
-    const activeGuide = Lusift.getActiveGuide();
+  const Lusift = window["Lusift"];
 
-    if (activeGuide) {
-      bodyContent = Lusift.getContent()[activeGuide.id].data.steps[index].data.bodyContent;
-    }
-    window['bodyContent'] = bodyContent;
+  let bodyContent = defaultBodyContent;
+  const activeGuide = Lusift.getActiveGuide();
 
-    const tooltipInstance = await createTooltip({
-        target,
-        content,
-        arrow,
-        offset,
-        placement,
-        remove: () => {},
-        onShow,
-        onHide,
-        onBeforeFirstRender: () => {
-          Lusift.render(bodyContent, ".lusift > .tooltip > .body-content", () => {
-          });
-        },
-        scrollIntoView,
-        showOnCreate: true
-    });
-    // tooltipInstance.show(true)
+  if (activeGuide) {
+    bodyContent = Lusift.getContent()[activeGuide.id].data.steps[index].data.bodyContent;
+  }
 
-    return tooltipInstance;
+  const tooltipInstance = await createTooltip({
+    target,
+    content,
+    arrow,
+    offset,
+    placement,
+    remove: () => {},
+    onShow,
+    onHide,
+    onBeforeFirstRender: () => {
+      Lusift.render(bodyContent, ".lusift > .tooltip > .body-content", () => {
+      });
+    },
+    scrollIntoView,
+    showOnCreate: true
+  });
+  // tooltipInstance.show(true)
+
+  return tooltipInstance;
 };
 
 export default renderTooltip;

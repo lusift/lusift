@@ -9,6 +9,7 @@ const defaultTooltipActions = {
     disabled: false,
   },
   navSection: {
+    disabled: false,
     styleProps: {},
     nextButton: {
       text: 'next',

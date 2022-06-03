@@ -7,8 +7,6 @@ import Backdrop from "../backdrop";
 import { autoUpdate } from '@floating-ui/dom';
 
 // TODO: should we have transition effects for backdrop? it's kind of jerky
-// TODO: On brave browser, on page /dashboard, at something around 925kb viewport width (devtool resizing), the tooltip keeps firing the update
-// -- ok, not just that width, but you'll find some points where it does
 
 export default class Tooltip {
     private targetElement: HTMLElement;
