@@ -119,14 +119,14 @@ const defaultGuideData = {
   onClose: () => {}
 }
 
-function removeUndefinedFields(obj) {
+function removeUndefinedFieldsFromContent(obj) {
   for (var key in obj) {
     if (obj[key] === undefined) {
       delete obj[key];
       continue;
     }
-    if (obj[key] && typeof obj[key] === "object") {
-      removeUndefinedFields(obj[key]);
+    if (obj[key] && typeof obj[key] === "object" && !(obj[key] instanceof Element)) {
+      removeUndefinedFieldsFromContent(obj[key]);
     }
   }
   return obj;
@@ -251,7 +251,7 @@ export interface ContentDefaults {
 }
 
 export default function combineContentWithDefaults(content, contentDefaults?: DeepPartial<ContentDefaults>): Content {
-  content = removeUndefinedFields(content);
+  content = removeUndefinedFieldsFromContent(content);
 
   // TODO: combine inputDefaults with defaults, but only for properties that exist on defaults
 
