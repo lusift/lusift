@@ -6,7 +6,8 @@ import {
     getElementPosition,
     getStepUID,
     changeAsyncStepStatus,
-    debounce
+    debounce,
+    copyObject
 } from "../common/utils";
 import { Hotspot as HotspotData } from "../common/types";
 import { log, warn, error } from "../common/logger";
@@ -25,7 +26,7 @@ class Hotspot {
 
     constructor({ data, guideID, onRemove }) {
         log(data);
-        this.data = JSON.parse(JSON.stringify(data));
+        this.data = copyObject(data);
         this.onRemove = onRemove;
         const { index, type, target } = this.data;
         this.tipID = getStepUID({ guideID, type, index });

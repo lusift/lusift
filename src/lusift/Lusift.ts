@@ -22,7 +22,6 @@ import addDefaultCSS from "./addDefaultCSS";
 
 // TODO_: Adding beacon to tooltip step type (it can toggle the tooltip visibility)
 // TODO_: add support for angul*r
-// TODO: Fix content object
 // NOTE: Handling versioning
 // TODO: Can we just export element classes (Tooltip, Modal, Hotspot, Backdrop) and have them be optionally loadable by the client?
 // -- something like how modifiers work in popperjs

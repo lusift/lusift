@@ -12,6 +12,7 @@ import vanillaRender from "./vanillaRender";
 import getScrollBarWidth from "./getScrollBarWidth";
 import getDocumentDimensions from './dimensions';
 import debounce from './debounce';
+import copyObject from './copyObject';
 
 export {
     htmlStringToElement,
@@ -27,5 +28,6 @@ export {
     vanillaRender,
     getScrollBarWidth,
     getDocumentDimensions,
-    debounce
+    debounce,
+    copyObject
 };

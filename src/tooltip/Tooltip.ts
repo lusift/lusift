@@ -1,6 +1,6 @@
 import { document, window } from "global";
 import createTooltip from "./createTooltip";
-import { getStepUID, debounce } from "../common/utils";
+import { getStepUID, debounce, copyObject } from "../common/utils";
 import { log, warn, error } from "../common/logger";
 import { TooltipData, HotspotAndTooltipTarget as Target, StepActions } from "../common/types";
 import Backdrop from "../backdrop";
@@ -48,10 +48,10 @@ export default class Tooltip {
         log("%c Tooltip constructor! ", "background: #222; color: #bada55");
 
         this.target = target;
-        this.actions = JSON.parse(JSON.stringify(actions));
+        this.actions = copyObject(actions);
         const { elementSelector } = target;
-        this.styleProps = JSON.parse(JSON.stringify(styleProps));
-        this.data = JSON.parse(JSON.stringify(data));
+        this.styleProps = copyObject(styleProps);
+        this.data = copyObject(data);
         this.index = index;
         this.onRemove = onRemove;
 

@@ -1,6 +1,6 @@
 import createModal, { noScrollBody, restoreScrollBody } from "./createModal";
 import { document, window } from "global";
-import { getStepUID, addFocusTrap } from "../common/utils";
+import { getStepUID, addFocusTrap, copyObject } from "../common/utils";
 import { ModalData } from "../common/types";
 import { MODAL_OVERLAY_CLASS, MODAL_CLASS } from "../common/constants";
 
@@ -12,7 +12,7 @@ class Modal {
 
     constructor({ index, guideID, data, closeButton, onRemove, overlay, styleProps }) {
         const uid = getStepUID({ guideID, type: "modal", index });
-        this.data = JSON.parse(JSON.stringify(data));
+        this.data = copyObject(data);
         index = index;
 
         this.removeModal = createModal({
