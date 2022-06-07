@@ -15,7 +15,6 @@ import { isOfTypeContent, isObject } from "../common/utils/isOfType";
 import addDefaultCSS from "./addDefaultCSS";
 
 // TODO: Write documentation
-// TODO: Tooltip with no bodyContent passed is rendering undefined for body
 // TODO: Style step components better
 // - Modal
 // - Tooltip

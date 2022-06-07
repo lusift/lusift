@@ -76,8 +76,10 @@ const renderTooltip = async ({ data, target, styleProps, actions, uid, index, on
   const activeGuide = Lusift.getActiveGuide();
 
   if (activeGuide) {
-    bodyContent = Lusift.getContent()[activeGuide.id].data.steps[index].data.bodyContent;
+    bodyContent = Lusift.getContent()[activeGuide.id].data.steps[index].data.bodyContent || bodyContent;
   }
+  console.log('tooltip body content to render')
+  console.log(bodyContent)
 
   const tooltipInstance = await createTooltip({
     target,
