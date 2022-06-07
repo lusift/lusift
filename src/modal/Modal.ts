@@ -5,7 +5,7 @@ import { ModalData } from "../common/types";
 import { MODAL_OVERLAY_CLASS, MODAL_CLASS } from "../common/constants";
 
 class Modal {
-    private data: ModalData = {};
+    private data: ModalData;
     private focusTrap: any;
     private onRemove: Function;
     private removeModal: Function;

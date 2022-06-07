@@ -1,4 +1,5 @@
-import { Content } from '../common/types';
+import { Content, DeepPartial } from '../common/types';
+import { ContentDefaults } from './types';
 import { mergeDeep } from '../common/utils';
 import { isObject } from '../common/utils/isOfType';
 
@@ -55,6 +56,9 @@ const defaultTooltip = {
     },
     arrow: true,
     backdrop: defaultTooltipBackdrop,
+    progressOn: {
+      eventType: 'click',
+    },
     offset: defaultTooltipOffset,
     maxWidth: 400
   },
@@ -138,91 +142,6 @@ let defaults = {
   modal: defaultModal,
 }
 
-export interface DefaultTooltip {
-  target: {
-    path: {
-      comparator: string,
-      value: string
-    }
-  },
-  data: {
-    placement: string,
-    arrow: boolean,
-    backdrop: {
-      disabled: boolean,
-      color: string,
-      opacity: string,
-      stageGap: number,
-      nextOnOverlayClick: boolean
-    }
-  },
-  actions: {
-    styleProps: {},
-    closeButton: {
-      styleProps: {},
-      disabled: boolean,
-    },
-    navSection: {
-      styleProps: {},
-      nextButton: {
-        text: string,
-        styleProps: {},
-        disabled: boolean,
-      },
-      prevButton: {
-        text: string,
-        styleProps: {},
-        disabled: boolean,
-      },
-      dismissLink: {
-        text: string,
-        styleProps: {},
-        disabled: boolean,
-      }
-    }
-  }
-}
-
-export interface DefaultHotspot {
-  target: {
-    path: {
-      comparator: string,
-      value: string
-    }
-  },
-  beacon: {
-    placement: {
-      top: number,
-      left: number,
-    },
-    size: number,
-    color: string,
-    type: string
-  },
-  tip: {
-    data: {
-      placement: string,
-      arrow: boolean,
-    },
-    styleProps: {},
-  },
-  async: boolean
-}
-
-export interface DefaultModal {
-  target: {
-    path: {
-      comparator: string,
-      value: string
-    }
-  },
-  closeButton: {
-    styleProps: {},
-    disabled: boolean,
-  },
-  data: {
-  }
-}
 
 function overrideProps(target, source) {
   let output = Object.assign({}, target);
@@ -240,22 +159,11 @@ function overrideProps(target, source) {
 }
 
 
-export type DeepPartial<T> = {
-    [P in keyof T]?: DeepPartial<T[P]>;
-};
-
-export interface ContentDefaults {
-  tooltip: DefaultTooltip,
-  hotspot: DefaultHotspot,
-  modal: DefaultModal,
-}
-
 export default function combineContentWithDefaults(content, contentDefaults?: DeepPartial<ContentDefaults>): Content {
   content = removeUndefinedFieldsFromContent(content);
 
-  // TODO: combine inputDefaults with defaults, but only for properties that exist on defaults
-
   if (contentDefaults) {
+    // combine input defaults with defaults, but only for properties that exist on defaults
     defaults = overrideProps(defaults, contentDefaults);
   }
 

@@ -3,25 +3,25 @@ import { saveState, loadState, setDefaultState } from "../common/store";
 import { log, error, warn } from "../common/logger";
 import { doesStepMatchDisplayCriteria } from "../common/utils";
 import startStepInstance from './startStepInstance';
-import mergeContentWithDefaults, { ContentDefaults, DeepPartial } from './defaults';
+import mergeContentWithDefaults from './defaults';
 
 import { window, document } from "global";
 
-import { Content, LocalState, ActiveGuide } from "../common/types";
+import { Content, LocalState, ActiveGuide, DeepPartial } from "../common/types";
+import { ContentDefaults, InputContent } from './types';
 
 import { isOfTypeContent, isObject } from "../common/utils/isOfType";
 
 import addDefaultCSS from "./addDefaultCSS";
 
 // TODO: Write documentation
-// TODO: Give ability to pass html elements
+// TODO: Tooltip with no bodyContent passed is rendering undefined for body
 // TODO: Style step components better
 // - Modal
 // - Tooltip
 // - hotspot
 
 // TODO_: Adding beacon to tooltip step type (it can toggle the tooltip visibility)
-// NOTE_: Support for different typescript versions
 // TODO_: add support for angul*r
 // TODO: Fix content object
 // NOTE: Handling versioning
@@ -145,8 +145,12 @@ class Lusift {
         saveState(localData);
     }
 
-    public setContent(content: Content, defaults?: DeepPartial<ContentDefaults>): void {
+    public setContent(content: InputContent, defaults?: DeepPartial<ContentDefaults>): void {
+        console.log('passed to setContent:')
+        console.log(content);
         const mergedWithDefaultsContent = mergeContentWithDefaults(content, defaults);
+        console.log('merged with defaults:')
+        console.log(mergedWithDefaultsContent)
 
         // validate content
         if (!isOfTypeContent(mergedWithDefaultsContent)) {

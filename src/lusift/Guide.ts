@@ -66,6 +66,7 @@ export default class Guide {
         this.removeIllegalSteps();
         this.attemptToStartAsyncSteps();
 
+        // TODO: Add a case for when steps.length is 0
         if (finished || prematurelyClosed) {
             error("Guide is already finished or closed");
         } else {
@@ -295,7 +296,7 @@ export default class Guide {
         }
         this.closeCurrentStep();
         this.setStep(newStep);
-        typeof window.Lusift.onNext === "function" && window.Lusift.onNext();
+        window.Lusift.onNext();
     }
 
     public prevStep(): void {
@@ -321,6 +322,6 @@ export default class Guide {
         this.closeCurrentStep();
         this.setStep(newStep);
         const Lusift = window["Lusift"];
-        typeof Lusift.onPrev === "function" && Lusift.onPrev();
+        Lusift.onPrev();
     }
 }

@@ -13,9 +13,9 @@ export default class Tooltip {
     readonly target: Target;
     private fuitInstance: any;
     readonly uid: string;
-    readonly data: Partial<TooltipData>;
+    readonly data: TooltipData;
     private actions: StepActions;
-    readonly styleProps: Object = {};
+    readonly styleProps: Object;
     private targetsAndEventListeners: {
         method: string;
         target: HTMLElement;
@@ -39,7 +39,7 @@ export default class Tooltip {
     }: {
         target: Target;
         guideID: string;
-        data: Partial<TooltipData>;
+        data: TooltipData;
         index: number;
         actions: StepActions;
         styleProps: Object;
@@ -55,15 +55,11 @@ export default class Tooltip {
         this.index = index;
         this.onRemove = onRemove;
 
-        this.data.progressOn = {
-            eventType: "click",
-            elementSelector,
-            ...data.progressOn,
-        };
+        this.data.progressOn.elementSelector = this.data.progressOn.elementSelector || elementSelector;
 
-        if (!this.data.backdrop!.disabled) {
+        if (!this.data.backdrop.disabled) {
             // factor in backdrop stage gap in tooltip offset
-            this.data.offset![0] = this.data.offset![0] + this.data.backdrop!.stageGap!;
+            this.data.offset[0] = this.data.offset[0] + this.data.backdrop.stageGap!;
         }
 
         this.uid = getStepUID({ guideID, index, type: "tooltip" });
@@ -83,7 +79,7 @@ export default class Tooltip {
     }
 
     private addBackdrop(): void {
-        const { stageGap, opacity, color } = this.data.backdrop!;
+        const { stageGap, opacity, color } = this.data.backdrop;
         const data = {
             stageGap,
             opacity,
@@ -126,7 +122,7 @@ export default class Tooltip {
                 index,
                 onShow: (instance) => {
                     if(instance.state.isShown) {
-                        backdrop!.disabled || this.addBackdrop.bind(this)();
+                        backdrop.disabled || this.addBackdrop.bind(this)();
                         this.isTooltipShown = true;
                     } else {
                         console.log('onShow: onShow ran but it\'s hidden')

@@ -8,6 +8,7 @@ export interface StepActions {
         disabled: boolean;
     };
     navSection: {
+        disabled: boolean;
         styleProps: object;
         nextButton: {
             text: string;
@@ -27,63 +28,70 @@ export interface StepActions {
     };
 }
 
+export type BodyContent = string | Element | object | Function;
+
 export interface BackdropData {
     color: string;
     opacity: string;
     stageGap: number;
-    nextOnOverlayClick?: boolean;
+    nextOnOverlayClick: boolean;
 }
-
-export interface Step {
-    index: number;
-    type: string;
-}
-
-const targetPathComparator = <const>["is", "contains", "startsWith", "endsWith", "regex"];
 
 export interface TooltipBackdrop extends Partial<BackdropData> {
     disabled: boolean;
 }
 
 export interface TooltipData {
-    bodyContent: string;
+    bodyContent: BodyContent;
     placement: Placement;
     offset: number[];
     arrow: boolean;
     scrollIntoView: boolean;
-    backdrop: Partial<TooltipBackdrop>;
-    progressOn: Partial<{
+    backdrop: TooltipBackdrop;
+    progressOn: {
         eventType: string;
         elementSelector: string;
         disabled: boolean;
-    }>;
+    };
 }
+
+export type PathComparator =
+    'is' |
+    'contains' |
+    'startsWith' |
+    'endsWith' |
+    'regex';
+
+const pc: DeepPartial<PathComparator> | undefined = 'is'
 
 export interface ModalTarget {
     path: {
         value: string;
-        // comparator: typeof targetPathComparator[number];
-        comparator: string;
+        comparator: PathComparator;
     };
 }
 
 export interface HotspotAndTooltipTarget {
     path: {
         value: string;
-        // comparator: typeof targetPathComparator[number];
-        comparator: string;
+        comparator: PathComparator;
     };
     elementSelector: string;
 }
 
 export interface Tooltip {
     index: number;
-    type: string;
-    data?: Partial<TooltipData>;
+    type: 'tooltip';
+    data: TooltipData;
     target: HotspotAndTooltipTarget;
-    actions?: Partial<StepActions>;
-    styleProps?: object;
+    actions: StepActions;
+    styleProps: object;
 }
+
+export type DeepPartial<T> = {
+    [P in keyof T]?: DeepPartial<T[P]>;
+};
+
 
 export interface TrackingState {
     currentStepIndex: number;
@@ -107,43 +115,43 @@ export interface PopperInstanceType {
 
 export interface Hotspot {
     index: number;
-    type: string;
+    type: 'hotspot';
     target: HotspotAndTooltipTarget;
     beacon: {
         placement: {
             top: number;
             left: number;
         };
-        size?: number;
-        color?: string;
-        type?: string;
+        size: number;
+        color: string;
+        type: string;
     };
     tip: {
         data: {
             placement: Position;
             arrow: boolean;
-            bodyContent: string;
+            bodyContent: BodyContent;
         };
-        styleProps?: object;
+        styleProps: object;
     };
-    async?: boolean;
+    async: boolean;
 }
 
 export interface ModalData {
-    bodyContent?: string;
-    escToClose?: boolean;
-    clickOutsideToClose?: boolean;
+    bodyContent: BodyContent;
+    escToClose: boolean;
+    clickOutsideToClose: boolean;
 }
 
 export interface Modal {
     index: number;
-    type: string;
+    type: 'modal';
     target: ModalTarget;
-    data?: Partial<ModalData>;
-    closeButton?: Partial<{
+    data: ModalData;
+    closeButton: {
         styleProps: object;
         disabled: boolean;
-    }>;
+    };
 }
 
 export type StepTargetType = ModalTarget | HotspotAndTooltipTarget;
@@ -151,11 +159,11 @@ export type StepTargetType = ModalTarget | HotspotAndTooltipTarget;
 export interface GuideType {
     id: string;
     name: string;
-    description?: string;
+    description: string;
     steps: Array<Tooltip | Modal | Hotspot>;
-    onNext?: () => void;
-    onPrev?: () => void;
-    onClose?: () => void;
+    onNext: () => void;
+    onPrev: () => void;
+    onClose: () => void;
 }
 
 export interface LocalState {
@@ -194,7 +202,7 @@ export interface ElementPosition {
 
 export interface Content {
     [guideID: string]: {
-        type?: 'guide';
+        type: 'guide';
         data: GuideType;
     };
 }
@@ -203,25 +211,3 @@ export interface ActiveGuide {
     instance: GuideInstance;
     id: string;
 }
-
-export interface LusiftInstance {
-    setContent: (content: Content) => void;
-    showContent<T extends string>(contentID: T extends "" ? never : T): void;
-    getContent: () => Content;
-    refresh: () => void;
-    getActiveGuide: () => ActiveGuide | null;
-    enable: (guideID: string) => void;
-    disable: (guideID: string) => void;
-    setGlobalStyle: (style: string) => void;
-    getTrackingState: () => LocalState;
-    devShowStep: (guideID: string, stepNumber: number) => void;
-    close: () => void;
-    next: () => void;
-    prev: () => void;
-    goto: (newStepNum: number) => void;
-    onClose: () => void;
-    onNext: () => void;
-    onPrev: () => void;
-    render: (body: any, targetPath: string, callback?: Function) => void;
-}
-

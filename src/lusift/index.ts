@@ -1,5 +1,5 @@
 import Lusift from "./Lusift";
-import { LusiftInstance } from '../common/types';
+import { LusiftInstance } from './types';
 
 const lusiftInstance = new Lusift();
 
