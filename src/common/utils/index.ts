@@ -11,6 +11,7 @@ import addFocusTrap from "./addFocusTrap";
 import vanillaRender from "./vanillaRender";
 import getScrollBarWidth from "./getScrollBarWidth";
 import getDocumentDimensions from './dimensions';
+import hasFocussableElements from './hasFocussableElements';
 import debounce from './debounce';
 import copyObject from './copyObject';
 
@@ -29,5 +30,6 @@ export {
     getScrollBarWidth,
     getDocumentDimensions,
     debounce,
-    copyObject
+    copyObject,
+    hasFocussableElements
 };

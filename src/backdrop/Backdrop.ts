@@ -2,10 +2,14 @@ import { document, window } from "global";
 import {
     getStepUID,
     addFocusTrap,
+    copyObject,
+    hasFocussableElements
 } from "../common/utils/";
 import { log, warn, error } from "../common/logger";
 import { BackdropData } from "../common/types";
 import createOverlayElement from './createOverlayElement';
+
+const getElement = (elementSelector: string): Element => document.querySelector(elementSelector);
 
 class Backdrop {
     private targetSelector: string;
@@ -30,15 +34,22 @@ class Backdrop {
         const uid = getStepUID({ guideID, index, type: "backdrop" });
         this.stagedTargetClass = `${uid}__target`;
 
-        this.data = JSON.parse(JSON.stringify(data));
+        this.data = copyObject(data);
         this.targetSelector = targetSelector;
 
         this.createOverlay();
 
+        const target = [".lusift > .tooltip", this.targetSelector];
+
+        const toEnableFocusTrap = hasFocussableElements(getElement(target[0])) ||
+            hasFocussableElements(getElement(target[1]));
+
         // trap focus inside tooltip
-        this.focusTrap = addFocusTrap({
-            target: [".lusift > .tooltip", this.targetSelector],
-        });
+        if (toEnableFocusTrap) {
+            this.focusTrap = addFocusTrap({
+                target
+            });
+        }
     }
 
     public resetBackdrop(): void {
@@ -49,7 +60,7 @@ class Backdrop {
     }
 
     private createOverlay(): void {
-        const targetElement = document.querySelector(this.targetSelector);
+        const targetElement = getElement(this.targetSelector);
         const { color, opacity } = this.data;
 
         const {

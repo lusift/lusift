@@ -55,6 +55,7 @@ const renderTooltip = async ({ data, target, styleProps, actions, uid, index, on
 
   const content = div();
   content.className = 'lusift';
+
   content.innerHTML = `
     ${renderProgressBar()}
     <div class="tooltip" id="tooltip-${uid}">
