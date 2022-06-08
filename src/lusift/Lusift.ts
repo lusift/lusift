@@ -15,6 +15,7 @@ import { isOfTypeContent, isObject } from "../common/utils/isOfType";
 import addDefaultCSS from "./addDefaultCSS";
 
 // TODO: Write documentation
+// TODO: Create spotlight effect in place of backdrop element like here https://www.appcues.com/ui-patterns/tooltips
 // TODO: Style step components better
 // - Modal
 // - Tooltip

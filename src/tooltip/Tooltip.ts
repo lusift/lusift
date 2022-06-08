@@ -7,6 +7,8 @@ import Backdrop from "../backdrop";
 import { autoUpdate } from '@floating-ui/dom';
 
 // TODO: should we have transition effects for backdrop? it's kind of jerky
+// TODO: Better way to set button group at the bottom of tooltip
+// TODO: When there are no tabbable elements, make the focus-trap conditionally apply
 
 export default class Tooltip {
     private targetElement: HTMLElement;
