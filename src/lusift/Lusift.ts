@@ -21,7 +21,7 @@ import addDefaultCSS from "./addDefaultCSS";
 // TODO_: add support for angul*r
 // NOTE: Handling versioning
 // TODO: Can we just export element classes (Tooltip, Modal, Hotspot, Backdrop) and have them be optionally loadable by the client?
-// -- something like how modifiers work in popperjs
+// -- something like how modifiers plugin system works in popperjs
 
 const noOp = () => {}; // no-op function
 
