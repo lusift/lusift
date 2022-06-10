@@ -16,10 +16,10 @@ const renderProgressBar = () => {
         let progress = "66.66";
         let max = 100;
         return `
-      <progress class="lusift-progress" aria-label="progressbar" max="${max}" value="${progress}">
+        <progress class="lusift-progress" aria-label="progressbar" max="${max}" value="${progress}">
         ${progress}%
-      </progress>
-    `;
+        </progress>
+        `;
     }
 
     const Lusift = window['Lusift'];
@@ -28,12 +28,15 @@ const renderProgressBar = () => {
     const progressBarData = currentGuide.progressBar || {};
 
     // find out borderRadius based on step type (their default border radii), or via styleProps
+    // TODO: add styleProps object to content, and see how to consume it
+    // -- do the same for beacon btw
     let {
         height = DEFAULT_PROGRESS_BAR_HEIGHT,
-        color = PRIMARY_COLOR,
+        backgroundColor = PRIMARY_COLOR,
         borderRadius,
     } = progressBarData;
 
+    // TODO: Better way to retrieve borderRadius from tooltip dom element?
     if (!borderRadius) {
         if (currentStep.type === "modal") {
             if (currentStep.styleProps) {
@@ -56,21 +59,26 @@ const renderProgressBar = () => {
 
     return `
         <style>
-          .lusift-progress {
+        .lusift-progress {
             height: ${height};
-          }
-          .lusift-progress::-webkit-progress-bar {
+        }
+        .lusift-progress::-webkit-progress-bar {
             border-radius: ${borderRadius}; /*border-radius of tooltip*/
-          }
-          .lusift-progress::-webkit-progress-value {
-            background-color: ${color}; /*color of progress bar*/
-          }
+        }
+        .lusift-progress::-webkit-progress-value {
+            background-color: ${backgroundColor}; /*color of progress bar*/
+        }
+
+        .lusift-progress::-moz-progress-bar {
+            initial: none;
+            background-color: ${backgroundColor};
+        }
         </style>
 
         <progress class="lusift-progress" aria-label="progressbar" max="${max}" value="${progress}">
-          ${progress}%
+        ${progress}%
         </progress>
-    `;
+        `;
 };
 
 export default renderProgressBar;

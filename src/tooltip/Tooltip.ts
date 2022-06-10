@@ -7,7 +7,6 @@ import Backdrop from "../backdrop";
 import { autoUpdate } from '@floating-ui/dom';
 
 // TODO: should we have transition effects for backdrop? it's kind of jerky
-// TODO: Better way to set button group at the bottom of tooltip
 
 export default class Tooltip {
     private targetElement: HTMLElement;

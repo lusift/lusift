@@ -208,6 +208,9 @@
 }
 
 .tooltip .lusift-progress {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
 }
 
 .lusift-progress::-webkit-progress-bar {
@@ -228,6 +231,8 @@
 }
 
 .lusift-progress::-moz-progress-bar {
+    initial: none;
+    background-color: var(--primary-color);
 }
 
 /*beacon*/
