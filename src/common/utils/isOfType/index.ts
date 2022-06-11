@@ -29,6 +29,7 @@ export function isOfTypeTooltipData(object: any): boolean {
         (!object.offset || (object.offset instanceof Object && object.offset.length === 2)) &&
         (!object.actions || isObject(object.actions)) &&
         isOfTypeTooltipPlacement(object.placement) &&
+        isOfTypeProgressConfig(object.progressBar) &&
         (typeof object.contentBody === "string" ||
             (!object.contentBody && typeof object.contentBody !== "boolean")) &&
         // (typeof object.contentBody === 'string' && !!object.contentBody) &&
@@ -66,6 +67,13 @@ export function isOfTypeTooltipActions(object: any): boolean {
     );
 }
 
+export function isOfTypeProgressConfig(object: any): boolean {
+    return (
+        isObject(object) &&
+        isObject(object.styleProps)
+    );
+}
+
 export function isOfTypeTooltip(object: any): boolean {
     return (
         isOfTypeTooltipData(object.data) &&
@@ -77,7 +85,10 @@ export function isOfTypeTooltip(object: any): boolean {
 
 export function isOfTypeModal(object: any): boolean {
     return (
-        object.type === "modal" && isObject(object.data) && isObjectOrUndefined(object.closeButton)
+        object.type === "modal" &&
+        isObject(object.data) &&
+        isObjectOrUndefined(object.closeButton) &&
+        isOfTypeProgressConfig(object.data.progressBar)
     );
 }
 

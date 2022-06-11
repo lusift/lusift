@@ -5,7 +5,10 @@ import {
     DEFAULT_MODAL_BORDER_RADIUS,
     PRIMARY_COLOR,
     DEFAULT_PROGRESS_BAR_HEIGHT,
+    PROGRESS_BAR_CLASS
 } from "../constants";
+
+// TODO: Add progress bar to content object
 
 const renderProgressBar = () => {
     const currentGuide = loadState()[window.Lusift.getActiveGuide()?.id];
@@ -57,8 +60,18 @@ const renderProgressBar = () => {
 
     const max = 100;
 
+    const progressBarElement = document.createElement("progress");
+    progressBarElement.classList.add(PROGRESS_BAR_CLASS);
+    progressBarElement.setAttribute("aria-label", "progressbar");
+    progressBarElement.setAttribute("max", `${max}`);
+    progressBarElement.setAttribute("value", progress);
+    // move style rules to parent (tooltip or modal)
+    return progressBarElement;
+
+
     return `
         <style>
+        /*
         .lusift-progress {
             height: ${height};
         }
@@ -73,6 +86,7 @@ const renderProgressBar = () => {
             initial: none;
             background-color: ${backgroundColor};
         }
+        */
         </style>
 
         <progress class="lusift-progress" aria-label="progressbar" max="${max}" value="${progress}">

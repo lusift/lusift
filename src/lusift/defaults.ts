@@ -2,6 +2,7 @@ import { Content, DeepPartial } from '../common/types';
 import { ContentDefaults } from './types';
 import { mergeDeep } from '../common/utils';
 import { isObject } from '../common/utils/isOfType';
+import { PRIMARY_COLOR } from '../common/constants';
 
 const defaultTooltipActions = {
   styleProps: {},
@@ -56,6 +57,10 @@ const defaultTooltip = {
     },
     arrow: true,
     backdrop: defaultTooltipBackdrop,
+    progressBar: {
+      disabled: false,
+      styleProps: {},
+    },
     progressOn: {
       eventType: 'click',
     },
@@ -63,8 +68,7 @@ const defaultTooltip = {
     maxWidth: 400
   },
   actions: defaultTooltipActions,
-  styleProps: {
-  }
+  styleProps: {}
 }
 
 const defaultHotspot = {
@@ -106,7 +110,11 @@ const defaultModal = {
   },
   data: {
     escToClose: false,
-    clickOutsideToClose: true
+    clickOutsideToClose: true,
+    progressBar: {
+      disabled: false,
+      styleProps: {},
+    },
   },
   overlay: {
     styleProps: {},

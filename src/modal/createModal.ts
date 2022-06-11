@@ -1,5 +1,6 @@
 import { document } from "global";
 import { MODAL_OVERLAY_CLASS, MODAL_CLASS, DEFAULT_MODAL_BORDER_RADIUS, MODAL_OVERLAY_Z_INDEX } from "../common/constants";
+import { styleObjectToString } from "../common/utils";
 import renderProgressBar from "../common/progressBar";
 import renderCloseXButton from "../common/closeXButton";
 
@@ -34,7 +35,7 @@ export const restoreScrollBody = () => {
   document.body.classList.remove("lusift-no-scroll");
 };
 
-const createModal = ({ uid, index, closeButton, styleProps, overlay }): () => void => {
+const createModal = ({ uid, index, closeButton, progressBar, styleProps, overlay }): () => void => {
 
   const modalOverlay = div();
   const modal = div();
@@ -44,14 +45,42 @@ const createModal = ({ uid, index, closeButton, styleProps, overlay }): () => vo
   modal.classList.add(MODAL_CLASS);
   lusiftWrapper.classList.add("lusift");
   modal.innerHTML = `
-    ${renderProgressBar()}
+    <style>
+      .lusift-progress {
+        ${styleObjectToString({
+          ...progressBar.styleProps,
+          backgroundColor: undefined
+        })}
+      }
+      .lusift-progress::-webkit-progress-bar {
+        ${styleObjectToString({
+          ...progressBar.styleProps,
+          backgroundColor: undefined
+        })}
+      }
+      .lusift-progress::-webkit-progress-value {
+        ${styleObjectToString(progressBar.styleProps)}
+      }
+
+      .lusift-progress::-moz-progress-bar {
+        initial: none;
+        ${styleObjectToString({
+          ...progressBar.styleProps,
+          backgroundColor: undefined
+        })}
+      }
+    </style>
     ${renderCloseXButton(closeButton, "modal")}
     <section class="body-content">
     </section>
   `;
 
+  if (!progressBar.disabled) {
+    modal.prepend(renderProgressBar());
+  }
+
   Object.assign(modalOverlay.style, {
-    position:  'fixed',
+    position: 'fixed',
     overflowY: "scroll",
     background: "rgba(40,40,40, .5)",
     top: "0",

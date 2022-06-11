@@ -26,7 +26,7 @@ const startStepInstance = (stepData: any, guideID: string, onRemove: Function): 
             closeButton,
             onRemove,
             overlay,
-            styleProps
+            styleProps,
         });
     } else if (type === "hotspot") {
         activeStepInstance = new Hotspot({

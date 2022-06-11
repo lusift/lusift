@@ -2,12 +2,14 @@ import renderProgressBar from "../common/progressBar";
 import renderCloseXButton from "../common/closeXButton";
 import createTooltip from "../common/createTooltip";
 import { DEFAULT_TOOLTIP_BORDER_RADIUS } from "../common/constants";
+import { styleObjectToString } from '../common/utils';
 import { log } from "../common/logger";
 
 const defaultBodyContent = `
   <h3 style="font-weight: bold;">Default title</h3>
   <p style="font-weight: normal;">Default tooltip content</p>
 `;
+// TODO: The progress bar should look like it's contained rather than floating on top
 
 const div = () => document.createElement("div");
 const section = () => document.createElement("section");
@@ -50,20 +52,48 @@ const renderTooltip = async ({ data, target, styleProps, actions, uid, index, on
     // bodyContent = defaultBodyContent,
     placement,
     offset,
-    maxWidth
+    maxWidth,
+    progressBar
   } = data;
 
   const content = div();
   content.className = 'lusift';
 
   content.innerHTML = `
-    ${renderProgressBar()}
+      <style>
+      .lusift-progress {
+        ${styleObjectToString({
+          ...progressBar.styleProps,
+          backgroundColor: undefined
+        })}
+      }
+      .lusift-progress::-webkit-progress-bar {
+        ${styleObjectToString({
+          ...progressBar.styleProps,
+          backgroundColor: undefined
+        })}
+      }
+      .lusift-progress::-webkit-progress-value {
+        ${styleObjectToString(progressBar.styleProps)}
+      }
+
+      .lusift-progress::-moz-progress-bar {
+          initial: none;
+        ${styleObjectToString({
+          ...progressBar.styleProps,
+          backgroundColor: undefined
+        })}
+      }
+      </style>
     <div class="tooltip" id="tooltip-${uid}">
       ${renderCloseXButton(closeButton, "tooltip")}
       <section class="body-content">
       </section>
     </div>
   `;
+  if (!progressBar.disabled) {
+    content.prepend(renderProgressBar());
+  }
   content.querySelector(`#tooltip-${uid}`)!.appendChild(renderNavButtons(navSection));
 
   Object.assign(content.style, {

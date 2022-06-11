@@ -1,4 +1,5 @@
 export const MODAL_OVERLAY_CLASS = "lusift-modal-overlay";
+export const PROGRESS_BAR_CLASS = "lusift-progress";
 export const MODAL_CLASS = "modal";
 export const BEACON_CONTAINER_CLASS = "lusift-beacon-container";
 export const DEFAULT_TOOLTIP_BORDER_RADIUS = "4px";

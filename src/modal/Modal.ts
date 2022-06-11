@@ -21,6 +21,7 @@ class Modal {
             closeButton,
             styleProps,
             overlay,
+            progressBar: data.progressBar
         });
 
         const { escToClose, clickOutsideToClose } = this.data;

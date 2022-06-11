@@ -17,7 +17,8 @@ import addDefaultCSS from "./addDefaultCSS";
 // TODO: Write documentation
 // TODO: Create spotlight effect in place of backdrop element like here https://www.appcues.com/ui-patterns/tooltips
 // -- relevant css properties: mask, radial-gradient, backdrop-filter
-// TODO: CSS in firefox is not working as intended
+// TODO: Backdrop elements sometimes have thin line where they meet around target element
+// -- any way to send this line at the ends of the screen, and not where these elements meet?
 
 // TODO_: Adding beacon to tooltip step type (it can toggle the tooltip visibility)
 // TODO_: add support for angul*r
