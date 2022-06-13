@@ -2,7 +2,6 @@ import { Content, DeepPartial } from '../common/types';
 import { ContentDefaults } from './types';
 import { mergeDeep } from '../common/utils';
 import { isObject } from '../common/utils/isOfType';
-import { PRIMARY_COLOR } from '../common/constants';
 
 const defaultTooltipActions = {
   styleProps: {},
@@ -40,9 +39,7 @@ const defaultTooltipBackdrop = {
   nextOnOverlayClick: false
 }
 
-const tooltipArrowDefaultSize = 12;
-const tooltipArrowSizeScale = 1;
-const defaultTooltipOffset = [tooltipArrowSizeScale*tooltipArrowDefaultSize, 0]; // x needs to be size of arrow + backdrop gap
+const defaultTooltipOffset = [0, 0];
 
 const defaultTooltip = {
   target: {
@@ -56,6 +53,7 @@ const defaultTooltip = {
       orientation: 'auto'
     },
     arrow: true,
+    arrowSizeScale: 1,
     backdrop: defaultTooltipBackdrop,
     progressBar: {
       disabled: false,

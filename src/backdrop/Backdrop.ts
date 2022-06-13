@@ -66,6 +66,7 @@ class Backdrop {
         const {
             nodes: overlayNodes,
             removeOverlay,
+            attachOverlay,
             shouldOverlayBeReset
         } = createOverlayElement({
             targetElement,
@@ -73,7 +74,8 @@ class Backdrop {
             color,
             opacity
         });
-        overlayNodes.forEach(el => document.body.appendChild(el));
+        attachOverlay();
+        shouldOverlayBeReset();
         this.removeOverlay = removeOverlay;
         // this.shouldOverlayBeReset = shouldOverlayBeReset;
     }

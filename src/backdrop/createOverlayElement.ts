@@ -4,6 +4,7 @@ import {
     roundNum,
     getDocumentDimensions
 } from "../common/utils/";
+import { log } from "../common/logger";
 
 // TODO: clean this
 const areNumbersEqual = (num1: number, num2: number): boolean => {
@@ -23,7 +24,6 @@ const areNumbersEqual = (num1: number, num2: number): boolean => {
 
     return roundNum(num1, decimalPlaces) === roundNum(num2, decimalPlaces);
 };
-
 
 const createOverlayElement = ({ targetElement, stageGap, color, opacity }) => {
 
@@ -80,7 +80,8 @@ const createOverlayElement = ({ targetElement, stageGap, color, opacity }) => {
 
     Object.assign(vRight.style, {
         ...overlayStyle,
-        width: `${documentWidth - (targetPosition.left + targetPosition.width) - padding}px`,
+        width: `${documentWidth - (targetPosition.left + targetPosition.width) - padding - 0.2}px`, // test
+        // HACK: ^ making width slightly smaller to prevent that window resize event firing on loop
         height: `${documentHeight}px`,
         left: `${targetPosition.right + padding}px`,
     });
@@ -107,8 +108,35 @@ const createOverlayElement = ({ targetElement, stageGap, color, opacity }) => {
         const { documentHeight, documentWidth } = getDocumentDimensions();
         attachOverlay();
 
-        console.log(documentWidth, overlaySumWidth);
-        console.log(documentHeight, overlaySumHeight);
+        log(documentWidth, overlaySumWidth);
+        log(documentHeight, overlaySumHeight);
+
+        // NOTE: This check isn't precise enough sometimes, you can see the hair-thin lines
+        // where these different overlay nodes meet
+        if (
+            !areNumbersEqual(documentWidth, overlaySumWidth) ||
+            !areNumbersEqual(documentHeight, overlaySumHeight)
+        ) {
+            console.log('overlay dimension not matching document\'s');
+            return true;
+        } else {
+            console.log('perfect overlay')
+            return false;
+        }
+    }
+
+    // TODO:
+        /* const { height: hTopHeight, width: hTopWidth } = getElementPosition(hTop);
+        const { height: hBottomHeight } = getElementPosition(hBottom);
+        const vLeftWidth = getElementPosition(vLeft).width;
+        const vRightWidth = getElementPosition(vRight).width;
+        window['getElementPosition'] = getElementPosition;
+
+        const overlaySumWidth = hTopWidth + vLeftWidth + vRightWidth;
+        const overlaySumHeight = hTopHeight + hBottomHeight + targetPosition.height + 2 * padding;
+
+        log(documentWidth, overlaySumWidth);
+        // log(documentHeight, overlaySumHeight);
 
         // NOTE: This check isn't precise enough sometimes, you can see the hair-thin lines
         // where these different overlay nodes meet
@@ -117,11 +145,7 @@ const createOverlayElement = ({ targetElement, stageGap, color, opacity }) => {
             !areNumbersEqual(documentHeight, overlaySumHeight)
         ) {
             console.log('Reset backdrop');
-            return true;
-        } else {
-            return false;
-        }
-    }
+        } */
 
     function attachOverlay() {
         overlayNodes.forEach(el => document.body.appendChild(el));

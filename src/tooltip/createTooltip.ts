@@ -53,7 +53,8 @@ const renderTooltip = async ({ data, target, styleProps, actions, uid, index, on
     placement,
     offset,
     maxWidth,
-    progressBar
+    progressBar,
+    arrowSizeScale
   } = data;
 
   const content = div();
@@ -125,6 +126,7 @@ const renderTooltip = async ({ data, target, styleProps, actions, uid, index, on
       });
     },
     scrollIntoView,
+    arrowSizeScale,
     showOnCreate: true
   });
   // tooltipInstance.show(true)

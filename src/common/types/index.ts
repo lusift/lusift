@@ -37,6 +37,7 @@ export interface BackdropData {
     nextOnOverlayClick: boolean;
 }
 
+// TODO: refactor this
 export interface TooltipBackdrop extends Partial<BackdropData> {
     disabled: boolean;
 }
@@ -44,14 +45,20 @@ export interface TooltipBackdrop extends Partial<BackdropData> {
 export interface TooltipData {
     bodyContent: BodyContent;
     placement: Placement;
+    // TODO: offset has 2 numbers
     offset: number[];
     arrow: boolean;
+    arrowSizeScale: number;
     scrollIntoView: boolean;
     backdrop: TooltipBackdrop;
     progressOn: {
         eventType: string;
         elementSelector: string;
         disabled: boolean;
+    };
+    progressBar: {
+        disabled: boolean;
+        styleProps: object;
     };
 }
 
@@ -141,6 +148,10 @@ export interface ModalData {
     bodyContent: BodyContent;
     escToClose: boolean;
     clickOutsideToClose: boolean;
+    progressBar: {
+        disabled: boolean;
+        styleProps: object;
+    };
 }
 
 export interface Modal {

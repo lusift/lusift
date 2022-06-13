@@ -9,6 +9,7 @@ const createTooltip = async (props): Promise<Instance> => {
     let {
         target,
         remove,
+        arrowSizeScale,
         content,
         arrow,
         maxWidth,
@@ -35,6 +36,7 @@ const createTooltip = async (props): Promise<Instance> => {
         hideOnClick: false,
         onClickOutside,
         onShow,
+        arrowSizeScale,
         onHide,
         onBeforeFirstRender,
         onAfterFirstRender,

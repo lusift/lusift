@@ -30,6 +30,7 @@ export function isOfTypeTooltipData(object: any): boolean {
         (!object.actions || isObject(object.actions)) &&
         isOfTypeTooltipPlacement(object.placement) &&
         isOfTypeProgressConfig(object.progressBar) &&
+        (typeof object.arrowSizeScale === "number") &&
         (typeof object.contentBody === "string" ||
             (!object.contentBody && typeof object.contentBody !== "boolean")) &&
         // (typeof object.contentBody === 'string' && !!object.contentBody) &&
