@@ -1,169 +1,111 @@
 import { BACKDROP_Z_INDEX, OVERLAY_SELECTOR_CLASS } from '../common/constants';
+import { document } from 'global';
 import {
-    getElementPosition,
-    roundNum,
-    getDocumentDimensions
+  getElementPosition,
+  getDocumentDimensions
 } from "../common/utils/";
-import { log } from "../common/logger";
 
-// TODO: clean this
-const areNumbersEqual = (num1: number, num2: number): boolean => {
-    let num1Precision = num1.toString().substring(num1.toString().indexOf(".")).length - 1;
-    if (num1.toString().indexOf(".") == -1) num1Precision = 0;
+const div = () => document.createElement("div");
 
-    let num2Precision = num2.toString().substring(num2.toString().indexOf(".")).length - 1;
-    if (num2.toString().indexOf(".") == -1) num2Precision = 0;
-    let decimalPlaces = Math.min(num1Precision, num2Precision);
-    if (decimalPlaces > 2) {
-        decimalPlaces = 1; //most reliable precision
-    }
-    /* log(num1, num2)
-  log(num1Precision, num2Precision, decimalPlaces);
+const test = ({ targetElement, stageGap, color, opacity }) => {
+  const overlay = div();
+  overlay.classList.add(OVERLAY_SELECTOR_CLASS);
 
-  log(roundNum(num1, decimalPlaces), roundNum(num2, decimalPlaces)); */
+  const { documentHeight, documentWidth } = getDocumentDimensions();
 
-    return roundNum(num1, decimalPlaces) === roundNum(num2, decimalPlaces);
-};
+  const padding = stageGap;
+  const targetPosition = getElementPosition(targetElement);
 
-const createOverlayElement = ({ targetElement, stageGap, color, opacity }) => {
+  const hTop = div();
+  hTop.id = "hTop";
+  const hBottom = div();
+  hBottom.id = "hBottom";
 
-    const padding = stageGap;
-    const div = () => document.createElement("div");
-    const targetPosition = getElementPosition(targetElement);
-    const { documentHeight, documentWidth } = getDocumentDimensions();
+  const vLeft = div();
+  vLeft.id = "vLeft";
+  const vLeftCover = div();
+  vLeft.appendChild(vLeftCover);
+  const vRight = div();
+  vRight.id = "vRight";
+  const vRightCover = div();
+  vRight.appendChild(vRightCover);
 
-    const hTop = div();
-    hTop.id = "hTop";
-    const hBottom = div();
-    hBottom.id = "hBottom";
+  const overlayStyle = {
+    background: color,
+    transition: "visibility 0.3s ease-in-out",
+    position: "absolute",
+    top: "0",
+    bottom: "0",
+    left: "0",
+    right: "0",
+    zIndex: BACKDROP_Z_INDEX,
+  };
 
-    const vLeft = div();
-    vLeft.id = "vLeft";
-    const vRight = div();
-    vRight.id = "vRight";
+  Object.assign(overlay.style, {
+    opacity
+  });
 
-    const overlayStyle = {
-        opacity,
-        background: color,
-        transition: "visibility 0.3s ease-in-out",
-        position: "absolute",
-        top: "0",
-        bottom: "0",
-        left: "0",
-        right: "0",
-        zIndex: BACKDROP_Z_INDEX,
-        border: "1px solid transparent",
-    };
+  Object.assign(hTop.style, {
+    ...overlayStyle,
+    height: `${targetPosition.bottom - targetPosition.height - padding}px`,
+    width: `${targetPosition.right - targetPosition.left + 2 * padding}px`,
+    left: `${targetPosition.left - padding}px`,
+    bottom: `${targetPosition.top - padding}px`,
+  });
 
-    Object.assign(hTop.style, {
-        ...overlayStyle,
-        height: `${targetPosition.bottom - targetPosition.height - padding}px`,
-        width: `${targetPosition.right - targetPosition.left + 2 * padding}px`,
-        left: `${targetPosition.left - padding}px`,
-        bottom: `${targetPosition.top - padding}px`,
-    });
+  Object.assign(hBottom.style, {
+    ...overlayStyle,
+    height: `${documentHeight - (targetPosition.top + targetPosition.height + padding)}px`,
+    width: `${targetPosition.right - targetPosition.left + 2 * padding}px`,
+    left: `${targetPosition.left - padding}px`,
+    top: `${targetPosition.bottom + padding}px`,
+  });
 
-    Object.assign(hBottom.style, {
-        ...overlayStyle,
-        height: `${documentHeight - (targetPosition.top + targetPosition.height + padding)}px`,
-        width: `${targetPosition.right - targetPosition.left + 2 * padding}px`,
-        left: `${targetPosition.left - padding}px`,
-        top: `${targetPosition.bottom + padding}px`,
-    });
+  Object.assign(vLeft.style, {
+    ...overlayStyle,
+    width: `${targetPosition.left - padding}px`,
+    height: `${documentHeight}px`,
+    right: `${targetPosition.left - padding}px`,
+  });
 
-    Object.assign(vLeft.style, {
-        ...overlayStyle,
-        width: `${targetPosition.left - padding}px`,
-        height: `${documentHeight}px`,
-        right: `${targetPosition.left - padding}px`,
-    });
+  Object.assign(vRight.style, {
+    ...overlayStyle,
+    width: `${documentWidth - (targetPosition.left + targetPosition.width) - padding - 0.2}px`,
+    // HACK: ^ making width slightly smaller to prevent that window resize event firing on loop
+    height: `${documentHeight}px`,
+    left: `${targetPosition.right + padding}px`,
+  });
 
-    Object.assign(vRight.style, {
-        ...overlayStyle,
-        width: `${documentWidth - (targetPosition.left + targetPosition.width) - padding - 0.2}px`, // test
-        // HACK: ^ making width slightly smaller to prevent that window resize event firing on loop
-        height: `${documentHeight}px`,
-        left: `${targetPosition.right + padding}px`,
-    });
-    const overlayNodes = [hTop, hBottom, vLeft, vRight].map(el => {
-        el.classList.add(OVERLAY_SELECTOR_CLASS);
-        return el;
-    });
+  Object.assign(vLeftCover.style, {
+    ...overlayStyle,
+    position: 'absolute',
+    right: '-2px',
+    width: '3px',
+    left: '',
+    border: '',
+    background: color,
+  });
+  Object.assign(vRightCover.style, {
+    ...overlayStyle,
+    position: 'absolute',
+    border: '',
+    left: '-2px',
+    width: '3px',
+    background: color,
+  });
 
-    function shouldOverlayBeReset () {
-        // See that the overlay isn't glitchy, reset if it is
-        const { height: hTopHeight, width: hTopWidth } = getElementPosition(hTop);
-        const { height: hBottomHeight } = getElementPosition(hBottom);
-        const vLeftWidth = getElementPosition(vLeft).width;
-        const vRightWidth = getElementPosition(vRight).width;
+  [hBottom, hTop, vLeft, vRight].forEach(el => overlay.appendChild(el));
 
-        const targetPosition = getElementPosition(targetElement);
+  const attachOverlay = () => document.body.appendChild(overlay);
+  const detachOverlay = () => document.body.removeChild(overlay);
+  const removeOverlay = () => overlay.remove();
 
-        const overlaySumWidth = hTopWidth + vLeftWidth + vRightWidth;
-        const overlaySumHeight = hTopHeight + hBottomHeight + targetPosition.height + 2 * padding;
-
-        // detach it after getting overlay nodes measurements
-        // and before taking measurements of the document
-        detachOverlay();
-        const { documentHeight, documentWidth } = getDocumentDimensions();
-        attachOverlay();
-
-        log(documentWidth, overlaySumWidth);
-        log(documentHeight, overlaySumHeight);
-
-        // NOTE: This check isn't precise enough sometimes, you can see the hair-thin lines
-        // where these different overlay nodes meet
-        if (
-            !areNumbersEqual(documentWidth, overlaySumWidth) ||
-            !areNumbersEqual(documentHeight, overlaySumHeight)
-        ) {
-            console.log('overlay dimension not matching document\'s');
-            return true;
-        } else {
-            console.log('perfect overlay')
-            return false;
-        }
-    }
-
-    // TODO:
-        /* const { height: hTopHeight, width: hTopWidth } = getElementPosition(hTop);
-        const { height: hBottomHeight } = getElementPosition(hBottom);
-        const vLeftWidth = getElementPosition(vLeft).width;
-        const vRightWidth = getElementPosition(vRight).width;
-        window['getElementPosition'] = getElementPosition;
-
-        const overlaySumWidth = hTopWidth + vLeftWidth + vRightWidth;
-        const overlaySumHeight = hTopHeight + hBottomHeight + targetPosition.height + 2 * padding;
-
-        log(documentWidth, overlaySumWidth);
-        // log(documentHeight, overlaySumHeight);
-
-        // NOTE: This check isn't precise enough sometimes, you can see the hair-thin lines
-        // where these different overlay nodes meet
-        if (
-            !areNumbersEqual(documentWidth, overlaySumWidth) ||
-            !areNumbersEqual(documentHeight, overlaySumHeight)
-        ) {
-            console.log('Reset backdrop');
-        } */
-
-    function attachOverlay() {
-        overlayNodes.forEach(el => document.body.appendChild(el));
-    }
-    function detachOverlay() {
-        overlayNodes.forEach(el => document.body.removeChild(el));
-    }
-    function removeOverlay() {
-        overlayNodes.forEach(el => el.remove());
-    }
-
-    return {
-        nodes: overlayNodes,
-        removeOverlay,
-        detachOverlay,
-        attachOverlay,
-        shouldOverlayBeReset
-    }
+  return {
+    node: overlay,
+    removeOverlay,
+    detachOverlay,
+    attachOverlay,
+  }
 }
 
-export default createOverlayElement;
+export default test;

@@ -18,7 +18,6 @@ class Backdrop {
     private toStopOverlay: boolean = false;
     private focusTrap: any;
     public removeOverlay: () => void = () => {};
-    // public shouldOverlayBeReset!: () => boolean;
 
     constructor({
         targetSelector,
@@ -64,10 +63,8 @@ class Backdrop {
         const { color, opacity } = this.data;
 
         const {
-            nodes: overlayNodes,
             removeOverlay,
             attachOverlay,
-            shouldOverlayBeReset
         } = createOverlayElement({
             targetElement,
             stageGap: this.data.stageGap,
@@ -75,9 +72,7 @@ class Backdrop {
             opacity
         });
         attachOverlay();
-        shouldOverlayBeReset();
         this.removeOverlay = removeOverlay;
-        // this.shouldOverlayBeReset = shouldOverlayBeReset;
     }
 
     public remove(): void {
