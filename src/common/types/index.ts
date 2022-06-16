@@ -1,5 +1,4 @@
 import { Position, Placement } from 'floating-ui-tooltip/dist/types';
-// TODO: There's only one beacon type, remove the option for animation type
 
 export interface StepActions {
     styleProps: object;
@@ -37,20 +36,20 @@ export interface BackdropData {
     nextOnOverlayClick: boolean;
 }
 
-// TODO: refactor this
-export interface TooltipBackdrop extends Partial<BackdropData> {
-    disabled: boolean;
-}
-
 export interface TooltipData {
     bodyContent: BodyContent;
     placement: Placement;
-    // TODO: offset has 2 numbers
-    offset: number[];
+    offset: [number, number];
     arrow: boolean;
     arrowSizeScale: number;
     scrollIntoView: boolean;
-    backdrop: TooltipBackdrop;
+    backdrop: {
+        disabled: boolean;
+        color: string;
+        opacity: string;
+        stageGap: number;
+        nextOnOverlayClick: boolean;
+    };
     progressOn: {
         eventType: string;
         elementSelector: string;
@@ -68,8 +67,6 @@ export type PathComparator =
     'startsWith' |
     'endsWith' |
     'regex';
-
-const pc: DeepPartial<PathComparator> | undefined = 'is'
 
 export interface ModalTarget {
     path: {

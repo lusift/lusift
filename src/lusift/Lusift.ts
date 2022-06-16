@@ -15,7 +15,6 @@ import { isOfTypeContent, isObject } from "../common/utils/isOfType";
 import addDefaultCSS from "./addDefaultCSS";
 
 // TODO: Write documentation
-// TODO: Change around content object
 // TODO: Create spotlight effect in place of backdrop element like here https://www.appcues.com/ui-patterns/tooltips
 // -- relevant css properties: mask, radial-gradient, backdrop-filter
 

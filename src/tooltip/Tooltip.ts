@@ -59,7 +59,7 @@ export default class Tooltip {
 
         if (!this.data.backdrop.disabled) {
             // factor in backdrop stage gap in tooltip offset
-            this.data.offset[0] = this.data.offset[0] + this.data.backdrop.stageGap!;
+            this.data.offset[0] = this.data.offset[0] + this.data.backdrop.stageGap;
         }
 
         this.uid = getStepUID({ guideID, index, type: "tooltip" });
@@ -91,7 +91,7 @@ export default class Tooltip {
             index: this.index,
             data,
         });
-        if (this.data.backdrop!.nextOnOverlayClick) {
+        if (this.data.backdrop.nextOnOverlayClick) {
             Array.from<HTMLElement>(
                 document.getElementsByClassName(this.backdropInstance.overlaySelectorClass),
             ).forEach((target: HTMLElement) => {
@@ -106,7 +106,7 @@ export default class Tooltip {
 
         const { progressOn, backdrop } = this.data;
 
-        const { eventType, disabled } = progressOn!;
+        const { eventType, disabled } = progressOn;
         disabled || this.addEventListenerToTarget(this.targetElement, "next", eventType);
 
         if (!this.fuitInstance) {
@@ -129,14 +129,14 @@ export default class Tooltip {
                     }
                 },
                 onHide: (instance) => {
-                    if(!backdrop!.disabled) {
+                    if(!backdrop.disabled) {
                         this.backdropInstance && this.backdropInstance.remove();
                         this.backdropInstance = null;
                         this.isTooltipShown = false;
                     }
                 },
             });
-            if (!backdrop!.disabled) {
+            if (!backdrop.disabled) {
 
                 const debouncedBackdropReset = debounce((_x?) => {
                     console.log('auto update triggered for backdrop. debounce method')
