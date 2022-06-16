@@ -52,6 +52,9 @@
     background-color: transparent;
     border: none;
     font-weight: normal;
+    position: absolute;
+    top: 0px;
+    right: 0px;
 }
 
 .lusift .modal h1,
@@ -186,7 +189,7 @@
 
 .lusift .modal .body-content {
     padding: 3px 15px;
-    margin-top: 5px;
+    padding-top: 15px;
     padding-bottom: 8px;
     color: #111;
 }

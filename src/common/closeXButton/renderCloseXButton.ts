@@ -9,11 +9,9 @@ const renderCloseXButton = (closeButton: any, stepType: 'modal' | 'tooltip'): st
     }
     </style>
 
-    <section class="close-btn">
     <button onclick="Lusift.close()" class="closeX close">
       &#10799;
     </button>
-    </section>
   `;
 };
 
