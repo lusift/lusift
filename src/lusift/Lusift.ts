@@ -15,6 +15,9 @@ import { isOfTypeContent, isObject } from "../common/utils/isOfType";
 import addDefaultCSS from "./addDefaultCSS";
 
 // TODO: Write documentation
+// -- some rough idea of the volume of the documentation site and
+// -- a rough outline of what there will be?
+// -- tech stack and design decisions
 // TODO: Create spotlight effect in place of backdrop element like here https://www.appcues.com/ui-patterns/tooltips
 // -- relevant css properties: mask, radial-gradient, backdrop-filter
 

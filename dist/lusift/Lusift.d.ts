@@ -1,0 +1,30 @@
+import { Content, LocalState, ActiveGuide, DeepPartial } from "../common/types";
+import { ContentDefaults, InputContent } from './types';
+declare class Lusift {
+    private content;
+    render: (body: any, targetPath: string, callback?: Function) => void;
+    private activeGuide;
+    private isDevMode;
+    private navigationMethods;
+    constructor();
+    next(): void;
+    prev(): void;
+    goto(newStepNum: number): void;
+    close(): void;
+    private showEnabledContent;
+    getActiveGuide(): ActiveGuide | null;
+    private doesGuideExist;
+    enable(guideID: string, toRefresh?: boolean): void;
+    disable(guideID: string, toRemove?: boolean): void;
+    setContent(content: InputContent, defaults?: DeepPartial<ContentDefaults>): void;
+    getContent(): Content;
+    refresh(): void;
+    showContent<T extends string>(contentID: T extends "" ? never : T): void;
+    onNext(): void;
+    onPrev(): void;
+    onClose(): void;
+    setGlobalStyle(styleText: string): void;
+    getTrackingState(): LocalState;
+    devShowStep(guideID: string, stepNumber: number): void;
+}
+export default Lusift;
