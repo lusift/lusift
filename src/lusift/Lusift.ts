@@ -20,6 +20,7 @@ import addDefaultCSS from "./addDefaultCSS";
 // -- tech stack and design decisions
 // TODO: Create spotlight effect in place of backdrop element like here https://www.appcues.com/ui-patterns/tooltips
 // -- relevant css properties: mask, radial-gradient, backdrop-filter
+// TODO: Remove stale console.log's
 
 // TODO_: Adding beacon to tooltip step type (it can toggle the tooltip visibility)
 // TODO_: add support for angul*r

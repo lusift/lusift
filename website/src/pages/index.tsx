@@ -1,11 +1,12 @@
-import type { NextPage } from 'next';
 import Head from 'next/head';
 import styles from '../styles/Home.module.css';
 import Link from 'next/link';
+import Layout from '../components/layout';
+import { NextPageWithLayout } from '../types/page';
 
 // TODO: generate sitemap
 
-const Home: NextPage = () => {
+const Home: NextPageWithLayout = () => {
   return (
     <div className={styles.container}>
       <Head>
@@ -15,7 +16,7 @@ const Home: NextPage = () => {
       </Head>
 
       <main className={styles.main}>
-        <h1> Welcome to Lusift!</h1>
+        <h1 className={styles.heading}> Welcome to Lusift!</h1>
         <Link href="/docs/overview" as={`/docs/overview`}>
           <a className="hover:underline">Documentation</a>
         </Link>
@@ -24,6 +25,14 @@ const Home: NextPage = () => {
       <footer className={styles.footer}>
       </footer>
     </div>
+  );
+}
+
+Home.getLayout = (page) => {
+  return (
+    <Layout>
+      {page}
+    </Layout>
   );
 }
 

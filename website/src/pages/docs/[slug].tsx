@@ -6,11 +6,12 @@ import PostBody from '../../components/post-body'
 import Header from '../../components/header'
 import PostHeader from '../../components/post-header' */
 import Layout from '../../components/layout';
-import { getPostBySlug, getPostSlugs, getAllPosts } from '../../lib/api';
+import { getPostBySlug, getAllPosts } from '../../lib/api';
 // import PostTitle from '../../components/post-title'
 import Head from 'next/head';
 import Link from 'next/link';
 import markdownToHtml from '../../lib/markdownToHtml';
+import { NextPageWithLayout } from '../../types/page';
 
 const PostBody = ({ content }: { content: string }) => {
   return (
@@ -22,9 +23,7 @@ const PostBody = ({ content }: { content: string }) => {
   );
 }
 
-// TODO: Sorting and section-ing of pages
 // TODO: Add Head and SEO stuff
-// TODO: Should we use const to declare functions or `function`
 
 const Sidebar = ({ posts }: { posts: { slug: string; title: string; }[] }) => {
   return (
@@ -46,46 +45,56 @@ const Sidebar = ({ posts }: { posts: { slug: string; title: string; }[] }) => {
     </div>
   );
 }
-// TODO: Read popular blog articles on nextjs
 
-const Post = ({ post, posts, preview }: { post: any; posts: { slug: string; title: string; }[]; preview: any }) => {
+interface IPost {
+  post: any;
+  posts: {
+    slug: string;
+    title: string;
+  }[];
+  preview: any;
+}
+
+const Post: NextPageWithLayout<IPost> = ({ post, posts, preview }) => {
   const router = useRouter();
   if (!router.isFallback && !post?.slug) {
     return <ErrorPage statusCode={404} />
   }
   return (
-    <Layout>
+    <div className="container">
       <Sidebar posts={posts} />
-      <div className="container">
-        {router.isFallback ? (
-          <div>Loading…</div>
-        ) : (
-          <>
-            <article>
-              <Head>
-                <title>
-                  {post.title} | Lusift Docs
-                </title>
-                {/* <meta property="og:image" content={post.ogImage.url} /> */}
-              </Head>
-              <PostBody content={post.content} />
-            </article>
-          </>
-        )}
-      </div>
-    </Layout>
+      {router.isFallback ? (
+        <div>Loading…</div>
+      ) : (
+        <>
+          <article>
+            <Head>
+              <title>
+                {post.title} | Lusift Docs
+              </title>
+              {/* <meta property="og:image" content={post.ogImage.url} /> */}
+            </Head>
+            <PostBody content={post.content} />
+          </article>
+        </>
+      )}
+    </div>
   );
+}
+
+Post.getLayout = (page: any) => {
+  return (
+    <Layout>
+      {page}
+    </Layout>
+  )
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }: any) => {
   const post = getPostBySlug(params.slug, [
     'title',
-    'date',
     'slug',
-    'author',
     'content',
-    'ogImage',
-    'coverImage',
   ]);
   const posts = getAllPosts(['slug', 'title']);
   const content = await markdownToHtml(post.content || '');

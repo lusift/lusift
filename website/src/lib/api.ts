@@ -11,6 +11,7 @@ export const getPostSlugs = (): string[] => {
 // TODO: What are all of the possible field here?
 type PostItems = Partial<{
   slug: string;
+  title: string;
   content: string;
 }>;
 
