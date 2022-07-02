@@ -1,0 +1,64 @@
+{
+  "routes": [
+    {
+      "title": "Documentation",
+      "heading": true,
+      "routes": [
+        {
+          "title": "Getting Started",
+          "path": "/docs/overview.md"
+        },
+        {
+          "title": "Tutorial",
+          "path": "/docs/tutorial.md"
+        },
+        {
+          "title": "Creating A Guide",
+          "open": true,
+          "routes": [
+            {
+              "title": "Element Types",
+              "open": true,
+              "routes": [
+                {
+                  "title": "Tooltip",
+                  "path": "/docs/creating-a-guide/element-types/tooltip.md"
+                },
+                {
+                  "title": "Hotspot",
+                  "path": "/docs/creating-a-guide/element-types/hotspot.md"
+                },
+                {
+                  "title": "Modal",
+                  "path": "/docs/creating-a-guide/element-types/modal.md"
+                }
+              ]
+            },
+            {
+              "title": "Dev Mode",
+              "path": "/docs/creating-a-guide/dev-mode.md"
+            },
+            {
+              "title": "Hooks",
+              "path": "/docs/creating-a-guide/hooks.md"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Lusift Object",
+      "heading": true,
+      "routes": [
+        {
+          "title": "Navigation Methods",
+          "path": "/docs/lusift-object/nav-methods.md"
+        }
+      ]
+    },
+    {
+      "title": "Custom CSS",
+      "path": "/docs/custom-css.md"
+    }
+  ]
+}

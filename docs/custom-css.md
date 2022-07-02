@@ -1,6 +1,7 @@
 ---
+id: custom-css
 title: 'Custom CSS'
-index: 1
+description: Adding custom css to Lusift elements
 ---
 
 Here's how to add your *custom* css.

@@ -1,5 +1,4 @@
 import React from 'react';
-import styles from './layout.module.css';
 
 interface ILayout {
     children: React.ReactNode;
@@ -7,7 +6,7 @@ interface ILayout {
 
 const Layout: React.FC<ILayout> = ({ children }) => {
     return (
-        <main className={styles.main}>{children}</main>
+        <main className="p-0 mx-auto m-0">{children}</main>
     );
 }
 

@@ -2,9 +2,9 @@ import Head from 'next/head';
 import styles from '../styles/Home.module.css';
 import Link from 'next/link';
 import Layout from '../components/layout';
+import { Footer } from '../components/Footer';
+import { Nav } from '../components/Nav';
 import { NextPageWithLayout } from '../types/page';
-
-// TODO: generate sitemap
 
 const Home: NextPageWithLayout = () => {
   return (
@@ -16,14 +16,14 @@ const Home: NextPageWithLayout = () => {
       </Head>
 
       <main className={styles.main}>
+        <Nav />
         <h1 className={styles.heading}> Welcome to Lusift!</h1>
         <Link href="/docs/overview" as={`/docs/overview`}>
           <a className="hover:underline">Documentation</a>
         </Link>
       </main>
 
-      <footer className={styles.footer}>
-      </footer>
+      <Footer />
     </div>
   );
 }

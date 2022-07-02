@@ -1,34 +1,59 @@
 import fs from 'fs';
 import { join } from 'path';
 import matter from 'gray-matter';
+import { removeFromLast } from './utils';
+import { Post } from '../types';
 
 const postsDirectory = join(process.cwd(), '../docs');
 
 export const getPostSlugs = (): string[] => {
-  return fs.readdirSync(postsDirectory);
+  return fs.readdirSync(postsDirectory).filter(slug => slug.endsWith('.md'))
 }
 
-// TODO: What are all of the possible field here?
-type PostItems = Partial<{
-  slug: string;
-  title: string;
-  content: string;
-}>;
+export type Field = keyof Post;
 
-type Field = keyof PostItems;
+export const fetchDocsManifest = async () => {
+  const path = join(process.cwd(), '../website/src/manifest.json');
+  const res = fs.readFileSync(path, 'utf8');
+  return JSON.parse(res);
+}
 
-export const getPostBySlug = (slug: string, fields: Field[] = []): PostItems => {
-  const realSlug = slug.replace(/\.md$/, '');
-  const fullPath = join(postsDirectory, `${realSlug}.md`);
-  const fileContents = fs.readFileSync(fullPath, 'utf8');
+export const findRouteByPath = (path: string, routes: any[]): any => {
+  // eslint-disable-next-line
+  for (const route of routes) {
+    if (route.path && removeFromLast(route.path, '.') === path) {
+      return route;
+    }
+    const childPath = route.routes && findRouteByPath(path, route.routes);
+    if (childPath) return childPath;
+  }
+}
+
+
+export const getDocPaths = (nextRoutes: any[], carry: any[] = []): string[] => {
+  nextRoutes.forEach(({ path, routes }: { path: any; routes: any }) => {
+    if (path) {
+      carry.push(removeFromLast(path, '.'));
+    } else if (routes) {
+      getDocPaths(routes, carry);
+    }
+  });
+  return carry;
+}
+
+export const getPostByRoute = (slug: string, fields: Field[] = []): Post => {
+
+  const docPath = join(process.cwd(), '../');
+  const path = join(docPath, slug+'.md');
+  const fileContents = fs.readFileSync(path, 'utf8');
   const { data, content } = matter(fileContents);
 
-  const items: PostItems = {};
+  const items: Post = {};
 
   // Ensure only the minimal needed data is exposed
   fields.forEach((field: Field) => {
     if (field === 'slug') {
-      items[field] = realSlug;
+      items[field] = slug;
     }
     if (field === 'content') {
       items[field] = content;
@@ -42,12 +67,10 @@ export const getPostBySlug = (slug: string, fields: Field[] = []): PostItems => 
   return items;
 }
 
-export const getAllPosts = (fields: Field[] = []): PostItems[] => {
-  const slugs = getPostSlugs();
+export const getAllPosts = async (fields: Field[] = []): Promise<Post[]> => {
+  const manifest = await fetchDocsManifest()
+  const slugs = getDocPaths(manifest.routes);
   const posts = slugs
-    .map((slug) => getPostBySlug(slug, fields));
-  console.log('posts')
-  console.log(posts)
-    // TODO: sort posts
-  return posts;
+    .map((slug) => getPostByRoute(slug, fields));
+  return JSON.parse(JSON.stringify(posts));
 }
