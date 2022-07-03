@@ -5,6 +5,7 @@ import Layout from '../../components/layout';
 import { SidebarRoutes } from '../../components/SidebarRoutes';
 import { Sidebar } from '../../components/Sidebar';
 import { Nav } from '../../components/Nav';
+import { CustomHead } from '../../components/CustomHead';
 import { Footer } from '../../components/Footer';
 import { Sticky } from '../../components/Sticky';
 import markdown from '../../styles/markdown.module.css';
@@ -33,7 +34,6 @@ const DocBody: React.FC<DocBodyProps> = ({ content, title }) => {
   );
 }
 
-// TODO: Add Head and SEO stuff
 // TODO: Add MDX support
 // TODO: Learn tailwindcss
 // TODO: Set theme(tailwind.config.js) - colors, fonts, ...
@@ -41,6 +41,7 @@ const DocBody: React.FC<DocBodyProps> = ({ content, title }) => {
 // TODO: Fix layout
 // -- Look up documentation pages for other projects
 // TODO: Add `On this page` section
+
 
 export interface DocsProps {
   post: PostItem & {
@@ -55,9 +56,15 @@ const Docs: NextPageWithLayout<DocsProps> = ({ post, routes }) => {
   if (!router.isFallback && !post?.slug) {
     return <ErrorPage statusCode={404} />
   }
+  const { title, description } = post;
   const isMobile = useIsMobile();
+
   return (
     <div className="p-0 m-0 mx-auto">
+      <CustomHead
+        title={title || ''}
+        description={description || ''}
+        pathname={router.pathname} />
       {isMobile ? (
         <Nav />
       ) : (
@@ -106,6 +113,7 @@ export const getStaticProps: GetStaticProps = async ({ params }: any) => {
   const routes = manifest.routes;
   const post = getPostByRoute(slug, [
     'title',
+    'description',
     'slug',
     'content',
   ]);
