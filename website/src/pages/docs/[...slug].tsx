@@ -40,7 +40,7 @@ const DocBody: React.FC<DocBodyProps> = ({ content, title }) => {
 // TODO: Make Sidebar fixed
 // TODO: Fix layout
 // -- Look up documentation pages for other projects
-// TODO: Add On this page section
+// TODO: Add `On this page` section
 
 export interface DocsProps {
   post: PostItem & {
