@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import ErrorPage from 'next/error';
 import { GetStaticPaths, GetStaticProps } from 'next';
-import Layout from '../../components/layout';
+import Layout from '../../layouts/layout';
 import { SidebarRoutes } from '../../components/SidebarRoutes';
 import { Sidebar } from '../../components/Sidebar';
 import { Nav } from '../../components/Nav';
@@ -12,29 +12,31 @@ import markdown from '../../styles/markdown.module.css';
 import { getPostByRoute, getAllPosts, fetchDocsManifest, getDocPaths } from '../../lib/api';
 import { getSlug } from '../../lib/utils';
 import Head from 'next/head';
-import markdownToHtml from '../../lib/markdownToHtml';
 import { NextPageWithLayout } from '../../types/page';
 import { Post as PostItem, Route } from '../../types';
 
 import { useIsMobile } from '../../hooks/useIsMobile';
 
+import MDXComponents from '../../components/MDXComponents';
+import { serialize } from 'next-mdx-remote/serialize';
+import { MDXRemote, MDXRemoteSerializeResult } from 'next-mdx-remote'
+import remarkPlugins from '../../lib/remarkPlugins';
+
 export interface DocBodyProps {
-  content: string;
+  content: MDXRemoteSerializeResult;
   title: string;
 }
 
 const DocBody: React.FC<DocBodyProps> = ({ content, title }) => {
+  const components = MDXComponents;
   return (
-    <div className={markdown['markdown'] + ' w-full docs'}>
+    <div className={markdown['markdown'] + ' w-full docs prose'}>
       <h1>{title}</h1>
-      <div
-        dangerouslySetInnerHTML={{ __html: content }}
-      />
+      <MDXRemote {...content} components={components} />
     </div>
   );
 }
 
-// TODO: Add MDX support
 // TODO: Learn tailwindcss
 // TODO: Set theme(tailwind.config.js) - colors, fonts, ...
 // TODO: Make Sidebar fixed
@@ -46,7 +48,7 @@ const DocBody: React.FC<DocBodyProps> = ({ content, title }) => {
 export interface DocsProps {
   post: PostItem & {
     title: PostItem['title'];
-    content: PostItem['content'];
+    content: MDXRemoteSerializeResult;
   };
   routes: Route[];
 }
@@ -58,6 +60,9 @@ const Docs: NextPageWithLayout<DocsProps> = ({ post, routes }) => {
   }
   const { title, description } = post;
   const isMobile = useIsMobile();
+
+  // const Content = dynamic(() => import(`${post.slug}.mdx`));
+  // console.log(Content)
 
   return (
     <div className="p-0 m-0 mx-auto">
@@ -87,7 +92,8 @@ const Docs: NextPageWithLayout<DocsProps> = ({ post, routes }) => {
                     {post.title} | Lusift Docs
                   </title>
                 </Head>
-                <DocBody title={post.title as string} content={post.content as string} />
+                <DocBody title={post.title as string} content={post.content} />
+                {/* <Content /> */}
               </article>
             </>
           )}
@@ -119,13 +125,21 @@ export const getStaticProps: GetStaticProps = async ({ params }: any) => {
   ]);
 
   const posts = await getAllPosts(['slug', 'title']);
-  const content = await markdownToHtml(post.content || '');
+
+  const mdxSource = await serialize(post.content as any, {
+    scope: {
+    },
+    mdxOptions: {
+      remarkPlugins: [],
+      rehypePlugins: [],
+    },
+  });
 
   return {
     props: {
       post: {
         ...post,
-        content,
+        content: mdxSource,
       },
       posts,
       routes

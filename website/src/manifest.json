@@ -53,6 +53,10 @@
         {
           "title": "Navigation Methods",
           "path": "/docs/lusift-object/nav-methods.md"
+        },
+        {
+          "title": "Demo",
+          "path": "/docs/lusift-object/demo.md"
         }
       ]
     },

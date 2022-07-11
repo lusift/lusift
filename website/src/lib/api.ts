@@ -3,11 +3,12 @@ import { join } from 'path';
 import matter from 'gray-matter';
 import { removeFromLast } from './utils';
 import { Post } from '../types';
+import MDXFileLoader from './mdx-file-loader';
 
 const postsDirectory = join(process.cwd(), '../docs');
 
 export const getPostSlugs = (): string[] => {
-  return fs.readdirSync(postsDirectory).filter(slug => slug.endsWith('.md'))
+  return fs.readdirSync(postsDirectory).filter(slug => slug.endsWith('.mdx'))
 }
 
 export type Field = keyof Post;
@@ -44,7 +45,7 @@ export const getDocPaths = (nextRoutes: any[], carry: any[] = []): string[] => {
 export const getPostByRoute = (slug: string, fields: Field[] = []): Post => {
 
   const docPath = join(process.cwd(), '../');
-  const path = join(docPath, slug+'.md');
+  const path = join(docPath, slug+'.mdx');
   const fileContents = fs.readFileSync(path, 'utf8');
   const { data, content } = matter(fileContents);
 
@@ -56,7 +57,7 @@ export const getPostByRoute = (slug: string, fields: Field[] = []): Post => {
       items[field] = slug;
     }
     if (field === 'content') {
-      items[field] = content;
+      items[field] = content as any;
     }
 
     if (typeof data[field] !== 'undefined') {

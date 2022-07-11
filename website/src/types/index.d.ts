@@ -1,7 +1,9 @@
+import type { MDXRemoteSerializeResult } from 'next-mdx-remote'
+
 export type Post = Partial<{
   slug: string;
   title: string;
-  content: string;
+  content: MDXRemoteSerializeResult;
   description: string;
 }>;
 
