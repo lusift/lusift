@@ -3,18 +3,19 @@ import { SITE_URL } from '../lib/constants';
 
 export interface CustomHeadProps {
   title: string;
+  pageTitle?: string;
   description: string;
   pathname: string;
 }
 
-export const CustomHead = ({ title, description, pathname }: CustomHeadProps) => {
+export const CustomHead = ({ title, description, pathname, pageTitle }: CustomHeadProps) => {
   const favicon = '/images/lusift.ico';
   const image = '/images/lusift-2.png';
   const baseUrl = SITE_URL;
 
   return (
     <Head>
-      <title key="title">{title}</title>
+      <title key="title">{pageTitle || title}</title>
       <meta name="description" key="description" content={description} />
       <link rel="icon" type="image/x-icon" href={favicon} />
       <link rel="apple-touch-icon" href={favicon} />

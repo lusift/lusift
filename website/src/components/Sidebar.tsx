@@ -10,7 +10,7 @@ export const Sidebar: React.FC<{
 
   return (
     <aside
-      className={cn('sidebar bg-white top-24 flex-shrink-0 pr-2', {
+      className={cn('sidebar sticky bg-white top-24 flex-shrink-0 pr-2', {
         active,
         ['pb-0 flex flex-col z-1 sticky']: fixed,
         fixed,

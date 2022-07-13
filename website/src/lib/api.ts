@@ -3,7 +3,6 @@ import { join } from 'path';
 import matter from 'gray-matter';
 import { removeFromLast } from './utils';
 import { Post } from '../types';
-import MDXFileLoader from './mdx-file-loader';
 
 const postsDirectory = join(process.cwd(), '../docs');
 
