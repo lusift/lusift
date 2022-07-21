@@ -8,7 +8,6 @@ const startStepInstance = (stepData: any, guideID: string, onRemove: Function): 
 
     if (type === "tooltip") {
         const { actions, styleProps } = stepData;
-
         activeStepInstance = new Tooltip({
             target,
             data,

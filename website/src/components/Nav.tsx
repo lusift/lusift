@@ -2,10 +2,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { Logo } from './Logo';
-
-export function ExternalLink(props: any) {
-  return <a {...props} rel="noopener" target={props.target || '_blank'} />;
-}
+import { ExternalLink } from './ExternalLink';
 
 const repoUrl = 'https://github.com/lusift/lusift';
 
@@ -42,6 +39,14 @@ export const Nav: React.FC = () => {
                 <Link href="/docs/overview">
                   <a className="rounded-md py-2 px-3 inline-flex items-center leading-5 font-medium text-gray-900 betterhover:hover:bg-gray-50 betterhover:hover:text-gray-900 focus:outline-none focus:text-gray-900 focus:bg-gray-50 transition duration-150 ease-in-out">
                     Docs
+                  </a>
+                </Link>
+              </div>
+
+              <div>
+                <Link href="/demo">
+                  <a className="rounded-md py-2 px-3 inline-flex items-center leading-5 font-medium text-gray-900 betterhover:hover:bg-gray-50 betterhover:hover:text-gray-900 focus:outline-none focus:text-gray-900 focus:bg-gray-50 transition duration-150 ease-in-out">
+                    Demo
                   </a>
                 </Link>
               </div>

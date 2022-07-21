@@ -14,19 +14,14 @@ import { isOfTypeContent, isObject } from "../common/utils/isOfType";
 
 import addDefaultCSS from "./addDefaultCSS";
 
-// TODO: Write documentation
-// -- some rough idea of the volume of the documentation site and
-// -- a rough outline of what there will be?
-// -- tech stack and design decisions
 // TODO: Create spotlight effect in place of backdrop element like here https://www.appcues.com/ui-patterns/tooltips
 // -- relevant css properties: mask, radial-gradient, backdrop-filter
 // TODO: Remove stale console.log's
+// TODO: Cleanup package management stuff
+// TODO: Add footer prop that can take html or a react component, it'll go below body
+// TODO: Stop refactoring
 
-// TODO_: Adding beacon to tooltip step type (it can toggle the tooltip visibility)
 // TODO_: add support for angul*r
-// NOTE: Handling versioning
-// TODO: Can we just export element classes (Tooltip, Modal, Hotspot, Backdrop) and have them be optionally loadable by the client?
-// -- something like how modifiers plugin system works in popperjs
 
 const noOp = () => {}; // no-op function
 
@@ -43,7 +38,7 @@ class Lusift {
         next: noOp,
         prev: noOp,
         close: noOp,
-        goto: (x) => {},
+        goto: (x: number) => {},
     }
 
     constructor() {
@@ -78,20 +73,20 @@ class Lusift {
         const enabledGuideID = Object.keys(localData).find(key => {
             const { trackingState } = localData[key];
             if(trackingState){
-                return trackingState.enabled
+                return trackingState.enabled;
             }
             return false;
         });
         if (enabledGuideID) {
             this.showContent(enabledGuideID);
         } else {
-            return warn(`No content enabled.`)
+            return warn(`No content enabled.`);
         }
     }
 
     public getActiveGuide(): ActiveGuide | null {
         if (!this.activeGuide) return null;
-        let { instance, id } = this.activeGuide;
+        const { instance, id } = this.activeGuide;
         const {
             guideData,
             getTrackingState,
@@ -109,21 +104,21 @@ class Lusift {
                 getActiveSteps,
                 reRenderStepElements,
             }
-        }
+        };
     }
 
     private doesGuideExist(guideID: string): boolean {
         return Object.keys(this.getContent()!)
-            .some(key => key === guideID);
+        .some(key => key === guideID);
     }
 
     public enable(guideID: string, toRefresh?: boolean): void {
         let localData = this.getTrackingState();
         if(!this.doesGuideExist(guideID)) {
-            return error(`Content of id '${guideID}' doesn't exist`);
+            return error(`Content with id '${guideID}' doesn't exist`);
         }
 
-        // enable content of id $guideID, disable all else
+        // enable content with id $guideID, disable all else
         Object.keys(localData).forEach(key => {
             const { trackingState } = localData[key];
             if(trackingState){
@@ -146,11 +141,11 @@ class Lusift {
     }
 
     public setContent(content: InputContent, defaults?: DeepPartial<ContentDefaults>): void {
-        console.log('passed to setContent:')
-        console.log(content);
+        /* console.log('passed to setContent:')
+        console.log(content); */
         const mergedWithDefaultsContent = mergeContentWithDefaults(content, defaults);
-        console.log('merged with defaults:')
-        console.log(mergedWithDefaultsContent)
+        /* console.log('merged with defaults:')
+        console.log(mergedWithDefaultsContent) */
 
         // validate content
         if (!isOfTypeContent(mergedWithDefaultsContent)) {

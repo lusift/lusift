@@ -21,13 +21,14 @@ const renderTooltip = async ({ remove, data, target, styleProps, uid, index, onC
   const content = div();
   content.className = 'lusift';
 
+  content.setAttribute('aria-label', 'tooltip');
   content.innerHTML = `
-    ${renderProgressBar()}
     <div class="hotspot-tooltip" id="tooltip-${uid}">
     <section class="body-content">
     </section>
     </div>
   `;
+  content.prepend(renderProgressBar());
   Object.assign(content.style, {
     borderRadius: DEFAULT_TOOLTIP_BORDER_RADIUS,
     ...styleProps,

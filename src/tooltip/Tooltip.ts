@@ -66,7 +66,7 @@ export default class Tooltip {
         this.guideID = guideID;
         this.targetElement = document.querySelector(elementSelector);
         this.show();
-        log("tooltip started");
+        // log("tooltip started");
     }
 
     private hide(): void {

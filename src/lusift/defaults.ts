@@ -165,7 +165,7 @@ function overrideProps(target, source) {
 }
 
 
-export default function combineContentWithDefaults(content, contentDefaults?: DeepPartial<ContentDefaults>): Content {
+export default function combineContentWithDefaults(content: any, contentDefaults?: DeepPartial<ContentDefaults>): Content {
   content = removeUndefinedFieldsFromContent(content);
 
   if (contentDefaults) {

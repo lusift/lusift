@@ -5,6 +5,7 @@ import { GetStaticPaths, GetStaticProps } from 'next';
 import Layout from '../../layouts/layout';
 import { SidebarRoutes } from '../../components/SidebarRoutes';
 import { Sidebar } from '../../components/Sidebar';
+import { ExternalLink } from '../../components/ExternalLink';
 import { CustomHead } from '../../components/CustomHead';
 import markdown from '../../styles/markdown.module.css';
 import { getPostByRoute, getAllPosts, fetchDocsManifest, getDocPaths } from '../../lib/api';
@@ -59,7 +60,6 @@ const Docs: NextPageWithLayout<DocsProps> = ({ post, routes }) => {
     return <ErrorPage statusCode={404} />
   }
   const { title, description } = post;
-  window.alert(post.slug)
   const pageTitle = `${title} | Lusift Docs`;
 
   const editUrl = `${REPO_URL}/edit/main${post.slug}.mdx`;
@@ -83,11 +83,9 @@ const Docs: NextPageWithLayout<DocsProps> = ({ post, routes }) => {
               TODO: page nav buttons
             </div>
             <div className="flex justify-end border-2 border-gray-700 border-solid p-3">
-              <Link href={editUrl} as={editUrl}>
-                <a>
+              <ExternalLink href={editUrl}>
                   Edit this page on github
-                </a>
-              </Link>
+              </ExternalLink>
             </div>
           </DocBody>
         </div>

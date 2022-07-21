@@ -86,7 +86,7 @@ const renderTooltip = async ({ data, target, styleProps, actions, uid, index, on
         })}
       }
       </style>
-    <div class="tooltip" id="tooltip-${uid}">
+    <div aria-label="tooltip" class="tooltip" id="tooltip-${uid}">
       ${renderCloseXButton(closeButton, "tooltip")}
       <section class="body-content">
       </section>
