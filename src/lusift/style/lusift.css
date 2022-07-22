@@ -122,6 +122,10 @@
     margin-right: 0.4rem;
 }
 
+.lusift .tooltip .nav-buttons .prev-next-btns {
+    justify-content: flex-end;
+}
+
 .lusift .tooltip .nav-buttons .dismiss-link:active,
 .lusift .tooltip .nav-buttons .dismiss-link:focus,
 .lusift .tooltip .nav-buttons .dismiss-link:hover {
@@ -200,6 +204,7 @@
     margin: 0;
     padding: 0;
     position: absolute;
+    background-color: transparent;
     top: 0;
     display: block;
     width: 100%;

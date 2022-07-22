@@ -20,7 +20,6 @@ const renderFooter = (navSection: any): Element => {
     const { nextButton, prevButton, dismissLink, disabled } = navSection;
     if (disabled) return div();
 
-    // TODO: next and prev button should be aligned to the right
     const container = section();
     container.className = 'nav-buttons';
     const dismiss = button();
@@ -41,9 +40,13 @@ const renderFooter = (navSection: any): Element => {
     Object.assign(next.style, nextButton.styleProps);
     Object.assign(prev.style, prevButton.styleProps);
 
+    const prevNextBtns = div();
+    prevNextBtns.className = 'prev-next-btns';
+
     dismissLink && container.appendChild(dismiss);
-    prevButton && container.appendChild(prev);
-    nextButton && container.appendChild(next);
+    prevButton && prevNextBtns.appendChild(prev);
+    nextButton && prevNextBtns.appendChild(next);
+    container.appendChild(prevNextBtns);
 
     return container;
 };

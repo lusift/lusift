@@ -17,7 +17,6 @@ import addDefaultCSS from "./addDefaultCSS";
 // TODO: Create spotlight effect in place of backdrop element like here https://www.appcues.com/ui-patterns/tooltips
 // -- relevant css properties: mask, radial-gradient, backdrop-filter
 // TODO: Remove stale console.log's
-// TODO: Cleanup package management stuff
 // TODO: Stop refactoring
 
 // TODO_: add support for angul*r
