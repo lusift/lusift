@@ -9,27 +9,29 @@ const defaultBodyContent = `
   <h3 style="font-weight: bold;">Default title</h3>
   <p style="font-weight: normal;">Default tooltip content</p>
 `;
+
 // TODO: The progress bar should look like it's contained rather than floating on top
 
 const div = () => document.createElement("div");
 const section = () => document.createElement("section");
+const button = () => document.createElement("button");
 
-const renderNavButtons = (navSection: any): Element => {
+const renderFooter = (navSection: any): Element => {
     const { nextButton, prevButton, dismissLink, disabled } = navSection;
     if (disabled) return div();
 
     const container = section();
     container.className = 'nav-buttons';
-    const dismiss = document.createElement('button');
+    const dismiss = button();
     dismiss.className = 'close dismiss-link';
     dismiss.innerText = dismissLink.text;
     dismiss.setAttribute('onclick', 'window.Lusift.close()');
 
-    const prev = document.createElement('button');
+    const prev = button();
     prev.className = 'prev';
     prev.innerText = prevButton.text;
     prev.setAttribute('onclick', 'window.Lusift.prev()');
-    const next = document.createElement('button');
+    const next = button();
     next.className = 'next lusift-button';
     next.innerText = nextButton.text;
     next.setAttribute('onclick', 'window.Lusift.next()');
@@ -90,12 +92,14 @@ const renderTooltip = async ({ data, target, styleProps, actions, uid, index, on
       ${renderCloseXButton(closeButton, "tooltip")}
       <section class="body-content">
       </section>
+      <section class="footer">
+      </section>
     </div>
   `;
   if (!progressBar.disabled) {
     content.prepend(renderProgressBar());
   }
-  content.querySelector(`#tooltip-${uid}`)!.appendChild(renderNavButtons(navSection));
+  content.querySelector(`#tooltip-${uid}`)!.appendChild(renderFooter(navSection));
 
   Object.assign(content.style, {
     borderRadius: DEFAULT_TOOLTIP_BORDER_RADIUS,
@@ -105,10 +109,12 @@ const renderTooltip = async ({ data, target, styleProps, actions, uid, index, on
   const Lusift = window["Lusift"];
 
   let bodyContent = defaultBodyContent;
+  let footerContent = null;
   const activeGuide = Lusift.getActiveGuide();
 
   if (activeGuide) {
     bodyContent = Lusift.getContent()[activeGuide.id].data.steps[index].data.bodyContent || bodyContent;
+    footerContent = Lusift.getContent()[activeGuide.id].data.steps[index].data.footerContent || footerContent;
   }
 
   const tooltipInstance = await createTooltip({
@@ -123,6 +129,8 @@ const renderTooltip = async ({ data, target, styleProps, actions, uid, index, on
     onHide,
     onBeforeFirstRender: () => {
       Lusift.render(bodyContent, ".lusift > .tooltip > .body-content", () => {
+      });
+      Lusift.render(footerContent, ".lusift > .tooltip > .footer", () => {
       });
     },
     scrollIntoView,

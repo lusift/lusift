@@ -18,7 +18,6 @@ import addDefaultCSS from "./addDefaultCSS";
 // -- relevant css properties: mask, radial-gradient, backdrop-filter
 // TODO: Remove stale console.log's
 // TODO: Cleanup package management stuff
-// TODO: Add footer prop that can take html or a react component, it'll go below body
 // TODO: Stop refactoring
 
 // TODO_: add support for angul*r
