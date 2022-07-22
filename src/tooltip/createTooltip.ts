@@ -20,6 +20,7 @@ const renderFooter = (navSection: any): Element => {
     const { nextButton, prevButton, dismissLink, disabled } = navSection;
     if (disabled) return div();
 
+    // TODO: next and prev button should be aligned to the right
     const container = section();
     container.className = 'nav-buttons';
     const dismiss = button();

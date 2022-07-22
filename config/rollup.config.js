@@ -146,12 +146,12 @@ function getConfig({ input, name, outputFile, tsconfig, packageJsonPath }) {
                 terser(),
                 // These visualizer plugins require some build files to be in those directories already
                 // or the rollup scripts errors out
-                visualizeSource({
+                /* visualizeSource({
                     // TODO: This errors out (the entire build process does) when there's not a build file already
                     filename: `.rollup-build-stats/${name.toLowerCase()}-${mode.toLowerCase()}.html`,
                     format: 'html',
                     gzip: false
-                }),
+                }), */
             ] : [],
             /* ...mode === 'development' ? [
                 visualizer({

@@ -26,6 +26,7 @@ export interface StepActions {
     };
 }
 export declare type BodyContent = string | Element | object | Function;
+export declare type FooterContent = string | Element | object | Function;
 export interface BackdropData {
     color: string;
     opacity: string;
@@ -34,6 +35,7 @@ export interface BackdropData {
 }
 export interface TooltipData {
     bodyContent: BodyContent;
+    footerContent: FooterContent;
     placement: Placement;
     offset: [number, number];
     arrow: boolean;

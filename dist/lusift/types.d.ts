@@ -1,4 +1,4 @@
-import { DeepPartial, ActiveGuide, LocalState, Content, BodyContent, Tooltip, Hotspot, Modal } from '../common/types';
+import { DeepPartial, ActiveGuide, LocalState, Content, BodyContent, FooterContent, Tooltip, Hotspot, Modal } from '../common/types';
 export declare type MinTooltip = DeepPartial<Tooltip> & {
     index: number;
 } & {
@@ -16,6 +16,7 @@ export declare type MinTooltip = DeepPartial<Tooltip> & {
 } & {
     data: {
         bodyContent: BodyContent;
+        footerContent: FooterContent;
     };
 };
 export declare type MinModal = DeepPartial<Modal> & {
