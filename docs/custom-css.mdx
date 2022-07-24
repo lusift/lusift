@@ -6,3 +6,281 @@ description: Adding custom css to Lusift elements
 
 Here's how to add your *custom* css.
 
+```
+/*default*/
+
+.lusift {
+    --primary-color: #17a3a8;
+    --modal-border-radius: 4px;
+    --tooltip-border-radius: 4px;
+    --progress-bar-height: 3px;
+}
+/*
+ * TODO: changes:
+ * -- modal drop-shadow(rgba(0, 0, 0, 0.3) 0px 0px 3px);
+ * -- Clean up this css
+ * */
+
+.lusift-no-scroll {
+    overflow: hidden;
+}
+
+.lusift button {
+    background-color: var(--primary-color);
+    border-radius: 6px;
+    padding: 0.3rem 0.45rem;
+    color: #fff;
+    font-weight: bold;
+    transition-duration: 0.2s;
+    outline: 2px solid transparent;
+}
+
+.lusift button:focus {
+    outline-color: #444;
+}
+
+.lusift .tooltip button {
+    color: #fff;
+    padding: 0.2rem 0.35rem;
+    font-size: 0.75rem;
+    font-weight: bold;
+    border-radius: 8px;
+}
+
+.lusift .modal button {
+    font-size: 1.1rem;
+    padding: 0.45rem 0.75rem;
+}
+
+.lusift h1,
+.lusift h2,
+.lusift h3 {
+    text-align: center;
+}
+
+.lusift .closeX {
+    background-color: transparent;
+    border: none;
+    font-weight: normal;
+    position: absolute;
+    top: 1px;
+    right: 0px;
+}
+
+.lusift .modal h1,
+.lusift .modal h2,
+.lusift .modal h3,
+.lusift .modal p {
+    margin: 0 0 0.85rem 0;
+}
+
+.lusift .modal h1,
+.lusift .modal h2,
+.lusift .modal h3 {
+    line-height: 1.2;
+}
+
+/*tooltip closeX*/
+
+.lusift .tooltip section.close-btn {
+    display: flex;
+    justify-content: flex-end;
+    margin: 0;
+    border-radius: inherit;
+}
+
+.lusift .tooltip {
+    /* border: 1px solid red; */
+    padding: 4px 3px;
+    font-weight: bold;
+    font-size: 1rem;
+    display: block;
+    z-index: 99999;
+    --section-vertical-margin: 5px;
+}
+
+.lusift .tooltip > * {
+    margin: var(--section-vertical-margin) 12px;
+}
+
+.lusift .tooltip .closeX {
+    font-weight: normal;
+    margin: 0;
+    margin-bottom: calc(var(--section-vertical-margin) * -0.95);
+    font-size: 0.9rem;
+    padding: 0px 2px;
+    color: #999;
+    background: transparent;
+    border-radius: 2px;
+}
+
+/*tooltip nav-buttons*/
+.lusift .tooltip section.nav-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    /* margin-bottom: 8px; */
+}
+
+.lusift .tooltip .nav-buttons .dismiss-link {
+    color: #777;
+    background: transparent;
+    border: none;
+    padding: 2px;
+    font-style: italic;
+    font-size: 0.8rem;
+    margin-right: 0.4rem;
+}
+
+.lusift .tooltip .nav-buttons .prev-next-btns {
+    justify-content: flex-end;
+}
+
+.lusift .tooltip .nav-buttons .dismiss-link:active,
+.lusift .tooltip .nav-buttons .dismiss-link:focus,
+.lusift .tooltip .nav-buttons .dismiss-link:hover {
+    text-decoration: underline;
+    border: none;
+    color: #444;
+}
+
+.lusift .tooltip .nav-buttons .dismiss-link:active,
+.lusift .tooltip .nav-buttons .dismiss-link:focus{
+    text-decoration: none;
+    color: #444;
+}
+
+.lusift .tooltip .nav-buttons .next,
+.lusift .tooltip .nav-buttons .prev {
+    color: #fff;
+    padding: 0.25rem 0.45rem;
+    font-size: 0.75rem;
+    font-weight: bold;
+    border-radius: 8px;
+}
+
+.lusift .tooltip .nav-buttons .prev {
+    margin-right: 0.3rem;
+}
+
+/*tooltip main content*/
+
+.lusift .tooltip .body-content {
+    min-width: 80px;
+    white-space: nowrap;
+}
+
+.lusift-backdrop-overlay {
+}
+
+/*modal*/
+
+/*modal overlay*/
+.lusift-modal-overlay {
+}
+
+.lusift .modal {
+}
+
+/*modal closeX*/
+
+.lusift .modal section.close-btn {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.lusift .modal .closeX {
+    font-weight: normal;
+    font-size: 1.35rem;
+    padding: 0 2px;
+    margin-right: 0px;
+    color: #999;
+    background: transparent;
+    border-radius: 2px;
+}
+
+/*modal body-content*/
+
+.lusift .modal .body-content {
+    padding: 3px 15px;
+    padding-top: 15px;
+    padding-bottom: 8px;
+    color: #111;
+}
+
+/*tooltip-progress*/
+
+.lusift-progress {
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    background-color: transparent;
+    top: 0;
+    display: block;
+    width: 100%;
+    height: var(--progress-bar-height);
+    -webkit-appearance: none;
+}
+
+.modal .lusift-progress {
+}
+
+.tooltip .lusift-progress {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+.lusift-progress::-webkit-progress-bar {
+    position: absolute;
+    top: 0;
+    initial: none;
+    background-color: transparent; /*background-color of tooltip*/
+    border-radius: var(--tooltip-border-radius);
+}
+
+.modal .lusift-progress::-webkit-progress-bar {
+    border-radius: var(--modal-border-radius);
+}
+
+.lusift-progress::-webkit-progress-value {
+    initial: none;
+    background-color: var(--primary-color);
+}
+
+.lusift-progress::-moz-progress-bar {
+    initial: none;
+    background-color: var(--primary-color);
+}
+
+/*beacon*/
+
+.lusift-beacon {
+    border-radius: 50%;
+    position: absolute;
+    pointer-events: auto;
+    cursor: pointer;
+    -webkit-animation-delay: 1s;
+    animation-delay: 1s;
+}
+
+/*hotspot */
+
+/*width, text is getting wrapped*/
+.lusift .hotspot-tooltip {
+    font-weight: bold;
+    font-size: 1rem;
+    display: block;
+    padding: 5px 9px;
+    white-space: nowrap;
+}
+
+.lusift .hotspot-tooltip > * {
+    margin: 3px 6px;
+}
+
+.lusift .hotspot-tooltip .body-content {
+    min-width: 80px;
+}
+
+```

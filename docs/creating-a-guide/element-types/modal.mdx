@@ -5,3 +5,34 @@ description: Modal
 ---
 
 Creating Modal element
+
+```
+type Modal = {
+    index: number;
+    type: 'modal';
+    target: ModalTarget;
+    data: ModalData;
+    closeButton: {
+        styleProps: object;
+        disabled: boolean;
+    };
+}
+
+type ModalData = {
+    bodyContent: BodyContent;
+    escToClose: boolean;
+    clickOutsideToClose: boolean;
+    progressBar: {
+        disabled: boolean;
+        styleProps: object;
+    };
+}
+
+type ModalTarget = {
+    path: {
+        value: string;
+        comparator: PathComparator;
+    };
+}
+
+```

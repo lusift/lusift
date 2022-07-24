@@ -17,6 +17,10 @@
           "open": true,
           "routes": [
             {
+              "title": "Content",
+              "path": "/docs/creating-a-guide/content.md"
+            },
+            {
               "title": "Element Types",
               "open": true,
               "routes": [
@@ -55,8 +59,8 @@
           "path": "/docs/lusift-object/nav-methods.md"
         },
         {
-          "title": "Demo",
-          "path": "/docs/lusift-object/demo.md"
+          "title": "Tracking State",
+          "path": "/docs/lusift-object/tracking-state.md"
         }
       ]
     },
