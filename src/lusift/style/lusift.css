@@ -6,31 +6,18 @@
     --tooltip-border-radius: 4px;
     --progress-bar-height: 3px;
 }
-/*
- * TODO: changes:
- * -- modal drop-shadow(rgba(0, 0, 0, 0.3) 0px 0px 3px);
- * -- Clean up this css
- * */
 
 .lusift-no-scroll {
     overflow: hidden;
 }
 
-.lusift button {
+.lusift .tooltip button {
     background-color: var(--primary-color);
-    border-radius: 6px;
+    border-radius: 8px;
     padding: 0.3rem 0.45rem;
     color: #fff;
-    font-weight: bold;
     transition-duration: 0.2s;
     outline: 2px solid transparent;
-}
-
-.lusift button:focus {
-    outline-color: #444;
-}
-
-.lusift .tooltip button {
     color: #fff;
     padding: 0.2rem 0.35rem;
     font-size: 0.75rem;
@@ -38,15 +25,13 @@
     border-radius: 8px;
 }
 
+.lusift .tooltip button:focus {
+    outline-color: #444;
+}
+
 .lusift .modal button {
     font-size: 1.1rem;
     padding: 0.45rem 0.75rem;
-}
-
-.lusift h1,
-.lusift h2,
-.lusift h3 {
-    text-align: center;
 }
 
 .lusift .closeX {
@@ -56,19 +41,6 @@
     position: absolute;
     top: 1px;
     right: 0px;
-}
-
-.lusift .modal h1,
-.lusift .modal h2,
-.lusift .modal h3,
-.lusift .modal p {
-    margin: 0 0 0.85rem 0;
-}
-
-.lusift .modal h1,
-.lusift .modal h2,
-.lusift .modal h3 {
-    line-height: 1.2;
 }
 
 /*tooltip closeX*/
@@ -110,7 +82,6 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    /* margin-bottom: 8px; */
 }
 
 .lusift .tooltip .nav-buttons .dismiss-link {
@@ -170,9 +141,6 @@
 .lusift-modal-overlay {
 }
 
-.lusift .modal {
-}
-
 /*modal closeX*/
 
 .lusift .modal section.close-btn {
@@ -213,10 +181,10 @@
     -webkit-appearance: none;
 }
 
-.modal .lusift-progress {
+.lusift .modal .lusift-progress {
 }
 
-.tooltip .lusift-progress {
+.lusift .tooltip .lusift-progress {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
@@ -230,7 +198,7 @@
     border-radius: var(--tooltip-border-radius);
 }
 
-.modal .lusift-progress::-webkit-progress-bar {
+.lusift .modal .lusift-progress::-webkit-progress-bar {
     border-radius: var(--modal-border-radius);
 }
 
@@ -257,7 +225,6 @@
 
 /*hotspot */
 
-/*width, text is getting wrapped*/
 .lusift .hotspot-tooltip {
     font-weight: bold;
     font-size: 1rem;
