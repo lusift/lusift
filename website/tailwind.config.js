@@ -4,6 +4,7 @@ module.exports = {
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx}",
     "./src/components/**/*.{js,ts,jsx,tsx}",
+    "./src/layouts/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     screens: {
@@ -14,7 +15,9 @@ module.exports = {
     },
     extend: {
       colors: {
-        primary: 'gold'
+        primary: '#11999E',
+        red: 'red',
+        green: 'green'
       },
       spacing: {
         '128': '32rem',

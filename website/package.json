@@ -13,6 +13,7 @@
   "dependencies": {
     "@mdx-js/loader": "^2.0.0-rc.2",
     "@mdx-js/react": "^2.0.0-rc.2",
+    "@n8tb1t/use-scroll-position": "^2.0.3",
     "@types/stringify-object": "^4.0.1",
     "classnames": "^2.3.1",
     "gray-matter": "^4.0.3",

@@ -11,7 +11,6 @@ export type Props = AppProps & {
   Component: NextPageWithLayout;
 };
 
-
 const App = ({ Component, pageProps }: Props) => {
   const getLayout = Component.getLayout ?? ((page: ReactNode) => page);
   return (

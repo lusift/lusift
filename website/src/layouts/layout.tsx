@@ -10,21 +10,21 @@ interface ILayout {
 
 const Layout: React.FC<ILayout> = ({ children }) => {
   const isMobile = useIsMobile();
-    return (
-        <>
-            <main className="p-0 mx-auto m-0">
-      {isMobile ? (
-        <Nav />
-      ) : (
-        <Sticky>
+  return (
+    <div className="flex flex-col min-h-screen justify-between">
+      <main className="p-0 mx-auto m-0 w-full">
+        {isMobile ? (
           <Nav />
-        </Sticky>
-      )}
-                {children}
-            </main>
-            <Footer />
-        </>
-    );
+        ) : (
+          <Sticky>
+            <Nav />
+          </Sticky>
+        )}
+        {children}
+      </main>
+      <Footer />
+    </div>
+  );
 }
 
 export default Layout;

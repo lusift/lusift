@@ -22,13 +22,13 @@ const functionsToRemove = mode === 'production' ? ['console.log', 'assert.*', 'd
 
 const bundleOutputDirName = `${mode === 'development' ? 'dev' : 'dist'}`;
 const configOptions = [
-    {
+    /* {
         input: 'src/index.ts',
         outputFile: `${bundleOutputDirName}/index.js`,
         name: 'Lusift',
         tsconfig: 'tsconfig.json',
         packageJsonPath: 'package.json',
-    },
+    }, */
     {
         input: 'src/react/src/index.tsx',
         outputFile: `${bundleOutputDirName}/react/src/index.js`,
@@ -36,13 +36,13 @@ const configOptions = [
         tsconfig: 'tsconfig.react.json',
         packageJsonPath: 'src/react/package.json',
     },
-    {
+    /* {
         input: 'src/vue/src/index.ts',
         outputFile: `${bundleOutputDirName}/vue/src/index.js`,
         name: 'Lusift-vue',
         tsconfig: 'tsconfig.vue.json',
         packageJsonPath: 'src/vue/package.json',
-    },
+    }, */
 ];
 
 function getConfig({ input, name, outputFile, tsconfig, packageJsonPath }) {

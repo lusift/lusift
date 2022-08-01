@@ -1,8 +1,10 @@
 import Link from 'next/link';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { Logo } from './Logo';
 import { ExternalLink } from './ExternalLink';
+import { useScrollPosition } from '@n8tb1t/use-scroll-position';
 
 const repoUrl = 'https://github.com/lusift/lusift';
 
@@ -13,14 +15,29 @@ const obj = {
   version: '0.0.1',
 }
 
-obj.name;
-obj.url;
-obj.target;
-
 export const Nav: React.FC = () => {
+
+  const distinctBorderClass = 'border-b border-gray-200';
   const router = useRouter();
+  const [dynamicClass, setDynamicClass] = useState('');
+
+  useScrollPosition(({ prevPos, currPos }) => {
+    if (router.pathname !== '/') return;
+    if (currPos.y === 0) {
+      setDynamicClass('');
+    } else {
+      setDynamicClass(distinctBorderClass);
+    }
+  }, [router.pathname]);
+
+  useEffect(() => {
+    const defaultDynamicClass = router.pathname === '/' ? '' : distinctBorderClass;
+    setDynamicClass(defaultDynamicClass);
+  }, [router.pathname]);
+
+
   return (
-    <div className="bg-white bg-[hsla(209, 62%, 50%, 1)] border-b border-gray-200">
+    <nav className={`bg-white bg-[hsla(209, 62%, 50%, 1)] ${dynamicClass}`}>
       <div className="container mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-12 md:gap-8">
           <div className="md:col-span-3 flex items-center justify-between h-16">
@@ -72,6 +89,6 @@ export const Nav: React.FC = () => {
           </div>
         </div>
       </div>
-    </div>
+    </nav>
   );
 };
