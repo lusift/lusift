@@ -11,6 +11,7 @@ import startStepInstance from './startStepInstance';
 import { GuideType, ActiveStep, TrackingState, StepTargetType } from "../common/types";
 
 // TODO: refactor this
+// TODO: Add property `closeOnLastNext`
 
 export default class Guide {
     readonly guideData: GuideType;
@@ -292,7 +293,9 @@ export default class Guide {
     public nextStep(): void {
         const newStep = this.getTrackingState().currentStepIndex + 1;
         if (newStep + 1 > this.guideData.steps.length) {
-            return error("No new steps");
+            if (!this.guideData.closeOnLastNext) {
+                return error("No new steps");
+            }
         }
         this.closeCurrentStep();
         this.setStep(newStep);

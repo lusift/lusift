@@ -174,6 +174,7 @@ export interface GuideType {
     onNext: () => void;
     onPrev: () => void;
     onClose: () => void;
+    closeOnLastNext: boolean;
 }
 
 export interface LocalState {

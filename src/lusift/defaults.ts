@@ -148,7 +148,6 @@ let defaults = {
   modal: defaultModal,
 }
 
-
 function overrideProps(target, source) {
   let output = Object.assign({}, target);
   if (isObject(target) && isObject(source)) {
@@ -163,7 +162,6 @@ function overrideProps(target, source) {
   }
   return output;
 }
-
 
 export default function combineContentWithDefaults(content: any, contentDefaults?: DeepPartial<ContentDefaults>): Content {
   content = removeUndefinedFieldsFromContent(content);
