@@ -1,4 +1,4 @@
-declare const test: ({ targetElement, stageGap, color, opacity }: {
+declare const createOverlay: ({ targetElement, stageGap, color, opacity }: {
     targetElement: any;
     stageGap: any;
     color: any;
@@ -9,4 +9,4 @@ declare const test: ({ targetElement, stageGap, color, opacity }: {
     detachOverlay: () => any;
     attachOverlay: () => any;
 };
-export default test;
+export default createOverlay;

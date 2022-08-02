@@ -101,7 +101,7 @@
     "rollup": "2.61.1",
     "rollup-plugin-peer-deps-external": "2.2.4",
     "rollup-plugin-postcss": "4.0.2",
-    "rollup-plugin-source-map-explorer": "1.1.1",
+    "rollup-plugin-source-map-explorer": "1.1.2",
     "rollup-plugin-terser": "7.0.2",
     "rollup-plugin-typescript2": "0.31.1",
     "rollup-plugin-visualizer": "5.5.2",

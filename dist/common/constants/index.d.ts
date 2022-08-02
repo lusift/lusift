@@ -9,7 +9,7 @@ export declare const DEFAULT_PROGRESS_BAR_HEIGHT = "3px";
 export declare const LUSIFT_CONTAINER_ID = "lusift";
 export declare const LUSIFT_SHADOW_ROOT_ID = "lusift-root";
 export declare const MODAL_OVERLAY_Z_INDEX = 99999;
-export declare const BACKDROP_Z_INDEX = 99998;
 export declare const TOOLTIP_Z_INDEX = 99999;
+export declare const BACKDROP_Z_INDEX: number;
 export declare const BEACON_Z_INDEX = 99999;
 export declare const OVERLAY_SELECTOR_CLASS = "lusift-backdrop-overlay";
