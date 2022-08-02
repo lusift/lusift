@@ -104,7 +104,7 @@ const defaultModal = {
   },
   closeButton: {
     styleProps: {},
-    disabled: true,
+    disabled: false,
   },
   data: {
     escToClose: false,

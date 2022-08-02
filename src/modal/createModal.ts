@@ -6,24 +6,37 @@ import renderCloseXButton from "../common/closeXButton";
 
 const defaultBodyContent = `
   <style>
-  .body-content h2{
+  .lusift .modal h2 {
     font-weight: bold;
     font-size: 1.5rem;
+    text-align: center;
+    margin-bottom: 0.5rem;
   }
-  .body-content .button-area{
+  .lusift .modal p {
+    text-align: center;
+  }
+  .lusift .modal .button-area {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 2rem 0;
+    margin: 1rem 0;
+  }
+
+  .lusift .modal .button-area button {
+    font-size: 1.1rem;
+    padding: 0.45rem 0.75rem;
   }
   </style>
-  <h2>Default Modal Content</h2>
-  <p>some text</p>
-  <div class="button-area">
-  <button class="button" onclick="Lusift.next()">
-  Next
-  </button>
-  </div>`;
+  <div class="modal">
+    <h2>Default Modal Content</h2>
+    <p>This is the default modal content!</p>
+    <div class="button-area">
+      <button class="button" onclick="Lusift.next()">
+        Next
+      </button>
+    </div>
+  </div>
+`;
 
 const div = () => document.createElement("div");
 
@@ -111,7 +124,7 @@ const createModal = ({ uid, index, closeButton, progressBar, styleProps, overlay
   const activeGuide = Lusift.getActiveGuide();
 
   if (activeGuide) {
-    bodyContent = Lusift.getContent()[activeGuide.id].data.steps[index].data.bodyContent;
+    bodyContent = Lusift.getContent()[activeGuide.id].data.steps[index].data.bodyContent || bodyContent;
   }
 
   Lusift.render(bodyContent, ".lusift > .modal > .body-content");

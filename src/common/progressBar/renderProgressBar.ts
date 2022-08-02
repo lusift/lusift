@@ -67,32 +67,6 @@ const renderProgressBar = () => {
     progressBarElement.setAttribute("value", progress);
     // move style rules to parent (tooltip or modal)
     return progressBarElement;
-
-
-    return `
-        <style>
-        /*
-        .lusift-progress {
-            height: ${height};
-        }
-        .lusift-progress::-webkit-progress-bar {
-            border-radius: ${borderRadius}; /*border-radius of tooltip*/
-        }
-        .lusift-progress::-webkit-progress-value {
-            background-color: ${backgroundColor}; /*color of progress bar*/
-        }
-
-        .lusift-progress::-moz-progress-bar {
-            initial: none;
-            background-color: ${backgroundColor};
-        }
-        */
-        </style>
-
-        <progress class="lusift-progress" aria-label="progressbar" max="${max}" value="${progress}">
-        ${progress}%
-        </progress>
-        `;
 };
 
 export default renderProgressBar;

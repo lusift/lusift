@@ -11,7 +11,7 @@
     overflow: hidden;
 }
 
-.lusift .tooltip button {
+.lusift .tooltip button, .lusift .modal button {
     background-color: var(--primary-color);
     border-radius: 8px;
     padding: 0.3rem 0.45rem;
@@ -25,13 +25,9 @@
     border-radius: 8px;
 }
 
-.lusift .tooltip button:focus {
+.lusift .tooltip button:focus,
+.lusift .modal button:focus {
     outline-color: #444;
-}
-
-.lusift .modal button {
-    font-size: 1.1rem;
-    padding: 0.45rem 0.75rem;
 }
 
 .lusift .closeX {
@@ -150,8 +146,8 @@
 
 .lusift .modal .closeX {
     font-weight: normal;
-    font-size: 1.35rem;
-    padding: 0 2px;
+    font-size: 1.45rem;
+    padding: 0 5px;
     margin-right: 0px;
     color: #999;
     background: transparent;
