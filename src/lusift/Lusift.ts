@@ -16,8 +16,6 @@ import addDefaultCSS from "./addDefaultCSS";
 
 // NOTE: Stop refactoring
 // TODO: Add support for react 18
-// TODO: Target comparator is not working quite right for regex type
-// -- /lusift/boards is matched by /*/boards, /*/*/boards and so on, for example
 
 // TODO_: add support for angul*r
 
