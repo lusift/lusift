@@ -14,7 +14,6 @@ export type MinModal = DeepPartial<Modal> &
     { target: { elementSelector: string } } &
     { data: { bodyContent: BodyContent } };
 
-
 export type MinHotspot = DeepPartial<Hotspot> &
     { index: number } &
     { type: 'hotspot' } &

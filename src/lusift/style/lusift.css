@@ -11,7 +11,8 @@
     overflow: hidden;
 }
 
-.lusift .tooltip button, .lusift .modal button {
+.lusift .tooltip button,
+.lusift .modal button {
     background-color: var(--primary-color);
     border-radius: 8px;
     padding: 0.3rem 0.45rem;

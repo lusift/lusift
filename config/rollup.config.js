@@ -136,6 +136,7 @@ function getConfig({ input, name, outputFile, tsconfig, packageJsonPath }) {
                 inject: false,
                 sourceMap: (mode === 'production' ? false : 'inline'),
                 minimize: mode === 'production',
+                extract: `lusift.css`
             }),
             strip({
                 functions: functionsToRemove,

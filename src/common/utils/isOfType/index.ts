@@ -40,7 +40,7 @@ export function isOfTypeTooltipData(object: any): boolean {
 }
 
 export function isOfTypeTarget(object: any, type: string): boolean {
-    const comparators = ["is", "contains", "endsWith", "startsWith"];
+    const comparators = ["is", "contains", "endsWith", "startsWith", "regex"];
     const elementSelectorExists =
         typeof object.elementSelector === "string" && !!object.elementSelector;
 

@@ -14,10 +14,10 @@ import { isOfTypeContent, isObject } from "../common/utils/isOfType";
 
 import addDefaultCSS from "./addDefaultCSS";
 
-// TODO: Create spotlight effect in place of backdrop element like here https://www.appcues.com/ui-patterns/tooltips
-// -- relevant css properties: mask, radial-gradient, backdrop-filter
-// TODO: Remove stale console.log's
-// TODO: Stop refactoring
+// NOTE: Stop refactoring
+// TODO: Add support for react 18
+// TODO: Target comparator is not working quite right for regex type
+// -- /lusift/boards is matched by /*/boards, /*/*/boards and so on, for example
 
 // TODO_: add support for angul*r
 
@@ -47,7 +47,7 @@ class Lusift {
         if (!isObject(localData)) {
             setDefaultState();
         }
-        addDefaultCSS();
+        addDefaultCSS(); // this line adds css to the header
     }
 
     public next(): void {

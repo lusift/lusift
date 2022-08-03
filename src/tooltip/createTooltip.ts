@@ -9,12 +9,12 @@ const defaultBodyContent = `
   <h3 style="font-weight: bold;">Default title</h3>
   <p style="font-weight: normal;">Default tooltip content</p>
 `;
-
 // TODO: The progress bar should look like it's contained rather than floating on top
 
 const div = () => document.createElement("div");
 const section = () => document.createElement("section");
 const button = () => document.createElement("button");
+
 
 const renderFooter = (navSection: any): Element => {
     const { nextButton, prevButton, dismissLink, disabled } = navSection;
@@ -47,6 +47,37 @@ const renderFooter = (navSection: any): Element => {
     prevButton && prevNextBtns.appendChild(prev);
     nextButton && prevNextBtns.appendChild(next);
     container.appendChild(prevNextBtns);
+
+    return container;
+};
+
+const renderNavButtons = (navSection: any): Element => {
+    const { nextButton, prevButton, dismissLink, disabled } = navSection;
+    if (disabled) return div();
+
+    const container = section();
+    container.className = 'nav-buttons';
+    const dismiss = document.createElement('button');
+    dismiss.className = 'close dismiss-link';
+    dismiss.innerText = dismissLink.text;
+    dismiss.setAttribute('onclick', 'window.Lusift.close()');
+
+    const prev = document.createElement('button');
+    prev.className = 'prev';
+    prev.innerText = prevButton.text;
+    prev.setAttribute('onclick', 'window.Lusift.prev()');
+    const next = document.createElement('button');
+    next.className = 'next lusift-button';
+    next.innerText = nextButton.text;
+    next.setAttribute('onclick', 'window.Lusift.next()');
+
+    Object.assign(dismiss.style, dismissLink.styleProps);
+    Object.assign(next.style, nextButton.styleProps);
+    Object.assign(prev.style, prevButton.styleProps);
+
+    dismissLink && container.appendChild(dismiss);
+    prevButton && container.appendChild(prev);
+    nextButton && container.appendChild(next);
 
     return container;
 };
@@ -134,8 +165,9 @@ const renderTooltip = async ({ data, target, styleProps, actions, uid, index, on
     onBeforeFirstRender: () => {
       Lusift.render(bodyContent, ".lusift > .tooltip > .body-content", () => {
       });
-      Lusift.render(footerContent, ".lusift > .tooltip > .footer", () => {
-      });
+      // TODO: the second render call breaks Lusift on vue, commenting out for now
+      /* Lusift.render(footerContent, ".lusift > .tooltip > .footer", () => {
+      }); */
     },
     scrollIntoView,
     arrowSizeScale,

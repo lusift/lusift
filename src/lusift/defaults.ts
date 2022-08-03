@@ -108,7 +108,7 @@ const defaultModal = {
   },
   data: {
     escToClose: false,
-    clickOutsideToClose: true,
+    clickOutsideToClose: false,
     progressBar: {
       disabled: false,
       styleProps: {},

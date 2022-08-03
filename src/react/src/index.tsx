@@ -1,12 +1,17 @@
 import React from "react";
+import ReactDOM from "react-dom";
 import Lusift from "../../lusift";
 import { window, document } from "global";
-import ReactDOM from "react-dom";
 import { Content } from "../../common/types";
 import { vanillaRender } from "../../common/utils";
 import { isReactComponent, isReactClassComponent } from "../../common/utils/isOfType";
 
 const reactRender = (BodyComponent: any, targetPath: string, callback?: Function) => {
+    let isReact18 = false;
+
+    window.__REACT_DEVTOOLS_GLOBAL_HOOK__.renderers.forEach(r => {
+        isReact18 = r.version.startsWith('18');
+    });
     const target = document.querySelector(targetPath);
     ReactDOM.render(<BodyComponent />, target);
     if (callback) callback();

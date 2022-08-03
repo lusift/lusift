@@ -12,6 +12,7 @@ import { GuideType, ActiveStep, TrackingState, StepTargetType } from "../common/
 
 // TODO: refactor this
 // TODO: Add property `closeOnLastNext`
+//
 
 export default class Guide {
     readonly guideData: GuideType;
