@@ -19,6 +19,9 @@ export default class Guide {
         log(loadState());
         const localGuideState = window['Lusift'].getContent()[guideID].data;
         const guideData = Object.assign({}, localGuideState);
+        if (!('closeOnLastNext' in guideData)) {
+            guideData.closeOnLastNext = true;
+        }
 
         this.guideData = guideData;
         log(
