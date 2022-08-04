@@ -16,6 +16,11 @@ import addDefaultCSS from "./addDefaultCSS";
 
 // NOTE: Stop refactoring
 // TODO: Add support for react 18
+// TODO: Make closeOnLastNext true by default
+// TODO: Maybe don't refresh disabled guides?
+// TODO: Disable progress bar for hotspot by default
+// TODO: Any way to make Lusift importable at multiple places in the client without instantiating new instance every
+// time?
 
 // TODO_: add support for angul*r
 
@@ -208,7 +213,11 @@ class Lusift {
         // if it is, don't instantiate it
         const guideTrackingState = loadState()[contentID]?.trackingState;
         if(guideTrackingState?.finished || guideTrackingState?.prematurelyClosed) {
-            return warn(`Guide '${contentID}' is closed.`);
+            // even if the guide has been closed, unless it's disabled, we want it to still
+            // instantiate to check for any open async steps
+            if(!guideTrackingState?.enabled) {
+                return warn(`Guide '${contentID}' is closed.`);
+            }
         }
         const newGuideInstance = new Guide(contentID);
         this.enable(contentID);

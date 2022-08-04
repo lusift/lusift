@@ -7,12 +7,7 @@ import {
 } from "../common/utils";
 
 import startStepInstance from './startStepInstance';
-
 import { GuideType, ActiveStep, TrackingState, StepTargetType } from "../common/types";
-
-// TODO: refactor this
-// TODO: Add property `closeOnLastNext`
-//
 
 export default class Guide {
     readonly guideData: GuideType;
@@ -64,13 +59,17 @@ export default class Guide {
     }
 
     public start(): void {
+        console.log('start()')
         const { finished, prematurelyClosed } = this.getTrackingState();
         this.removeIllegalSteps();
         this.attemptToStartAsyncSteps();
+        const { steps } = this.guideData;
 
-        // TODO: Add a case for when steps.length is 0
+        if (steps.length === 0) {
+            return warn('No steps in passed content');
+        }
         if (finished || prematurelyClosed) {
-            error("Guide is already finished or closed");
+            log("Guide is already finished or closed");
         } else {
             this.attemptToShowActiveStep();
         }
@@ -107,6 +106,7 @@ export default class Guide {
         stepIndex--;
         do {
             stepIndex++;
+            log(stepIndex)
             const step = steps[stepIndex];
             const { target, type } = steps[stepIndex];
             let async = false;
@@ -169,6 +169,7 @@ export default class Guide {
 
     private attemptToStartAsyncSteps(): void {
         // start all the async hotpots with toOpen true
+        console.log('attempting async steps')
         const steps = this.guideData.steps;
         steps.forEach(step => {
             const { type, index, target } = step;
@@ -244,10 +245,17 @@ export default class Guide {
 
     public setStep(newStepNum: number): void {
         // change step and see which steps need to be unmounted or mounted
+        const noRemainingStepIsSync = this.guideData.steps
+        .slice(newStepNum,).every(step => {
+            // is step async
+            return !(step.type !== 'hotspot' || (step.type === 'hotspot' && !step.async));
+        });
+
         let newTrackingState = this.getTrackingState();
         if (newStepNum < 0) {
             return error("Step index can't be less than 0");
-        } else if (newStepNum + 1 > this.guideData.steps.length) {
+            // Set finished to true when no remanining step is sync
+        } else if (newStepNum > this.guideData.steps.length - 1 || noRemainingStepIsSync) {
             if (!newTrackingState.finished) {
                 this.closeCurrentStep();
                 newTrackingState.finished = true;
@@ -259,6 +267,15 @@ export default class Guide {
             newTrackingState.currentStepIndex = newStepNum;
             this.setTrackingState(newTrackingState);
             this.start();
+        }
+        if (noRemainingStepIsSync) {
+            // for remaining async steps if any at the end of all sync steps
+            this.guideData.steps
+            .slice(newStepNum,).forEach(step => {
+                newTrackingState.asyncSteps[step.index].toOpen = true;
+            });
+            this.setTrackingState(newTrackingState);
+            this.attemptToStartAsyncSteps();
         }
     }
 
