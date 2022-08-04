@@ -17,7 +17,6 @@ import addDefaultCSS from "./addDefaultCSS";
 // NOTE: Stop refactoring
 // TODO: Add support for react 18
 // TODO: Make closeOnLastNext true by default
-// TODO: Maybe don't refresh disabled guides?
 // TODO: Any way to make Lusift importable at multiple places in the client without instantiating new instance every
 // time?
 
@@ -171,8 +170,11 @@ class Lusift {
     public refresh(): void {
         // run page elements through step display conditionals again
         if (this.activeGuide) {
-            this.activeGuide!.instance.start!();
-            log("Lusift refreshed");
+            const enabled = this.activeGuide.instance.getTrackingState().enabled;
+            if (enabled) {
+                this.activeGuide!.instance.start!();
+                log("Lusift refreshed");
+            }
         } else {
             warn("No active guide instance to refresh");
             // Assuming this method is called every time on page load.

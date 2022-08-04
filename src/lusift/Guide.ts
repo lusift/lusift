@@ -59,7 +59,6 @@ export default class Guide {
     }
 
     public start(): void {
-        console.log('start()')
         const { finished, prematurelyClosed } = this.getTrackingState();
         this.removeIllegalSteps();
         this.attemptToStartAsyncSteps();
@@ -169,7 +168,6 @@ export default class Guide {
 
     private attemptToStartAsyncSteps(): void {
         // start all the async hotpots with toOpen true
-        console.log('attempting async steps')
         const steps = this.guideData.steps;
         steps.forEach(step => {
             const { type, index, target } = step;
@@ -185,7 +183,7 @@ export default class Guide {
                     log(`Step ${index}: target path and element matched. toOpen is true`);
                     // if step is already active warn that the step is already active
                     if (this.isStepActive(index)) {
-                        return warn(`Step ${index} is already active`);
+                        return log(`Step ${index} is already active`);
                     }
                     this.activeSteps.push({
                         index,
