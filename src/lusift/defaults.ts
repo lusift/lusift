@@ -88,7 +88,10 @@ const defaultHotspot = {
     data: {
       placement: 'bottom',
       arrow: true,
-      maxWidth: 400
+      maxWidth: 400,
+      progressBar: {
+        disabled: true
+      }
     },
     styleProps: {
     }

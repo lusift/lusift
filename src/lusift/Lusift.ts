@@ -18,7 +18,6 @@ import addDefaultCSS from "./addDefaultCSS";
 // TODO: Add support for react 18
 // TODO: Make closeOnLastNext true by default
 // TODO: Maybe don't refresh disabled guides?
-// TODO: Disable progress bar for hotspot by default
 // TODO: Any way to make Lusift importable at multiple places in the client without instantiating new instance every
 // time?
 

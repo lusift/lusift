@@ -15,6 +15,7 @@ const renderTooltip = async ({ remove, data, target, styleProps, uid, index, onC
     placement,
     offset,
     maxWidth,
+    progressBar
     // bodyContent = defaultBodyContent,
   } = data;
 
@@ -28,7 +29,9 @@ const renderTooltip = async ({ remove, data, target, styleProps, uid, index, onC
     </section>
     </div>
   `;
-  content.prepend(renderProgressBar());
+  if (!progressBar.disabled) {
+    content.prepend(renderProgressBar());
+  }
   Object.assign(content.style, {
     borderRadius: DEFAULT_TOOLTIP_BORDER_RADIUS,
     ...styleProps,
