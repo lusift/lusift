@@ -108,7 +108,6 @@ export default class Guide {
         stepIndex--;
         do {
             stepIndex++;
-            log(stepIndex)
             const step = steps[stepIndex];
             const { target, type } = steps[stepIndex];
             let async = false;

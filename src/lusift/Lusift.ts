@@ -16,8 +16,6 @@ import addDefaultCSS from "./addDefaultCSS";
 
 // NOTE: Stop refactoring
 // TODO: Add support for react 18
-// TODO: Any way to make Lusift importable at multiple places in the client without instantiating new instance every
-// time?
 
 // TODO_: add support for angul*r
 
