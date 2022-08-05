@@ -18,6 +18,7 @@ declare class Lusift {
     disable(guideID: string, toRemove?: boolean): void;
     setContent(content: InputContent, defaults?: DeepPartial<ContentDefaults>): void;
     getContent(): Content;
+    resetTrackingState(): void;
     refresh(): void;
     showContent<T extends string>(contentID: T extends "" ? never : T): void;
     onNext(): void;

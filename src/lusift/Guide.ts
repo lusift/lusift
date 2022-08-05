@@ -238,7 +238,7 @@ export default class Guide {
         return loadState()[this.guideData.id].trackingState;
     }
 
-    private resetTrackingState(): void {
+    public resetTrackingState(): void {
         const newTrackingState = this.generateNewTrackingState();
         this.setTrackingState(newTrackingState);
     }

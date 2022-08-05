@@ -15,7 +15,7 @@ export default class Guide {
     private removeIllegalSteps;
     private setTrackingState;
     getTrackingState(): TrackingState;
-    private resetTrackingState;
+    resetTrackingState(): void;
     setStep(newStepNum: number): void;
     remove(): void;
     private closeCurrentStep;

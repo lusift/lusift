@@ -198,6 +198,7 @@ export interface GuideInstance {
     getActiveSteps: () => ActiveStep[];
     getProgress: () => number;
     reRenderStepElements: () => void;
+    resetTrackingState: () => void;
     removeAllActiveSteps?: () => void;
     start?: () => void;
 }

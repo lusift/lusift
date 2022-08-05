@@ -89,6 +89,7 @@ class Lusift {
             getActiveSteps,
             getProgress,
             reRenderStepElements,
+            resetTrackingState
         } = instance;
 
         return {
@@ -99,6 +100,7 @@ class Lusift {
                 getProgress,
                 getActiveSteps,
                 reRenderStepElements,
+                resetTrackingState
             }
         };
     }
@@ -162,6 +164,10 @@ class Lusift {
 
     public getContent(): Content {
         return this.content;
+    }
+
+    public resetTrackingState() {
+        setDefaultState();
     }
 
     public refresh(): void {
@@ -231,6 +237,7 @@ class Lusift {
             getActiveSteps,
             getProgress,
             removeAllActiveSteps,
+            resetTrackingState,
             guideData
         } = newGuideInstance;
 
@@ -242,6 +249,7 @@ class Lusift {
                 getProgress: getProgress.bind(newGuideInstance),
                 getActiveSteps: getActiveSteps.bind(newGuideInstance),
                 reRenderStepElements: reRenderStepElements.bind(newGuideInstance),
+                resetTrackingState: resetTrackingState.bind(newGuideInstance),
                 removeAllActiveSteps: removeAllActiveSteps.bind(newGuideInstance),
                 start: start.bind(newGuideInstance)
             }

@@ -134,6 +134,7 @@ export interface LusiftInstance {
     setGlobalStyle: (style: string) => void;
     getTrackingState: () => LocalState;
     devShowStep: (guideID: string, stepNumber: number) => void;
+    resetTrackingState: () => void;
     close: () => void;
     next: () => void;
     prev: () => void;
