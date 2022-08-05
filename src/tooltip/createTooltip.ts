@@ -4,19 +4,18 @@ import createTooltip from "../common/createTooltip";
 import { DEFAULT_TOOLTIP_BORDER_RADIUS } from "../common/constants";
 import { styleObjectToString } from '../common/utils';
 import { log } from "../common/logger";
+import { StepActions } from '../common/types';
 
 const defaultBodyContent = `
   <h3 style="font-weight: bold;">Default title</h3>
   <p style="font-weight: normal;">Default tooltip content</p>
 `;
-// TODO: The progress bar should look like it's contained rather than floating on top
 
 const div = () => document.createElement("div");
 const section = () => document.createElement("section");
 const button = () => document.createElement("button");
 
-
-const renderFooter = (navSection: any): Element => {
+const renderFooter = (navSection: StepActions['navSection']): Element => {
     const { nextButton, prevButton, dismissLink, disabled } = navSection;
     if (disabled) return div();
 
@@ -43,41 +42,10 @@ const renderFooter = (navSection: any): Element => {
     const prevNextBtns = div();
     prevNextBtns.className = 'prev-next-btns';
 
-    dismissLink && container.appendChild(dismiss);
-    prevButton && prevNextBtns.appendChild(prev);
-    nextButton && prevNextBtns.appendChild(next);
+    !dismissLink.disabled && container.appendChild(dismiss);
+    !prevButton.disabled && prevNextBtns.appendChild(prev);
+    !nextButton.disabled && prevNextBtns.appendChild(next);
     container.appendChild(prevNextBtns);
-
-    return container;
-};
-
-const renderNavButtons = (navSection: any): Element => {
-    const { nextButton, prevButton, dismissLink, disabled } = navSection;
-    if (disabled) return div();
-
-    const container = section();
-    container.className = 'nav-buttons';
-    const dismiss = document.createElement('button');
-    dismiss.className = 'close dismiss-link';
-    dismiss.innerText = dismissLink.text;
-    dismiss.setAttribute('onclick', 'window.Lusift.close()');
-
-    const prev = document.createElement('button');
-    prev.className = 'prev';
-    prev.innerText = prevButton.text;
-    prev.setAttribute('onclick', 'window.Lusift.prev()');
-    const next = document.createElement('button');
-    next.className = 'next lusift-button';
-    next.innerText = nextButton.text;
-    next.setAttribute('onclick', 'window.Lusift.next()');
-
-    Object.assign(dismiss.style, dismissLink.styleProps);
-    Object.assign(next.style, nextButton.styleProps);
-    Object.assign(prev.style, prevButton.styleProps);
-
-    dismissLink && container.appendChild(dismiss);
-    prevButton && container.appendChild(prev);
-    nextButton && container.appendChild(next);
 
     return container;
 };
