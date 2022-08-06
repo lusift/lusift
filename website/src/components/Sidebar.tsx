@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import cn from 'classnames';
 
 export const Sidebar: React.FC<{
@@ -6,7 +5,6 @@ export const Sidebar: React.FC<{
   fixed?: boolean;
   children: any;
 }> = ({ active, children, fixed }) => {
-  const [searching, setSearching] = useState(false);
 
   return (
     <aside
@@ -14,7 +12,6 @@ export const Sidebar: React.FC<{
         active,
         ['pb-0 flex flex-col z-1 sticky']: fixed,
         fixed,
-        searching,
       })}
     >
       <div className="sidebar-content overflow-y-auto pb-4">{children}</div>
@@ -27,13 +24,6 @@ export const Sidebar: React.FC<{
           padding-right: 2.5rem;
           /* Full page - content margin - header size - banner */
           height: calc(100vh - 1.5rem - 64px - 42px);
-        }
-        .sidebar.fixed.searching > .sidebar-content {
-          display: none;
-        }
-        .sidebar-search {
-          position: relative;
-          z-index: 1;
         }
         @media screen and (max-width: 1024px) {
           .sidebar,

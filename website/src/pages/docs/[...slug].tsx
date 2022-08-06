@@ -5,6 +5,8 @@ import { GetStaticPaths, GetStaticProps } from 'next';
 import Layout from '../../layouts/layout';
 import { SidebarRoutes } from '../../components/SidebarRoutes';
 import { Sidebar } from '../../components/Sidebar';
+import { SidebarMobile } from '../../components/SidebarMobile';
+import { Sticky } from '../../components/Sticky';
 import { ExternalLink } from '../../components/ExternalLink';
 import { CustomHead } from '../../components/CustomHead';
 import markdown from '../../styles/markdown.module.css';
@@ -47,7 +49,6 @@ const DocBody: React.FC<DocBodyProps> = ({ content, title, children }) => {
 // -- Look up documentation pages for other projects
 // TODO: Add `On this page` section
 
-
 export interface DocsProps {
   post: PostItem & {
     title: PostItem['title'];
@@ -81,7 +82,14 @@ const Docs: NextPageWithLayout<DocsProps> = ({ post, routes, route: _route }) =>
         pageTitle={pageTitle}
         description={description || ''}
         pathname={router.pathname} />
-      <div className="pb-12 px-12 pt-6 content">
+        <>
+          <Sticky shadow>
+            <SidebarMobile>
+              <SidebarRoutes isMobile={true} routes={routes} />
+            </SidebarMobile>
+          </Sticky>
+        </>
+      <div className="pb-12 px-4 sm:px-12 pt-6 content">
         <div className="flex relative">
           <Sidebar fixed>
             <SidebarRoutes routes={routes} />
@@ -92,7 +100,7 @@ const Docs: NextPageWithLayout<DocsProps> = ({ post, routes, route: _route }) =>
             <DocsNavButtons next={nextRoute} prev={prevRoute} />
             <div className="mt-4 flex justify-end text-gray-200 p-3">
               <a href={editUrl} className="text-gray-600" rel="noopener" target={'_blank'}>
-                  Edit this page on github
+                Edit this page on github
               </a>
             </div>
           </DocBody>
