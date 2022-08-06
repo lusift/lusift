@@ -163,7 +163,7 @@ export default class Guide {
                 return step.index === currentStep.index;
             }) +
                 1) /
-                (syncSteps.length + 1)) *
+                (syncSteps.length)) *
             100;
         return progress;
     }
@@ -304,7 +304,7 @@ export default class Guide {
                 instance => instance.index !== currentStepIndex,
             );
         } else {
-            warn("There's no active step to close");
+            log("There's no active step to close");
         }
     }
 
