@@ -14,3 +14,7 @@ export interface Route {
   heading?: boolean;
   routes?: Route[];
 }
+
+export interface Routes {
+  routes: Route[];
+}

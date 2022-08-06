@@ -14,9 +14,12 @@ import { NextPageWithLayout } from '../../types/page';
 import { Post as PostItem, Route } from '../../types';
 
 import MDXComponents from '../../components/MDXComponents';
+import { DocsNavButtons } from '../../components/DocsNavButtons';
 import { serialize } from 'next-mdx-remote/serialize';
 import { MDXRemote, MDXRemoteSerializeResult } from 'next-mdx-remote'
 import remarkPlugins from '../../lib/remarkPlugins';
+import { getRouteContext } from '../../lib/get-route-context';
+import { findRouteByPath } from '../../lib/findRouteByPath';
 
 import { REPO_URL } from '../../lib/constants';
 
@@ -40,7 +43,6 @@ const DocBody: React.FC<DocBodyProps> = ({ content, title, children }) => {
 }
 
 // TODO: Set theme(tailwind.config.js) - colors, fonts, ...
-// TODO: Make Sidebar fixed
 // TODO: Fix layout
 // -- Look up documentation pages for other projects
 // TODO: Add `On this page` section
@@ -52,9 +54,10 @@ export interface DocsProps {
     content: MDXRemoteSerializeResult;
   };
   routes: Route[];
+  route: Route;
 }
 
-const Docs: NextPageWithLayout<DocsProps> = ({ post, routes }) => {
+const Docs: NextPageWithLayout<DocsProps> = ({ post, routes, route: _route }) => {
   const router = useRouter();
   if (!router.isFallback && !post?.slug) {
     return <ErrorPage statusCode={404} />
@@ -63,6 +66,13 @@ const Docs: NextPageWithLayout<DocsProps> = ({ post, routes }) => {
   const pageTitle = `${title} | Lusift Docs`;
 
   const editUrl = `${REPO_URL}/edit/main${post.slug}.mdx`;
+  const { route, prevRoute, nextRoute } = getRouteContext(_route, routes);
+  if (prevRoute && prevRoute.path?.endsWith('.md')) {
+    prevRoute.path = prevRoute.path?.substring(0, prevRoute.path.length - 3);
+  }
+  if (nextRoute && nextRoute.path?.endsWith('.md')) {
+    nextRoute.path = nextRoute.path?.substring(0, nextRoute.path.length - 3);
+  }
 
   return (
     <div className="mx-auto">
@@ -79,13 +89,11 @@ const Docs: NextPageWithLayout<DocsProps> = ({ post, routes }) => {
           <DocBody
             title={post.title as string}
             content={post.content}>
-            <div className="p-3 border-2 border-gray-700 border-solid">
-              TODO: page nav buttons
-            </div>
-            <div className="flex justify-end border-2 border-gray-700 border-solid p-3">
-              <ExternalLink href={editUrl}>
+            <DocsNavButtons next={nextRoute} prev={prevRoute} />
+            <div className="mt-4 flex justify-end text-gray-200 p-3">
+              <a href={editUrl} className="text-gray-600" rel="noopener" target={'_blank'}>
                   Edit this page on github
-              </ExternalLink>
+              </a>
             </div>
           </DocBody>
         </div>
@@ -114,6 +122,8 @@ export const getStaticProps: GetStaticProps = async ({ params }: any) => {
     'content',
   ]);
 
+  const route = manifest && findRouteByPath(slug, manifest.routes);
+
   const posts = await getAllPosts(['slug', 'title']);
 
   const mdxSource = await serialize(post.content as any, {
@@ -132,7 +142,8 @@ export const getStaticProps: GetStaticProps = async ({ params }: any) => {
         content: mdxSource,
       },
       posts,
-      routes
+      routes,
+      route
     },
   }
 }

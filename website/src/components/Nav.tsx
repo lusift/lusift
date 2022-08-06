@@ -8,13 +8,6 @@ import { useScrollPosition } from '@n8tb1t/use-scroll-position';
 
 const repoUrl = 'https://github.com/lusift/lusift';
 
-const obj = {
-  name: 'lusift',
-  url: repoUrl,
-  target: '_blank',
-  version: '0.0.1',
-}
-
 export const Nav: React.FC = () => {
 
   const distinctBorderClass = 'border-b border-gray-200';
@@ -38,7 +31,7 @@ export const Nav: React.FC = () => {
 
   return (
     <nav className={`bg-white bg-[hsla(209, 62%, 50%, 1)] ${dynamicClass}`}>
-      <div className="container mx-auto">
+      <div className="sm:px-0 px-2 container mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-12 md:gap-8">
           <div className="md:col-span-3 flex items-center justify-between h-16">
             <div>

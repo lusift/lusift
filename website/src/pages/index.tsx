@@ -25,8 +25,7 @@ import { BsFillPlayFill } from 'react-icons/bs';
 const LinkAsButton: React.FC<{ bg: string; url: string; name: string; }> = ({ bg, url, name }) => {
   return (
     <Link href={url} as={url}>
-      {/*dynamically adding bg-${color} not working*/}
-      <a className={`text-white ${bg} p-2.5 px-4 rounded-md mx-2
+      <a className={`text-white ${bg} p-2.5 px-4 rounded-md m-1.5 mx-2 text-center
         hover:no-underline opacity-90 hover:opacity-100 text-md transition-all duration-100
         `}>
         {name}
@@ -48,8 +47,8 @@ const Home: NextPageWithLayout = () => {
         pathname={pathname}/>
 
       <section className="flex justify-center">
-        <div className="max-w-4xl border-2 border-solid border-white flex flex-col items-center justify-center p-12 py-24">
-          <h1 className="text-center font-heading leading-none font-black capitalize text-gray-900 text-7xl">
+        <div className="max-w-4xl w-11/12 border-2 border-solid border-white flex flex-col items-center justify-center p-2 py-10 sm:py-24">
+          <h1 className="text-6xl sm:text-7xl text-center font-heading leading-none font-black capitalize text-gray-900">
             Javascript product
             <span className="text-center block text-primary mt-3">
               &nbsp;tour library
@@ -59,7 +58,7 @@ const Home: NextPageWithLayout = () => {
             A bunch of text here to describe our library here. So cool, this thing. Literally the best thing to have been whipped up in
             javascript ever!
           </p>
-          <div className="flex my-1">
+          <div className="flex flex-col w-full sm:w-auto sm:flex-row my-1">
             <LinkAsButton
               bg={'bg-blue-600'}
               name={'Documentation'}
@@ -73,10 +72,10 @@ const Home: NextPageWithLayout = () => {
       </section>
 
       <section>
-        <div className="py-4 text-white my-2 justify-center flex">
-          <div className="max-w-5xl w-11/12 border-2 border-solid border-white relative flex flex-col items-center justify-center p-[1.5] py-5">
+        <div className="py-4 text-white my-2 sm:mt-0 justify-center flex">
+          <div className="max-w-5xl w-11/12 border-2 border-solid border-white relative flex flex-col items-center justify-center p-0 sm:p-[1.5] py-5">
             <div>
-              <video className="w-full" controls={false} loop autoPlay>
+              <video className="w-full" controls={false} loop muted playsInline autoPlay>
                 <source src="/lusift-demo.webm" type="video/webm" />
                 Your browser does not support the video tag.
               </video>
@@ -99,8 +98,8 @@ const Home: NextPageWithLayout = () => {
       <section>
         <div className="py-2 text-white my-2 justify-center flex items-center">
           <div className="bg-blue-600 max-w-5xl flex justify-center w-11/12 shadow-2xl rounded-lg">
-            <div className="flex items-center justify-between w-full py-12 px-8">
-              <h3 className="font-heading text-3xl font-semibold">
+            <div className="flex flex-col justify-center sm:justify-between sm:flex-row items-center w-full sm:py-12 px-5 sm:px-8 py-8">
+              <h3 className="font-heading text-2xl mb-2 sm:mb-0 sm:text-3xl font-semibold">
                 Ready to get started?
               </h3>
               <Link href={`/docs/overview`} as={`/docs/overview`}>
