@@ -6,4 +6,17 @@ description: Nav methods
 
 Using nav methods
 
-next, prev, close, goto
+## next
+`Lusift.next()` progresses the guide to the next step
+
+## prev
+`Lusift.prev()` takes the guide to the previous step
+
+## goto
+`Lusift.goto(index: number)` sets the current step index to `index`
+
+## close
+`Lusift.close()` closes the active guide prematurely, without finishing it.
+
+This method doesn't prevent lusift from checking for and displaying valid async steps, use `Lusift.disable()` in
+conjuction for that.

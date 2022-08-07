@@ -50,7 +50,7 @@ const renderFooter = (navSection: StepActions['navSection']): Element => {
     return container;
 };
 
-const renderTooltip = async ({ data, target, styleProps, actions, uid, index, onShow, onHide, scrollIntoView }) => {
+const renderTooltip = async ({ data, target, styleProps, actions, uid, index, onShow, onHide }) => {
   const { closeButton, navSection } = actions;
   const {
     arrow,
@@ -59,6 +59,7 @@ const renderTooltip = async ({ data, target, styleProps, actions, uid, index, on
     offset,
     maxWidth,
     progressBar,
+    scrollIntoView,
     arrowSizeScale
   } = data;
 

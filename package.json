@@ -105,8 +105,6 @@
     "eslint-plugin-prettier": "4.0.0",
     "jest": "27.2.0",
     "prettier": "2.4.1",
-    "react": "file:../roadmap/node_modules/react",
-    "react-dom": "file:../roadmap/node_modules/react-dom",
     "rimraf": "3.0.2",
     "rollup": "2.61.1",
     "rollup-plugin-peer-deps-external": "2.2.4",
@@ -133,8 +131,6 @@
   "peerDependencies": {
     "@floating-ui/dom": ">=0.0.1",
     "@vue/composition-api": "^0.1.0",
-    "react": "^0.14.9 || ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0",
-    "react-dom": "^0.14.9 || ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0",
     "tslib": "^1.9.0 || >=2.0.0",
     "vue": "^2.6.11 || >=3.0.0"
   },

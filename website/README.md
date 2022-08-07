@@ -7,3 +7,5 @@ First, run the development server:
 ```bash
 npm run dev
 ```
+
+Inspiration: formik's website

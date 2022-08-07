@@ -11,6 +11,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@floating-ui/dom": "^0.0.1",
     "@mdx-js/loader": "^2.0.0-rc.2",
     "@mdx-js/react": "^2.0.0-rc.2",
     "@n8tb1t/use-scroll-position": "^2.0.3",
@@ -18,6 +19,7 @@
     "body-scroll-lock": "^4.0.0-beta.0",
     "classnames": "^2.3.1",
     "gray-matter": "^4.0.3",
+    "lusift": "file:..",
     "next": "12.1.5",
     "next-mdx-remote": "^4.0.3",
     "react": "17.0.2",

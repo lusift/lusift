@@ -54,6 +54,7 @@ const defaultTooltip = {
     },
     arrow: true,
     arrowSizeScale: 1,
+    scrollIntoView: true,
     backdrop: defaultTooltipBackdrop,
     progressBar: {
       disabled: false,

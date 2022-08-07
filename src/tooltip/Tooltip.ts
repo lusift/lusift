@@ -118,7 +118,6 @@ export default class Tooltip {
                 actions,
                 styleProps,
                 data,
-                scrollIntoView: true,
                 index,
                 onShow: (instance) => {
                     if(instance.state.isShown) {

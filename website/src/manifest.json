@@ -13,6 +13,10 @@
           "path": "/docs/tutorial.md"
         },
         {
+          "title": "Use with frameworks",
+          "path": "/docs/frameworks.md"
+        },
+        {
           "title": "Creating A Guide",
           "open": true,
           "routes": [
@@ -21,20 +25,20 @@
               "path": "/docs/creating-a-guide/content.md"
             },
             {
-              "title": "Element Types",
+              "title": "Step Types",
               "open": true,
               "routes": [
                 {
                   "title": "Tooltip",
-                  "path": "/docs/creating-a-guide/element-types/tooltip.md"
+                  "path": "/docs/creating-a-guide/step-types/tooltip.md"
                 },
                 {
                   "title": "Hotspot",
-                  "path": "/docs/creating-a-guide/element-types/hotspot.md"
+                  "path": "/docs/creating-a-guide/step-types/hotspot.md"
                 },
                 {
                   "title": "Modal",
-                  "path": "/docs/creating-a-guide/element-types/modal.md"
+                  "path": "/docs/creating-a-guide/step-types/modal.md"
                 }
               ]
             },

@@ -1,0 +1,82 @@
+---
+id: modal
+title: 'Modal'
+description: Modal
+---
+
+Creating Modal element
+
+```
+type Modal = {
+    index: number;
+    type: 'modal';
+    target: Target;
+    data: ModalData;
+    closeButton: {
+        styleProps: object;
+        disabled: boolean;
+    };
+}
+
+```
+
+## target
+```typescript
+type PathComparator =
+    'is' |
+    'contains' |
+    'startsWith' |
+    'endsWith' |
+    'regex';
+
+type Target = {
+    path: {
+        value: string;
+        comparator: PathComparator;
+    };
+}
+```
+
+## data
+```typescript
+type ModalData = {
+    bodyContent: BodyContent;
+    escToClose: boolean;
+    clickOutsideToClose: boolean;
+    progressBar: {
+        disabled: boolean;
+        styleProps: object;
+    };
+}
+```
+
+### bodyContent
+```typescript
+type BodyContent = string | Element | object | Function;
+```
+`bodyContent` can be a string, an HTML element, a React component or a Vue component. It is the main body of tooltip.
+
+### escToClose
+Setting this to `true` will take the user to the next step (`Lusift.next()`) on pressing the `Esc` key.
+
+Default value: `false`
+
+### clickOutsideToClose
+With `clickOutsideToClose` set to `true`, clicking outside the modal element will trigger `Lusift.next()`.
+
+Default value: `false`
+
+### progressBar
+Configure the progress bar at the top of the modal element -
+
+#### disabled
+Setting `disabled` to `true` will disable the progress bar.
+Default value is `false`
+
+#### styleProps
+Set CSS properties to the progress bar element.
+
+## closeButton
+Setting `disabled` on `closeButton` object to true disables the close button on the top right of the tooltip element.
+
+You can set CSS properties for the button with `styleProps` object on `closeButton`.

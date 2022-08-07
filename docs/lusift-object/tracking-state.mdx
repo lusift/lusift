@@ -4,9 +4,42 @@ title: 'Tracking State'
 description: Guide's tracking state
 ---
 
-Retreive guide's tracking state
+Tracking state of the guides is stored in the browser's localStorage, on key `lusift_state`.
 
+`Lusift.getTrackingState()` retrieves the tracking state of *all* the guides saved by Lusift.
 
 ```typescript
-Lusift.getTrackingState();
+type TrackingState = {
+    [guideId: string]: GuideTrackingState;
+}
+
+type GuideTrackingState = {
+    asyncSteps: {
+        [stepId: number]: {
+            toOpen: boolean;
+        };
+    };
+    currentStepindex: number;
+    enabled: boolean;
+    finished: boolean;
+    prematurelyClosed: boolean;
+}
 ```
+
+## asyncSteps
+`asyncSteps` refers to hotspot steps with `async` set to `true`.
+
+### toOpen
+When `toOpen` is `true`, the hotspot will appear at the target dom element.
+
+## currentStepindex
+`currentStepindex` is the `index` of the currently displayed or to display step.
+
+## enabled
+Weather the guide is enabled.
+
+## finished
+`finished` is `true` when all of the sync steps have been closed.
+
+## prematurelyClosed
+`prematurelyClosed` is set to true when `Lusift.close()` is used to close the guide.

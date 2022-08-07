@@ -4,5 +4,153 @@ title: 'Tutorial'
 description: How to create guide flow with Lusift
 ---
 
-- what are we doing in this tutorial (some basic guide)
-- create it in a couple or so steps with code
+In this tutorial we're going to create a basic 4 step guide.
+
+## Set Up
+
+Start by creating this html document:
+
+```html
+<html>
+  <head>
+    <title>Floating UI Tutorial</title>
+    <style>
+        body {
+            height: 100vh;
+            position: relative;
+        }
+        button.target {
+            position: absolute;
+            margin: 8rem;
+            color: #fff;
+            border-radius: 4px;
+            padding: 3px 2px;
+        }
+        .button-1 {
+            top: 0;
+            left: 0;
+            background: blue;
+        }
+        .button-2 {
+            top: 0;
+            right: 0;
+            background: red;
+        }
+        .button-3 {
+            bottom: 0;
+            right: 0;
+            background: #eab308;
+        }
+        .button-4 {
+            bottom: 0;
+            left: 0;
+            background: #06b6d4;
+        }
+    </style>
+  </head>
+  <body>
+    <button class="target button-1">
+      button 1
+    </button>
+    <button class="target button-2">
+      button 2
+    </button>
+    <button class="target button-3">
+      button 3
+    </button>
+    <button class="target button-4">
+      button 4
+    </button>
+
+    <script type="module">
+    </script>
+  </body>
+</html>
+
+```
+It should look something like this in the browser:
+
+<Result1 />
+<br />
+
+Then add the following javascript code inside the script tags.
+
+```typescript
+import Lusift from 'lusift';
+import 'lusift/dist/lusift.css';
+
+const tutorialGuide = {
+  id: 'tutorial',
+  name: 'Tutorial',
+  closeOnLastNext: false,
+  steps: [
+    {
+      index: 0,
+      type: 'tooltip',
+      target: {
+        elementSelector: '.lusift-target .button-1'
+      },
+      data: {
+        placement: {
+          position: 'right'
+        },
+        bodyContent: 'Step 1'
+      }
+    },
+    {
+      index: 1,
+      type: 'tooltip',
+      target: {
+        elementSelector: '.lusift-target .button-2'
+      },
+      data: {
+        placement: {
+          position: 'left'
+        },
+        bodyContent: 'Step 2'
+      }
+    },
+    {
+      index: 2,
+      type: 'tooltip',
+      target: {
+        elementSelector: '.lusift-target .button-3'
+      },
+      data: {
+        placement: {
+          position: 'top'
+        },
+        bodyContent: 'Step 3'
+      }
+    },
+    {
+      index: 3,
+      type: 'tooltip',
+      target: {
+        elementSelector: '.lusift-target .button-4'
+      },
+      data: {
+        placement: {
+          position: 'right'
+        },
+        bodyContent: 'Step 4 (last)'
+      }
+    },
+  ]
+}
+
+const lusiftContent = {
+  "tutorial": {
+    type: 'guide',
+    data: tutorialGuide
+ }
+}
+
+Lusift.setContent(lusiftContent);
+Lusift.showContent('tutorial');
+```
+
+And we have our guide working.
+Jump between steps by pressing the `next` and `prev` buttons.
+
+<Result2 />

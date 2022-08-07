@@ -4,12 +4,198 @@ title: 'Content'
 description: Methods to create guide
 ---
 
+We make use of the following methods to work with content in Lusift:
+
+## setContent
+`Lusift.setContent(lusiftContent: Content, defaults: ContentDefaults)` method takes the content containing guides' data.
+
+### Usage
+
+`setContent()` takes 2 arguments: content (interface Content) and defaults (interface ContentDefaults).
+Data inside defaults and content objects is merged to create content object internally, more in `getContent()`.
+
 ```typescript
-setContent
-showContent
-getContent
-refresh
-getActiveGuide
-enable
-disable
+
+interface GuideType {
+    id: string;
+    name: string;
+    description: string;
+    steps: Array<Tooltip | Modal | Hotspot>;
+    closeOnLastNext: boolean;
+    onNext: () => void;
+    onPrev: () => void;
+    onClose: () => void;
+}
+
+// Tooltip, Modal, Hotspot types discussed in next sections
+// likewise for onNext, onPrev, and onClose
+
+interface Content {
+    [guideID: string]: {
+        type: 'guide';
+        data: GuideType;
+    };
+}
+
+interface DefaultTooltip {
+  target: {
+    path: {
+      comparator: string;
+      value: string;
+    }
+  };
+  data: {
+    placement: string;
+    arrow: boolean;
+    backdrop: {
+      disabled: boolean;
+      color: string;
+      opacity: string;
+      stageGap: number;
+      nextOnOverlayClick: boolean;
+    }
+  };
+  actions: {
+    styleProps: {};
+    closeButton: {
+      styleProps: {};
+      disabled: boolean;
+    };
+    navSection: {
+      styleProps: {};
+      nextButton: {
+        text: string;
+        styleProps: {};
+        disabled: boolean;
+      };
+      prevButton: {
+        text: string;
+        styleProps: {};
+        disabled: boolean;
+      };
+      dismissLink: {
+        text: string;
+        styleProps: {};
+        disabled: boolean;
+      }
+    }
+  }
+}
+
+interface DefaultHotspot {
+  target: {
+    path: {
+      comparator: string;
+      value: string;
+    };
+  };
+  beacon: {
+    placement: {
+      top: number;
+      left: number;
+    };
+    size: number;
+    color: string;
+    type: string;
+  };
+  tip: {
+    data: {
+      placement: string;
+      arrow: boolean;
+    };
+    styleProps: {};
+  };
+  async: boolean;
+}
+
+interface DefaultModal {
+  target: {
+    path: {
+      comparator: string;
+      value: string;
+    }
+  };
+  closeButton: {
+    styleProps: {};
+    disabled: boolean;
+  };
+  data: {
+  }
+}
+
+interface ContentDefaults {
+  tooltip: DefaultTooltip;
+  hotspot: DefaultHotspot;
+  modal: DefaultModal;
+}
+
 ```
+
+#### `closeOnLastNext`
+
+Setting `closeOnLastNext` to `true` will close the guide when the last step is finished, IE, `Lusift.next()` is ran
+when at the last step.
+
+We will discuss individual step types (tooltip, hotspot, modal) in the next sections. The `defaults` are derived from
+the same.
+
+### Example
+```typescript
+const lusiftContent = {
+    '1': {
+        type: 'guide',
+        data: {
+            id: '1',
+            name: 'demo guide',
+            description: 'description...',
+            closeOnLastNext: false,
+            steps: [
+                // ...
+            ]
+        }
+    }
+}
+
+const defaults = {
+    // ...
+}
+
+Lusift.setContent(lusiftContent, defaults);
+
+```
+
+## showContent
+`Lusift.showContent(guideID: string)` method takes the id of the guide to start.
+## getContent
+`Lusift.getContent()` returns the content that has been set using `Lusift.setContent()`.
+## refresh
+`Lusift.refresh()` method checks for the target path and (new) target dom element on the webpage, for the active guide,
+if there is one. In absense of an active guide, this method will run `Lusift.showContent()` with id of the first enabled
+guide in the content.
+
+Run this on page changes in single page applications and when content, potentially incuding a target element, is dynamically added to the page.
+## getActiveGuide
+`Lusift.getActiveGuide()` returns the `id` and the `instance` object of the active guide if any. In absense of an active
+guide, it returns `null`.
+
+### `instance`
+The `instance` object contains the following properties:
+#### `getActiveSteps()`
+Returns a list of objects containing steps instance.
+#### `getProgress()`
+Returns a number representing the percentage of the guide steps the user has been through.
+#### `getTrackingState()`
+Returns the tracking state of the active guide. More on the Tracking State section of the documentation.
+#### `guideData`
+Contains the content data of the guide.
+#### `resetTrackingState()`
+Resets guide's progress / tracking state
+
+## resetTrackingState
+`Lusift.resetTrackingState()` resets the tracking state of all guides in Lusift.
+## disable
+`Lusift.disable(guideID: string)` takes the id of the guide to disable. Disabling an active guide will make Lusift not check for any
+steps to display.
+## enable
+`Lusift.enable(guideID: string, toRefresh?: boolean)` takes the id of the guide to enable as the first parameter and
+`toRefresh` as an optional parameter setting which to `true` will run `Lusift.refresh()` after enabling the guide.

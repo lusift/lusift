@@ -1,0 +1,253 @@
+---
+id: tooltip
+title: 'Tooltip'
+description: Tooltip
+---
+
+Data model of a `tooltip` element
+
+```
+type Tooltip = {
+    index: number;
+    type: 'tooltip';
+    data: TooltipData;
+    target: Target;
+    actions: TooltipActions;
+}
+```
+## index
+Serial number for steps, beginning from 0.
+
+## data
+
+```typescript
+type TooltipData = {
+    bodyContent: BodyContent;
+    footerContent: FooterContent;
+    placement: Placement;
+    offset: [number, number];
+    arrow: boolean;
+    arrowSizeScale: number;
+    scrollIntoView: boolean;
+    backdrop: {
+        disabled: boolean;
+        color: string;
+        opacity: string;
+        stageGap: number;
+        nextOnOverlayClick: boolean;
+    };
+    progressOn: {
+        eventType: string;
+        elementSelector: string;
+        disabled: boolean;
+    };
+    progressBar: {
+        disabled: boolean;
+        styleProps: object;
+    };
+}
+```
+
+### bodyContent
+```
+type BodyContent = string | Element | object | Function;
+```
+`bodyContent` can be a string, an HTML element, a React component or a Vue component. It is the main body of tooltip.
+
+### footerContent
+```
+type FooterContent = string | Element | object | Function;
+```
+`footerContent`, like `bodyContent`, can be a string, an HTML element, a React component or a Vue component.
+Footer appears below the content passed to `bodyContent`.
+
+### placement
+
+```typescript
+type Alignment = 'start' | 'end';
+type Side = 'top' | 'right' | 'bottom' | 'left';
+type AlignedPlacement = `${Side}-${Alignment}`;
+
+type Position = Side | AlignedPlacement | 'auto';
+type Orientation = 'fixed' | 'auto';
+
+type Placement = {
+    position: Position;
+    orientation: Orientation;
+}
+```
+#### Position
+`position` dictates where the tooltip should be positioned with respect to the target dom element. Default value is
+`bottom`.
+#### Orientation
+Setting `orientation` to `auto` will make Lusift change the `position` of tooltip if the tooltip overflows the document when rendered
+with the passed `position` value. Setting it to `fixed` prevents this behaviour.
+Default value is `auto`.
+
+### offset
+`offset`'s data type is an array of 2 numbers, the first number is the distance of tooltip from x-axis of the element,
+and the second number is the distance of tooltip from y-axis of the target element.
+
+Default value is `[0, 0]`.
+
+### arrow
+Setting `arrow` to `false` disables arrow on the tooltip. Default value is `true`.
+
+### arrowSizeScale
+`arrowSizeScale` is the multiple value you want to increase the tooltip arrow's size by.
+
+### scrollIntoView
+Setting `scrollIntoView` to `true` will scroll the the screen to the target dom element on the page. Default value is
+`true`.
+
+### backdrop
+Configuring the tooltip backdrop.
+
+#### disabled
+Setting `disabled` to `true` disables the backdrop with the tooltip. Default value is `false`, it is enabled by default.
+
+#### color
+Hex color value of the backdrop. Default value is `#444`.
+
+#### opacity
+Opacity of backdrop. Default value is `0.5`.
+
+#### stageGap
+Space, in pixels, between the backdrop element wrapping around the target element and the target element.
+Default value is `5`.
+
+#### nextOnOverlayClick
+Setting this to `true` makes it so that clicking on the backdrop overlay takes you to the next step in the guide.
+Default value is `false`.
+
+### progressOn
+
+#### eventType
+`eventType` is the value of event type that needs to be registered by an element of css selector `elementSelector`, as below,
+for the guide to progress on to the next step. Default value is `click`.
+
+#### elementSelector
+`elementSelector` is the css selector of any element on the document. Default element is the target element. That is,
+the default behaviour is to progress to next step when the target element is clicked.
+
+#### disabled
+Setting `disabled` to `true` will disable this behaviour.
+
+
+### progressBar
+#### disabled
+Setting `disabled` to `true` disables the progress bar at the top of the tooltip.
+
+#### styleProps
+Set CSS properties to the progress bar element.
+
+## target
+
+```typescript
+type PathComparator =
+    'is' |
+    'contains' |
+    'startsWith' |
+    'endsWith' |
+    'regex';
+
+type Target = {
+    path: {
+        value: string;
+        comparator: PathComparator;
+    };
+    elementSelector: string;
+}
+```
+`target` dictates the condition for the tooltip element to display and where.
+
+### path
+
+#### value
+`value` is the url path value of the target page.
+
+#### comparator
+- `is`: the path `value` should be equals to the current path.
+
+- `contains`: the current url path should contain the `value`.
+
+- `startsWith`: the current url path should start with `value`. Uses javascript's `String.prototype.startsWith()`.
+
+- `endsWith`: the current url path should end with `value`. Uses javascript's `String.prototype.endsWith()`.
+
+- `regex`: Use `*` as the placeholder for parts of url. Example, `/*/dashboard/` will match `/companyName/dashboard`.
+
+### elementSelector
+`elementSelector` is the css selector of the target dom element where the tooltip will point at.
+
+## actions
+
+```typescript
+interface StepActions {
+    closeButton: {
+        styleProps: object;
+        disabled: boolean;
+    };
+    navSection: {
+        disabled: boolean;
+        styleProps: object;
+        nextButton: {
+            text: string;
+            styleProps: object;
+            disabled: boolean;
+        };
+        prevButton: {
+            text: string;
+            styleProps: object;
+            disabled: boolean;
+        };
+        dismissLink: {
+            text: string;
+            styleProps: object;
+            disabled: boolean;
+        };
+    };
+}
+```
+### closeButton
+Setting `disabled` on `closeButton` object to true disables the close button on the top right of the tooltip element.
+
+You can set CSS properties for the button with `styleProps` object on `closeButton`.
+
+### navSection
+The nav section includes navigation buttons at the bottom of the tooltip element to go to the next step, previous step, or to skip
+the guide.
+Setting `disabled` to true disables the nav section entirely.
+
+`nextButton`, `prevButton`, and `dismissLink` configure the text, enabled status, and styling of the next button,
+previous button, and the dismiss button respectively.
+
+# Example
+
+```typescript
+const tooltip1 = {
+    index: 0,
+    type: 'tooltip',
+    target: {
+    path: {
+            value: '/docs/overview',
+            comparator: 'is'
+        },
+        elementSelector: 'button.lusift-target'
+    },
+    data: {
+        placement: {
+          position: 'right',
+          orientation: 'fixed',
+        },
+        bodyContent: 'My tooltip',
+        footerContent: 'This is the footer',
+    },
+    actions: {
+        closeButton: {
+            disabled: true
+        }
+    }
+}
+
+```

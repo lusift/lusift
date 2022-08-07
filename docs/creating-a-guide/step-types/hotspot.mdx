@@ -1,0 +1,100 @@
+---
+id: hotspot
+title: 'Hotspot'
+description: Hotspot
+---
+
+Creating Hotspot element
+
+```typescript
+type Hotspot = {
+    index: number;
+    type: 'hotspot';
+    target: Target;
+    beacon: {
+        placement: {
+            top: number;
+            left: number;
+        };
+        size: number;
+        color: string;
+    };
+    tip: {
+        data: {
+            placement: Position;
+            arrow: boolean;
+            bodyContent: BodyContent;
+        };
+    };
+    async: boolean;
+}
+```
+
+## target
+Same as in tooltip, refer to the `target` section of the Tooltip page.
+
+```typescript
+type PathComparator =
+    'is' |
+    'contains' |
+    'startsWith' |
+    'endsWith' |
+    'regex';
+
+type Target = {
+    path: {
+        value: string;
+        comparator: PathComparator;
+    };
+    elementSelector: string;
+}
+```
+
+## beacon
+
+### placement
+`placement` configures the position of the beacon element relative to the top and left of the target element.
+#### top
+Default value: 90
+
+#### left
+Default value: 90
+
+### size
+`size` is the multiple value we want the beacon's size to increase by.
+
+### color
+Color of the beacon element.
+Default value: `#b9f`
+
+## tip
+Configuring the hotspot tooltip -
+### data
+
+#### position
+```typescript
+type Alignment = 'start' | 'end';
+type Side = 'top' | 'right' | 'bottom' | 'left';
+type AlignedPlacement = `${Side}-${Alignment}`;
+
+type Position = Side | AlignedPlacement | 'auto';
+```
+
+`position` dictates where the tooltip should be positioned with respect to the target dom element. Default value is `bottom`.
+
+
+#### arrow
+Setting `arrow` to `false` disables arrow on the tooltip. Default value is `true`.
+
+#### bodyContent
+```typescript
+type BodyContent = string | Element | object | Function;
+```
+`bodyContent` can be a string, an HTML element, a React component or a Vue component. It is the main body of tooltip.
+
+## async
+An async step does not have to be closed in order for the step element next to it to
+open. Hotspots by default are async, but they can be made into sync step, like all other step types are, by setting the
+`async` value to `false`.
+
+Default value: `true`
