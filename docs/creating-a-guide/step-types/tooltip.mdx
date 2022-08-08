@@ -6,7 +6,7 @@ description: Tooltip
 
 Data model of a `tooltip` element
 
-```
+``` typescript
 type Tooltip = {
     index: number;
     type: 'tooltip';
@@ -49,13 +49,13 @@ type TooltipData = {
 ```
 
 ### bodyContent
-```
+``` typescript
 type BodyContent = string | Element | object | Function;
 ```
 `bodyContent` can be a string, an HTML element, a React component or a Vue component. It is the main body of tooltip.
 
 ### footerContent
-```
+``` typescript
 type FooterContent = string | Element | object | Function;
 ```
 `footerContent`, like `bodyContent`, can be a string, an HTML element, a React component or a Vue component.

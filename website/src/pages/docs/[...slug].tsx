@@ -25,6 +25,7 @@ import { findRouteByPath } from '../../lib/findRouteByPath';
 import rehypeSlug from 'rehype-slug';
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypePrism from "rehype-prism-plus";
+import mdxPrism from 'mdx-prism';
 
 import { REPO_URL } from '../../lib/constants';
 
@@ -144,7 +145,8 @@ export const getStaticProps: GetStaticProps = async ({ params }: any) => {
       remarkPlugins,
       rehypePlugins: [
         rehypeSlug,
-        rehypePrism,
+        mdxPrism,
+        rehypePrism
         // [
         //   rehypeAutolinkHeadings,
         //   {
