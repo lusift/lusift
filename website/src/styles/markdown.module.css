@@ -27,6 +27,14 @@
   content: '';
 }
 
+.markdown > article > a {
+  text-decoration: none;
+}
+
+.markdown > article > a:hover {
+  text-decoration: underline;
+}
+
 .markdown > h1,
 .markdown > a > h1 {
   @apply mb-6 text-4xl font-semibold leading-snug tracking-tight text-gray-900;

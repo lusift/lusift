@@ -6,8 +6,9 @@ import footnotes from 'remark-footnotes';
 import remarkImages from 'remark-images';
 
 const plugins = [
-  remarkSlug,
-  [
+  // remarkSlug,
+  // autoLinkHeadings,
+  /* [
     autoLinkHeadings,
     {
       behavior: 'append',
@@ -16,14 +17,14 @@ const plugins = [
         title: 'Direct link to heading',
       },
     },
-  ],
-  [
+  ], */
+  /* [
     remarkToc,
     {
       skip: 'Reference',
       maxDepth: 6,
     },
-  ],
+  ], */
   emoji,
   footnotes,
   remarkImages,

@@ -22,6 +22,9 @@ import { MDXRemote, MDXRemoteSerializeResult } from 'next-mdx-remote'
 import remarkPlugins from '../../lib/remarkPlugins';
 import { getRouteContext } from '../../lib/get-route-context';
 import { findRouteByPath } from '../../lib/findRouteByPath';
+import rehypeSlug from 'rehype-slug';
+import rehypeAutolinkHeadings from "rehype-autolink-headings";
+import rehypePrism from "rehype-prism-plus";
 
 import { REPO_URL } from '../../lib/constants';
 
@@ -138,8 +141,19 @@ export const getStaticProps: GetStaticProps = async ({ params }: any) => {
     scope: {
     },
     mdxOptions: {
-      remarkPlugins: [],
-      rehypePlugins: [],
+      remarkPlugins,
+      rehypePlugins: [
+        rehypeSlug,
+        rehypePrism,
+        // [
+        //   rehypeAutolinkHeadings,
+        //   {
+        //     properties: {
+        //       className: ["anchor"],
+        //     },
+        //   },
+        // ],
+      ],
     },
   });
 
