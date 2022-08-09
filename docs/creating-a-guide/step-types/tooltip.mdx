@@ -4,7 +4,7 @@ title: 'Tooltip'
 description: Tooltip
 ---
 
-Data model of a `tooltip` element
+Data model of a `tooltip` element:
 
 ``` typescript
 type Tooltip = {
@@ -16,7 +16,7 @@ type Tooltip = {
 }
 ```
 ## index
-Serial number for steps, beginning from 0.
+The serial number for steps, beginning from 0.
 
 ## data
 
@@ -52,14 +52,14 @@ type TooltipData = {
 ``` typescript
 type BodyContent = string | Element | object | Function;
 ```
-`bodyContent` can be a string, an HTML element, a React component or a Vue component. It is the main body of tooltip.
+`bodyContent` can be a string, an HTML element, a React component or a Vue component. It is the main body of the tooltip.
 
 ### footerContent
 ``` typescript
 type FooterContent = string | Element | object | Function;
 ```
 `footerContent`, like `bodyContent`, can be a string, an HTML element, a React component or a Vue component.
-Footer appears below the content passed to `bodyContent`.
+The footer appears below the content passed to `bodyContent`.
 
 ### placement
 
@@ -77,15 +77,15 @@ type Placement = {
 }
 ```
 #### Position
-`position` dictates where the tooltip should be positioned with respect to the target dom element. Default value is
+`position` dictates where the tooltip should be positioned with respect to the target dom element. The default value is
 `bottom`.
 #### Orientation
-Setting `orientation` to `auto` will make Lusift change the `position` of tooltip if the tooltip overflows the document when rendered
+Setting `orientation` to `auto` will make Lusift change the `position` of the tooltip if the tooltip overflows the document when rendered
 with the passed `position` value. Setting it to `fixed` prevents this behaviour.
 Default value is `auto`.
 
 ### offset
-`offset`'s data type is an array of 2 numbers, the first number is the distance of tooltip from x-axis of the element,
+`offset`'s data type is an array of 2 numbers, the first number is the distance of the tooltip from x-axis of the element,
 and the second number is the distance of tooltip from y-axis of the target element.
 
 Default value is `[0, 0]`.
@@ -164,18 +164,18 @@ type Target = {
 ### path
 
 #### value
-`value` is the url path value of the target page.
+`value` is the URL path value of the target page.
 
 #### comparator
-- `is`: the path `value` should be equals to the current path.
+- `is`: the path `value` should be equal to the current path.
 
-- `contains`: the current url path should contain the `value`.
+- `contains`: the current URL path should contain the `value`.
 
-- `startsWith`: the current url path should start with `value`. Uses javascript's `String.prototype.startsWith()`.
+- `startsWith`: the current URL path should start with `value`. Uses javascript's `String.prototype.startsWith()`.
 
-- `endsWith`: the current url path should end with `value`. Uses javascript's `String.prototype.endsWith()`.
+- `endsWith`: the current URL path should end with `value`. Uses javascript's `String.prototype.endsWith()`.
 
-- `regex`: Use `*` as the placeholder for parts of url. Example, `/*/dashboard/` will match `/companyName/dashboard`.
+- `regex`: Use `*` as the placeholder for parts of URL. Example, `/*/dashboard/` will match `/companyName/dashboard`.
 
 ### elementSelector
 `elementSelector` is the css selector of the target dom element where the tooltip will point at.

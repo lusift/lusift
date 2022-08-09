@@ -11,11 +11,12 @@ We make use of the following methods to work with content in Lusift:
 
 ### Usage
 
-`setContent()` takes 2 arguments: content (interface Content) and defaults (interface ContentDefaults).
-Data inside defaults and content objects is merged to create content object internally, more in `getContent()`.
+`setContent()` takes 2 arguments: content (`type Content`) and defaults (`type ContentDefaults`).
+
+Data in defaults and content objects are merged to create a content object internally, more about that in `getContent()`.
 
 ```typescript
-interface GuideType {
+type GuideType = {
     id: string;
     name: string;
     description: string;
@@ -29,14 +30,14 @@ interface GuideType {
 // Tooltip, Modal, Hotspot types discussed in next sections
 // likewise for onNext, onPrev, and onClose
 
-interface Content {
+type Content = {
     [guideID: string]: {
         type: 'guide';
         data: GuideType;
     };
 }
 
-interface DefaultTooltip {
+type DefaultTooltip = {
   target: {
     path: {
       comparator: string;
@@ -81,7 +82,7 @@ interface DefaultTooltip {
   }
 }
 
-interface DefaultHotspot {
+type DefaultHotspot = {
   target: {
     path: {
       comparator: string;
@@ -107,7 +108,7 @@ interface DefaultHotspot {
   async: boolean;
 }
 
-interface DefaultModal {
+type DefaultModal = {
   target: {
     path: {
       comparator: string;
@@ -122,7 +123,7 @@ interface DefaultModal {
   }
 }
 
-interface ContentDefaults {
+type ContentDefaults = {
   tooltip: DefaultTooltip;
   hotspot: DefaultHotspot;
   modal: DefaultModal;
@@ -132,7 +133,7 @@ interface ContentDefaults {
 
 #### `closeOnLastNext`
 
-Setting `closeOnLastNext` to `true` will close the guide when the last step is finished, IE, `Lusift.next()` is ran
+Setting `closeOnLastNext` to `true` will close the guide when the last step is finished, IE, `Lusift.next()` is called
 when at the last step.
 
 We will discuss individual step types (tooltip, hotspot, modal) in the next sections. The `defaults` are derived from
@@ -169,12 +170,12 @@ Lusift.setContent(lusiftContent, defaults);
 `Lusift.getContent()` returns the content that has been set using `Lusift.setContent()`.
 ## refresh
 `Lusift.refresh()` method checks for the target path and (new) target dom element on the webpage, for the active guide,
-if there is one. In absense of an active guide, this method will run `Lusift.showContent()` with id of the first enabled
+if there is one. In absence of an active guide, this method will run `Lusift.showContent()` with id of the first enabled
 guide in the content.
 
-Run this on page changes in single page applications and when content, potentially incuding a target element, is dynamically added to the page.
+Run this on page changes in single page applications and when content, potentially including a target element, is dynamically added to the page.
 ## getActiveGuide
-`Lusift.getActiveGuide()` returns the `id` and the `instance` object of the active guide if any. In absense of an active
+`Lusift.getActiveGuide()` returns the `id` and the `instance` object of the active guide if any. In absence of an active
 guide, it returns `null`.
 
 ### `instance`
