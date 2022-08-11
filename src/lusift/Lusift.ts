@@ -194,6 +194,7 @@ class Lusift {
         }
         this.isDevMode = false;
         const content = this.getContent();
+
         if (Object.keys(content).length === 0) {
             return error(`Content not set, pass valid content data to setContent()`);
         }

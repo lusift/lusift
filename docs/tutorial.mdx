@@ -49,16 +49,24 @@ Start by creating this HTML document:
     </style>
   </head>
   <body>
-    <button class="target button-1">
+    <button
+      data-lusift="button-1"
+      class="target button-1">
       button 1
     </button>
-    <button class="target button-2">
+    <button
+      data-lusift="button-2"
+      class="target button-2">
       button 2
     </button>
-    <button class="target button-3">
+    <button
+      data-lusift="button-3"
+      class="target button-3">
       button 3
     </button>
-    <button class="target button-4">
+    <button
+      data-lusift="button-4"
+      class="target button-4">
       button 4
     </button>
 
@@ -88,12 +96,13 @@ const tutorialGuide = {
       index: 0,
       type: 'tooltip',
       target: {
-        elementSelector: '.lusift-target .button-1'
+        elementSelector: '[data-lusift="button-1"]'
       },
       data: {
         placement: {
           position: 'right'
         },
+        arrowSizeScale: 1.25,
         bodyContent: 'Step 1'
       }
     },
@@ -101,12 +110,13 @@ const tutorialGuide = {
       index: 1,
       type: 'tooltip',
       target: {
-        elementSelector: '.lusift-target .button-2'
+        elementSelector: '[data-lusift="button-2"]'
       },
       data: {
         placement: {
           position: 'left'
         },
+        arrowSizeScale: 1.25,
         bodyContent: 'Step 2'
       }
     },
@@ -114,12 +124,13 @@ const tutorialGuide = {
       index: 2,
       type: 'tooltip',
       target: {
-        elementSelector: '.lusift-target .button-3'
+        elementSelector: '[data-lusift="button-3"]'
       },
       data: {
         placement: {
           position: 'top'
         },
+        arrowSizeScale: 1.25,
         bodyContent: 'Step 3'
       }
     },
@@ -127,12 +138,13 @@ const tutorialGuide = {
       index: 3,
       type: 'tooltip',
       target: {
-        elementSelector: '.lusift-target .button-4'
+        elementSelector: '[data-lusift="button-4"]'
       },
       data: {
         placement: {
           position: 'right'
         },
+        arrowSizeScale: 1.25,
         bodyContent: 'Step 4 (last)'
       }
     },

@@ -8,7 +8,7 @@ const guide1 = {
       index: 0,
       type: 'tooltip',
       target: {
-        elementSelector: '.lusift-target .button-1'
+        elementSelector: '[data-lusift="button-1"]'
       },
       data: {
         placement: {
@@ -22,7 +22,7 @@ const guide1 = {
       index: 1,
       type: 'tooltip',
       target: {
-        elementSelector: '.lusift-target .button-2'
+        elementSelector: '[data-lusift="button-2"]'
       },
       data: {
         placement: {
@@ -36,7 +36,7 @@ const guide1 = {
       index: 2,
       type: 'tooltip',
       target: {
-        elementSelector: '.lusift-target .button-3'
+        elementSelector: '[data-lusift="button-3"]'
       },
       data: {
         placement: {
@@ -50,7 +50,7 @@ const guide1 = {
       index: 3,
       type: 'tooltip',
       target: {
-        elementSelector: '.lusift-target .button-4'
+        elementSelector: '[data-lusift="button-4"]'
       },
       data: {
         placement: {
