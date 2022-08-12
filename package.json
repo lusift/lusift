@@ -126,7 +126,7 @@
     "webpack-cli": "4.9.1"
   },
   "dependencies": {
-    "floating-ui-tooltip": "^1.0.2",
+    "floating-ui-tooltip": "^1.0.0",
     "focus-trap": "6.7.1",
     "global": "4.4.0",
     "vue-demi": "0.13.4"
