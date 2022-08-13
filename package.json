@@ -70,8 +70,6 @@
     "lint": "npm run lint:eslint src/*",
     "lint:eslint": "eslint --ignore-path .gitignore",
     "format": "prettier --write 'src/**/*.(ts|js|tsx|jsx|vue|css)'",
-    "vue-build": "NODE_ENV=production rollup -c config/rollup.config.vue.js",
-    "vue-dev": "NODE_ENV=development rollup -c config/rollup.config.vue.js -w",
     "clean": "rimraf dist",
     "__(prepare runs on lusift package install)prepare": "npm run clean && npm run build"
   },
