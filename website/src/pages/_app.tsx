@@ -53,10 +53,11 @@ const App = ({ Component, pageProps }: Props) => {
       }
     }
 
+    // @ts-ignore
     Lusift.setContent(lusiftContent, defaults);
     Lusift.showContent('tutorial');
     router.events.on('routeChangeComplete', () => {
-      (window['Lusift' as any] as any).refresh();
+      Lusift.refresh();
     });
   }, []);
   return (

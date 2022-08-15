@@ -3,7 +3,7 @@
   "version": "0.0.2",
   "sideEffects": false,
   "private": false,
-  "description": "",
+  "description": "Javascript library to create product walkthroughs for your web app. Drive users through different features in your product.",
   "browser": "dist/index.js",
   "main": "index.js",
   "module": "dist/index.js",
@@ -53,14 +53,15 @@
     "dist",
     "dev"
   ],
-  "author": "",
+  "author": "Naresh Bhusal",
   "license": "ISC",
-  "bugs": "https://github.com/nareshbhusal/lusift/issues",
-  "homepage": "https://lusift.com/",
+  "bugs": "https://github.com/lusift/lusift/issues",
+  "homepage": "https://github.com/lusift/lusift",
+  "homepage": "https://lusift.vercel.app",
   "keywords": [],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nareshbhusal/lusift.git"
+    "url": "git+https://github.com/lusift/lusift.git"
   },
   "scripts": {
     "dev": "NODE_ENV=development rollup -c config/rollup.config.js -w",

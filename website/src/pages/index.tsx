@@ -5,27 +5,6 @@ import { NextPageWithLayout } from '../types/page';
 import { useRouter } from 'next/router';
 import { BsFillPlayFill } from 'react-icons/bs';
 
-/*
- * === section 1 ===
- * headline: Javascript product tour library
- * description:
- * button1: Get started | button 2: View demo
- *
- * === section 2 ===
- * a gif/video
- *
- * === section 3 ===
- * feature/benefit overview
- * -- Frameworks: Works with vanilla js, react, and vue
- * -- Guides can span multiple pages
- * --- png image of 3 browser images in a grid with different pages and step elements
- * -- Hotspot: Announce new features or offer helpful clues
- *
- * === section 4 ===
- * call to action banner
- * === footer ===
- */
-
 const LinkAsButton: React.FC<{ bg: string; url: string; name: string; }> = ({ bg, url, name }) => {
   return (
     <Link href={url} as={url}>
