@@ -2462,10 +2462,10 @@
   dependencies:
     "yallist" "^4.0.0"
 
-"lusift@^0.0.4":
-  "integrity" "sha512-q09LzcJ+qR82mex9fCE4Ig87visyJPnBmatzjzafkHZ5gNC2MSIrjXyLJ4x13EbjGLGOYdPt1k9+TJU3g3JLTA=="
-  "resolved" "https://registry.npmjs.org/lusift/-/lusift-0.0.4.tgz"
-  "version" "0.0.4"
+"lusift@^0.0.8":
+  "integrity" "sha512-jZ04KOYdeNVOrsG5sc2rLS10yYUEK2/aQS7HgtthNvEHecuXut2LH1yXprhz79AbUBWaZMIKxpYsZzLnOQtxUA=="
+  "resolved" "https://registry.npmjs.org/lusift/-/lusift-0.0.8.tgz"
+  "version" "0.0.8"
   dependencies:
     "floating-ui-tooltip" "^1.0.3"
     "focus-trap" "6.7.1"
