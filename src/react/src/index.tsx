@@ -12,7 +12,9 @@ const reactRender = (BodyComponent: any, targetPath: string, callback?: Function
 
     if (typeof hooks === 'undefined') {
         // useless in non-dev mode
-        window.__REACT_DEVTOOLS_GLOBAL_HOOK__.renderers = [];
+        window.__REACT_DEVTOOLS_GLOBAL_HOOK__ = {
+            renderers: []
+        };
     }
 
     hooks.renderers.forEach(r => {
