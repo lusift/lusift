@@ -17,7 +17,7 @@ const reactRender = (BodyComponent: any, targetPath: string, callback?: Function
         };
     }
 
-    hooks.renderers.forEach(r => {
+    window.__REACT_DEVTOOLS_GLOBAL_HOOK__.renderers.forEach(r => {
         isReact18 = r.version.startsWith('18');
     });
     const target = document.querySelector(targetPath);
