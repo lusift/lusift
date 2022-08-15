@@ -1,6 +1,6 @@
 {
   "name": "lusift",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "sideEffects": false,
   "private": false,
   "description": "Javascript library to create product walkthroughs for your web app. Drive users through different features in your product.",
@@ -56,7 +56,6 @@
   "author": "Naresh Bhusal",
   "license": "ISC",
   "bugs": "https://github.com/lusift/lusift/issues",
-  "homepage": "https://github.com/lusift/lusift",
   "homepage": "https://lusift.vercel.app",
   "keywords": [],
   "repository": {
