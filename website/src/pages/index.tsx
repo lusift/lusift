@@ -4,6 +4,8 @@ import { CustomHead } from '../components/CustomHead';
 import { NextPageWithLayout } from '../types/page';
 import { useRouter } from 'next/router';
 import { BsFillPlayFill } from 'react-icons/bs';
+import { DEMO_APP_URL } from '../lib/constants';
+
 
 const LinkAsButton: React.FC<{ bg: string; url: string; name: string; }> = ({ bg, url, name }) => {
   return (
@@ -50,7 +52,7 @@ const Home: NextPageWithLayout = () => {
               <LinkAsButton
                 bg={'bg-gray-800'}
                 name={'Open Demo App'}
-                url={'/demo'} />
+                url={DEMO_APP_URL} />
             </div>
           </div>
         </section>
@@ -64,7 +66,7 @@ const Home: NextPageWithLayout = () => {
                   Your browser does not support the video tag.
                 </video>
               </div>
-              <Link href={'/demo'} as={'/demo'}>
+              <Link href={DEMO_APP_URL} as={DEMO_APP_URL}>
                 <a className={`border-2 border-gray-200 p-3 px-7 shadow-md border-solid rounded-4xl bg-white bottom-0 absolute mx-2
                   hover:no-underline opacity-100 hover:opacity-100 text-md transition-all duration-100 font-semibold
                   text-gray-800 text-md flex items-center

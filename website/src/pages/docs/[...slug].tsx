@@ -48,11 +48,6 @@ const DocBody: React.FC<DocBodyProps> = ({ content, title, children }) => {
   );
 }
 
-// TODO: Set theme(tailwind.config.js) - colors, fonts, ...
-// TODO: Fix layout
-// -- Look up documentation pages for other projects
-// TODO: Add `On this page` section
-
 export interface DocsProps {
   post: PostItem & {
     title: PostItem['title'];
@@ -101,6 +96,7 @@ const Docs: NextPageWithLayout<DocsProps> = ({ post, routes, route: _route }) =>
           <DocBody
             title={post.title as string}
             content={post.content}>
+            {/* @ts-ignore */}
             <DocsNavButtons next={nextRoute} prev={prevRoute} />
             <div className="mt-4 flex justify-end text-gray-200 p-3">
               <a href={editUrl} className="text-gray-600" rel="noopener" target={'_blank'}>
