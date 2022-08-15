@@ -11,7 +11,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@floating-ui/dom": "^0.5.4",
     "@mdx-js/loader": "^2.0.0-rc.2",
     "@mdx-js/react": "^2.0.0-rc.2",
     "@n8tb1t/use-scroll-position": "^2.0.3",

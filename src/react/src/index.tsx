@@ -8,8 +8,14 @@ import { isReactComponent, isReactClassComponent } from "../../common/utils/isOf
 
 const reactRender = (BodyComponent: any, targetPath: string, callback?: Function) => {
     let isReact18 = false;
+    const hooks = window.__REACT_DEVTOOLS_GLOBAL_HOOK__;
 
-    window.__REACT_DEVTOOLS_GLOBAL_HOOK__.renderers.forEach(r => {
+    if (typeof hooks === 'undefined') {
+        // useless in non-dev mode
+        window.__REACT_DEVTOOLS_GLOBAL_HOOK__.renderers = [];
+    }
+
+    hooks.renderers.forEach(r => {
         isReact18 = r.version.startsWith('18');
     });
     const target = document.querySelector(targetPath);
