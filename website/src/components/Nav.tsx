@@ -55,11 +55,9 @@ export const Nav: React.FC = () => {
               </div>
 
               <div>
-                <Link href={DEMO_APP_URL}>
-                  <a className="rounded-md py-2 px-3 inline-flex items-center leading-5 font-medium text-gray-900 betterhover:hover:bg-gray-50 betterhover:hover:text-gray-900 focus:outline-none focus:text-gray-900 focus:bg-gray-50 transition duration-150 ease-in-out">
-                    Demo
-                  </a>
-                </Link>
+                <a href={DEMO_APP_URL} target="_blank" className="rounded-md py-2 px-3 inline-flex items-center leading-5 font-medium text-gray-900 betterhover:hover:bg-gray-50 betterhover:hover:text-gray-900 focus:outline-none focus:text-gray-900 focus:bg-gray-50 transition duration-150 ease-in-out">
+                  Demo
+                </a>
               </div>
 
               <div>
