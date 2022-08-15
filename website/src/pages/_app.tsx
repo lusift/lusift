@@ -10,7 +10,7 @@ import { useRouter } from 'next/router';
 import { MDXProvider } from '@mdx-js/react';
 import MDXComponents from '../components/MDXComponents';
 import Lusift from 'lusift';
-import 'lusift/dev/lusift.css';
+import 'lusift/dist/lusift.css';
 import lusiftContent from '../lib/lusiftContent';
 
 export type Props = AppProps & {
