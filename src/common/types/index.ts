@@ -45,6 +45,7 @@ export interface TooltipData {
     arrow: boolean;
     arrowSizeScale: number;
     scrollIntoView: boolean;
+    zIndex: number;
     backdrop: {
         disabled: boolean;
         color: string;

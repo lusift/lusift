@@ -2,6 +2,7 @@ import { Content, DeepPartial } from '../common/types';
 import { ContentDefaults } from './types';
 import { mergeDeep } from '../common/utils';
 import { isObject } from '../common/utils/isOfType';
+import { TOOLTIP_Z_INDEX } from '../common/constants';
 
 const defaultTooltipActions = {
   styleProps: {},
@@ -55,6 +56,7 @@ const defaultTooltip = {
     arrow: true,
     arrowSizeScale: 1,
     scrollIntoView: true,
+    zIndex: TOOLTIP_Z_INDEX,
     backdrop: defaultTooltipBackdrop,
     progressBar: {
       disabled: false,

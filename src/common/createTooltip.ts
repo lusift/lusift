@@ -2,7 +2,6 @@
 import { Instance } from 'floating-ui-tooltip/dev/types'; */
 import floatingTooltip from 'floating-ui-tooltip';
 import { Instance, Props } from 'floating-ui-tooltip/dist/types';
-import { TOOLTIP_Z_INDEX } from '../common/constants';
 
 const createTooltip = async (props): Promise<Instance> => {
 
@@ -23,7 +22,8 @@ const createTooltip = async (props): Promise<Instance> => {
         onClickOutside,
         hideOnReferenceHidden,
         hideOnTooltipEscape,
-        scrollIntoView
+        scrollIntoView,
+        zIndex
     } = props;
 
     if (!remove) {
@@ -32,7 +32,7 @@ const createTooltip = async (props): Promise<Instance> => {
 
     return floatingTooltip(target, {
         allowHTML: true,
-        zIndex: TOOLTIP_Z_INDEX,
+        zIndex,
         hideOnClick: false,
         onClickOutside,
         onShow,
