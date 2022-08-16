@@ -14,6 +14,7 @@ const guide1 = {
         placement: {
           position: 'right'
         },
+        zIndex: 100,
         arrowSizeScale: 1.25,
         bodyContent: 'Step 1'
       }
